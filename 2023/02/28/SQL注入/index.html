@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="TryHackMe实验房间：https:&#x2F;&#x2F;tryhackme.com&#x2F;room&#x2F;sqlinjectionlm Introduction使用 SQL 的web应用程序可以转变为 SQL 注入的关键点在于用户提供的数据被包含在 SQL 查询中。 假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id 号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的 URL 可能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL注入（SQLi）">
+<meta property="og:url" content="http://example.com/2023/02/28/SQL%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="hxt&#39;s Blog">
+<meta property="og:description" content="TryHackMe实验房间：https:&#x2F;&#x2F;tryhackme.com&#x2F;room&#x2F;sqlinjectionlm Introduction使用 SQL 的web应用程序可以转变为 SQL 注入的关键点在于用户提供的数据被包含在 SQL 查询中。 假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id 号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的 URL 可能">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-28T06:30:13.089Z">
+<meta property="article:modified_time" content="2023-01-15T14:31:59.638Z">
+<meta property="article:author" content="hxt">
+<meta property="article:tag" content="TryHackMe">
+<meta property="article:tag" content="web安全">
+<meta property="article:tag" content="SQL注入">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/02/28/SQL%E6%B3%A8%E5%85%A5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SQL注入（SQLi） | hxt's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">hxt's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/SQL%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQL注入（SQLi）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-28 14:30:13" itemprop="dateCreated datePublished" datetime="2023-02-28T14:30:13+08:00">2023-02-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-15 22:31:59" itemprop="dateModified" datetime="2023-01-15T22:31:59+08:00">2023-01-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>TryHackMe实验房间：<a target="_blank" rel="noopener" href="https://tryhackme.com/room/sqlinjectionlm">https://tryhackme.com/room/sqlinjectionlm</a></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>使用 SQL 的web应用程序可以转变为 SQL 注入的关键点在于用户提供的数据被包含在 SQL 查询中。</p>
+<p>假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id 号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的 URL 可能如下所示：</p>
+<p><code>https://website.thm/blog?id=1</code></p>
+<p>从上面的 URL 中，你可以看到所选的博客条目来自查询字符串(query string)中的 id 参数。Web应用程序需要从数据库中检索文章，并使用如下的SQL语句：</p>
+<p><code>SELECT * from blog where id=1 and private=0 LIMIT 1;</code></p>
+<p>发现上面的SQL语句正在博客表中查找 id 号为 1 且<code>private</code>列设置为 0 的文章，这意味着它可以被公众查看，并且使用了<code>limit</code>将结果限制为只有一个匹配项。</p>
+<p>正如在本文开头所提到的，当用户输入的数据被引入数据库查询时，就会引入SQL注入。在本例中，查询字符串中的 id 参数直接用于 SQL 查询。</p>
+<p>假设文章 id 2 仍然锁定为私有的，所以它不能在网站上查看。我们现在可以将 URL 改为：</p>
+<p><code>https://website.thm/blog?id=2;--</code></p>
+<p>对应生成的 SQL 语句为：</p>
+<p><code>SELECT * from blog where id=2;-- and private=0 LIMIT 1;</code></p>
+<p>URL 中的分号表示 SQL 语句的结束，两个横杠(<code>--</code>)会导致之后的所有内容都被视为注释。通过这样做，实际上是在运行查询：</p>
+<p><code>SELECT * from blog where id=2;--</code></p>
+<p>无论是否将其设置为公开，它将返回 id 为 2 的文章。</p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="In-Band-SQLi"><a href="#In-Band-SQLi" class="headerlink" title="In-Band SQLi"></a>In-Band SQLi</h3><p>In-Band SQL 注入是最容易检测和利用的类型。In-Band 是指使用相同通信方法来利用漏洞并接受结果。例如，在网页上发现 SQL 注入漏洞，然后能够从数据库中将数据提取到同一页面。</p>
+<ul>
+<li><p><strong>Error-Based SQL Injection</strong>(基于报错的SQL注入)</p>
+<p>这种类型的 SQL 注入对于轻松获取有关数据库结构的信息是最有用的，因为来自数据库的错误信息会直接打印到网页上，这通常可以用于枚举整个数据库。</p>
+</li>
+<li><p><strong>Union-Based SQL Injection</strong>(基于 union 的SQL注入)</p>
+<p>这种类型的注入使用 UNION 操作符和 SELECT 语句一起向页面返回其他结果。这是通过SQL注入漏洞提取大量数据的最常见方法。</p>
+</li>
+</ul>
+<h3 id="Blind-SQLi"><a href="#Blind-SQLi" class="headerlink" title="Blind SQLi"></a>Blind SQLi</h3><p>与 in-band SQL 注入不同，blind SQL 注入几乎没有反馈来提示我们我们是否注入成功，这是因为错误消息已被禁用，但无论如何，注入依旧是有效的。</p>
+<ul>
+<li><p>Authentication Bypass(身份验证绕过)</p>
+<p>最直接的 blind SQLi 技巧之一就是绕过登录表单等身份验证。连接到用户数据库的登录表单通常以这样的方式开发，即：web应用程序对用户名和密码的内容不感兴趣，而等关注两者是否在用户表中匹配。基本上，web应用程序会询问数据库“您是否是用户名为 <strong>bob</strong> 、密码为 <strong>bob123</strong> 的用户？”，数据库会回答“是”或“否”，并根据回答决定web应用程序是否允许你继续操作。</p>
+</li>
+<li><p><strong>Boolean Based</strong>(布尔盲注)</p>
+<p>布尔盲注是指我们从注入尝试中收到的可能是<code>true/false</code>、<code>yes/no</code>、<code>on/off</code>、<code>1/0</code>或者任何只能有两个结果的响应。该结果表明攻击者的 SQL 注入是否成功。虽然响应只有两种结果，但还是能够枚举整个数据库的结构和内容。</p>
+<p>例如，可以通过布尔盲注来判断数据库的首字母(<code>admin123&#39; UNION SELECT 1,2,3 where database() like &#39;s%&#39;;--</code>)。</p>
+</li>
+<li><p><strong>Time Based</strong>(时间盲注)</p>
+<p>时间盲注与上述的布尔盲注非常相似，因为发送相同的请求，但没有直观的指示您的查询是错误的还是正确的。相反，正确查询的指标是基于完成查询所需的时间。这种时间延迟是通过在 UNION 语句旁边使用内置方法（如 **SLEEP(x)**）引入的。SLEEP() 方法只能在 UNION SELECT 语句成功时执行。</p>
+<p>例如，当试图确定表中的列数时，可以使用以下查询：</p>
+<p><code>admin123&#39; UNION SELECT SLEEP(5)</code></p>
+<p>如果未产生停顿，那么我们可以推断出该请求未成功，所以我们增加一列：</p>
+<p><code>admin123&#39; UNION SELECT SLEEP(5),2;--</code></p>
+<p>直到产生 5 秒延迟为止。</p>
+</li>
+</ul>
+<h3 id="Out-of-Band-SQLi"><a href="#Out-of-Band-SQLi" class="headerlink" title="Out of Band SQLi"></a>Out of Band SQLi</h3><p>此类 SQL 注入并不常见，因为它要么取决于数据库服务器上启用的特定功能，要么取决于web应用程序的业务逻辑，后者根据SQL查询的结果进行某种外部网络调用。</p>
+<p>Out-Of-Band 攻击通过两个不同的通信渠道进行分类，一个用于发起攻击，另一个用于收集结果。例如，攻击通道可以是web请求，数据收集通道可以监视对你控制的服务发出的HTTP&#x2F;DNS请求。</p>
+<p>1） 攻击者通过注入 payload 向易受攻击的网站发出请求。</p>
+<p>2） 该网站对数据库进行SQL查询，并传递黑客的 payload 。</p>
+<p>3） payload 包含一个请求，该请求强制将包含数据库数据的HTTP请求返回给黑客的计算机。</p>
+<h2 id="预防措施"><a href="#预防措施" class="headerlink" title="预防措施"></a>预防措施</h2><h3 id="预编译语句（参数化查询）"><a href="#预编译语句（参数化查询）" class="headerlink" title="预编译语句（参数化查询）"></a>预编译语句（参数化查询）</h3><p>开发人员首先编写 SQL 查询，然后将任何用户输入作为参数添加。编写准备好的语句可以确保 SQL 代码结构不变，并且数据库可以区分查询和数据。作为一个好处，它还使您的代码看起来更干净、更容易阅读。</p>
+<h3 id="对输入进行验证"><a href="#对输入进行验证" class="headerlink" title="对输入进行验证"></a>对输入进行验证</h3><p>输入验证可以在很大程度上保护输入到 SQL 查询中的内容。使用允许列表可以将输入限制为仅某些字符串，或者编程语言中的字符串替换方法可以过滤你希望允许或不允许的字符。</p>
+<h3 id="对用户输入进行转义"><a href="#对用户输入进行转义" class="headerlink" title="对用户输入进行转义"></a>对用户输入进行转义</h3><p>允许用户输入包含诸如<code>&#39;</code>、<code>&quot;</code>、<code>$</code>、<code>\</code>之类的字符可能会导致SQL查询中断，或者更糟的是，正如我们所了解的那样，打开它们以接受注入攻击。转义用户输入是在这些字符前面加上反斜杠（\）的方法，这样会导致它们被解析为常规字符串而不是特殊字符。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TryHackMe/" rel="tag"># TryHackMe</a>
+              <a href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag"># web安全</a>
+              <a href="/tags/SQL%E6%B3%A8%E5%85%A5/" rel="tag"># SQL注入</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/28/XSS/" rel="prev" title="XSS">
+      <i class="fa fa-chevron-left"></i> XSS
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/28/Passive-Reconnaissance/" rel="next" title="Passive Reconnaissance（被动侦察）">
+      Passive Reconnaissance（被动侦察） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#In-Band-SQLi"><span class="nav-number">2.1.</span> <span class="nav-text">In-Band SQLi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blind-SQLi"><span class="nav-number">2.2.</span> <span class="nav-text">Blind SQLi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Out-of-Band-SQLi"><span class="nav-number">2.3.</span> <span class="nav-text">Out of Band SQLi</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E9%98%B2%E6%8E%AA%E6%96%BD"><span class="nav-number">3.</span> <span class="nav-text">预防措施</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91%E8%AF%AD%E5%8F%A5%EF%BC%88%E5%8F%82%E6%95%B0%E5%8C%96%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">预编译语句（参数化查询）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%BE%93%E5%85%A5%E8%BF%9B%E8%A1%8C%E9%AA%8C%E8%AF%81"><span class="nav-number">3.2.</span> <span class="nav-text">对输入进行验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5%E8%BF%9B%E8%A1%8C%E8%BD%AC%E4%B9%89"><span class="nav-number">3.3.</span> <span class="nav-text">对用户输入进行转义</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hxt"
+      src="/images/hxt.jpg">
+  <p class="site-author-name" itemprop="name">hxt</p>
+  <div class="site-description" itemprop="description">May the Force be with you.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hxt</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

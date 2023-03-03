@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="汇编语言（七）——数据处理reg（寄存器）：ax、bx、cx、dx、ah、al、bh、bl、ch、cl、dh、dl、sp、bp、si、di； sreg（段寄存器）：ds、ss、cs、es。 bx、si、di 和 bp在8086CPU中，只有标题中这四个寄存器可以用在 [...] 中来进行内存单元的寻址。  下面的指令是错误的： 1234mov ax, [cx]mov ax, [ax]mov ax,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编语言（七）">
+<meta property="og:url" content="http://example.com/2022/09/21/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/index.html">
+<meta property="og:site_name" content="hxt&#39;s Blog">
+<meta property="og:description" content="汇编语言（七）——数据处理reg（寄存器）：ax、bx、cx、dx、ah、al、bh、bl、ch、cl、dh、dl、sp、bp、si、di； sreg（段寄存器）：ds、ss、cs、es。 bx、si、di 和 bp在8086CPU中，只有标题中这四个寄存器可以用在 [...] 中来进行内存单元的寻址。  下面的指令是错误的： 1234mov ax, [cx]mov ax, [ax]mov ax,">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220924122435330.png">
+<meta property="article:published_time" content="2022-09-21T05:32:09.475Z">
+<meta property="article:modified_time" content="2022-11-03T03:57:46.394Z">
+<meta property="article:author" content="hxt">
+<meta property="article:tag" content="内存">
+<meta property="article:tag" content="寄存器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220924122435330.png">
+
+<link rel="canonical" href="http://example.com/2022/09/21/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>汇编语言（七） | hxt's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">hxt's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/21/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          汇编语言（七）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-21 13:32:09" itemprop="dateCreated datePublished" datetime="2022-09-21T13:32:09+08:00">2022-09-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-03 11:57:46" itemprop="dateModified" datetime="2022-11-03T11:57:46+08:00">2022-11-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="汇编语言（七）——数据处理"><a href="#汇编语言（七）——数据处理" class="headerlink" title="汇编语言（七）——数据处理"></a>汇编语言（七）——数据处理</h1><p>reg（寄存器）：ax、bx、cx、dx、ah、al、bh、bl、ch、cl、dh、dl、sp、bp、si、di；</p>
+<p>sreg（段寄存器）：ds、ss、cs、es。</p>
+<h2 id="bx、si、di-和-bp"><a href="#bx、si、di-和-bp" class="headerlink" title="bx、si、di 和 bp"></a>bx、si、di 和 bp</h2><p>在8086CPU中，只有标题中这四个寄存器可以用在 <code>[...]</code> 中来进行内存单元的寻址。</p>
+<ul>
+<li><p>下面的指令是错误的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [cx]</span><br><span class="line">mov ax, [ax]</span><br><span class="line">mov ax, [dx]</span><br><span class="line">mov ax, [ds]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这四个寄存器可以单个出现，也可以这四种组合出现：bx 和 si 、bx 和 di 、bp 和 si 、bp 和 di 。</p>
+<p>注：<strong>[bx + bp]</strong> 、<strong>[si + di]</strong> ，这两个组合是错误的。</p>
+</li>
+<li><p>只要在 <code>[...]</code> 中使用了寄存器 <strong>bp</strong> ，而指令中没有显性地给出段地址，段地址就默认在 <code>ss</code> 中。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [bp]                      含义：(ax) = ((ss)*16+(bp))</span><br><span class="line">mov ax, [bp+idata]                含义：(ax) = ((ss)*16+(bp)+idata)</span><br><span class="line">mov ax, [bp+si]                   含义：(ax) = ((ss)*16+(bp)+(si))</span><br><span class="line">mov ax, [bp+si+idata]             含义：(ax) = ((ss)*16+(bp)+(si)+idata)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="数据所在位置"><a href="#数据所在位置" class="headerlink" title="数据所在位置"></a>数据所在位置</h2><p>指令在执行前，所要处理的数据可以在三个位置：<strong>CPU内部</strong>、<strong>内存</strong>、<strong>端口</strong>。</p>
+<h2 id="数据位置的表达"><a href="#数据位置的表达" class="headerlink" title="数据位置的表达"></a>数据位置的表达</h2><ol>
+<li><p>立即数（idata）</p>
+<p>对于直接包含在机器指令中的数据（执行前在CPU指令缓存器中），被称为立即数。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">add bx,2000h</span><br><span class="line">or bx,00010000b</span><br><span class="line">mov al,&#x27;a&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>寄存器</p>
+<p>指令要处理的数据在寄存器中，在汇编指令中给出相应的寄存器名。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov ax,bx</span><br><span class="line">mov ds,ax</span><br><span class="line">push bx</span><br><span class="line">mov ds:[0],bx</span><br><span class="line">push ds</span><br><span class="line">mov ss,ax</span><br><span class="line">mov sp,ax</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>段地址（SA）和偏移地址（EA）</p>
+<p>指令要处理的数据在内存中，在汇编指令中可用 [X] 的格式给出 EA，SA 在某个段寄存器中。</p>
+<p>存放段地址的寄存器可以是默认的，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[0]</span><br><span class="line">mov ax,[di]</span><br><span class="line">mov ax,[bx+8]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+si+8]</span><br></pre></td></tr></table></figure>
+
+<p>等指令，段地址默认在 <strong>ds</strong> 中。</p>
+<p>存放段地址的寄存器也可以显性给出，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,ds:[bp]             含义：(ax)=((ds)*16)+(bp)</span><br><span class="line">mov ax,es:[bx]</span><br><span class="line">mov ax,ss:[bx+si]</span><br><span class="line">mov ax,cs:[bx+si+8]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="寻址方式"><a href="#寻址方式" class="headerlink" title="寻址方式"></a>寻址方式</h2><p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220924122435330.png" alt="image-20220924122435330"></p>
+<h2 id="指令要处理的数据所占的字长"><a href="#指令要处理的数据所占的字长" class="headerlink" title="指令要处理的数据所占的字长"></a>指令要处理的数据所占的字长</h2><ol>
+<li><p>通过寄存器指明要处理的数据的字长</p>
+<p>字操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">mov bx,ds:[0]</span><br><span class="line">mov ds,ax</span><br><span class="line">mov ds:[0],ax</span><br><span class="line">inc ax</span><br><span class="line">add ax,1000</span><br></pre></td></tr></table></figure>
+
+<p>字节操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov al,1</span><br><span class="line">mov al,bl</span><br><span class="line">mov al,ds:[0]</span><br><span class="line">mov ds:[0],al</span><br><span class="line">inc al</span><br><span class="line">add al,100</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在没有寄存器名存在的情况下，用操作符<code>X ptr</code>指明内存单元的长度，X 在汇编指令中可以为 word 或 byte 。</p>
+<p>下面的指令中用了 word ptr 指明了指令访问的内存单元是一个<strong>字单元</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov word ptr ds:[0],1</span><br><span class="line">inc word ptr [bx]</span><br><span class="line">inc word ptr ds:[0]</span><br><span class="line">add word ptr [bx],2</span><br></pre></td></tr></table></figure>
+
+<p>下面的指令中，用 byte ptr 指明了指令访问的内存单元是一个<strong>字节单元</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov byte ptr ds:[0],1</span><br><span class="line">inc byte ptr [bx]</span><br><span class="line">inc byte ptr ds:[0]</span><br><span class="line">add byte ptr [bx],2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其他方法</p>
+<p>有些指令默认了访问的是字单元还是字节单元，比如：push [1000H] 就不用指明访问的是字单元还是字节单元，因为 push 指令只进行<strong>字操作</strong>。</p>
+</li>
+</ol>
+<h2 id="div指令"><a href="#div指令" class="headerlink" title="div指令"></a>div指令</h2><p>div是除法指令。</p>
+<ul>
+<li>除数：有8位和16位两种，在一个寄存器或内存单元中。</li>
+<li>被除数：默认放在 <strong>AX</strong> 或 <strong>DX 和AX</strong>中，如果除数为8位，被除数则为16位，默认在 AX 中存放；如果输出为16位，被除数则为32位，在 DX 和 AX 中存放，DX 存放高16位，AX 存放低16位。</li>
+<li>结果：如果除数为8位，则 AL 存储商，AH 存储余数；如果除数为16位，则 AX 存储除法操作的商，DX 存储除法操作的余数。</li>
+</ul>
+<p>格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div reg</span><br><span class="line">div 内存单元</span><br></pre></td></tr></table></figure>
+
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div byte ptr ds:[0]   含义：(al)=(ax)/((ds)*16+0)的商；</span><br><span class="line">						 (ah)=(ax)/((ds)*16+0)的余数</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div word ptr es:[0]   含义：(ax)=[(dx)*10000H+(ax)]/((es)*16+0)的商</span><br><span class="line">                           (dx)=[(dx)*10000H+(ax)]/((es)*16+0)的余数</span><br></pre></td></tr></table></figure>
+
+<h2 id="伪指令-dd"><a href="#伪指令-dd" class="headerlink" title="伪指令 dd"></a>伪指令 dd</h2><p><strong>dd</strong> 是用来定义 dword（double word）双字型数据的。比如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data segment</span><br><span class="line">  db 1</span><br><span class="line">  dw 1</span><br><span class="line">  dd 1</span><br><span class="line">data ends</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第一个数据为 01H，在<code>data:0</code>处，占1个字节；</li>
+<li>第二个数据为 0001H，在<code>data:1</code>处，占1个字；</li>
+<li>第三个数据为 00000001H，在<code>data:3</code>处，占2个字。</li>
+</ul>
+<h2 id="dup"><a href="#dup" class="headerlink" title="dup"></a>dup</h2><p>dup是一个操作符，在汇编语言中同 db、dw、dd 等一样，也是由编译器识别处理的符号。它是和 db、dw、dd 等数据定义伪指令配合使用的，用来进行数据的重复。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db 3 dup (0)             ;定义了3个字节，值都为 0，相当于 db 0,0,0</span><br><span class="line">db 3 dup (0,1,2)         ;定义了9个字节，相当于 db 0,1,2,0,1,2,0,1,2</span><br><span class="line">db 3 dup(&#x27;abc&#x27;,&#x27;ABC&#x27;)    ;定义了18个字节，相当于 db &#x27;abcABCabcABCabcABC&#x27;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%86%85%E5%AD%98/" rel="tag"># 内存</a>
+              <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag"># 寄存器</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/18/ManyCheck/" rel="prev" title="复现省赛逆向-ManyCheck">
+      <i class="fa fa-chevron-left"></i> 复现省赛逆向-ManyCheck
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/29/nssctf-%E8%B4%AA%E9%A3%9F%E8%9B%87/" rel="next" title="Reverse-贪食蛇">
+      Reverse-贪食蛇 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">汇编语言（七）——数据处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bx%E3%80%81si%E3%80%81di-%E5%92%8C-bp"><span class="nav-number">1.1.</span> <span class="nav-text">bx、si、di 和 bp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%89%80%E5%9C%A8%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.2.</span> <span class="nav-text">数据所在位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%9A%84%E8%A1%A8%E8%BE%BE"><span class="nav-number">1.3.</span> <span class="nav-text">数据位置的表达</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="nav-number">1.4.</span> <span class="nav-text">寻址方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E8%A6%81%E5%A4%84%E7%90%86%E7%9A%84%E6%95%B0%E6%8D%AE%E6%89%80%E5%8D%A0%E7%9A%84%E5%AD%97%E9%95%BF"><span class="nav-number">1.5.</span> <span class="nav-text">指令要处理的数据所占的字长</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#div%E6%8C%87%E4%BB%A4"><span class="nav-number">1.6.</span> <span class="nav-text">div指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%AA%E6%8C%87%E4%BB%A4-dd"><span class="nav-number">1.7.</span> <span class="nav-text">伪指令 dd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dup"><span class="nav-number">1.8.</span> <span class="nav-text">dup</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hxt"
+      src="/images/hxt.jpg">
+  <p class="site-author-name" itemprop="name">hxt</p>
+  <div class="site-description" itemprop="description">May the Force be with you.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hxt</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

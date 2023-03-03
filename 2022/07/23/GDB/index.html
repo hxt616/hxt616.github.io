@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="参考： http:&#x2F;&#x2F;c.biancheng.net&#x2F;gdb&#x2F; https:&#x2F;&#x2F;www.cnblogs.com&#x2F;acceptedzhs&#x2F;p&#x2F;13161213.html  https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;259625135 https:&#x2F;&#x2F;blog.51cto.com&#x2F;u_15127591&#x2F;3564713 相关资料： http:&#x2F;&#x2F;note.iawen.com&#x2F;note&#x2F;p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GDB入门">
+<meta property="og:url" content="http://example.com/2022/07/23/GDB/index.html">
+<meta property="og:site_name" content="hxt&#39;s Blog">
+<meta property="og:description" content="参考： http:&#x2F;&#x2F;c.biancheng.net&#x2F;gdb&#x2F; https:&#x2F;&#x2F;www.cnblogs.com&#x2F;acceptedzhs&#x2F;p&#x2F;13161213.html  https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;259625135 https:&#x2F;&#x2F;blog.51cto.com&#x2F;u_15127591&#x2F;3564713 相关资料： http:&#x2F;&#x2F;note.iawen.com&#x2F;note&#x2F;p">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-23T14:22:29.704Z">
+<meta property="article:modified_time" content="2022-08-29T04:01:17.927Z">
+<meta property="article:author" content="hxt">
+<meta property="article:tag" content="gdb">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/07/23/GDB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>GDB入门 | hxt's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">hxt's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/23/GDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GDB入门
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-23 22:22:29" itemprop="dateCreated datePublished" datetime="2022-07-23T22:22:29+08:00">2022-07-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-29 12:01:17" itemprop="dateModified" datetime="2022-08-29T12:01:17+08:00">2022-08-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GDB/" itemprop="url" rel="index"><span itemprop="name">GDB</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考：</p>
+<p><a target="_blank" rel="noopener" href="http://c.biancheng.net/gdb/">http://c.biancheng.net/gdb/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/acceptedzhs/p/13161213.html">https://www.cnblogs.com/acceptedzhs/p/13161213.html</a> </p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/259625135">https://zhuanlan.zhihu.com/p/259625135</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15127591/3564713">https://blog.51cto.com/u_15127591/3564713</a></p>
+<p>相关资料：</p>
+<p><a target="_blank" rel="noopener" href="http://note.iawen.com/note/programming/gdb">http://note.iawen.com/note/programming/gdb</a> GDB入门+命令大全</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/acceptedzhs/p/13161213.html">https://www.cnblogs.com/acceptedzhs/p/13161213.html</a> 较详细的gdb入门资料</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/acceptedzhs/p/12562880.html">https://www.cnblogs.com/acceptedzhs/p/12562880.html</a> gdb高级技巧</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lvdongjie/p/8994092.html">https://www.cnblogs.com/lvdongjie/p/8994092.html</a> GDB用法详解</p>
+<h1 id="GDB"><a href="#GDB" class="headerlink" title="GDB"></a>GDB</h1><p>维基百科上对GDB的解释是这样的：<strong>GNU调试器</strong>（英语：<strong>G</strong>NU <strong>D</strong>e<strong>b</strong>ugger，缩写：<strong>GDB</strong>），是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU">GNU</a>软件系统中的标准<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7">调试器</a>，此外GDB也是个具有移携性的调试器，经过移携需求的调修与重新编译，如今许多的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%A1%9EUNIX">类UNIX</a>操作系统上都可以使用GDB，而现有GDB所能支持调试的编程语言有<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%E8%AA%9E%E8%A8%80">C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%2B%2B">C++</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80)">Pascal</a>以及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">FORTRAN</a>。</p>
+<h2 id="GDB入门"><a href="#GDB入门" class="headerlink" title="GDB入门"></a>GDB入门</h2><p>将以下程序作为示例，将该文件命名为main.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span> <span class="type">int</span> n,sum;</span><br><span class="line">    n = <span class="number">1</span>;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(n &lt;= <span class="number">100</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sum = sum + n;</span><br><span class="line">        n = n+<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先要使用gcc来编译源文件，且要使用<code>-g</code>选项，这样可以生成能够被gdb调试的可执行文件。</p>
+<p><code>root@ls-jc2uT1jQ:~# gcc -g main.c -o main</code>将可执行文件命名为main。</p>
+<ol>
+<li><p>启动GDB调试器</p>
+<p>方法一：<code>root@ls-jc2uT1jQ:~# gdb main [--silent]</code> (–silent选项会将部分没用的信息屏蔽)</p>
+<p>方法二：也可不在gdb后加可执行文件名，进入gdb后利用file选项加载可执行文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gdb -q   &lt;---&quot;-q&quot;选项可省略不必要的输出信息</span></span><br><span class="line">(gdb) file main</span><br><span class="line">Reading symbols from main...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打印源代码</p>
+<p><code>l</code>选项会将带行号的源代码打印出来(注意“l”是“list”的缩写，不是数字“1”)，默认显示前十行代码，可直接回车查看后续代码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gdb main --silent</span></span><br><span class="line">Reading symbols from main...</span><br><span class="line">(gdb) l</span><br><span class="line">1	<span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line">2	int main ()</span><br><span class="line">3	&#123;</span><br><span class="line">4	    unsigned long long int n, <span class="built_in">sum</span>;</span><br><span class="line">5	</span><br><span class="line">6	    n = 1;</span><br><span class="line">7	    <span class="built_in">sum</span> = 0;</span><br><span class="line">8	</span><br><span class="line">9	    <span class="keyword">while</span> (n &lt;= 100)</span><br><span class="line">10	    &#123;</span><br><span class="line">(gdb) </span><br><span class="line">11	        <span class="built_in">sum</span> = <span class="built_in">sum</span> + n;</span><br><span class="line">12	        n = n + 1;</span><br><span class="line">13	    &#125;</span><br><span class="line">14	</span><br><span class="line">15	    <span class="built_in">return</span> 0;</span><br><span class="line">16	&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置断点。</p>
+<p><code>b 函数名|行号</code>（b为break的缩写）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b 9   &lt;---在第9行设置断点</span><br><span class="line">Breakpoint 1 at 0x1141: file main.c, line 9.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行程序。</p>
+<table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">r（全称run）</td>
+<td align="left">从头开始运行程序至断点</td>
+</tr>
+<tr>
+<td align="left">c（全称continue）</td>
+<td align="left">从当前位置运行程序至下一个断点</td>
+</tr>
+<tr>
+<td align="left">u（全称until）行号</td>
+<td align="left">从当前位置运行程序至指定行号</td>
+</tr>
+</tbody></table>
+<p>以<code>r</code>为例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(gdb) r    &lt;---运行至断点，且处在断点的语句并不执行</span><br><span class="line">Starting program: /root/main </span><br><span class="line"></span><br><span class="line">Breakpoint 1, main () at main.c:9</span><br><span class="line">9	    <span class="keyword">while</span> (n &lt;= 100)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>单步执行</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>n（全称next）</td>
+<td>单步执行，不进入函数内部</td>
+</tr>
+<tr>
+<td>s（全称step）</td>
+<td>单步执行，进入函数内部</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(gdb) s    &lt;---执行<span class="keyword">while</span>循环，在11行停下，此时11行的代码并未执行</span><br><span class="line">11	        <span class="built_in">sum</span> = <span class="built_in">sum</span> + n;</span><br><span class="line">(gdb) n</span><br><span class="line">12	        n = n + 1;</span><br></pre></td></tr></table></figure>
+
+<p>拓展：si命令类似于s命令，ni命令类似于n命令。所不同的是，这两个命令（si&#x2F;ni）所针对的是汇编指令，而s&#x2F;n针对的是源代码。</p>
+</li>
+<li><p>输出变量</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>p（全称print） 变量名</td>
+<td>打印一次变量名&#x2F;函数调用对应的值</td>
+</tr>
+<tr>
+<td>disp（display） 变量名</td>
+<td>设置在每次停下时都打印该变量名&#x2F;函数调用对应的值</td>
+</tr>
+</tbody></table>
+<p>以p为例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) p n      &lt;---打印代码中变量n的值</span><br><span class="line"><span class="variable">$1</span> = 1</span><br></pre></td></tr></table></figure>
+
+<p>以disp为例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) disp n</span><br><span class="line">1: n = 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>退出调试</p>
+<p>直接输入<code>q</code>并回车</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(gdb) q</span><br><span class="line">A debugging session is active.</span><br><span class="line"></span><br><span class="line">	Inferior 1 [process 467365] will be killed.</span><br><span class="line"></span><br><span class="line">Quit anyway? (y or n) y</span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment">#    &lt;---已退出</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="GDB汇编调试"><a href="#GDB汇编调试" class="headerlink" title="GDB汇编调试"></a>GDB汇编调试</h2><h3 id="部分指令"><a href="#部分指令" class="headerlink" title="部分指令"></a><strong>部分指令</strong></h3><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>si</td>
+<td>单步执行，进入函数内部</td>
+</tr>
+<tr>
+<td>ni</td>
+<td>单步执行，不进入函数内部</td>
+</tr>
+<tr>
+<td>disp  &#x2F;i  $pc(或寄存器)</td>
+<td>显示出当前执行的语句，下一行展示相关寄存器和堆栈内容的变化</td>
+</tr>
+<tr>
+<td>i r</td>
+<td>查看所有寄存器的值</td>
+</tr>
+<tr>
+<td>i r rax</td>
+<td>查看rax寄存器的值</td>
+</tr>
+<tr>
+<td>layout src</td>
+<td>显示源代码窗口</td>
+</tr>
+<tr>
+<td>layout asm</td>
+<td>显示反汇编窗口</td>
+</tr>
+<tr>
+<td>disassemble</td>
+<td>获取汇编代码</td>
+</tr>
+</tbody></table>
+<h3 id="查看指定内存地址处的内容："><a href="#查看指定内存地址处的内容：" class="headerlink" title="查看指定内存地址处的内容："></a><strong>查看指定内存地址处的内容</strong>：</h3><p>命令格式：<strong>x&#x2F;nfu  addr</strong> 如：**<code>(gdb) x/3sw  $eax</code>**</p>
+<p>其中<strong>x : examine 的缩写</strong></p>
+<p><strong>n : 表示要显示的内存单元个数</strong></p>
+<p><strong>f : 表示显示方式, 可取如下值</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x 按十六进制格式显示变量。</span><br><span class="line">d 按十进制格式显示变量。</span><br><span class="line">c 按字符格式显示变量。</span><br><span class="line">f 按浮点数格式显示变量。</span><br></pre></td></tr></table></figure>
+
+<p><strong>u表示一个地址单元的长度</strong>，与n一起表示显示的地址长度</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b表示单字节，</span><br><span class="line">h表示双字节，</span><br><span class="line">w表示四字节，</span><br><span class="line">g表示八字节</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/gdb/" rel="tag"># gdb</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/22/gcc/" rel="prev" title="gcc入门">
+      <i class="fa fa-chevron-left"></i> gcc入门
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/10/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%89%EF%BC%89/" rel="next" title="汇编语言（三）">
+      汇编语言（三） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GDB"><span class="nav-number">1.</span> <span class="nav-text">GDB</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB%E5%85%A5%E9%97%A8"><span class="nav-number">1.1.</span> <span class="nav-text">GDB入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB%E6%B1%87%E7%BC%96%E8%B0%83%E8%AF%95"><span class="nav-number">1.2.</span> <span class="nav-text">GDB汇编调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E5%88%86%E6%8C%87%E4%BB%A4"><span class="nav-number">1.2.1.</span> <span class="nav-text">部分指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%8C%87%E5%AE%9A%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E5%A4%84%E7%9A%84%E5%86%85%E5%AE%B9%EF%BC%9A"><span class="nav-number">1.2.2.</span> <span class="nav-text">查看指定内存地址处的内容：</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hxt"
+      src="/images/hxt.jpg">
+  <p class="site-author-name" itemprop="name">hxt</p>
+  <div class="site-description" itemprop="description">May the Force be with you.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hxt</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
