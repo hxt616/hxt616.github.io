@@ -1678,7 +1678,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-04 10:00:34" itemprop="dateModified" datetime="2023-01-04T10:00:34+08:00">2023-01-04</time>
+                <time title="修改时间：2023-03-25 14:24:54" itemprop="dateModified" datetime="2023-03-25T14:24:54+08:00">2023-03-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1725,7 +1725,7 @@
 <h3 id="Why-do-File-inclusion-vulnerabilities-happen？"><a href="#Why-do-File-inclusion-vulnerabilities-happen？" class="headerlink" title="Why do File inclusion vulnerabilities happen？"></a>Why do File inclusion vulnerabilities happen？</h3><p>文件包含漏洞通常在web应用程序的各种编程语言中被发现和利用，例如编写以及实现得较差的 <strong>PHP</strong> 程序。这些漏洞的主要问题在于输入验证(input validation)，用户的输入未经排查或验证从而使得用户控制它们。</p>
 <h3 id="What-is-the-risk-of-File-inclusion？"><a href="#What-is-the-risk-of-File-inclusion？" class="headerlink" title="What is the risk of File inclusion？"></a>What is the risk of File inclusion？</h3><p>文件包含的风险取决于攻击者是否可以利用文件包含漏洞读取敏感数据。成功的攻击会导致敏感数据的泄露，包括web应用程序的代码和文件，以及后端系统的凭证。此外，如果攻击者能够以某种方式对服务器的文件进行写入，例如<code>/tmp</code>目录，那么就有可能导致远程命令执行（RCE）漏洞。然而，当文件包含漏洞无法获取敏感数据并且无法对服务器进行写入时，该漏洞就不会有效。</p>
 <h2 id="Path-Traversal（路径遍历）"><a href="#Path-Traversal（路径遍历）" class="headerlink" title="Path Traversal（路径遍历）"></a>Path Traversal（路径遍历）</h2><p>也称为 <strong>Directory traversal</strong>（目录遍历），该漏洞允许攻击者读取操作系统资源，例如运行应用程序的服务器上的本地文件。攻击者通过操纵和滥用web应用程序的URL来定位和访问存储在应用程序之外的文件或目录，从而实现对该漏洞的利用。</p>
-<p>当用户的输入传递给PHP中的<code>file_get_contents</code>等函数时，会出现路径遍历漏洞。需要注意的是，函数并不是导致漏洞的主要因素。通常，输入验证或过滤不佳才是导致该漏洞的原因。在PHP中，您可以使用<code>file_get_contents</code>读取文件的内容。才<a target="_blank" rel="noopener" href="https://www.php.net/manual/en/function.file-get-contents.php">这里</a>可以查看有关该函数的更多信息。</p>
+<p>当用户的输入传递给PHP中的<code>file_get_contents</code>等函数时，会出现路径遍历漏洞。需要注意的是，函数并不是导致漏洞的主要因素。通常，输入验证或过滤不佳才是导致该漏洞的原因。在PHP中，您可以使用<code>file_get_contents</code>读取文件的内容。在<a target="_blank" rel="noopener" href="https://www.php.net/manual/en/function.file-get-contents.php">这里</a>可以查看有关该函数的更多信息。</p>
 <p>下面的图片展示了web应用程序如何存储文件及其文件结构。用户可通过路径<code>/var/www/app/CVs</code>请求访问<code>userCV.pdf</code>文件的内容。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230101155922722.png" alt="image-20230101155922722"></p>
 <p>我们可以通过添加 <strong>payload</strong> 来查看web应用程序的行为用以测试URL参数。路径遍历攻击也称为<code>dot-dot-slash</code>攻击(<strong>..&#x2F;</strong>)，该攻击利用<code>../</code>将目录移动到<strong>上一级</strong>。如果攻击者找到了攻击点，在上图中是<code>get.php?file=</code>，<code>get.php</code>的路径为<code>/var/www/app/get.php</code>，然后攻击者可能发送如下内容：<code>http://webapp.thm/get.php?file=../../../../etc/passwd</code>，通过<code>../</code>不断返回上一级直到根目录，再进入根目录下的<code>/etc</code>目录，找到<code>passwd</code>文件。因此web应用程序最终返回<code>passwd</code>的文件内容。</p>
