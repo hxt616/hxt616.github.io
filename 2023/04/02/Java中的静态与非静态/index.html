@@ -20,17 +20,20 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="May the Force be with you.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="hxt&#39;s Blog">
-<meta property="og:url" content="http://example.com/tags/RSA/index.html">
+  <meta name="description" content="Java中的Object（对象）是类的实例  静态成员和方法由static修饰，属于类，可以通过类名直接访问，无需创建类的实例。  非静态成员和方法属于类的实例，不需要static修饰，非静态成员和方法必须通过类的实例（对象）访问（通过new关键字创建对象后，再通过对象调用）。  示例： 12345678910111213141516171819202122232425public class">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中的静态与非静态">
+<meta property="og:url" content="http://example.com/2023/04/02/Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E4%B8%8E%E9%9D%9E%E9%9D%99%E6%80%81/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="May the Force be with you.">
+<meta property="og:description" content="Java中的Object（对象）是类的实例  静态成员和方法由static修饰，属于类，可以通过类名直接访问，无需创建类的实例。  非静态成员和方法属于类的实例，不需要static修饰，非静态成员和方法必须通过类的实例（对象）访问（通过new关键字创建对象后，再通过对象调用）。  示例： 12345678910111213141516171819202122232425public class">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-02T09:51:58.583Z">
+<meta property="article:modified_time" content="2023-04-02T10:42:55.694Z">
 <meta property="article:author" content="hxt">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/tags/RSA/">
+<link rel="canonical" href="http://example.com/2023/04/02/Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E4%B8%8E%E9%9D%9E%E9%9D%99%E6%80%81/">
 
 
 <script id="page-configurations">
@@ -38,12 +41,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: RSA | hxt's Blog</title>
+  <title>Java中的静态与非静态 | hxt's Blog</title>
   
 
 
@@ -156,51 +159,122 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">RSA
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/04/02/Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E4%B8%8E%E9%9D%9E%E9%9D%99%E6%80%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java中的静态与非静态
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-04-02 17:51:58 / 修改时间：18:42:55" itemprop="dateCreated datePublished" datetime="2023-04-02T17:51:58+08:00">2023-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>800</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
+        <ul>
+<li><p>Java中的<code>Object</code>（对象）是类的实例</p>
+</li>
+<li><p>静态成员和方法由<code>static</code>修饰，属于类，可以通过类名直接访问，无需创建类的实例。</p>
+</li>
+<li><p>非静态成员和方法属于类的实例，不需要<code>static</code>修饰，非静态成员和方法必须通过类的实例（对象）访问（通过new关键字创建对象后，再通过对象调用）。</p>
+</li>
+<li><p>示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Example</span> &#123;</span><br><span class="line">    <span class="comment">// 静态成员变量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">staticVariable</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 非静态成员变量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="variable">nonStaticVariable</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 静态方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">staticMethod</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;This is a static method.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 非静态方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">nonStaticMethod</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;This is a non-static method.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问静态成员和方法</span></span><br><span class="line">Example.staticVariable = <span class="number">1</span>;</span><br><span class="line">Example.staticMethod();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建类的实例并访问非静态成员和方法</span></span><br><span class="line"><span class="type">Example</span> <span class="variable">example</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Example</span>();</span><br><span class="line">example.nonStaticVariable = <span class="number">1</span>;</span><br><span class="line">example.nonStaticMethod();</span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例代码中，我们定义了一个名为 <code>Example</code> 的类，并在其中定义了一个静态成员变量 <code>staticVariable</code>，一个非静态成员变量 <code>nonStaticVariable</code>，一个静态方法 <code>staticMethod</code> 和一个非静态方法 <code>nonStaticMethod</code>。我们展示了如何访问静态和非静态成员和方法。</p>
+</li>
+</ul>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-09-12T15:40:22+08:00"
-              content="2022-09-12">
-          09-12
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/09/12/RSA%E7%AE%97%E6%B3%95/" itemprop="url">
-            <span itemprop="name">RSA算法</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/04/02/Java%E4%B8%AD%E7%9A%84%E6%95%B0%E7%BB%84%E7%9B%B8%E7%AD%89%E9%97%AE%E9%A2%98/" rel="prev" title="Java中的数组相等问题">
+      <i class="fa fa-chevron-left"></i> Java中的数组相等问题
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
