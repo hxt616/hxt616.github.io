@@ -162,6 +162,155 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/21/x86%E6%8C%87%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/21/x86%E6%8C%87%E4%BB%A4/" class="post-title-link" itemprop="url">x86指令（Instructions）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-21 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-21T00:00:00+08:00">2022-08-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-04-13 14:08:25" itemprop="dateModified" datetime="2023-04-13T14:08:25+08:00">2023-04-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>以AT&amp;T语法为例，AT&amp;T与Intel的区别见：<br><a target="_blank" rel="noopener" href="https://hxt616.github.io/2022/08/16/AT&amp;T%E5%92%8CIntel/">https://hxt616.github.io/2022/08/16/AT&amp;T%E5%92%8CIntel/</a></p>
+<p>本文参考《CTF All In One》：<a target="_blank" rel="noopener" href="https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html#334-%E6%8C%87%E4%BB%A4-instructions">https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html#334-%E6%8C%87%E4%BB%A4-instructions</a></p>
+<h1 id="三类x86指令"><a href="#三类x86指令" class="headerlink" title="三类x86指令"></a>三类x86指令</h1><h2 id="数据移动指令"><a href="#数据移动指令" class="headerlink" title="数据移动指令"></a>数据移动指令</h2><h3 id="mov-移动"><a href="#mov-移动" class="headerlink" title="mov 移动"></a><code>mov</code> 移动</h3><p><code>mov</code> 指令将数据从它的第一个参数 ( 即寄存器中的内容, 内存单元中的内容, 或者一个常数值 ) 复制到它的第二个参数 ( 即寄存器或者内存单元 ). 当寄存器到寄存器之间的数据移动是可行的时候, 直接地从内存单元中将数据移动到另一内存单元中是不行的. 在这种需要在内存单元中传递数据的情况下, 它数据来源的那个内存单元必须首先把那个内存单元中的数据加载到一个寄存器中, 然后才可以通过这个寄存器来把数据移动到目标内存单元中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov %ebx, %eax        将 EBX 中的值复制到 EAX 中</span><br><span class="line">mov %ebx, var(,1)     将 EBX 中的 4 个字节大小的数据移动的内存中标签为 var 的地方去.( var 是一个 32 位常数)</span><br><span class="line">mov (%ebx), %eax      从 EBX 中的内存地址加载 4 个字节的数据到 EAX, 就是把 EBX 中的内容当作标签, 这个标签在内存中对应的数据放到 EAX 中</span><br></pre></td></tr></table></figure>
+
+<h3 id="push-入栈"><a href="#push-入栈" class="headerlink" title="push 入栈"></a><code>push</code> 入栈</h3><p><code>push</code>指令将它的参数移动到硬件支持的<strong>栈</strong>内存顶端. 特别地, <code>push</code> 首先将 ESP 中的值<strong>减少</strong> 4, 然后将它的参数移动到一个 32 位的地址单元 ( %esp ). ESP ( 栈指针 ) 会随着不断入栈从而持续递减, 即栈内存是从高地址单元到低地址单元增长。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push %eax         将 EAX 送入栈</span><br><span class="line">push var(,1)      将 var 对应的 4 字节大小的数据送入栈中</span><br></pre></td></tr></table></figure>
+
+<h3 id="pop-出栈"><a href="#pop-出栈" class="headerlink" title="pop 出栈"></a><code>pop</code> 出栈</h3><p><code>pop</code>指令从硬件支持的栈内存顶端移除 4 字节的数据, 并把这个数据放到该指令指定的参数中 ( 即寄存器或者内存单元 ). 其首先将内存中 ( %esp ) 的 4 字节数据放到指定的寄存器或者内存单元中, 然后让 <strong>ESP + 4</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pop %edi       将栈顶的元素移除, 并放入到寄存器 EDI 中</span><br><span class="line">pop (%ebx)     将栈顶的元素移除, 并放入从 EBX 开始的 4 个字节大小的内存单元中</span><br></pre></td></tr></table></figure>
+
+<h3 id="lea-加载有效地址"><a href="#lea-加载有效地址" class="headerlink" title="lea 加载有效地址"></a><code>lea</code> 加载有效地址</h3><p><code>lea</code>指令将其第一个参数指定的内存单元 放入到 第二个参数指定的寄存器中。</p>
+<p><code>LEA AX,[1000H]</code>，作用是将源操作数 [1000H] 的偏移地址 1000H 送至 AX。理解时，可直接将[ ]去掉，等同于 <code>MOV AX,1000H</code>。 再如：<code>LEA BX,[AX]</code>，等同于 <code>MOV BX,AX</code>；<code>LEA BX,TABLE</code> 等同于 <code>MOV BX,OFFSET TABLE</code>。 但有时不能直接使用 <code>MOV</code> 代替： 比如：<code>LEA AX,[SI+6]</code> 不能直接替换成：<code>MOV AX,SI+6</code>；但可替换为： <code>MOV AX,SI</code> <code>ADD AX,6</code> 两步完成。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lea (%ebx,%esi,8), %edi      EBX+8*ESI 的值被移入到了 EDI</span><br><span class="line">lea val(,1), %eax          val 的值被移入到了 EAX</span><br></pre></td></tr></table></figure>
+
+<h2 id="逻辑运算指令"><a href="#逻辑运算指令" class="headerlink" title="逻辑运算指令"></a>逻辑运算指令</h2><h3 id="add-整数相加"><a href="#add-整数相加" class="headerlink" title="add 整数相加"></a><code>add</code> 整数相加</h3><p><code>add</code> 指令将两个参数相加，然后将结果存放到第二个参数中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add $10, %eax        EAX 中的值被设置为了 EAX+10</span><br><span class="line">addb $10, (%eax)       往 EAX 中的值 所代表的内存单元地址 加上 1 个字节的数字 10</span><br></pre></td></tr></table></figure>
+
+<h3 id="sub-整数相减"><a href="#sub-整数相减" class="headerlink" title="sub 整数相减"></a><code>sub</code> 整数相减</h3><p><code>sub</code>指令将第二个参数的值与第一个相减，就是后面那个减去前面那个，然后把结果存储到第二个参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sub %ah, %al      AL 被设置成 AL-AH</span><br><span class="line">sub $216, %eax        将 EAX 中的值减去 216</span><br></pre></td></tr></table></figure>
+
+<h3 id="inc-自增"><a href="#inc-自增" class="headerlink" title="inc 自增"></a><code>inc</code> 自增</h3><p><code>inc</code> 指令让它的参数加 1。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incl var(,1)        将 var 所代表的 32 位整数加上 1</span><br></pre></td></tr></table></figure>
+
+<h3 id="dec-自减"><a href="#dec-自减" class="headerlink" title="dec 自减"></a><code>dec</code> 自减</h3><p><code>dec</code>指令让它的参数减1。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dec %eax       EAX 中的值减去 1</span><br></pre></td></tr></table></figure>
+
+<h3 id="imul-整数相乘"><a href="#imul-整数相乘" class="headerlink" title="imul 整数相乘"></a><code>imul</code> 整数相乘</h3><p><code>imul</code> 指令有两种基本格式 : 第一种是 2 个参数的；第二种格式是 3 个参数的。</p>
+<p>2 个参数的这种格式, 先是将两个参数相乘, 然后把结果存到第二个参数中。<strong>运算结果 ( 即第二个参数 ) 必须是一个寄存器</strong>。</p>
+<p>3 个参数的这种格式，先是将它的第 1 个参数和第 2 个参数相乘，然后把结果存到第 3 个参数中，<strong>第 3 个参数必须是一个寄存器</strong>。此外，第 1 个参数必须是一个常数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">imul (%ebx), %eax        将 EAX 中的 32 位整数, 与 EBX 中的内容所指的内存单元, 相乘, 然后把结果存到 EAX 中</span><br><span class="line">imul $25, %edi, %esi        ESI 被设置为 EDI * 25.</span><br></pre></td></tr></table></figure>
+
+<h3 id="idiv-整数相除"><a href="#idiv-整数相除" class="headerlink" title="idiv 整数相除"></a><code>idiv</code> 整数相除</h3><p><code>idiv</code>只有一个操作数，此操作数为除数，而被除数则为 EDX : EAX 中的内容（一个64位的整数），除法结果 ( 商 ) 存在 EAX 中，而所得的余数存在 EDX 中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">idiv %ebx       用 EDX : EAX 的值除以 EBX 的值。商存放在 EAX 中, 余数存放在 EDX 中</span><br><span class="line">idivw (%ebx)       将 EDX : EAX 的值除以存储在 EBX 所对应内存单元的 32 位值。商存放在 EAX 中, 余数存放在 EDX 中</span><br></pre></td></tr></table></figure>
+
+<h3 id="and，or，xor-按位逻辑-与-或-异或-运算"><a href="#and，or，xor-按位逻辑-与-或-异或-运算" class="headerlink" title="and，or，xor   按位逻辑 与, 或, 异或 运算"></a><code>and</code>，<code>or</code>，<code>xor</code>   按位逻辑 与, 或, 异或 运算</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">and $0x0F, %eax       只留下 EAX 中最后 4 位数字 (二进制位)</span><br><span class="line">xor %edx, %edx       将 EDX 的值全部设置成 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="not-非"><a href="#not-非" class="headerlink" title="not 非"></a><code>not</code> 非</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not %eax     将 EAX 的所有值翻转</span><br></pre></td></tr></table></figure>
+
+<h3 id="neg-取负指令"><a href="#neg-取负指令" class="headerlink" title="neg 取负指令"></a><code>neg</code> 取负指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neg %eax       EAX → -EAX</span><br></pre></td></tr></table></figure>
+
+<h3 id="shl-按位左移"><a href="#shl-按位左移" class="headerlink" title="shl 按位左移"></a><code>shl</code> 按位左移</h3><p><code>shl</code>对第二个参数进行位运算，移动的位数由第一个参数决定。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shl $1, %eax       将 EAX 的值乘以 2 (如果最高有效位是 0 的话)</span><br></pre></td></tr></table></figure>
+
+<h3 id="shr-按位右移"><a href="#shr-按位右移" class="headerlink" title="shr 按位右移"></a><code>shr</code> 按位右移</h3><p>同上</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shr %cl, %ebx       将 EBX 的值除以 2n, 其中 n 为 CL 中的值, 运算最终结果存到 EBX 中</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程控制指令"><a href="#流程控制指令" class="headerlink" title="流程控制指令"></a>流程控制指令</h2><p>x86处理器的指令指针寄存器 ( EIP )为 32 位寄存器，它用来在内存中指示我们输入汇编指令的位置。就是说这个寄存器指向哪个内存单元，那个单元存储的机器码就是程序执行的指令。通常它是指向我们程序要执行的 下一条指令。</p>
+<h3 id="jmp-跳转指令"><a href="#jmp-跳转指令" class="headerlink" title="jmp 跳转指令"></a><code>jmp</code> 跳转指令</h3><p>将程序跳转到参数指定的内存地址，然后执行该内存地址的指令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp begin         跳转到打了 &quot; begin &quot; 这个标签的地方</span><br></pre></td></tr></table></figure>
+
+<h3 id="jcondition-有条件的跳转"><a href="#jcondition-有条件的跳转" class="headerlink" title="jcondition 有条件的跳转"></a><code>jcondition</code> 有条件的跳转</h3><p>语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">je &lt;label           当相等的时候跳转</span><br><span class="line">jne &lt;label          当不相等的时候跳转</span><br><span class="line">jz &lt;label           当最后结果为 0 的时候跳转</span><br><span class="line">jg &lt;label           当大于的时候跳转</span><br><span class="line">jge &lt;label          当大于等于的时候跳转</span><br><span class="line">jl &lt;label           当小于的时候跳转</span><br><span class="line">jle &lt;label          当小于等于的时候跳转</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmp %ebx, %eax        某些指令执行前先对参数进行cmp操作</span><br><span class="line">jle done          如果 EAX 的值小于等于 EBX 的值, 就跳转到 &quot; done &quot; 标签, 否则就继续执行下一条指令</span><br></pre></td></tr></table></figure>
+
+<h3 id="cmp-比较指令"><a href="#cmp-比较指令" class="headerlink" title="cmp 比较指令"></a><code>cmp</code> 比较指令</h3><p>比较两个参数的值，适当地设置机器状态字中的条件代码。此指令与sub指令类似，但是cmp不用将计算结果保存在操作数中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmpb $10, (%ebx)</span><br><span class="line">jeq loop             如果 EBX 的值等于整数常量 10, 则跳转到标签 &quot; loop &quot; 的位置.</span><br></pre></td></tr></table></figure>
+
+<h3 id="call，ret-子程序调用与返回"><a href="#call，ret-子程序调用与返回" class="headerlink" title="call，ret 子程序调用与返回"></a><code>call</code>，<code>ret</code> 子程序调用与返回</h3><p>这两个指令实现子程序的调用和返回。</p>
+<p><code>call</code> 指令首先将当前代码位置推到内存中硬件支持的栈内存上 ( 请看 <code>push</code> 指令 )，然后无条件跳转到标签参数指定的代码位置，<code>call</code> 指令结束后, 返回到调用之前的地址。</p>
+<p><code>ret</code> 指令实现子程序的返回。该指令首先从栈中取出代码 ( 类似于 <code>pop</code> 指令 )，然后它无条件跳转到检索到的代码位置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">call &lt;label</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/cat%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E4%B9%B1%E7%A0%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1216,400 +1365,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/07/Base64/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/07/Base64/" class="post-title-link" itemprop="url">Base64</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-04-07 16:47:53" itemprop="dateCreated datePublished" datetime="2022-04-07T16:47:53+08:00">2022-04-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-29 19:12:36" itemprop="dateModified" datetime="2022-08-29T19:12:36+08:00">2022-08-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">编码</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考维基百科（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Base64%EF%BC%89%E3%80%81CTF">https://zh.wikipedia.org/wiki/Base64）、CTF</a> Wiki</p>
-<p><strong>Base64</strong>是一种基于64个可打印字符来表示<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E8%BF%9B%E5%88%B6">二进制数据</a>的表示方法。由于2的6次方等于64，正好对应了64个字符，所以每6个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BD%8D%E5%85%83">比特</a>为一个单元，对应某个可打印字符。</p>
-<p>转换的时候，将<strong>3 字节</strong>的数据，先后放入一个 <strong>24 位</strong>的缓冲区中，先来的字节占高位。数据不足 3 字节的话，于缓冲器中剩下的比特用 0 补足。</p>
-<p>通常而言 在逆向题目中，当我们能找到 <br><code>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/</code> <br>这样的索引表，再经过简单的分析基本就能判定是 Base64 编码。</p>
-<p><strong>示例</strong>：</p>
-<p>编码“Man”的结果为<code>TWFu</code>，详细原理如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220407163844733.png" alt="image-20220407163844733"></p>
-<p>如果要编码的字节数不能被3整除，最后会多出1个或2个字节，那么可以使用下面的方法进行处理：先使用0字节值在末尾补足，使其能够被3整除，然后再进行Base64的编码。在编码后的Base64文本后加上一个或两个<code>=</code>号，代表补足的字节数。也就是说，当最后剩余两个八位(待补足)字节（2个byte）时，最后一个6位的Base64字节块有四位是0值，最后附加上两个等号；如果最后剩余一个八位(待补足)字节（1个byte）时，最后一个6位的base字节块有两位是0值，最后附加一个等号。 参考下表：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220407163920831.png" alt="image-20220407163920831"></p>
-<p>附：Base64索引表</p>
-<table>
-<thead>
-<tr>
-<th align="center">十进制</th>
-<th align="center">二进制</th>
-<th align="center">字符</th>
-<th align="center"></th>
-<th align="center">十进制</th>
-<th align="center">二进制</th>
-<th align="center">字符</th>
-<th align="center"></th>
-<th align="center">十进制</th>
-<th align="center">二进制</th>
-<th align="center">字符</th>
-<th align="center"></th>
-<th align="center">十进制</th>
-<th align="center">二进制</th>
-<th align="center">字符</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">0</td>
-<td align="center">000000</td>
-<td align="center">A</td>
-<td align="center"></td>
-<td align="center">16</td>
-<td align="center">010000</td>
-<td align="center">Q</td>
-<td align="center"></td>
-<td align="center">32</td>
-<td align="center">100000</td>
-<td align="center">g</td>
-<td align="center"></td>
-<td align="center">48</td>
-<td align="center">110000</td>
-<td align="center">w</td>
-</tr>
-<tr>
-<td align="center">1</td>
-<td align="center">000001</td>
-<td align="center">B</td>
-<td align="center"></td>
-<td align="center">17</td>
-<td align="center">010001</td>
-<td align="center">R</td>
-<td align="center"></td>
-<td align="center">33</td>
-<td align="center">100001</td>
-<td align="center">h</td>
-<td align="center"></td>
-<td align="center">49</td>
-<td align="center">110001</td>
-<td align="center">x</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center">000010</td>
-<td align="center">C</td>
-<td align="center"></td>
-<td align="center">18</td>
-<td align="center">010010</td>
-<td align="center">S</td>
-<td align="center"></td>
-<td align="center">34</td>
-<td align="center">100010</td>
-<td align="center">i</td>
-<td align="center"></td>
-<td align="center">50</td>
-<td align="center">110010</td>
-<td align="center">y</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center">000011</td>
-<td align="center">D</td>
-<td align="center"></td>
-<td align="center">19</td>
-<td align="center">010011</td>
-<td align="center">T</td>
-<td align="center"></td>
-<td align="center">35</td>
-<td align="center">100011</td>
-<td align="center">j</td>
-<td align="center"></td>
-<td align="center">51</td>
-<td align="center">110011</td>
-<td align="center">z</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center">000100</td>
-<td align="center">E</td>
-<td align="center"></td>
-<td align="center">20</td>
-<td align="center">010100</td>
-<td align="center">U</td>
-<td align="center"></td>
-<td align="center">36</td>
-<td align="center">100100</td>
-<td align="center">k</td>
-<td align="center"></td>
-<td align="center">52</td>
-<td align="center">110100</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center">000101</td>
-<td align="center">F</td>
-<td align="center"></td>
-<td align="center">21</td>
-<td align="center">010101</td>
-<td align="center">V</td>
-<td align="center"></td>
-<td align="center">37</td>
-<td align="center">100101</td>
-<td align="center">l</td>
-<td align="center"></td>
-<td align="center">53</td>
-<td align="center">110101</td>
-<td align="center">1</td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="center">000110</td>
-<td align="center">G</td>
-<td align="center"></td>
-<td align="center">22</td>
-<td align="center">010110</td>
-<td align="center">W</td>
-<td align="center"></td>
-<td align="center">38</td>
-<td align="center">100110</td>
-<td align="center">m</td>
-<td align="center"></td>
-<td align="center">54</td>
-<td align="center">110110</td>
-<td align="center">2</td>
-</tr>
-<tr>
-<td align="center">7</td>
-<td align="center">000111</td>
-<td align="center">H</td>
-<td align="center"></td>
-<td align="center">23</td>
-<td align="center">010111</td>
-<td align="center">X</td>
-<td align="center"></td>
-<td align="center">39</td>
-<td align="center">100111</td>
-<td align="center">n</td>
-<td align="center"></td>
-<td align="center">55</td>
-<td align="center">110111</td>
-<td align="center">3</td>
-</tr>
-<tr>
-<td align="center">8</td>
-<td align="center">001000</td>
-<td align="center">I</td>
-<td align="center"></td>
-<td align="center">24</td>
-<td align="center">011000</td>
-<td align="center">Y</td>
-<td align="center"></td>
-<td align="center">40</td>
-<td align="center">101000</td>
-<td align="center">o</td>
-<td align="center"></td>
-<td align="center">56</td>
-<td align="center">111000</td>
-<td align="center">4</td>
-</tr>
-<tr>
-<td align="center">9</td>
-<td align="center">001001</td>
-<td align="center">J</td>
-<td align="center"></td>
-<td align="center">25</td>
-<td align="center">011001</td>
-<td align="center">Z</td>
-<td align="center"></td>
-<td align="center">41</td>
-<td align="center">101001</td>
-<td align="center">p</td>
-<td align="center"></td>
-<td align="center">57</td>
-<td align="center">111001</td>
-<td align="center">5</td>
-</tr>
-<tr>
-<td align="center">10</td>
-<td align="center">001010</td>
-<td align="center">K</td>
-<td align="center"></td>
-<td align="center">26</td>
-<td align="center">011010</td>
-<td align="center">a</td>
-<td align="center"></td>
-<td align="center">42</td>
-<td align="center">101010</td>
-<td align="center">q</td>
-<td align="center"></td>
-<td align="center">58</td>
-<td align="center">111010</td>
-<td align="center">6</td>
-</tr>
-<tr>
-<td align="center">11</td>
-<td align="center">001011</td>
-<td align="center">L</td>
-<td align="center"></td>
-<td align="center">27</td>
-<td align="center">011011</td>
-<td align="center">b</td>
-<td align="center"></td>
-<td align="center">43</td>
-<td align="center">101011</td>
-<td align="center">r</td>
-<td align="center"></td>
-<td align="center">59</td>
-<td align="center">111011</td>
-<td align="center">7</td>
-</tr>
-<tr>
-<td align="center">12</td>
-<td align="center">001100</td>
-<td align="center">M</td>
-<td align="center"></td>
-<td align="center">28</td>
-<td align="center">011100</td>
-<td align="center">c</td>
-<td align="center"></td>
-<td align="center">44</td>
-<td align="center">101100</td>
-<td align="center">s</td>
-<td align="center"></td>
-<td align="center">60</td>
-<td align="center">111100</td>
-<td align="center">8</td>
-</tr>
-<tr>
-<td align="center">13</td>
-<td align="center">001101</td>
-<td align="center">N</td>
-<td align="center"></td>
-<td align="center">29</td>
-<td align="center">011101</td>
-<td align="center">d</td>
-<td align="center"></td>
-<td align="center">45</td>
-<td align="center">101101</td>
-<td align="center">t</td>
-<td align="center"></td>
-<td align="center">61</td>
-<td align="center">111101</td>
-<td align="center">9</td>
-</tr>
-<tr>
-<td align="center">14</td>
-<td align="center">001110</td>
-<td align="center">O</td>
-<td align="center"></td>
-<td align="center">30</td>
-<td align="center">011110</td>
-<td align="center">e</td>
-<td align="center"></td>
-<td align="center">46</td>
-<td align="center">101110</td>
-<td align="center">u</td>
-<td align="center"></td>
-<td align="center">62</td>
-<td align="center">111110</td>
-<td align="center">+</td>
-</tr>
-<tr>
-<td align="center">15</td>
-<td align="center">001111</td>
-<td align="center">P</td>
-<td align="center"></td>
-<td align="center">31</td>
-<td align="center">011111</td>
-<td align="center">f</td>
-<td align="center"></td>
-<td align="center">47</td>
-<td align="center">101111</td>
-<td align="center">v</td>
-<td align="center"></td>
-<td align="center">63</td>
-<td align="center">111111</td>
-<td align="center">&#x2F;</td>
-</tr>
-</tbody></table>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1681,7 +1436,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1730,7 +1485,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">132k</span>
+    <span title="站点总字数">133k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
