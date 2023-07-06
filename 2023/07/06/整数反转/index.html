@@ -20,20 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="参考：http:&#x2F;&#x2F;c.biancheng.net&#x2F;gcc&#x2F; 相关资料： https:&#x2F;&#x2F;www.cnblogs.com&#x2F;fnlingnzb-learner&#x2F;p&#x2F;8059251.html 动态库和静态库 https:&#x2F;&#x2F;bravey.github.io&#x2F;2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9  gcc编译选项 GCCG">
+  <meta name="description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;reverse-integer&#x2F; 这算是一道简单题，我最后还是参考官方题解才做出来:cry:  给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。 如果反转后整数超过 32 位的有符号整数的范围 [−231, 231 − 1] ，就返回 0。 假设环境不允许存储 64 位整数（有符号或无符号）。 示例 ：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="gcc入门">
-<meta property="og:url" content="http://example.com/2022/07/22/gcc/index.html">
+<meta property="og:title" content="整数反转">
+<meta property="og:url" content="http://example.com/2023/07/06/%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="参考：http:&#x2F;&#x2F;c.biancheng.net&#x2F;gcc&#x2F; 相关资料： https:&#x2F;&#x2F;www.cnblogs.com&#x2F;fnlingnzb-learner&#x2F;p&#x2F;8059251.html 动态库和静态库 https:&#x2F;&#x2F;bravey.github.io&#x2F;2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9  gcc编译选项 GCCG">
+<meta property="og:description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;reverse-integer&#x2F; 这算是一道简单题，我最后还是参考官方题解才做出来:cry:  给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。 如果反转后整数超过 32 位的有符号整数的范围 [−231, 231 − 1] ，就返回 0。 假设环境不允许存储 64 位整数（有符号或无符号）。 示例 ：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-07-22T04:00:48.574Z">
-<meta property="article:modified_time" content="2022-08-31T02:51:22.613Z">
+<meta property="article:published_time" content="2023-07-06T08:57:26.406Z">
+<meta property="article:modified_time" content="2023-07-06T08:57:54.960Z">
 <meta property="article:author" content="hxt">
-<meta property="article:tag" content="gcc">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2022/07/22/gcc/">
+<link rel="canonical" href="http://example.com/2023/07/06/%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/">
 
 
 <script id="page-configurations">
@@ -46,7 +48,7 @@
   };
 </script>
 
-  <title>gcc入门 | hxt's Blog</title>
+  <title>整数反转 | hxt's Blog</title>
   
 
 
@@ -166,7 +168,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/22/gcc/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/06/%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -179,7 +181,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          gcc入门
+          整数反转
         </h1>
 
         <div class="post-meta">
@@ -188,23 +190,21 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-07-22 12:00:48" itemprop="dateCreated datePublished" datetime="2022-07-22T12:00:48+08:00">2022-07-22</time>
+              <time title="创建时间：2023-07-06 16:57:26 / 修改时间：16:57:54" itemprop="dateCreated datePublished" datetime="2023-07-06T16:57:26+08:00">2023-07-06</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-31 10:51:22" itemprop="dateModified" datetime="2022-08-31T10:51:22+08:00">2022-08-31</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/GCC/" itemprop="url" rel="index"><span itemprop="name">GCC</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
                 </span>
             </span>
 
@@ -221,14 +221,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
+              <span>807</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -240,44 +240,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>参考：<a target="_blank" rel="noopener" href="http://c.biancheng.net/gcc/">http://c.biancheng.net/gcc/</a></p>
-<p>相关资料：</p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html">https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html</a> 动态库和静态库</p>
-<p><a target="_blank" rel="noopener" href="https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9">https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9</a>  gcc编译选项</p>
-<h1 id="GCC"><a href="#GCC" class="headerlink" title="GCC"></a>GCC</h1><p>GCC全称 the GNU Compiler Collection ，是一套<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%B7%A8%E7%A8%8B%E8%AA%9E%E8%A8%80">编程语言</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BC%96%E8%AF%91%E5%99%A8">编译器</a>，以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GPL">GPL</a>及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LGPL">LGPL</a>许可证所发行的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E8%BB%9F%E9%AB%94">自由软件</a>，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU%E8%A8%88%E5%8A%83">GNU计划</a>的关键部分，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU%E5%B7%A5%E5%85%B7%E9%93%BE">GNU工具链</a>的主要组成部分之一。可处理<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">Fortran</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80)">Pascal</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Objective-C">Objective-C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Java">Java</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Ada">Ada</a>，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Go">Go</a>与其他语言。</p>
-<p>GCC中包含gcc和g++，分别处理C语言和C++。关于这两者的区别可参考<a target="_blank" rel="noopener" href="http://c.biancheng.net/view/7936.html">http://c.biancheng.net/view/7936.html</a></p>
-<h2 id="gcc使用技巧"><a href="#gcc使用技巧" class="headerlink" title="gcc使用技巧"></a>gcc使用技巧</h2><ol>
-<li><p>当文件没有扩展名时，可使用 <code>-x</code> 选项指明当前文件的类型。比如当前有个文件demo，当直接使用gcc demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件，因此使用 <code>gcc -xc demo</code> （将文件当作C语言处理）。</p>
-</li>
-<li><p>gcc + 文件名，生成对应的可执行文件，默认为a.out 。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./a.out</span></span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-o</code>选项指定生成的可执行文件的文件名。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c -o helloworld         #用来指定要生成的文件名。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./helloworld</span></span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-E</code>选项可控制GCC编译器仅对源码做<strong>预处理</strong>操作。<br>所谓预处理操作，主要是处理那些源文件和头文件中以 # 开头的命令（比如 #include、#define、#ifdef 等），并删除程序中所有的注释 &#x2F;&#x2F; 和 &#x2F;* … *&#x2F;。</p>
-<p>一般将预处理的内容保存在.i后缀的文件中 :</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -E helloworld.c -o helloworld.i</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-S</code>选项可令GCC编译器仅将指定文件加工至<strong>编译阶段</strong>，并生成对应的汇编代码文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.i         #GCC编译器只需编译此文件。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.c         #GCC编译器需要对其进行预处理和编译这两步操作。</span></span><br></pre></td></tr></table></figure>
+        <p>题目地址：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-integer/">https://leetcode.cn/problems/reverse-integer/</a></p>
+<p>这算是一道简单题，我最后还是参考官方题解才做出来:cry:</p>
+<blockquote>
+<p>给你一个 32 位的有符号整数 <code>x</code> ，返回将 <code>x</code> 中的数字部分反转后的结果。</p>
+<p>如果反转后整数超过 32 位的有符号整数的范围 <code>[−231, 231 − 1]</code> ，就返回 0。</p>
+<p><strong>假设环境不允许存储 64 位整数（有符号或无符号）。</strong></p>
+<p><strong>示例 ：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：x = 123</span><br><span class="line">输出：321</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>int类型表示的范围：**-2147483648** ~ <strong>2147483647</strong></p>
+<p>这里不能在算出结果后再比较结果是否溢出，因为题目要求不允许使用64位整数，即运算过程中的数字必须在32位有符号整数的范围内，所以在计算过程中可能会直接溢出报错。</p>
+<p>这里使用如下思想：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 弹出 x 的末尾数字 digit</span></span><br><span class="line">digit = x % <span class="number">10</span></span><br><span class="line">x /= <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将数字 digit 推入 rev 末尾</span></span><br><span class="line">rev = rev * <span class="number">10</span> + digit</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>以上这两行命令均能生成与原文件名相同的后缀为.s的文件（内容为汇编代码）。</p>
-</li>
-<li><p><code>-c</code>选项可让GCC编译器将指定文件加工至<strong>汇编阶段</strong>（但并不执行链接操作），并生成对应的目标文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -c helloworld.s         #生成了与原文件名相同的后缀为.o的文件，将汇编代码转变成机器可以执行的指令</span></span><br></pre></td></tr></table></figure>
+<p>首先题目要求输入必须是32位int类型，所以不用对输入进行范围判断。假设输入正数<strong>2147483645</strong>，此时反转到最后一个数字前，<code>rev</code>的值为<strong>546384741</strong>，现在还剩最后一个数字，需要执行这句<code>rev = rev * 10 + digit</code>，但在乘以 10 时就已经溢出报错了，所以该代码不能执行，因此需要在每次循环执行<code>rev = rev * 10 + digit</code>前判断<code>rev</code>的范围是否满足：</p>
+<p>​        <strong>$⌈\frac{−2^{31}}{10}⌉≤rev≤⌊\frac{2^{31}−1}{10}⌋$</strong></p>
+<p>完整代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">reverse</span><span class="params">(<span class="type">int</span> x)</span>&#123;</span><br><span class="line">    <span class="type">int</span> t=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x!=<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(t&lt;INT_MIN/<span class="number">10</span> || t&gt;INT_MAX/<span class="number">10</span>)&#123; <span class="comment">//INT_MIN 和 INT_MAX 对应最大值和最小值</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        t = t*<span class="number">10</span> + x%<span class="number">10</span>;</span><br><span class="line">        x/=<span class="number">10</span>;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>-c选项同样对.c和.i文件有用。</p>
-</li>
-<li><p>gcc执行<strong>链接操作</strong>。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.o -o helloworld           #生成可执行文件helloworld。</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-g</code>选项可产生调试信息，可以使用<strong>gdb</strong>调试可执行文件。</p>
-</li>
-<li><p><code>-m32</code>选项指定生成32位机器的汇编代码，同理<code>-m64</code>则生成64位机器汇编代码。</p>
-<p>参考文章 ：<a target="_blank" rel="noopener" href="https://blog.csdn.net/vantian/article/details/78748653?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166191228716782388062237%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=166191228716782388062237&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~pc_rank_34-1-78748653-null-null.142">https://blog.csdn.net/vantian/article/details/78748653?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166191228716782388062237%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=166191228716782388062237&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~pc_rank_34-1-78748653-null-null.142</a></p>
-</li>
-</ol>
 
     </div>
 
@@ -287,7 +268,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/gcc/" rel="tag"># gcc</a>
+              <a href="/tags/C/" rel="tag"># C</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
           </div>
 
         
@@ -296,13 +279,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/07/13/%E5%9C%B0%E5%9D%80%E7%9A%84%E5%AF%BB%E5%9D%80%E8%83%BD%E5%8A%9B/" rel="prev" title="地址的寻址能力">
-      <i class="fa fa-chevron-left"></i> 地址的寻址能力
+    <a href="/2023/07/05/%E5%AF%BB%E6%89%BE%E4%B8%A4%E4%B8%AA%E6%AD%A3%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0/" rel="prev" title="寻找两个正序数组的中位数">
+      <i class="fa fa-chevron-left"></i> 寻找两个正序数组的中位数
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/07/23/GDB/" rel="next" title="GDB入门">
-      GDB入门 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -361,7 +341,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GCC"><span class="nav-number">1.</span> <span class="nav-text">GCC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">1.1.</span> <span class="nav-text">gcc使用技巧</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
