@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="参考：http:&#x2F;&#x2F;c.biancheng.net&#x2F;gcc&#x2F; 相关资料： https:&#x2F;&#x2F;www.cnblogs.com&#x2F;fnlingnzb-learner&#x2F;p&#x2F;8059251.html 动态库和静态库 https:&#x2F;&#x2F;bravey.github.io&#x2F;2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9  gcc编译选项 GCCG">
+  <meta name="description" content="参考：http:&#x2F;&#x2F;c.biancheng.net&#x2F;gcc&#x2F; 相关资料： https:&#x2F;&#x2F;www.cnblogs.com&#x2F;fnlingnzb-learner&#x2F;p&#x2F;8059251.html 动态库和静态库 https:&#x2F;&#x2F;bravey.github.io&#x2F;2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9 gcc编译选项 GCC G">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gcc入门">
 <meta property="og:url" content="http://example.com/2022/07/22/gcc/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="参考：http:&#x2F;&#x2F;c.biancheng.net&#x2F;gcc&#x2F; 相关资料： https:&#x2F;&#x2F;www.cnblogs.com&#x2F;fnlingnzb-learner&#x2F;p&#x2F;8059251.html 动态库和静态库 https:&#x2F;&#x2F;bravey.github.io&#x2F;2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9  gcc编译选项 GCCG">
+<meta property="og:description" content="参考：http:&#x2F;&#x2F;c.biancheng.net&#x2F;gcc&#x2F; 相关资料： https:&#x2F;&#x2F;www.cnblogs.com&#x2F;fnlingnzb-learner&#x2F;p&#x2F;8059251.html 动态库和静态库 https:&#x2F;&#x2F;bravey.github.io&#x2F;2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9 gcc编译选项 GCC G">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-07-22T04:00:48.574Z">
 <meta property="article:modified_time" content="2022-08-31T02:51:22.613Z">
@@ -242,41 +242,42 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>参考：<a target="_blank" rel="noopener" href="http://c.biancheng.net/gcc/">http://c.biancheng.net/gcc/</a></p>
+        <p>参考：http://c.biancheng.net/gcc/</p>
 <p>相关资料：</p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html">https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html</a> 动态库和静态库</p>
-<p><a target="_blank" rel="noopener" href="https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9">https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9</a>  gcc编译选项</p>
-<h1 id="GCC"><a href="#GCC" class="headerlink" title="GCC"></a>GCC</h1><p>GCC全称 the GNU Compiler Collection ，是一套<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/編程語言">编程语言</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/编译器">编译器</a>，以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GPL">GPL</a>及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LGPL">LGPL</a>许可证所发行的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/自由軟體">自由软件</a>，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU計劃">GNU计划</a>的关键部分，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU工具链">GNU工具链</a>的主要组成部分之一。可处理<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">Fortran</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(程式語言">Pascal</a>)、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Objective-C">Objective-C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Java">Java</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Ada">Ada</a>，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Go">Go</a>与其他语言。</p>
-<p>GCC中包含gcc和g++，分别处理C语言和C++。关于这两者的区别可参考<a target="_blank" rel="noopener" href="http://c.biancheng.net/view/7936.html">http://c.biancheng.net/view/7936.html</a></p>
-<h2 id="gcc使用技巧"><a href="#gcc使用技巧" class="headerlink" title="gcc使用技巧"></a>gcc使用技巧</h2><ol>
-<li><p>当文件没有扩展名时，可使用 <code>-x</code> 选项指明当前文件的类型。比如当前有个文件demo，当直接使用gcc demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件，因此使用 <code>gcc -xc demo</code> （将文件当作C语言处理）。</p>
-</li>
+<p>https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html
+动态库和静态库</p>
+<p>https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9
+gcc编译选项</p>
+<h1 id="gcc">GCC</h1>
+<p>GCC全称 the GNU Compiler Collection ，是一套<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/編程語言">编程语言</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/编译器">编译器</a>，以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GPL">GPL</a>及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LGPL">LGPL</a>许可证所发行的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/自由軟體">自由软件</a>，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU計劃">GNU计划</a>的关键部分，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU工具链">GNU工具链</a>的主要组成部分之一。可处理<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">Fortran</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(程式語言)">Pascal</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Objective-C">Objective-C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Java">Java</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Ada">Ada</a>，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Go">Go</a>与其他语言。</p>
+<p>GCC中包含gcc和g++，分别处理C语言和C++。关于这两者的区别可参考http://c.biancheng.net/view/7936.html</p>
+<h2 id="gcc使用技巧">gcc使用技巧</h2>
+<ol type="1">
+<li><p>当文件没有扩展名时，可使用 <code>-x</code>
+选项指明当前文件的类型。比如当前有个文件demo，当直接使用gcc
+demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件，因此使用
+<code>gcc -xc demo</code> （将文件当作C语言处理）。</p></li>
 <li><p>gcc + 文件名，生成对应的可执行文件，默认为a.out 。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./a.out</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./a.out</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure></li>
 <li><p><code>-o</code>选项指定生成的可执行文件的文件名。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c -o helloworld         #用来指定要生成的文件名。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./helloworld</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><code>-E</code>选项可控制GCC编译器仅对源码做<strong>预处理</strong>操作。<br>所谓预处理操作，主要是处理那些源文件和头文件中以 # 开头的命令（比如 #include、#define、#ifdef 等），并删除程序中所有的注释 // 和 /<em> … </em>/。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c -o helloworld         #用来指定要生成的文件名。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./helloworld</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p><code>-E</code>选项可控制GCC编译器仅对源码做<strong>预处理</strong>操作。<br>所谓预处理操作，主要是处理那些源文件和头文件中以
+# 开头的命令（比如 #include、#define、#ifdef
+等），并删除程序中所有的注释 // 和 /* ... */。</p>
 <p>一般将预处理的内容保存在.i后缀的文件中 :</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -E helloworld.c -o helloworld.i</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -E helloworld.c -o helloworld.i</span></span><br></pre></td></tr></tbody></table></figure></li>
 <li><p><code>-S</code>选项可令GCC编译器仅将指定文件加工至<strong>编译阶段</strong>，并生成对应的汇编代码文件。</p>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.i         #GCC编译器只需编译此文件。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.c         #GCC编译器需要对其进行预处理和编译这两步操作。</span></span><br></pre></td></tr></tbody></table></figure>
-<p>以上这两行命令均能生成与原文件名相同的后缀为.s的文件（内容为汇编代码）。</p>
-</li>
+<p>以上这两行命令均能生成与原文件名相同的后缀为.s的文件（内容为汇编代码）。</p></li>
 <li><p><code>-c</code>选项可让GCC编译器将指定文件加工至<strong>汇编阶段</strong>（但并不执行链接操作），并生成对应的目标文件。</p>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -c helloworld.s         #生成了与原文件名相同的后缀为.o的文件，将汇编代码转变成机器可以执行的指令</span></span><br></pre></td></tr></tbody></table></figure>
-<p>-c选项同样对.c和.i文件有用。</p>
-</li>
+<p>-c选项同样对.c和.i文件有用。</p></li>
 <li><p>gcc执行<strong>链接操作</strong>。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.o -o helloworld           #生成可执行文件helloworld。</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><code>-g</code>选项可产生调试信息，可以使用<strong>gdb</strong>调试可执行文件。</p>
-</li>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.o -o helloworld           #生成可执行文件helloworld。</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><p><code>-g</code>选项可产生调试信息，可以使用<strong>gdb</strong>调试可执行文件。</p></li>
 <li><p><code>-m32</code>选项指定生成32位机器的汇编代码，同理<code>-m64</code>则生成64位机器汇编代码。</p>
-<p>参考文章 ：<a target="_blank" rel="noopener" href="https://blog.csdn.net/vantian/article/details/78748653?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166191228716782388062237%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=166191228716782388062237&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~pc_rank_34-1-78748653-null-null.142">https://blog.csdn.net/vantian/article/details/78748653?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166191228716782388062237%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=166191228716782388062237&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~pc_rank_34-1-78748653-null-null.142</a></p>
-</li>
+<p>参考文章
+：https://blog.csdn.net/vantian/article/details/78748653?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166191228716782388062237%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=166191228716782388062237&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2<sub>all</sub>first_rank_ecpm_v1~pc_rank_34-1-78748653-null-null.142</p></li>
 </ol>
 
     </div>
@@ -361,7 +362,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GCC"><span class="nav-number">1.</span> <span class="nav-text">GCC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">1.1.</span> <span class="nav-text">gcc使用技巧</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gcc"><span class="nav-number">1.</span> <span class="nav-text">GCC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">1.1.</span> <span class="nav-text">gcc使用技巧</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -426,12 +427,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -504,6 +505,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

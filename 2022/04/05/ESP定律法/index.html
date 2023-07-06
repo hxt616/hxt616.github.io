@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="参考：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;117294551          ​         《从0到1：CTFer成长之路》P260 使用文件：https:&#x2F;&#x2F;book.nu1l.com&#x2F;tasks&#x2F;#&#x2F;pages&#x2F;reverse&#x2F;5.3 原理堆栈平衡。首先通过pushad将所有寄存器一次性压入栈，然后通过popad指令恢复寄存器。 过程首先打开文件找到pushad">
+  <meta name="description" content="参考：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;117294551 ​ 《从0到1：CTFer成长之路》P260 使用文件：https:&#x2F;&#x2F;book.nu1l.com&#x2F;tasks&#x2F;#&#x2F;pages&#x2F;reverse&#x2F;5.3 原理 堆栈平衡。首先通过pushad将所有寄存器一次性压入栈，然后通过popad指令恢复寄存器。 过程 首先打开文件找到pushad   image-2022040">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ESP定律法">
 <meta property="og:url" content="http://example.com/2022/04/05/ESP%E5%AE%9A%E5%BE%8B%E6%B3%95/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="参考：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;117294551          ​         《从0到1：CTFer成长之路》P260 使用文件：https:&#x2F;&#x2F;book.nu1l.com&#x2F;tasks&#x2F;#&#x2F;pages&#x2F;reverse&#x2F;5.3 原理堆栈平衡。首先通过pushad将所有寄存器一次性压入栈，然后通过popad指令恢复寄存器。 过程首先打开文件找到pushad">
+<meta property="og:description" content="参考：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;117294551 ​ 《从0到1：CTFer成长之路》P260 使用文件：https:&#x2F;&#x2F;book.nu1l.com&#x2F;tasks&#x2F;#&#x2F;pages&#x2F;reverse&#x2F;5.3 原理 堆栈平衡。首先通过pushad将所有寄存器一次性压入栈，然后通过popad指令恢复寄存器。 过程 首先打开文件找到pushad   image-2022040">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175227302.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175320125.png">
@@ -233,7 +233,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>343</span>
+              <span>435</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -252,19 +252,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/117294551">https://zhuanlan.zhihu.com/p/117294551</a>         </p>
-<p>​         《从0到1：CTFer成长之路》P260</p>
-<p>使用文件：<a target="_blank" rel="noopener" href="https://book.nu1l.com/tasks/#/pages/reverse/5.3">https://book.nu1l.com/tasks/#/pages/reverse/5.3</a></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>堆栈平衡。首先通过pushad将所有寄存器一次性压入栈，然后通过popad指令恢复寄存器。</p>
-<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p>首先打开文件找到pushad</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175227302.png" alt="image-20220405175227302"></p>
+        <p>参考：https://zhuanlan.zhihu.com/p/117294551</p>
+<p>​ 《从0到1：CTFer成长之路》P260</p>
+<p>使用文件：https://book.nu1l.com/tasks/#/pages/reverse/5.3</p>
+<h2 id="原理">原理</h2>
+<p>堆栈平衡。首先通过pushad将所有寄存器一次性压入栈，然后通过popad指令恢复寄存器。</p>
+<h2 id="过程">过程</h2>
+<p>首先打开文件找到pushad</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175227302.png" alt="image-20220405175227302">
+<figcaption aria-hidden="true">image-20220405175227302</figcaption>
+</figure>
 <p>单步执行该指令（按F8键），此时发现ESP（<strong>栈顶指针</strong>）发生变化</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175320125.png" alt="image-20220405175320125"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175320125.png" alt="image-20220405175320125">
+<figcaption aria-hidden="true">image-20220405175320125</figcaption>
+</figure>
 <p>此时右击ESP选择<code>HW break[ESP]</code>，设置硬件读取断点，则当popad进行还原寄存器时会在该处发生中断。然后按F9键运行程序，在断点处中断，</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180030247.png" alt="image-20220405180030247"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180030247.png" alt="image-20220405180030247">
+<figcaption aria-hidden="true">image-20220405180030247</figcaption>
+</figure>
 <p>此时可删除断点，以防后续触发。然后便是分析图中指令。</p>
 <p>单击jmp语句，按F4键运行至此，再按F8键执行跳转，此时可发现OEP。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180412785.png" alt="image-20220405180412785"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180412785.png" alt="image-20220405180412785">
+<figcaption aria-hidden="true">image-20220405180412785</figcaption>
+</figure>
 
     </div>
 
@@ -414,12 +428,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -492,6 +506,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

@@ -233,13 +233,16 @@
 
       
           <p>向下取整的运算称为Floor，用数学符号⌊⌋表示；向上取整的运算称为Ceiling，用数学符号⌈⌉表示。</p>
-<p>在C语言中整数除法取的既不是Floor也不是Ceiling，无论操作数是正是负总是把小数部分截掉，在<strong>数轴上向零的方向取整（Truncate toward Zero）</strong>，或者说当操作数为正的时候相当于Floor，当操作符为负的时候相当于Ceiling。例如：</p>
+<p>在C语言中整数除法取的既不是Floor也不是Ceiling，无论操作数是正是负总是把小数部分截掉，在<strong>数轴上向零的方向取整（Truncate
+toward
+Zero）</strong>，或者说当操作数为正的时候相当于Floor，当操作符为负的时候相当于Ceiling。例如：</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> / <span class="number">60</span> = <span class="number">0</span>                 <span class="comment">//⌊59/60⌋=0      ⌈59/60⌉=1</span></span><br><span class="line"><span class="number">-59</span> / <span class="number">60</span> = <span class="number">0</span>                <span class="comment">//⌊-59/60⌋=-1    ⌈-59/60⌉=0</span></span><br></pre></td></tr></tbody></table></figure>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> / <span class="number">58</span> = <span class="number">1</span></span><br><span class="line"><span class="number">-59</span> / <span class="number">58</span> = <span class="number">-1</span></span><br></pre></td></tr></tbody></table></figure>
-<p>同时可以得到一个与取模运算有关的结论：%运算符的结果总是与被除数同号 。例如：</p>
+<p>同时可以得到一个与取模运算有关的结论：%运算符的结果总是与被除数同号
+。例如：</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> % <span class="number">60</span> = <span class="number">59</span></span><br><span class="line"><span class="number">-59</span> % <span class="number">60</span> = <span class="number">-59</span></span><br></pre></td></tr></tbody></table></figure>
 <p>注意：Python中的整数除法和整数取模运算与C语言不完全相同。</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://docs.huihoo.com/c/linux-c-programming/ch04s02.html">https://docs.huihoo.com/c/linux-c-programming/ch04s02.html</a></p>
+<p>参考：https://docs.huihoo.com/c/linux-c-programming/ch04s02.html</p>
 
       
     </div>
@@ -321,7 +324,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Homework-01—Q5：If-Function-vs-Statement"><a href="#Homework-01—Q5：If-Function-vs-Statement" class="headerlink" title="Homework 01—Q5：If Function vs Statement"></a>Homework 01—Q5：If Function vs Statement</h1><p>题目代码如下：</p>
+          <h1 id="homework-01--q5if-function-vs-statement">Homework 01--Q5：If
+Function vs Statement</h1>
+<p>题目代码如下：</p>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">if_function</span>(<span class="params">condition, true_result, false_result</span>):</span><br><span class="line">    <span class="string">"""Return true_result if condition is a true value, and</span></span><br><span class="line"><span class="string">    false_result otherwise.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; if_function(True, 2, 3)</span></span><br><span class="line"><span class="string">    2</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; if_function(False, 2, 3)</span></span><br><span class="line"><span class="string">    3</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; if_function(3==2, 'equal', 'not equal')</span></span><br><span class="line"><span class="string">    'not equal'</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; if_function(3&gt;2, 'bigger', 'smaller')</span></span><br><span class="line"><span class="string">    'bigger'</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> condition:</span><br><span class="line">        <span class="keyword">return</span> true_result</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> false_result</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">with_if_statement</span>():</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; result = with_if_statement()</span></span><br><span class="line"><span class="string">    61A</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; print(result)</span></span><br><span class="line"><span class="string">    None</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> cond():</span><br><span class="line">        <span class="keyword">return</span> true_func()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> false_func()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">with_if_function</span>():</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; result = with_if_function()</span></span><br><span class="line"><span class="string">    Welcome to</span></span><br><span class="line"><span class="string">    61A</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; print(result)</span></span><br><span class="line"><span class="string">    None</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> if_function(cond(), true_func(), false_func())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cond</span>():</span><br><span class="line">    <span class="string">"*** YOUR CODE HERE ***"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">true_func</span>():</span><br><span class="line">    <span class="string">"*** YOUR CODE HERE ***"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">false_func</span>():</span><br><span class="line">    <span class="string">"*** YOUR CODE HERE ***"</span></span><br></pre></td></tr></tbody></table></figure>
 <p>题目要求我们补全代码，并且要符合注释里的输出结果。</p>
 <p>分析代码，将<code>code()</code>、<code>true_func()</code>、<code>false_func()</code>带入<code>if_function(condition, true_result, false_result)</code>函数中，得到：</p>
@@ -398,7 +403,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>727</span>
+              <span>842</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -417,30 +422,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>参考资料：<a target="_blank" rel="noopener" href="http://composingprograms.com/pages/13-defining-new-functions.html#calling-user-defined-functions">http://composingprograms.com/pages/13-defining-new-functions.html#calling-user-defined-functions</a></p>
+          <p>参考资料：http://composingprograms.com/pages/13-defining-new-functions.html#calling-user-defined-functions</p>
 <p>最近在学习CS61A，学到了一个新概念：frame</p>
-<h1 id="Frame"><a href="#Frame" class="headerlink" title="Frame"></a>Frame</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>An environment in which an expression is evaluated consists of a sequence of <em>frames</em>, depicted as boxes. Each frame contains <em>bindings</em>, each of which associates a name with its corresponding value.</p>
+<h1 id="frame">Frame</h1>
+<h2 id="定义">定义</h2>
+<p>An environment in which an expression is evaluated consists of a
+sequence of <em>frames</em>, depicted as boxes. Each frame contains
+<em>bindings</em>, each of which associates a name with its
+corresponding value.</p>
 <p>当我们对表达式求值时，实际上是在当前环境中求值，而该环境由一系列的“框架”组成。每个框架都包含绑定关系，将名称与其相应值相关联。</p>
-<h2 id="global-frame"><a href="#global-frame" class="headerlink" title="global frame"></a>global frame</h2><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> pi</span><br><span class="line">tau = <span class="number">2</span> * pi</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="global-frame">global frame</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> pi</span><br><span class="line">tau = <span class="number">2</span> * pi</span><br></pre></td></tr></tbody></table></figure>
 <p>上述示例的环境中就只有 the global frame ，如下图所示</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008231614912.png" alt="image-20221008231614912"><br><a target="_blank" rel="noopener" href="http://composingprograms.com/tutor.html">http://composingprograms.com/tutor.html</a> （可通过该链接测试代码）</p>
-<p>import语句导入的函数和用户自定义的函数都被包含在 the global frame 中，如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008232149245.png" alt="image-20221008232149245"></p>
-<h2 id="local-frame"><a href="#local-frame" class="headerlink" title="local frame"></a>local frame</h2><p>调用用户自己定义的函数时，每个实例都有其自己独立的 local frame 。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008231614912.png" alt="image-20221008231614912"><br>http://composingprograms.com/tutor.html
+（可通过该链接测试代码）</p>
+<p>import语句导入的函数和用户自定义的函数都被包含在 the global frame
+中，如下图所示：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008232149245.png" alt="image-20221008232149245">
+<figcaption aria-hidden="true">image-20221008232149245</figcaption>
+</figure>
+<h2 id="local-frame">local frame</h2>
+<p>调用用户自己定义的函数时，每个实例都有其自己独立的 local frame 。</p>
 <ul>
 <li><p>执行实例前</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235349096.png" alt="image-20221008235349096"></p>
-</li>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235349096.png" alt="image-20221008235349096">
+<figcaption aria-hidden="true">image-20221008235349096</figcaption>
+</figure></li>
 <li><p>执行实例过程</p>
-<p>使用参数-2调用 square 函数，因此创建了一个新的框架（frame），形式参数x绑定到值-2。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235439472.png" alt="image-20221008235439472"></p>
-<p>在当前环境中查找名称x，该环境由显示的两个框架组成。在 mul(x,x) 中的两次出现，且均为-2，因此 square 函数返回 4 。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235453861.png" alt="image-20221008235453861"></p>
-</li>
+<p>使用参数-2调用 square
+函数，因此创建了一个新的框架（frame），形式参数x绑定到值-2。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235439472.png" alt="image-20221008235439472">
+<figcaption aria-hidden="true">image-20221008235439472</figcaption>
+</figure>
+<p>在当前环境中查找名称x，该环境由显示的两个框架组成。在 mul(x,x)
+中的两次出现，且均为-2，因此 square 函数返回 4 。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235453861.png" alt="image-20221008235453861">
+<figcaption aria-hidden="true">image-20221008235453861</figcaption>
+</figure></li>
 <li><p>执行完成</p>
 <p>square所在的框架会消失，这里保留只是方便观察。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221010103200749.png" alt="image-20221010103200749"></p>
-</li>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221010103200749.png" alt="image-20221010103200749">
+<figcaption aria-hidden="true">image-20221010103200749</figcaption>
+</figure></li>
 </ul>
 
       
@@ -514,7 +542,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.1k</span>
+              <span>4.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -533,23 +561,41 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="NSSCTF-Reverse-贪食蛇"><a href="#NSSCTF-Reverse-贪食蛇" class="headerlink" title="NSSCTF-Reverse-贪食蛇"></a>NSSCTF-Reverse-贪食蛇</h1><p>题目来自于NSSCTF: SWPU NSS新生赛（校外通道）</p>
-<p>下载附件，用IDA打开，首先按 shift+F12 打开 String 窗口，没发现什么，于是直接 F5 查看伪代码</p>
+          <h1 id="nssctf-reverse-贪食蛇">NSSCTF-Reverse-贪食蛇</h1>
+<p>题目来自于NSSCTF: SWPU NSS新生赛（校外通道）</p>
+<p>下载附件，用IDA打开，首先按 shift+F12 打开 String
+窗口，没发现什么，于是直接 F5 查看伪代码</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl __noreturn <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">{</span><br><span class="line">  __main();</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  {</span><br><span class="line">    gameStartMenu();</span><br><span class="line">    gameMainLoop();</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>双击查看各个函数，发现主要的代码实现在<code>gameMainLoop()</code>函数中，两百多行代码看不出什么来，我便准备运行该程序：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929205947106.png" alt="image-20220929205947106"></p>
-<p>要得到 60 分以上才能得到flag，玩了一局发现有点难度，猜想能够修改判断条件，将 60 分改成 1 分不就轻松了吗。再次查看<code>gameMainLoop()</code></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929205947106.png" alt="image-20220929205947106">
+<figcaption aria-hidden="true">image-20220929205947106</figcaption>
+</figure>
+<p>要得到 60
+分以上才能得到flag，玩了一局发现有点难度，猜想能够修改判断条件，将 60
+分改成 1 分不就轻松了吗。再次查看<code>gameMainLoop()</code></p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">gameMainLoop</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">void</span> *v0; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">int</span> v1; <span class="comment">// edx</span></span><br><span class="line">  <span class="type">int</span> v2; <span class="comment">// ecx</span></span><br><span class="line">  <span class="type">int</span> v3; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">signed</span> <span class="type">int</span> v4; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">signed</span> <span class="type">int</span> v5; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">signed</span> <span class="type">int</span> v6; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">signed</span> <span class="type">int</span> v7; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">char</span> v8; <span class="comment">// cl</span></span><br><span class="line">  <span class="type">char</span> v9; <span class="comment">// cl</span></span><br><span class="line">  <span class="type">int</span> result; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">int</span> v11; <span class="comment">// [esp+2Dh] [ebp-ECBh]</span></span><br><span class="line">  _BYTE v12[<span class="number">3</span>]; <span class="comment">// [esp+31h] [ebp-EC7h]</span></span><br><span class="line">  <span class="type">int</span> v13; <span class="comment">// [esp+50Ch] [ebp-9ECh]</span></span><br><span class="line">  <span class="type">int</span> v14[<span class="number">625</span>]; <span class="comment">// [esp+510h] [ebp-9E8h]</span></span><br><span class="line">  <span class="type">char</span> v15; <span class="comment">// [esp+ED7h] [ebp-21h]</span></span><br><span class="line">  <span class="type">int</span> j; <span class="comment">// [esp+ED8h] [ebp-20h]</span></span><br><span class="line">  <span class="type">char</span> v17; <span class="comment">// [esp+EDFh] [ebp-19h]</span></span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [esp+EE0h] [ebp-18h]</span></span><br><span class="line">  <span class="type">int</span> v19; <span class="comment">// [esp+EE4h] [ebp-14h]</span></span><br><span class="line">  <span class="type">int</span> v20; <span class="comment">// [esp+EE8h] [ebp-10h]</span></span><br><span class="line">  <span class="type">int</span> v21; <span class="comment">// [esp+EECh] [ebp-Ch]</span></span><br><span class="line"></span><br><span class="line">  gameBegin();</span><br><span class="line">  v0 = <span class="built_in">malloc</span>(<span class="number">1u</span>);</span><br><span class="line">  srand((<span class="type">unsigned</span> <span class="type">int</span>)v0);</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">  {</span><br><span class="line">    v21 = <span class="number">12</span>;</span><br><span class="line">    v20 = <span class="number">12</span>;</span><br><span class="line">    v19 = <span class="number">4</span>;</span><br><span class="line">    <span class="built_in">memset</span>(v14, <span class="number">0</span>, <span class="keyword">sizeof</span>(v14));</span><br><span class="line">    <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">24</span>; i += <span class="number">2</span> )</span><br><span class="line">    {</span><br><span class="line">      v1 = <span class="number">624</span> - i;</span><br><span class="line">      v2 = <span class="number">25</span> * i;</span><br><span class="line">      v3 = <span class="number">25</span> * (i + <span class="number">1</span>) - <span class="number">1</span>;</span><br><span class="line">      v14[v3] = <span class="number">-2</span>;</span><br><span class="line">      v14[v2] = v14[v3];</span><br><span class="line">      v14[v1] = v14[v2];</span><br><span class="line">      v14[i] = v14[v1];</span><br><span class="line">    }</span><br><span class="line">    v17 = <span class="number">100</span>;</span><br><span class="line">    v15 = <span class="number">3</span>;</span><br><span class="line">    v11 = <span class="number">0</span>;</span><br><span class="line">    v13 = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">memset</span>(</span><br><span class="line">      (<span class="type">void</span> *)((<span class="type">unsigned</span> <span class="type">int</span>)v12 &amp; <span class="number">0xFFFFFFFC</span>),</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="number">4</span> * (((<span class="type">unsigned</span> <span class="type">int</span>)((<span class="type">char</span> *)&amp;v11 - ((<span class="type">unsigned</span> <span class="type">int</span>)v12 &amp; <span class="number">0xFFFFFFFC</span>) + <span class="number">1251</span>) &amp; <span class="number">0xFFFFFFFC</span>) &gt;&gt; <span class="number">2</span>));</span><br><span class="line">    sprintf_s(&amp;v11, <span class="number">32</span>, <span class="string">"mode con: cols=%d lines=%d"</span>, <span class="number">50</span>, <span class="number">25</span>);</span><br><span class="line">    system((<span class="type">const</span> <span class="type">char</span> *)&amp;v11);</span><br><span class="line">    <span class="keyword">for</span> ( j = <span class="number">2</span>; j; --j )</span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">do</span></span><br><span class="line">        i = rand() % <span class="number">625</span>;</span><br><span class="line">      <span class="keyword">while</span> ( v14[i] );</span><br><span class="line">      v14[i] = <span class="number">-1</span>;</span><br><span class="line">    }</span><br><span class="line">    system(<span class="string">"title GluttonousSnake"</span>);</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">if</span> ( _kbhit() )</span><br><span class="line">      {</span><br><span class="line">        v15 = _getch();</span><br><span class="line">        <span class="keyword">if</span> ( v15 )</span><br><span class="line">        {</span><br><span class="line">          <span class="keyword">switch</span> ( v15 )</span><br><span class="line">          {</span><br><span class="line">            <span class="keyword">case</span> <span class="number">27</span>:</span><br><span class="line">              <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">              <span class="keyword">return</span> result;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">32</span>:</span><br><span class="line">              _getch();</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">65</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">75</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">97</span>:</span><br><span class="line">              <span class="keyword">if</span> ( v17 != <span class="number">100</span> )</span><br><span class="line">                v17 = <span class="number">97</span>;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">68</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">77</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">100</span>:</span><br><span class="line">              <span class="keyword">if</span> ( v17 != <span class="number">97</span> )</span><br><span class="line">                v17 = <span class="number">100</span>;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">72</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">87</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">119</span>:</span><br><span class="line">              <span class="keyword">if</span> ( v17 != <span class="number">115</span> )</span><br><span class="line">                v17 = <span class="number">119</span>;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">80</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">83</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">115</span>:</span><br><span class="line">              <span class="keyword">if</span> ( v17 != <span class="number">119</span> )</span><br><span class="line">                v17 = <span class="number">115</span>;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">          }</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> ( v17 == <span class="number">100</span> )</span><br><span class="line">      {</span><br><span class="line">        v5 = v21 &gt; <span class="number">23</span> ? <span class="number">-24</span> : <span class="number">1</span>;</span><br><span class="line">        v21 += v5;</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> ( v17 &gt; <span class="number">100</span> )</span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">if</span> ( v17 == <span class="number">115</span> )</span><br><span class="line">        {</span><br><span class="line">          v6 = v20 &gt; <span class="number">23</span> ? <span class="number">-24</span> : <span class="number">1</span>;</span><br><span class="line">          v20 += v6;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ( v17 == <span class="number">119</span> )</span><br><span class="line">        {</span><br><span class="line">          <span class="keyword">if</span> ( v20 &lt;= <span class="number">0</span> )</span><br><span class="line">            v7 = <span class="number">-24</span>;</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">            v7 = <span class="number">1</span>;</span><br><span class="line">          v20 -= v7;</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> ( v17 == <span class="number">97</span> )</span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">if</span> ( v21 &lt;= <span class="number">0</span> )</span><br><span class="line">          v4 = <span class="number">-24</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          v4 = <span class="number">1</span>;</span><br><span class="line">        v21 -= v4;</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> ( v14[<span class="number">25</span> * v20 + v21] &gt; <span class="number">1</span> || v14[<span class="number">25</span> * v20 + v21] == <span class="number">-2</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">if</span> ( v14[<span class="number">25</span> * v20 + v21] == <span class="number">-1</span> )</span><br><span class="line">      {</span><br><span class="line">        ++v19;</span><br><span class="line">        <span class="keyword">do</span></span><br><span class="line">          i = rand() % <span class="number">625</span>;</span><br><span class="line">        <span class="keyword">while</span> ( v14[i] );</span><br><span class="line">        v14[i] = <span class="number">-1</span>;</span><br><span class="line">        sprintf_s(&amp;v11, <span class="number">32</span>, <span class="string">"title score:%d"</span>, v19 - <span class="number">4</span>);</span><br><span class="line">        system((<span class="type">const</span> <span class="type">char</span> *)&amp;v11);</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">624</span>; ++i )</span><br><span class="line">        {</span><br><span class="line">          <span class="keyword">if</span> ( v14[i] &gt; <span class="number">0</span> )</span><br><span class="line">            --v14[i];</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">      v14[v21 + <span class="number">25</span> * v20] = v19;</span><br><span class="line">      <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">1249</span>; ++i )</span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">if</span> ( v14[i / <span class="number">2</span>] )</span><br><span class="line">        {</span><br><span class="line">          <span class="keyword">if</span> ( v14[i / <span class="number">2</span>] &lt;= <span class="number">0</span> )</span><br><span class="line">          {</span><br><span class="line">            <span class="keyword">if</span> ( v14[i / <span class="number">2</span>] == <span class="number">-2</span> )</span><br><span class="line">            {</span><br><span class="line">              <span class="keyword">if</span> ( i &amp; <span class="number">1</span> )</span><br><span class="line">                v9 = <span class="number">93</span>;</span><br><span class="line">              <span class="keyword">else</span></span><br><span class="line">                v9 = <span class="number">91</span>;</span><br><span class="line">              *((_BYTE *)&amp;v11 + i) = v9;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            {</span><br><span class="line">              *((_BYTE *)&amp;v11 + i) = <span class="number">48</span>;</span><br><span class="line">            }</span><br><span class="line">          }</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">          {</span><br><span class="line">            <span class="keyword">if</span> ( i &amp; <span class="number">1</span> )</span><br><span class="line">              v8 = <span class="number">41</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">              v8 = <span class="number">40</span>;</span><br><span class="line">            *((_BYTE *)&amp;v11 + i) = v8;</span><br><span class="line">          }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        {</span><br><span class="line">          *((_BYTE *)&amp;v11 + i) = <span class="number">32</span>;</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">      system(<span class="string">"cls"</span>);</span><br><span class="line">      <span class="built_in">printf</span>((<span class="type">const</span> <span class="type">char</span> *)&amp;v11);</span><br><span class="line">      sub_4020C0(v19);</span><br><span class="line">      Sleep(<span class="number">0x64</span>u);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> ( isFlag )</span><br><span class="line">    {</span><br><span class="line">      decode_flag(&amp;t_flag);</span><br><span class="line">      <span class="built_in">strcat</span>(s_flag, &amp;t_flag);</span><br><span class="line">      gameEndmenu(v19, s_flag);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    {</span><br><span class="line">      gameEndmenu(v19, flag);</span><br><span class="line">    }</span><br><span class="line">    result = _getch();</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">while</span> ( result == <span class="number">32</span> );</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>在第 192 行发现<code>sub_4020C0()</code>函数，双击查看</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl <span class="title function_">sub_4020C0</span><span class="params">(<span class="type">int</span> a1)</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> result; <span class="comment">// eax</span></span><br><span class="line"></span><br><span class="line">  result = a1 - <span class="number">4</span>;</span><br><span class="line">  <span class="keyword">if</span> ( a1 - <span class="number">4</span> &gt; <span class="number">60</span> )</span><br><span class="line">    result = isFlag++ + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>果然发现了 “60”，然后就是对其进行修改，在左侧函数栏中找到<code>sub_4020C0()</code>函数，切换到 text view 状态</p>
+<p>果然发现了
+“60”，然后就是对其进行修改，在左侧函数栏中找到<code>sub_4020C0()</code>函数，切换到
+text view 状态</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.text:00401C1C ; __unwind {</span><br><span class="line">.text:00401C1C                 push    ebp</span><br><span class="line">.text:00401C1D                 mov     ebp, esp</span><br><span class="line">.text:00401C1F                 mov     eax, [ebp+arg_0]</span><br><span class="line">.text:00401C22                 sub     eax, 4</span><br><span class="line">.text:00401C25                 cmp     eax, 3Ch     &lt;------3Ch转换为10进制为60</span><br><span class="line">.text:00401C28                 jle     short loc_401C37</span><br><span class="line">.text:00401C2A                 mov     eax, ds:_isFlag</span><br><span class="line">.text:00401C2F                 add     eax, 1</span><br><span class="line">.text:00401C32                 mov     ds:_isFlag, eax</span><br></pre></td></tr></tbody></table></figure>
 <p>在 Hex View 中找到对应的地址，找到 3C 所在的位置</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929210757529.png" alt="image-20220929210757529"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929210757529.png" alt="image-20220929210757529">
+<figcaption aria-hidden="true">image-20220929210757529</figcaption>
+</figure>
 <p>右键进行修改，改为<code>01</code>，然后通过下面的操作进行保存</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929210917237.png" alt="image-20220929210917237"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929210917237.png" alt="image-20220929210917237">
+<figcaption aria-hidden="true">image-20220929210917237</figcaption>
+</figure>
 <p>再次运行该程序，得了两分后直接撞墙退出游戏，发现flag</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929211044604.png" alt="image-20220929211044604"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929211044604.png" alt="image-20220929211044604">
+<figcaption aria-hidden="true">image-20220929211044604</figcaption>
+</figure>
 <p><code>NSSCTF{YourAreTheMasterOfGame!}</code></p>
 
       
@@ -638,79 +684,99 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="汇编语言（七）——数据处理"><a href="#汇编语言（七）——数据处理" class="headerlink" title="汇编语言（七）——数据处理"></a>汇编语言（七）——数据处理</h1><p>reg（寄存器）：ax、bx、cx、dx、ah、al、bh、bl、ch、cl、dh、dl、sp、bp、si、di；</p>
+          <h1 id="汇编语言七数据处理">汇编语言（七）——数据处理</h1>
+<p>reg（寄存器）：ax、bx、cx、dx、ah、al、bh、bl、ch、cl、dh、dl、sp、bp、si、di；</p>
 <p>sreg（段寄存器）：ds、ss、cs、es。</p>
-<h2 id="bx、si、di-和-bp"><a href="#bx、si、di-和-bp" class="headerlink" title="bx、si、di 和 bp"></a>bx、si、di 和 bp</h2><p>在8086CPU中，只有标题中这四个寄存器可以用在 <code>[...]</code> 中来进行内存单元的寻址。</p>
+<h2 id="bxsidi-和-bp">bx、si、di 和 bp</h2>
+<p>在8086CPU中，只有标题中这四个寄存器可以用在 <code>[...]</code>
+中来进行内存单元的寻址。</p>
 <ul>
 <li><p>下面的指令是错误的：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [cx]</span><br><span class="line">mov ax, [ax]</span><br><span class="line">mov ax, [dx]</span><br><span class="line">mov ax, [ds]</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>这四个寄存器可以单个出现，也可以这四种组合出现：bx 和 si 、bx 和 di 、bp 和 si 、bp 和 di 。</p>
-<p>注：<strong>[bx + bp]</strong> 、<strong>[si + di]</strong> ，这两个组合是错误的。</p>
-</li>
-<li><p>只要在 <code>[...]</code> 中使用了寄存器 <strong>bp</strong> ，而指令中没有显性地给出段地址，段地址就默认在 <code>ss</code> 中。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [cx]</span><br><span class="line">mov ax, [ax]</span><br><span class="line">mov ax, [dx]</span><br><span class="line">mov ax, [ds]</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>这四个寄存器可以单个出现，也可以这四种组合出现：bx 和 si 、bx 和
+di 、bp 和 si 、bp 和 di 。</p>
+<p>注：<strong>[bx + bp]</strong> 、<strong>[si + di]</strong>
+，这两个组合是错误的。</p></li>
+<li><p>只要在 <code>[...]</code> 中使用了寄存器 <strong>bp</strong>
+，而指令中没有显性地给出段地址，段地址就默认在 <code>ss</code> 中。</p>
 <p>例：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [bp]                      含义：(ax) = ((ss)*16+(bp))</span><br><span class="line">mov ax, [bp+idata]                含义：(ax) = ((ss)*16+(bp)+idata)</span><br><span class="line">mov ax, [bp+si]                   含义：(ax) = ((ss)*16+(bp)+(si))</span><br><span class="line">mov ax, [bp+si+idata]             含义：(ax) = ((ss)*16+(bp)+(si)+idata)</span><br></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [bp]                      含义：(ax) = ((ss)*16+(bp))</span><br><span class="line">mov ax, [bp+idata]                含义：(ax) = ((ss)*16+(bp)+idata)</span><br><span class="line">mov ax, [bp+si]                   含义：(ax) = ((ss)*16+(bp)+(si))</span><br><span class="line">mov ax, [bp+si+idata]             含义：(ax) = ((ss)*16+(bp)+(si)+idata)</span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
-<h2 id="数据所在位置"><a href="#数据所在位置" class="headerlink" title="数据所在位置"></a>数据所在位置</h2><p>指令在执行前，所要处理的数据可以在三个位置：<strong>CPU内部</strong>、<strong>内存</strong>、<strong>端口</strong>。</p>
-<h2 id="数据位置的表达"><a href="#数据位置的表达" class="headerlink" title="数据位置的表达"></a>数据位置的表达</h2><ol>
+<h2 id="数据所在位置">数据所在位置</h2>
+<p>指令在执行前，所要处理的数据可以在三个位置：<strong>CPU内部</strong>、<strong>内存</strong>、<strong>端口</strong>。</p>
+<h2 id="数据位置的表达">数据位置的表达</h2>
+<ol type="1">
 <li><p>立即数（idata）</p>
 <p>对于直接包含在机器指令中的数据（执行前在CPU指令缓存器中），被称为立即数。</p>
 <p>例：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">add bx,2000h</span><br><span class="line">or bx,00010000b</span><br><span class="line">mov al,'a'</span><br></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">add bx,2000h</span><br><span class="line">or bx,00010000b</span><br><span class="line">mov al,'a'</span><br></pre></td></tr></tbody></table></figure></li>
 <li><p>寄存器</p>
 <p>指令要处理的数据在寄存器中，在汇编指令中给出相应的寄存器名。</p>
 <p>例：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov ax,bx</span><br><span class="line">mov ds,ax</span><br><span class="line">push bx</span><br><span class="line">mov ds:[0],bx</span><br><span class="line">push ds</span><br><span class="line">mov ss,ax</span><br><span class="line">mov sp,ax</span><br></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov ax,bx</span><br><span class="line">mov ds,ax</span><br><span class="line">push bx</span><br><span class="line">mov ds:[0],bx</span><br><span class="line">push ds</span><br><span class="line">mov ss,ax</span><br><span class="line">mov sp,ax</span><br></pre></td></tr></tbody></table></figure></li>
 <li><p>段地址（SA）和偏移地址（EA）</p>
-<p>指令要处理的数据在内存中，在汇编指令中可用 [X] 的格式给出 EA，SA 在某个段寄存器中。</p>
+<p>指令要处理的数据在内存中，在汇编指令中可用 [X] 的格式给出 EA，SA
+在某个段寄存器中。</p>
 <p>存放段地址的寄存器可以是默认的，比如：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[0]</span><br><span class="line">mov ax,[di]</span><br><span class="line">mov ax,[bx+8]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+si+8]</span><br></pre></td></tr></tbody></table></figure>
 <p>等指令，段地址默认在 <strong>ds</strong> 中。</p>
 <p>存放段地址的寄存器也可以显性给出，比如：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,ds:[bp]             含义：(ax)=((ds)*16)+(bp)</span><br><span class="line">mov ax,es:[bx]</span><br><span class="line">mov ax,ss:[bx+si]</span><br><span class="line">mov ax,cs:[bx+si+8]</span><br></pre></td></tr></tbody></table></figure>
-</li>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,ds:[bp]             含义：(ax)=((ds)*16)+(bp)</span><br><span class="line">mov ax,es:[bx]</span><br><span class="line">mov ax,ss:[bx+si]</span><br><span class="line">mov ax,cs:[bx+si+8]</span><br></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h2 id="寻址方式"><a href="#寻址方式" class="headerlink" title="寻址方式"></a>寻址方式</h2><p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220924122435330.png" alt="image-20220924122435330"></p>
-<h2 id="指令要处理的数据所占的字长"><a href="#指令要处理的数据所占的字长" class="headerlink" title="指令要处理的数据所占的字长"></a>指令要处理的数据所占的字长</h2><ol>
+<h2 id="寻址方式">寻址方式</h2>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220924122435330.png" alt="image-20220924122435330">
+<figcaption aria-hidden="true">image-20220924122435330</figcaption>
+</figure>
+<h2 id="指令要处理的数据所占的字长">指令要处理的数据所占的字长</h2>
+<ol type="1">
 <li><p>通过寄存器指明要处理的数据的字长</p>
 <p>字操作：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">mov bx,ds:[0]</span><br><span class="line">mov ds,ax</span><br><span class="line">mov ds:[0],ax</span><br><span class="line">inc ax</span><br><span class="line">add ax,1000</span><br></pre></td></tr></tbody></table></figure>
 <p>字节操作：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov al,1</span><br><span class="line">mov al,bl</span><br><span class="line">mov al,ds:[0]</span><br><span class="line">mov ds:[0],al</span><br><span class="line">inc al</span><br><span class="line">add al,100</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>在没有寄存器名存在的情况下，用操作符<code>X ptr</code>指明内存单元的长度，X 在汇编指令中可以为 word 或 byte 。</p>
-<p>下面的指令中用了 word ptr 指明了指令访问的内存单元是一个<strong>字单元</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov al,1</span><br><span class="line">mov al,bl</span><br><span class="line">mov al,ds:[0]</span><br><span class="line">mov ds:[0],al</span><br><span class="line">inc al</span><br><span class="line">add al,100</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>在没有寄存器名存在的情况下，用操作符<code>X ptr</code>指明内存单元的长度，X
+在汇编指令中可以为 word 或 byte 。</p>
+<p>下面的指令中用了 word ptr
+指明了指令访问的内存单元是一个<strong>字单元</strong>：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov word ptr ds:[0],1</span><br><span class="line">inc word ptr [bx]</span><br><span class="line">inc word ptr ds:[0]</span><br><span class="line">add word ptr [bx],2</span><br></pre></td></tr></tbody></table></figure>
-<p>下面的指令中，用 byte ptr 指明了指令访问的内存单元是一个<strong>字节单元</strong>：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov byte ptr ds:[0],1</span><br><span class="line">inc byte ptr [bx]</span><br><span class="line">inc byte ptr ds:[0]</span><br><span class="line">add byte ptr [bx],2</span><br></pre></td></tr></tbody></table></figure>
-</li>
+<p>下面的指令中，用 byte ptr
+指明了指令访问的内存单元是一个<strong>字节单元</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov byte ptr ds:[0],1</span><br><span class="line">inc byte ptr [bx]</span><br><span class="line">inc byte ptr ds:[0]</span><br><span class="line">add byte ptr [bx],2</span><br></pre></td></tr></tbody></table></figure></li>
 <li><p>其他方法</p>
-<p>有些指令默认了访问的是字单元还是字节单元，比如：push [1000H] 就不用指明访问的是字单元还是字节单元，因为 push 指令只进行<strong>字操作</strong>。</p>
-</li>
+<p>有些指令默认了访问的是字单元还是字节单元，比如：push [1000H]
+就不用指明访问的是字单元还是字节单元，因为 push
+指令只进行<strong>字操作</strong>。</p></li>
 </ol>
-<h2 id="div指令"><a href="#div指令" class="headerlink" title="div指令"></a>div指令</h2><p>div是除法指令。</p>
+<h2 id="div指令">div指令</h2>
+<p>div是除法指令。</p>
 <ul>
 <li>除数：有8位和16位两种，在一个寄存器或内存单元中。</li>
-<li>被除数：默认放在 <strong>AX</strong> 或 <strong>DX 和AX</strong>中，如果除数为8位，被除数则为16位，默认在 AX 中存放；如果输出为16位，被除数则为32位，在 DX 和 AX 中存放，DX 存放高16位，AX 存放低16位。</li>
-<li>结果：如果除数为8位，则 AL 存储商，AH 存储余数；如果除数为16位，则 AX 存储除法操作的商，DX 存储除法操作的余数。</li>
+<li>被除数：默认放在 <strong>AX</strong> 或 <strong>DX
+和AX</strong>中，如果除数为8位，被除数则为16位，默认在 AX
+中存放；如果输出为16位，被除数则为32位，在 DX 和 AX 中存放，DX
+存放高16位，AX 存放低16位。</li>
+<li>结果：如果除数为8位，则 AL 存储商，AH 存储余数；如果除数为16位，则
+AX 存储除法操作的商，DX 存储除法操作的余数。</li>
 </ul>
 <p>格式如下：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div reg</span><br><span class="line">div 内存单元</span><br></pre></td></tr></tbody></table></figure>
 <p>例：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div byte ptr ds:[0]   含义：(al)=(ax)/((ds)*16+0)的商；</span><br><span class="line">						 (ah)=(ax)/((ds)*16+0)的余数</span><br></pre></td></tr></tbody></table></figure>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div word ptr es:[0]   含义：(ax)=[(dx)*10000H+(ax)]/((es)*16+0)的商</span><br><span class="line">                           (dx)=[(dx)*10000H+(ax)]/((es)*16+0)的余数</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="伪指令-dd"><a href="#伪指令-dd" class="headerlink" title="伪指令 dd"></a>伪指令 dd</h2><p><strong>dd</strong> 是用来定义 dword（double word）双字型数据的。比如</p>
+<h2 id="伪指令-dd">伪指令 dd</h2>
+<p><strong>dd</strong> 是用来定义 dword（double
+word）双字型数据的。比如</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data segment</span><br><span class="line">  db 1</span><br><span class="line">  dw 1</span><br><span class="line">  dd 1</span><br><span class="line">data ends</span><br></pre></td></tr></tbody></table></figure>
 <ul>
 <li>第一个数据为 01H，在<code>data:0</code>处，占1个字节；</li>
 <li>第二个数据为 0001H，在<code>data:1</code>处，占1个字；</li>
 <li>第三个数据为 00000001H，在<code>data:3</code>处，占2个字。</li>
 </ul>
-<h2 id="dup"><a href="#dup" class="headerlink" title="dup"></a>dup</h2><p>dup是一个操作符，在汇编语言中同 db、dw、dd 等一样，也是由编译器识别处理的符号。它是和 db、dw、dd 等数据定义伪指令配合使用的，用来进行数据的重复。</p>
+<h2 id="dup">dup</h2>
+<p>dup是一个操作符，在汇编语言中同 db、dw、dd
+等一样，也是由编译器识别处理的符号。它是和 db、dw、dd
+等数据定义伪指令配合使用的，用来进行数据的重复。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db 3 dup (0)             ;定义了3个字节，值都为 0，相当于 db 0,0,0</span><br><span class="line">db 3 dup (0,1,2)         ;定义了9个字节，相当于 db 0,1,2,0,1,2,0,1,2</span><br><span class="line">db 3 dup('abc','ABC')    ;定义了18个字节，相当于 db 'abcABCabcABCabcABC'</span><br></pre></td></tr></tbody></table></figure>
 
       
@@ -780,14 +846,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
+              <span>2.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -800,9 +866,14 @@
 
       
           <p>复现第五届浙江省网络与信息安全竞赛中的第一道逆向题。</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/fightforyourdream/article/details/15805125">https://blog.csdn.net/fightforyourdream/article/details/15805125</a></p>
-<h1 id="ManyCheck"><a href="#ManyCheck" class="headerlink" title="ManyCheck"></a>ManyCheck</h1><p>下载附件后，发现压缩包里有一个exe文件，和一个pdb文件（程序数据库文件）。直接用 Exeinfo PE 打开 exe 文件，查看相关信息</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918122046736.png" alt="image-20220918122046736"></p>
+<p>参考：https://blog.csdn.net/fightforyourdream/article/details/15805125</p>
+<h1 id="manycheck">ManyCheck</h1>
+<p>下载附件后，发现压缩包里有一个exe文件，和一个pdb文件（程序数据库文件）。直接用
+Exeinfo PE 打开 exe 文件，查看相关信息</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918122046736.png" alt="image-20220918122046736">
+<figcaption aria-hidden="true">image-20220918122046736</figcaption>
+</figure>
 <p>然后用IDA打开文件，直接按F5查看<code>_main_0</code>函数的伪代码</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main_0</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> savedregs; <span class="comment">// [esp+0h] [ebp+0h]</span></span><br><span class="line"></span><br><span class="line">  sub_4013BC(asc_40CC44, savedregs);</span><br><span class="line">  sub_4013BC(aLetsEnjoyThisE, savedregs);</span><br><span class="line">  sub_4013BC(asc_40CC94, savedregs);</span><br><span class="line">  sub_40100F();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>再按 Shift+F12 查看特殊字符串</p>
@@ -810,10 +881,16 @@
 <p>发现本题需要三次 check ，正确后给出flag。</p>
 <p>双击查看<code>sub_4013BC</code>函数，看不出什么名堂，再查看<code>sub_40100F()</code>函数，最后发现如下代码</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sub_401050</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> v0; <span class="comment">// ST08_4</span></span><br><span class="line">  <span class="type">char</span> v1; <span class="comment">// ST08_1</span></span><br><span class="line">  <span class="type">int</span> v3; <span class="comment">// [esp+0h] [ebp-8h]</span></span><br><span class="line">  <span class="type">int</span> v4; <span class="comment">// [esp+4h] [ebp-4h]</span></span><br><span class="line"></span><br><span class="line">  v4 = <span class="number">0</span>;</span><br><span class="line">  sub_4013BC((<span class="type">int</span>)aFirstCheck, <span class="number">77</span>);</span><br><span class="line">  sub_4013BC((<span class="type">int</span>)aGuessMyLuckyNu, v0);</span><br><span class="line">  <span class="built_in">scanf</span>(aD, &amp;v4);</span><br><span class="line">  <span class="keyword">if</span> ( v4 != v3 )</span><br><span class="line">    <span class="keyword">return</span> sub_4013BC((<span class="type">int</span>)aWhatAPity, v3);</span><br><span class="line">  sub_4013BC((<span class="type">int</span>)aBingo, v3);</span><br><span class="line">  byte_40CA37 = v1;</span><br><span class="line">  byte_40CA42 = v1 - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> sub_401014();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>分析代码可知第一个 check 的答案是<code>77</code>，再回到 String 窗口查看第二个 check ，需要计算出 n 和 m ，第三个 check 是关于 rotate 算法的，编写脚本</p>
+<p>分析代码可知第一个 check 的答案是<code>77</code>，再回到 String
+窗口查看第二个 check ，需要计算出 n 和 m ，第三个 check 是关于 rotate
+算法的，编写脚本</p>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line">n=math.sqrt(<span class="number">6388</span>-<span class="number">57</span>*<span class="number">59</span>)</span><br><span class="line">m=math.sqrt(<span class="number">2500</span>-<span class="number">1</span>-<span class="number">98</span>)</span><br><span class="line"><span class="built_in">print</span>(n,m)        <span class="comment">#n=55, m=49</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#third check</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">self, nums, k</span>):</span><br><span class="line">            <span class="comment"># Write your code here</span></span><br><span class="line">            length = <span class="built_in">len</span>(nums)</span><br><span class="line">            k = k % length</span><br><span class="line">            result = nums[length - k : length] + nums[:length - k]</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">r=Solution()</span><br><span class="line">flag=<span class="built_in">bin</span>(<span class="number">1718896489</span>)    <span class="comment">#flag=0b1100110011101000100011101101001（31位）</span></span><br><span class="line">flag=<span class="string">'0b01100110011101000100011101101001'</span>   <span class="comment">#在最前面加个'0',位数必须为整数个字节大小（8位，16位，32位）</span></span><br><span class="line">flag=<span class="built_in">list</span>(flag[<span class="number">2</span>:])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">''</span>.join(flag))</span><br><span class="line">s=r.rotate(flag,<span class="built_in">len</span>(flag)-<span class="number">16</span>)</span><br><span class="line">s=<span class="string">''</span>.join(s)</span><br><span class="line"><span class="built_in">print</span>(s)                     <span class="comment">#s='01000111011010010110011001110100'</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">int</span>(<span class="number">0b1000111011010010110011001110100</span>))       <span class="comment">#119809844</span></span><br></pre></td></tr></tbody></table></figure>
-<p>用OD打开 exe 文件，按F8运行至 first check ，按顺序输入：77、55、49、1198089844。得到flag</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918124817540.png" alt="image-20220918124817540"></p>
+<p>用OD打开 exe 文件，按F8运行至 first check
+，按顺序输入：77、55、49、1198089844。得到flag</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918124817540.png" alt="image-20220918124817540">
+<figcaption aria-hidden="true">image-20220918124817540</figcaption>
+</figure>
 <p><code>DASCTF{M71_Gift_08L}</code></p>
 
       
@@ -883,7 +960,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>708</span>
+              <span>636</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -902,10 +979,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/43568725">https://zhuanlan.zhihu.com/p/43568725</a>               <a target="_blank" rel="noopener" href="https://www.jiuzhang.com/solutions/rotate-array/">https://www.jiuzhang.com/solutions/rotate-array/</a></p>
-<h1 id="翻转数组（Rotate-Array）"><a href="#翻转数组（Rotate-Array）" class="headerlink" title="翻转数组（Rotate Array）"></a>翻转数组（Rotate Array）</h1><p>给定一个数组，将数组向右移动k步，其中k为非负数。</p>
+          <p>参考：https://zhuanlan.zhihu.com/p/43568725
+https://www.jiuzhang.com/solutions/rotate-array/</p>
+<h1 id="翻转数组rotate-array">翻转数组（Rotate Array）</h1>
+<p>给定一个数组，将数组向右移动k步，其中k为非负数。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6,7] and k = 3</span><br><span class="line">Output: [5,6,7,1,2,3,4]</span><br><span class="line">Explanation:</span><br><span class="line">rotate 1 steps to the right: [7,1,2,3,4,5,6]</span><br><span class="line">rotate 2 steps to the right: [6,7,1,2,3,4,5]</span><br><span class="line">rotate 3 steps to the right: [5,6,7,1,2,3,4]</span><br></pre></td></tr></tbody></table></figure>
-<p>假设给定一个二进制数<code>a='0b11001101'</code>，（<strong>必须为8位或16位或32位</strong>）求 rotate right 3 的结果，代码如下：</p>
+<p>假设给定一个二进制数<code>a='0b11001101'</code>，（<strong>必须为8位或16位或32位</strong>）求
+rotate right 3 的结果，代码如下：</p>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">self, nums, k</span>):</span><br><span class="line">            <span class="comment"># Write your code here</span></span><br><span class="line">            length = <span class="built_in">len</span>(nums)</span><br><span class="line">            k = k % length</span><br><span class="line">            result = nums[length - k : length] + nums[:length - k]</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">a=<span class="string">'0b11001101'</span></span><br><span class="line">a=<span class="built_in">list</span>(a[<span class="number">2</span>:])</span><br><span class="line">r=Solution()</span><br><span class="line">x=r.rotate(a,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span>(x)</span><br></pre></td></tr></tbody></table></figure>
 <p>运行结果为<code>['1', '0', '1', '1', '1', '0', '0', '1']</code>。</p>
 
@@ -976,7 +1056,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.9k</span>
+              <span>2.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -995,33 +1075,48 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>参考：<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html">https://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html</a></p>
-<p>​            <a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html">https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</a></p>
-<h2 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h2><p>它需要两个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/密钥">密钥</a>，一个是公开密钥，另一个是私有密钥；公钥用作加密，私钥则用作解密。使用公钥把<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/明文">明文</a>加密后所得的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/密文">密文</a>，只能用相对应的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/私钥">私钥</a>才能解密并得到原本的明文，最初用来加密的公钥不能用作解密。由于加密和解密需要两个不同的密钥，故被称为非对称加密；不同于加密和解密都使用同一个密钥的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/对称加密">对称加密</a>。公钥可以公开，可任意向外发布；私钥不可以公开，必须由用户自行严格秘密保管，绝不透过任何途径向任何人提供，也不会透露给被信任的要通信的另一方。（维基百科）</p>
-<h2 id="前置知识点"><a href="#前置知识点" class="headerlink" title="前置知识点"></a>前置知识点</h2><h3 id="互质"><a href="#互质" class="headerlink" title="互质"></a>互质</h3><ol>
+          <p>参考：https://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html</p>
+<p>​
+https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</p>
+<h2 id="非对称加密">非对称加密</h2>
+<p>它需要两个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/密钥">密钥</a>，一个是公开密钥，另一个是私有密钥；公钥用作加密，私钥则用作解密。使用公钥把<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/明文">明文</a>加密后所得的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/密文">密文</a>，只能用相对应的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/私钥">私钥</a>才能解密并得到原本的明文，最初用来加密的公钥不能用作解密。由于加密和解密需要两个不同的密钥，故被称为非对称加密；不同于加密和解密都使用同一个密钥的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/对称加密">对称加密</a>。公钥可以公开，可任意向外发布；私钥不可以公开，必须由用户自行严格秘密保管，绝不透过任何途径向任何人提供，也不会透露给被信任的要通信的另一方。（维基百科）</p>
+<h2 id="前置知识点">前置知识点</h2>
+<h3 id="互质">互质</h3>
+<ol type="1">
 <li>任意两个质数构成互质关系，比如13和61。</li>
 </ol>
-<p>　2. 一个数是质数，另一个数只要不是前者的倍数，两者就构成互质关系，比如3和10。</p>
-<p>　3. 如果两个数之中，较大的那个数是质数，则两者构成互质关系，比如97和57。</p>
+<p>　2.
+一个数是质数，另一个数只要不是前者的倍数，两者就构成互质关系，比如3和10。</p>
+<p>　3.
+如果两个数之中，较大的那个数是质数，则两者构成互质关系，比如97和57。</p>
 <p>　4. 1和任意一个自然数是都是互质关系，比如1和99。</p>
 <p>　5. p是大于1的整数，则p和p-1构成互质关系，比如57和56。</p>
 <p>　6. p是大于1的奇数，则p和p-2构成互质关系，比如17和15。</p>
-<h3 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h3><p>任意给定正整数 n，在小于等于 n 的正整数中，有 x 个与 n 构成互质关系的正整数。计算 x 的方法就叫欧拉函数，用 φ(n) 表示。</p>
-<p>例：在 1 到 8 之中，与 8 形成互质关系的是 1、3、5、7，所以 φ(n) = 4。</p>
+<h3 id="欧拉函数">欧拉函数</h3>
+<p>任意给定正整数 n，在小于等于 n 的正整数中，有 x 个与 n
+构成互质关系的正整数。计算 x 的方法就叫欧拉函数，用 φ(n) 表示。</p>
+<p>例：在 1 到 8 之中，与 8 形成互质关系的是 1、3、5、7，所以 φ(n) =
+4。</p>
 <p>关于 φ(n) 的计算方法，共五种情况：</p>
-<ol>
-<li><p>如果n=1，则 φ(1) = 1 。因为1与任何数（包括自身）都构成互质关系。</p>
-</li>
-<li><p>如果n是质数，则 φ(n)=n-1 。因为质数与小于它的每一个数，都构成互质关系。比如5与1、2、3、4都构成互质关系。</p>
-</li>
-<li><p>如果n是质数的某一个次方，即 n = p^k (p为质数，k为大于等于1的整数)，则</p>
-<p><img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(p^{k}" alt="img">%3Dp^{k}-p^{k-1}&amp;chs=40)</p>
+<ol type="1">
+<li><p>如果n=1，则 φ(1) = 1
+。因为1与任何数（包括自身）都构成互质关系。</p></li>
+<li><p>如果n是质数，则 φ(n)=n-1
+。因为质数与小于它的每一个数，都构成互质关系。比如5与1、2、3、4都构成互质关系。</p></li>
+<li><p>如果n是质数的某一个次方，即 n = p^k
+(p为质数，k为大于等于1的整数)，则</p>
+<figure>
+<img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(p%5E%7Bk%7D)%3Dp%5E%7Bk%7D-p%5E%7Bk-1%7D&amp;chs=40" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
 <p>比如 φ(8) = φ(2^3) =2^3 - 2^2 = 8 -4 = 4。</p>
-<p>这是因为只有当一个数不包含质数p，才可能与n互质。而包含质数p的数一共有p^(k-1)个，即1×p、2×p、3×p、…、p^(k-1)×p，把它们去除，剩下的就是与n互质的数。</p>
+<p>这是因为只有当一个数不包含质数p，才可能与n互质。而包含质数p的数一共有p<sup>(k-1)个，即1×p、2×p、3×p、...、p</sup>(k-1)×p，把它们去除，剩下的就是与n互质的数。</p>
 <p>上面的式子还可以写成下面的形式：</p>
-<p><img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(p^{k}" alt="img">%3Dp^{k}-p^{k-1}%3Dp^{k}(1-\frac{1}{p})&amp;chs=60)</p>
-<p>可以看出，上面的第二种情况是 k=1 时的特例。</p>
-</li>
+<figure>
+<img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(p%5E%7Bk%7D)%3Dp%5E%7Bk%7D-p%5E%7Bk-1%7D%3Dp%5E%7Bk%7D(1-\frac%7B1%7D%7Bp%7D)&amp;chs=60" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>可以看出，上面的第二种情况是 k=1 时的特例。</p></li>
 <li><p>如果n可以分解成两个互质的整数之积，</p>
 <blockquote>
 <p>　　n = p1 × p2</p>
@@ -1029,36 +1124,64 @@
 <p>则</p>
 <blockquote>
 <p>　　φ(n) = φ(p1p2) = φ(p1)φ(p2)</p>
-</blockquote>
-</li>
+</blockquote></li>
 <li><p>任意一个大于1的正整数，都可以写成一系列质数的积，根据前面几种情况可以得出公式：</p>
-<p><img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(n" alt="img">%3Dn(1-\frac{1}{p_{1}})(1-\frac{1}{p_{2}})…(1-\frac{1}{p_{r}})&amp;chs=60)</p>
-</li>
+<figure>
+<img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(n)%3Dn(1-\frac%7B1%7D%7Bp_%7B1%7D%7D)(1-\frac%7B1%7D%7Bp_%7B2%7D%7D)...(1-\frac%7B1%7D%7Bp_%7Br%7D%7D)&amp;chs=60" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
 </ol>
-<h3 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h3><p>如果两个正整数a和n互质，则n的欧拉函数 φ(n) 可以让下面的等式成立：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221017000738261.png" alt="image-20221017000738261"></p>
+<h3 id="欧拉定理">欧拉定理</h3>
+<p>如果两个正整数a和n互质，则n的欧拉函数 φ(n) 可以让下面的等式成立：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221017000738261.png" alt="image-20221017000738261">
+<figcaption aria-hidden="true">image-20221017000738261</figcaption>
+</figure>
 <p>也就是说，a的φ(n)次方被n除的余数为1。</p>
 <p><strong>特殊情况：</strong></p>
 <p>假设正整数a与质数p互质，因为质数p的φ(p)等于p-1，则欧拉定理可以写成</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221017000807005.png" alt="image-20221017000807005"></p>
-<h3 id="模反元素（模逆元）"><a href="#模反元素（模逆元）" class="headerlink" title="模反元素（模逆元）"></a>模反元素（模逆元）</h3><p>如果两个正整数a和n互质，那么一定可以找到整数b，使得 ab-1 被n整除，或者说ab被n除的余数是1。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220912153915183.png" alt="image-20220912153915183"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221017000807005.png" alt="image-20221017000807005">
+<figcaption aria-hidden="true">image-20221017000807005</figcaption>
+</figure>
+<h3 id="模反元素模逆元">模反元素（模逆元）</h3>
+<p>如果两个正整数a和n互质，那么一定可以找到整数b，使得 ab-1
+被n整除，或者说ab被n除的余数是1。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220912153915183.png" alt="image-20220912153915183">
+<figcaption aria-hidden="true">image-20220912153915183</figcaption>
+</figure>
 <p>此时，b 就叫做 a 的模反元素。</p>
-<h2 id="RSA算法"><a href="#RSA算法" class="headerlink" title="RSA算法"></a>RSA算法</h2><p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230127173626821.png" alt="image-20230127173626821"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230127173800453.png" alt="image-20230127173800453"></p>
-<h3 id="1-随机选择两个不相等的质数-p-和-q"><a href="#1-随机选择两个不相等的质数-p-和-q" class="headerlink" title="1.随机选择两个不相等的质数 p 和 q"></a>1.随机选择两个不相等的质数 p 和 q</h3><p>假设选择了61和53。</p>
-<h3 id="2-计算-p-和-q-的乘积-n"><a href="#2-计算-p-和-q-的乘积-n" class="headerlink" title="2.计算 p 和 q 的乘积 n"></a>2.计算 p 和 q 的乘积 n</h3><p>把61和53相乘。</p>
+<h2 id="rsa算法">RSA算法</h2>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230127173626821.png" alt="image-20230127173626821">
+<figcaption aria-hidden="true">image-20230127173626821</figcaption>
+</figure>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230127173800453.png" alt="image-20230127173800453">
+<figcaption aria-hidden="true">image-20230127173800453</figcaption>
+</figure>
+<h3 id="随机选择两个不相等的质数-p-和-q">1.随机选择两个不相等的质数 p 和
+q</h3>
+<p>假设选择了61和53。</p>
+<h3 id="计算-p-和-q-的乘积-n">2.计算 p 和 q 的乘积 n</h3>
+<p>把61和53相乘。</p>
 <blockquote>
 <p>n = 61×53 = 3233</p>
 </blockquote>
 <p>n的长度就是密钥长度。3233写成二进制是110010100001，一共有12位，所以这个密钥就是12位。实际应用中，RSA密钥一般是1024位，重要场合则为2048位。</p>
-<h3 id="3-计算-n-的欧拉函数-φ-n"><a href="#3-计算-n-的欧拉函数-φ-n" class="headerlink" title="3.计算 n 的欧拉函数 φ(n)"></a>3.计算 n 的欧拉函数 φ(n)</h3><p>根据公式：</p>
+<h3 id="计算-n-的欧拉函数-φn">3.计算 n 的欧拉函数 φ(n)</h3>
+<p>根据公式：</p>
 <blockquote>
 <p>φ(n) = (p-1)(q-1)</p>
 </blockquote>
 <p>算出 φ(3233) 等于 60×52 ，即 3120 。</p>
-<h3 id="4-随机选择一个整数-e，条件是-1-lt-e-lt-φ-n-，且-e-与-φ-n-互质"><a href="#4-随机选择一个整数-e，条件是-1-lt-e-lt-φ-n-，且-e-与-φ-n-互质" class="headerlink" title="4.随机选择一个整数 e，条件是 1 < e < φ(n) ，且 e 与 φ(n) 互质"></a>4.随机选择一个整数 e，条件是 1 &lt; e &lt; φ(n) ，且 e 与 φ(n) 互质</h3><p>假设随机选择了17。（实际应用中，常常选择65537。）</p>
-<h3 id="5-计算-e-对于-φ-n-的模反元素-d"><a href="#5-计算-e-对于-φ-n-的模反元素-d" class="headerlink" title="5.计算 e 对于 φ(n) 的模反元素 d"></a>5.计算 e 对于 φ(n) 的模反元素 d</h3><p><strong>d</strong> 满足公式：</p>
+<h3 id="随机选择一个整数-e条件是-1-e-φn-且-e-与-φn-互质">4.随机选择一个整数
+e，条件是 1 &lt; e &lt; φ(n) ，且 e 与 φ(n) 互质</h3>
+<p>假设随机选择了17。（实际应用中，常常选择65537。）</p>
+<h3 id="计算-e-对于-φn-的模反元素-d">5.计算 e 对于 φ(n) 的模反元素
+d</h3>
+<p><strong>d</strong> 满足公式：</p>
 <blockquote>
 <p>ed ≡ 1 (mod φ(n))</p>
 </blockquote>
@@ -1074,11 +1197,17 @@
 <blockquote>
 <p>17x + 3120y = 1</p>
 </blockquote>
-<p>利用扩展欧几里得算法求出结果（代码参考：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2446）">https://xz.aliyun.com/t/2446）</a></p>
+<p>利用扩展欧几里得算法求出结果（代码参考：https://xz.aliyun.com/t/2446）</p>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#利用gmpy2直接求解模反元素 </span></span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="built_in">print</span>(gmpy2.invert(<span class="number">17</span>, <span class="number">3120</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#用于扩展欧几里得算法的 Python 程序</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">egcd</span> ( a , b ):</span><br><span class="line">     <span class="keyword">if</span> (b == <span class="number">0</span>):</span><br><span class="line">         <span class="keyword">return</span> <span class="number">1</span>, <span class="number">0</span>, a</span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">         x , y , q = egcd( b , a % b ) <span class="comment"># q = GCD(a, b) = GCD(b, a%b)</span></span><br><span class="line">         x , y = y, ( x - (a // b) * y )</span><br><span class="line">         <span class="keyword">return</span> x, y, q </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mod_inv</span>(<span class="params">a,b</span>):</span><br><span class="line">    <span class="keyword">return</span> egcd(a,b)[<span class="number">0</span>]%b <span class="comment">#求a模b得逆元</span></span><br><span class="line"><span class="built_in">print</span>(mod_inv(<span class="number">17</span>,<span class="number">3120</span>))</span><br></pre></td></tr></tbody></table></figure>
 <p>可得 d = 2753 。</p>
-<h3 id="6-将-n-和-e-封装成公钥，n-和-d-封装成私钥"><a href="#6-将-n-和-e-封装成公钥，n-和-d-封装成私钥" class="headerlink" title="6.将 n 和 e 封装成公钥，n 和 d 封装成私钥"></a>6.将 n 和 e 封装成公钥，n 和 d 封装成私钥</h3><p>在上述的例子中，n=3233，e=17，d=2753，所以公钥就是 (3233,17)，私钥就是（3233, 2753）。</p>
-<h3 id="7-RSA算法的可靠性"><a href="#7-RSA算法的可靠性" class="headerlink" title="7.RSA算法的可靠性"></a>7.RSA算法的可靠性</h3><p>上述共出现了 p 、q 、n 、φ(n) 、e 、d 这六个数字，公钥用到了 n 和 e ，其余的四个数字都不公开。最关键的是 d，一旦 d 泄露，就等于私钥泄露。</p>
+<h3 id="将-n-和-e-封装成公钥n-和-d-封装成私钥">6.将 n 和 e 封装成公钥，n
+和 d 封装成私钥</h3>
+<p>在上述的例子中，n=3233，e=17，d=2753，所以公钥就是
+(3233,17)，私钥就是（3233, 2753）。</p>
+<h3 id="rsa算法的可靠性">7.RSA算法的可靠性</h3>
+<p>上述共出现了 p 、q 、n 、φ(n) 、e 、d 这六个数字，公钥用到了 n 和 e
+，其余的四个数字都不公开。最关键的是 d，一旦 d
+泄露，就等于私钥泄露。</p>
 <p>那么如何推导出 d ？</p>
 <blockquote>
 <p>（1）ed≡1 (mod φ(n))。只有知道e和φ(n)，才能算出d。</p>
@@ -1086,28 +1215,37 @@
 <p>（3）n=pq。只有将n因数分解，才能算出p和q。</p>
 </blockquote>
 <p>因此只有先计算出 p 和 q ，才有可能推导出 d 。</p>
-<h3 id="8-加密和解密"><a href="#8-加密和解密" class="headerlink" title="8.加密和解密"></a>8.加密和解密</h3><h4 id="（1）加密用公钥（n-e）"><a href="#（1）加密用公钥（n-e）" class="headerlink" title="（1）加密用公钥（n, e）"></a>（1）加密用公钥（n, e）</h4><p>假设鲍勃要向爱丽丝发送加密信息m，他就要用爱丽丝的公钥 (n,e) 对m进行加密（<strong>m为原文</strong>）。这里需要注意，m必须是整数（字符串可以取ascii值或unicode值），且m必须小于n。</p>
+<h3 id="加密和解密">8.加密和解密</h3>
+<h4 id="加密用公钥n-e">（1）加密用公钥（n, e）</h4>
+<p>假设鲍勃要向爱丽丝发送加密信息m，他就要用爱丽丝的公钥 (n,e)
+对m进行加密（<strong>m为原文</strong>）。这里需要注意，m必须是整数（字符串可以取ascii值或unicode值），且m必须小于n。</p>
 <p>加密的公式如下：</p>
 <blockquote>
-<p>m<sup>e</sup> ≡ c (mod n) </p>
+<p>m<sup>e</sup> ≡ c (mod n)</p>
 </blockquote>
-<p>爱丽丝的公钥是 (3233, 17)，鲍勃的m假设是65，那么可以算出下面的等式：</p>
+<p>爱丽丝的公钥是 (3233,
+17)，鲍勃的m假设是65，那么可以算出下面的等式：</p>
 <blockquote>
 <p>6517 ≡ 2790 (mod 3233)</p>
 </blockquote>
-<p>于是，c等于2790，鲍勃就把2790发给了爱丽丝，即 c 是<strong>密文</strong>。</p>
-<h4 id="（2）解密用私钥（n-d）"><a href="#（2）解密用私钥（n-d）" class="headerlink" title="（2）解密用私钥（n, d）"></a>（2）解密用私钥（n, d）</h4><p>爱丽丝拿到鲍勃发来的2790以后，就用自己的私钥(3233, 2753) 进行解密</p>
+<p>于是，c等于2790，鲍勃就把2790发给了爱丽丝，即 c
+是<strong>密文</strong>。</p>
+<h4 id="解密用私钥n-d">（2）解密用私钥（n, d）</h4>
+<p>爱丽丝拿到鲍勃发来的2790以后，就用自己的私钥(3233, 2753) 进行解密</p>
 <blockquote>
 <p>c<sup>d</sup> ≡ m (mod n)</p>
 </blockquote>
-<p>也就是说，c的d次方除以n的余数为m。现在，c等于2790，私钥是(3233, 2753)，那么，爱丽丝算出</p>
+<p>也就是说，c的d次方除以n的余数为m。现在，c等于2790，私钥是(3233,
+2753)，那么，爱丽丝算出</p>
 <blockquote>
-<p>2790<sup>2753</sup> ≡ 65 (mod 3233) </p>
+<p>2790<sup>2753</sup> ≡ 65 (mod 3233)</p>
 </blockquote>
 <p>解得加密前的原文：65。</p>
-<p>至此，”加密—解密”的整个过程全部完成。</p>
+<p>至此，"加密--解密"的整个过程全部完成。</p>
 <p>由上述公式可知，如果不知道 d ，就无法通过 c 求出 m 。</p>
-<h3 id="9-私钥解密的证明"><a href="#9-私钥解密的证明" class="headerlink" title="9.私钥解密的证明"></a>9.私钥解密的证明</h3><p>详见： <a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html">https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</a></p>
+<h3 id="私钥解密的证明">9.私钥解密的证明</h3>
+<p>详见：
+https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</p>
 
       
     </div>
@@ -1195,30 +1333,46 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="汇编语言（六）——and和or，灵活定位内存地址"><a href="#汇编语言（六）——and和or，灵活定位内存地址" class="headerlink" title="汇编语言（六）——and和or，灵活定位内存地址"></a>汇编语言（六）——and和or，灵活定位内存地址</h1><h2 id="and-和-or-指令及其应用"><a href="#and-和-or-指令及其应用" class="headerlink" title="and 和 or 指令及其应用"></a>and 和 or 指令及其应用</h2><h3 id="and-和-or"><a href="#and-和-or" class="headerlink" title="and 和 or"></a>and 和 or</h3><ol>
+          <h1 id="汇编语言六and和or灵活定位内存地址">汇编语言（六）——and和or，灵活定位内存地址</h1>
+<h2 id="and-和-or-指令及其应用">and 和 or 指令及其应用</h2>
+<h3 id="and-和-or">and 和 or</h3>
+<ol type="1">
 <li><p>and 指令：逻辑与指令，按位进行与运算。</p>
 <p>示例：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov al, 01100011B</span><br><span class="line">and al, 00111011B</span><br></pre></td></tr></tbody></table></figure>
-<p>执行后：al = 00100011B</p>
-</li>
+<p>执行后：al = 00100011B</p></li>
 <li><p>or 指令：逻辑或指令，按位进行或运算。</p>
 <p>示例：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov al, 01100011B</span><br><span class="line">or al, 00111011B</span><br></pre></td></tr></tbody></table></figure>
-<p>执行后：al = 01111011B</p>
-</li>
+<p>执行后：al = 01111011B</p></li>
 </ol>
-<h3 id="大小写转换问题"><a href="#大小写转换问题" class="headerlink" title="大小写转换问题"></a>大小写转换问题</h3><p>根据规律可知：大写字母 + 20H = 小写字母。因此当字母对应的ASCII码大于等于61H时，则为小写字母，而已学的指令中无法实现判断的功能，于是寻找新的规律。可以看出，字母对应的ASCII码的二进制形式，除<strong>第5位</strong>（位数从0开始计算）外，大写字母与小写字母的其他各位都一样。大写字母第5位为<strong>0</strong>，小写字母第5位为<strong>1</strong>。通过使用 and 和 or 指令对大小写进行转换。</p>
+<h3 id="大小写转换问题">大小写转换问题</h3>
+<p>根据规律可知：大写字母 + 20H =
+小写字母。因此当字母对应的ASCII码大于等于61H时，则为小写字母，而已学的指令中无法实现判断的功能，于是寻找新的规律。可以看出，字母对应的ASCII码的二进制形式，除<strong>第5位</strong>（位数从0开始计算）外，大写字母与小写字母的其他各位都一样。大写字母第5位为<strong>0</strong>，小写字母第5位为<strong>1</strong>。通过使用
+and 和 or 指令对大小写进行转换。</p>
 <p>完整程序如下：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg,ds:datasg</span><br><span class="line"></span><br><span class="line">datasg segment</span><br><span class="line"> db 'BaSiC'</span><br><span class="line"> db 'iNfOrMaTiOn'</span><br><span class="line">datasg ends</span><br><span class="line"></span><br><span class="line">codesg segment</span><br><span class="line"> start: mov ax,datasg</span><br><span class="line">        mov ds,ax                        ;设置ds指向datasg段</span><br><span class="line">        mov bx,0                         ;设置(bx)=0，ds:bx指向'BaSiC'的第一个字母</span><br><span class="line">        mov cx,5                         ;设置循环次数 5，因为'BaSiC'有5个字母</span><br><span class="line">     s: mov al,[bx]                      ;将ASCII码从ds:bx所指向的单元中取出</span><br><span class="line">        and al,11011111B                 ;将 al 中的ASCII码的第5位 置为0，变为大写字母</span><br><span class="line">        mov [bx],al                      ;将转变后的ASCII码写回原单位</span><br><span class="line">        inc bx                           ;(bx)加1，ds:bx指向下一个字母</span><br><span class="line">        loop s</span><br><span class="line">        </span><br><span class="line">        mov bx,5                         ;设置(bx) = 5，ds:bx指向'iNfOrMaTiOn'的第一个字母</span><br><span class="line">        mov cx,11                        ;设置循环次数 11，因为'iNfOrMaTiOn'有11个字母</span><br><span class="line">    s0: mov al,[bx]</span><br><span class="line">        or al,00100000B                  ;将al中的ASCII码的第5位 置为1，变为小写字母</span><br><span class="line">        mov [bx],al</span><br><span class="line">        inc bx</span><br><span class="line">        loop s0</span><br><span class="line">        </span><br><span class="line">        mov ax,4c00h</span><br><span class="line">        int 21h</span><br><span class="line">codesg ends</span><br><span class="line">end start</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="定位内存地址"><a href="#定位内存地址" class="headerlink" title="定位内存地址"></a>定位内存地址</h2><h3 id="bx-idata"><a href="#bx-idata" class="headerlink" title="[bx+idata]"></a>[bx+idata]</h3><p>[bx+idata]表示一个内存单元，它的偏移地址为 (bx)+idata（bx 中的数值加上idata）。</p>
-<p>对于上面的程序，datasg 段中的两个字符串，一个起始地址为0，另一个为5。于是我们可以将这两个字符串看作两个数组，分别用 <strong>[0+bx]</strong> 和 <strong>[5+bx]</strong> 来定位这两个字符串。</p>
+<h2 id="定位内存地址">定位内存地址</h2>
+<h3 id="bxidata">[bx+idata]</h3>
+<p>[bx+idata]表示一个内存单元，它的偏移地址为 (bx)+idata（bx
+中的数值加上idata）。</p>
+<p>对于上面的程序，datasg
+段中的两个字符串，一个起始地址为0，另一个为5。于是我们可以将这两个字符串看作两个数组，分别用
+<strong>[0+bx]</strong> 和 <strong>[5+bx]</strong>
+来定位这两个字符串。</p>
 <p>改进的程序如下：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   mov ax,datasg</span><br><span class="line">   mov ds,ax</span><br><span class="line">   mov bx,0</span><br><span class="line">   mov cx,5</span><br><span class="line"></span><br><span class="line">s: mov al,[bx]                ;定位第一个字符串的字符</span><br><span class="line">   and al,11011111b</span><br><span class="line">   mov [bx],al</span><br><span class="line">   mov al,[5+bx]              ;定位第二个字符串的字符</span><br><span class="line">   or al,00100000b</span><br><span class="line">   mov [5+bx],al</span><br><span class="line">   inc bx</span><br><span class="line">   loop s</span><br></pre></td></tr></tbody></table></figure>
 <p>其中也可将<code>[bx]</code>写成<code>0[bx]</code>，<code>[5+bx]</code>写成<code>5[bx]</code>。</p>
-<h3 id="SI-和-DI"><a href="#SI-和-DI" class="headerlink" title="SI 和 DI"></a>SI 和 DI</h3><p>si 和 di 是8086CPU中和 bx 功能相近的寄存器，si 和 di <strong>不能</strong>分成两个8位寄存器来使用。</p>
-<h3 id="bx-si-和-bx-di"><a href="#bx-si-和-bx-di" class="headerlink" title="[bx+si] 和 [bx+di]"></a>[bx+si] 和 [bx+di]</h3><p>[bx+si] 表示一个内存单元，它的偏移地址为 (bx) + (si)（即 bx 中的数值加上 si 中的数值）。</p>
+<h3 id="si-和-di">SI 和 DI</h3>
+<p>si 和 di 是8086CPU中和 bx 功能相近的寄存器，si 和 di
+<strong>不能</strong>分成两个8位寄存器来使用。</p>
+<h3 id="bxsi-和-bxdi">[bx+si] 和 [bx+di]</h3>
+<p>[bx+si] 表示一个内存单元，它的偏移地址为 (bx) + (si)（即 bx
+中的数值加上 si 中的数值）。</p>
 <p>指令<code>mov ax,[bx+si]</code>的数学化描述为：(ax)=((ds)*16+(bx)+(si))。</p>
-<h3 id="bx-si-idata-和-bx-di-idata"><a href="#bx-si-idata-和-bx-di-idata" class="headerlink" title="[bx+si+idata] 和 [bx+di+idata]"></a>[bx+si+idata] 和 [bx+di+idata]</h3><p>[bx+si+idata]表示一个内存单元，它的偏移地址为 (bx) + (si) +idata（即 bx 中的数据加上 si 中的数据再加上 idata）。</p>
+<h3 id="bxsiidata-和-bxdiidata">[bx+si+idata] 和 [bx+di+idata]</h3>
+<p>[bx+si+idata]表示一个内存单元，它的偏移地址为 (bx) + (si) +idata（即
+bx 中的数据加上 si 中的数据再加上 idata）。</p>
 <p>指令<code>mov ax,[bx+si+idata]</code>的数学化描述为：(ax)=((ds)*16+(bx)+(si)+idata)。</p>
 
       
@@ -1307,17 +1461,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="汇编语言（五）——包含多个段的程序"><a href="#汇编语言（五）——包含多个段的程序" class="headerlink" title="汇编语言（五）——包含多个段的程序"></a>汇编语言（五）——包含多个段的程序</h1><h2 id="在代码段中使用数据"><a href="#在代码段中使用数据" class="headerlink" title="在代码段中使用数据"></a>在代码段中使用数据</h2><p>计算以下8个数据的和，结果存在ax寄存器中：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
+          <h1 id="汇编语言五包含多个段的程序">汇编语言（五）——包含多个段的程序</h1>
+<h2 id="在代码段中使用数据">在代码段中使用数据</h2>
+<p>计算以下8个数据的和，结果存在ax寄存器中：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
 <p>我们希望通过循环的方式进行累加，而在累加前，要将这些数据存储在一组地址连续的内存单元中。具体做法如下：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">assume cs:code</span><br><span class="line">code segment</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">	</span><br><span class="line">	start: mov bx, 0</span><br><span class="line">	       mov ax, 0</span><br><span class="line">	</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	   s:  add ax, cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s</span><br><span class="line">	</span><br><span class="line">	       mov ax, 4c00h</span><br><span class="line">	       int 21h</span><br><span class="line">code ends</span><br><span class="line">end start</span><br></pre></td></tr></tbody></table></figure>
-<p>程序中<code>dw</code>（define word）的含义是定义字型数据。上述程序中使用<code>dw</code>定义了8个字型数据，所占内存空间大小为16字节。</p>
+<p>程序中<code>dw</code>（define
+word）的含义是定义字型数据。上述程序中使用<code>dw</code>定义了8个字型数据，所占内存空间大小为16字节。</p>
 <p>程序在运行时，<code>CS</code>中存放的是代码段的段地址，由于用<code>dw</code>定义的数据处于代码段的在开始，因此偏移地址为0，则这8个数据所在地址为<code>CS:0</code>、<code>CS:2</code>、<code>CS:4</code>、<code>CS:6</code>、<code>CS:8</code>、<code>CS:A</code>、<code>CS:C</code>、<code>CS:E</code>。</p>
-<p><code>end</code>除了通知编译器程序结束外，还可以通知编译器程序的入口在什么位置。上述示例中，<code>end</code>后面的标号 <strong>start</strong> 指明了程序的入口。</p>
-<h2 id="在代码段中使用栈"><a href="#在代码段中使用栈" class="headerlink" title="在代码段中使用栈"></a>在代码段中使用栈</h2><p>利用栈，将给定的数据逆序存放：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
+<p><code>end</code>除了通知编译器程序结束外，还可以通知编译器程序的入口在什么位置。上述示例中，<code>end</code>后面的标号
+<strong>start</strong> 指明了程序的入口。</p>
+<h2 id="在代码段中使用栈">在代码段中使用栈</h2>
+<p>利用栈，将给定的数据逆序存放：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
 <p>代码如下：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg</span><br><span class="line">code segment</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">	dw 0, 0, 0, 0, 0, 0, 0, 0    用dw定义16个字型数据，在程序加载后，取得16个字的内存空间，							    存放这16个数据。在后面的程序中将这段空间当作栈来使用。</span><br><span class="line">	start: mov ax, cs</span><br><span class="line">	       mov ss, ax</span><br><span class="line">	       mov sp, 30h           将设置栈顶ss:sp指向cs:30</span><br><span class="line">	       </span><br><span class="line">	       mov bx, 0</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	    s: push cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s                以上将代码段0~15单元中的8个字型数据依次入栈</span><br><span class="line">	       </span><br><span class="line">	       mov bx, 0</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	   s0: pop cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s0               以上依次出栈8个字型数据到代码段0~15单元中</span><br><span class="line">	       </span><br><span class="line">	       mov ax, 4c00h</span><br><span class="line">	       int 21h</span><br><span class="line">	       </span><br><span class="line">codesg ends</span><br><span class="line">end start                        指明程序的入口在start处</span><br></pre></td></tr></tbody></table></figure>
-<p>由上述代码可知<code>cs:10 ~ cs:2F</code>内存空间用来当作栈使用，初始状态下栈为空，所以<code>ss:sp</code>要指向栈底，则设置<code>ss:sp</code>指向<code>cs:30</code>（入栈 sp=sp-2）。</p>
-<h2 id="将数据、代码、栈放入不同的段"><a href="#将数据、代码、栈放入不同的段" class="headerlink" title="将数据、代码、栈放入不同的段"></a>将数据、代码、栈放入不同的段</h2><p>当数据、代码和栈需要的空间超过 64KB，就不能放在一个段中(一个段的容量不能大于 64KB，这是8086模式的限制，并不是所有处理器都这样)。</p>
+<p>由上述代码可知<code>cs:10 ~ cs:2F</code>内存空间用来当作栈使用，初始状态下栈为空，所以<code>ss:sp</code>要指向栈底，则设置<code>ss:sp</code>指向<code>cs:30</code>（入栈
+sp=sp-2）。</p>
+<h2 id="将数据代码栈放入不同的段">将数据、代码、栈放入不同的段</h2>
+<p>当数据、代码和栈需要的空间超过
+64KB，就不能放在一个段中(一个段的容量不能大于
+64KB，这是8086模式的限制，并不是所有处理器都这样)。</p>
 <p>示例代码如下：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">assume cs:code, ds:data, ss:stack</span><br><span class="line"></span><br><span class="line">data segment                数据段</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">data ends</span><br><span class="line"></span><br><span class="line">stack segment               栈段</span><br><span class="line">	dw 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0</span><br><span class="line">stack ends</span><br><span class="line"></span><br><span class="line">code segment                代码段</span><br><span class="line">start:  mov ax, stack </span><br><span class="line">        mov ss, ax</span><br><span class="line">        mov sp 20h          设置栈顶ss:sp指向stack:20</span><br><span class="line">        </span><br><span class="line">        mov ax, data</span><br><span class="line">        mov ds, ax          ds指向data段</span><br><span class="line">        </span><br><span class="line">        mov bx, 0           ds:bx指向data段中的第一个单元</span><br><span class="line">        </span><br><span class="line">        mov cx, 8</span><br><span class="line">s:      push [bx]</span><br><span class="line">        add bx, 2</span><br><span class="line">        loop s              以上将data段中的0~15单元中的8个字型数据依次入栈</span><br><span class="line">        </span><br><span class="line">        mov bx, 0</span><br><span class="line">        </span><br><span class="line">        mov cx, 8</span><br><span class="line">s0:     pop [bx]</span><br><span class="line">        add bx, 2</span><br><span class="line">        loop s0</span><br><span class="line">        </span><br><span class="line">        mov ax, 4c00h</span><br><span class="line">        int 21h</span><br><span class="line">code ends</span><br><span class="line"></span><br><span class="line">end start</span><br><span class="line">        </span><br></pre></td></tr></tbody></table></figure>
 <p><code>mov ax,data</code>的含义就是将名称<code>data</code>段的段地址送入<code>ax</code>。<code>data</code>段中的数据<code>0abch</code>的地址就是<code>data:6</code>。不能直接将数值直接送入段寄存器中，因此<code>mov ds,data</code>是错误的。正确的语句如下：</p>
@@ -1457,12 +1620,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -1535,6 +1698,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

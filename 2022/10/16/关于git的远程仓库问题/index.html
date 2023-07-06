@@ -236,15 +236,20 @@
 
       
         <p>最近一直断断续续地学习git的使用方法，今天在学习的时候遇到了一个关于远程仓库的问题：<strong>如何在克隆远程仓库后，将其关联到自己的远程仓库。</strong></p>
-<p>当使用 git clone 时，就会将远程仓库克隆到本地。利用命令<code>git remote -v</code>查看克隆的远程仓库的信息，例如：</p>
+<p>当使用 git clone
+时，就会将远程仓库克隆到本地。利用命令<code>git remote -v</code>查看克隆的远程仓库的信息，例如：</p>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/user/repo.git (fetch)</span><br><span class="line">origin  https://github.com/user/repo.git (push)</span><br></pre></td></tr></tbody></table></figure>
-<p>origin 为默认的远程仓库的别名。此时， origin 默认的 url 是原始仓库的地址。想要关联到新的远程仓库主要有两种方法：</p>
-<h3 id="添加远程仓库"><a href="#添加远程仓库" class="headerlink" title="添加远程仓库"></a>添加远程仓库</h3><p>使用<code>git remote add</code>命令添加。</p>
-<p>该命令采用两个参数：远程名称（例如<code>new</code> ）、远程 URL（例如 <code>https://github.com/user_1/repo.git</code>）。</p>
+<p>origin 为默认的远程仓库的别名。此时， origin 默认的 url
+是原始仓库的地址。想要关联到新的远程仓库主要有两种方法：</p>
+<h3 id="添加远程仓库">添加远程仓库</h3>
+<p>使用<code>git remote add</code>命令添加。</p>
+<p>该命令采用两个参数：远程名称（例如<code>new</code> ）、远程 URL（例如
+<code>https://github.com/user_1/repo.git</code>）。</p>
 <p>例如：</p>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add new https://github.com/user_1/repo.git <span class="comment"># Set a new remote</span></span><br><span class="line"></span><br><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/user/repo.git (fetch) <span class="comment"># 原始仓库</span></span><br><span class="line">origin  https://github.com/user/repo.git (push)  <span class="comment"># 原始仓库</span></span><br><span class="line">new  https://github.com/user_1/repo.git (fetch) <span class="comment"># 新添加的远程仓库</span></span><br><span class="line">new  https://github.com/user_1/repo.git (push) <span class="comment"># 新添加的远程仓库</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="更改远程仓库的-URL"><a href="#更改远程仓库的-URL" class="headerlink" title="更改远程仓库的 URL"></a>更改远程仓库的 URL</h3><p>使用<code>git remote set-url</code>命令更改 URL。</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://docs.github.com/cn/get-started/getting-started-with-git/managing-remote-repositories#changing-a-remote-repositorys-url">https://docs.github.com/cn/get-started/getting-started-with-git/managing-remote-repositories#changing-a-remote-repositorys-url</a></p>
+<h3 id="更改远程仓库的-url">更改远程仓库的 URL</h3>
+<p>使用<code>git remote set-url</code>命令更改 URL。</p>
+<p>参考：https://docs.github.com/cn/get-started/getting-started-with-git/managing-remote-repositories#changing-a-remote-repositorys-url</p>
 
     </div>
 
@@ -328,7 +333,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">添加远程仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%94%B9%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84-URL"><span class="nav-number">2.</span> <span class="nav-text">更改远程仓库的 URL</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">添加远程仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%94%B9%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84-url"><span class="nav-number">2.</span> <span class="nav-text">更改远程仓库的 URL</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -393,12 +398,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -471,6 +476,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

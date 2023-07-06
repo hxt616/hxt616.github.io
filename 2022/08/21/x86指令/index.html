@@ -243,50 +243,112 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>以AT&amp;T语法为例，AT&amp;T与Intel的区别见：<br><a target="_blank" rel="noopener" href="https://hxt616.github.io/2022/08/16/AT&amp;T%E5%92%8CIntel/">https://hxt616.github.io/2022/08/16/AT&amp;T%E5%92%8CIntel/</a></p>
-<p>本文参考《CTF All In One》：<a target="_blank" rel="noopener" href="https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html#334-%E6%8C%87%E4%BB%A4-instructions">https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html#334-%E6%8C%87%E4%BB%A4-instructions</a></p>
-<h1 id="三类x86指令"><a href="#三类x86指令" class="headerlink" title="三类x86指令"></a>三类x86指令</h1><h2 id="数据移动指令"><a href="#数据移动指令" class="headerlink" title="数据移动指令"></a>数据移动指令</h2><h3 id="mov-移动"><a href="#mov-移动" class="headerlink" title="mov 移动"></a><code>mov</code> 移动</h3><p><code>mov</code> 指令将数据从它的第一个参数 ( 即寄存器中的内容, 内存单元中的内容, 或者一个常数值 ) 复制到它的第二个参数 ( 即寄存器或者内存单元 ). 当寄存器到寄存器之间的数据移动是可行的时候, 直接地从内存单元中将数据移动到另一内存单元中是不行的. 在这种需要在内存单元中传递数据的情况下, 它数据来源的那个内存单元必须首先把那个内存单元中的数据加载到一个寄存器中, 然后才可以通过这个寄存器来把数据移动到目标内存单元中。</p>
+        <p>以AT&amp;T语法为例，AT&amp;T与Intel的区别见：<br>https://hxt616.github.io/2022/08/16/AT&amp;T%E5%92%8CIntel/</p>
+<p>本文参考《CTF All In
+One》：https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html#334-%E6%8C%87%E4%BB%A4-instructions</p>
+<h1 id="三类x86指令">三类x86指令</h1>
+<h2 id="数据移动指令">数据移动指令</h2>
+<h3 id="mov-移动"><code>mov</code> 移动</h3>
+<p><code>mov</code> 指令将数据从它的第一个参数 ( 即寄存器中的内容,
+内存单元中的内容, 或者一个常数值 ) 复制到它的第二个参数 (
+即寄存器或者内存单元 ). 当寄存器到寄存器之间的数据移动是可行的时候,
+直接地从内存单元中将数据移动到另一内存单元中是不行的.
+在这种需要在内存单元中传递数据的情况下,
+它数据来源的那个内存单元必须首先把那个内存单元中的数据加载到一个寄存器中,
+然后才可以通过这个寄存器来把数据移动到目标内存单元中。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov %ebx, %eax        将 EBX 中的值复制到 EAX 中</span><br><span class="line">mov %ebx, var(,1)     将 EBX 中的 4 个字节大小的数据移动的内存中标签为 var 的地方去.( var 是一个 32 位常数)</span><br><span class="line">mov (%ebx), %eax      从 EBX 中的内存地址加载 4 个字节的数据到 EAX, 就是把 EBX 中的内容当作标签, 这个标签在内存中对应的数据放到 EAX 中</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="push-入栈"><a href="#push-入栈" class="headerlink" title="push 入栈"></a><code>push</code> 入栈</h3><p><code>push</code>指令将它的参数移动到硬件支持的<strong>栈</strong>内存顶端. 特别地, <code>push</code> 首先将 ESP 中的值<strong>减少</strong> 4, 然后将它的参数移动到一个 32 位的地址单元 ( %esp ). ESP ( 栈指针 ) 会随着不断入栈从而持续递减, 即栈内存是从高地址单元到低地址单元增长。</p>
+<h3 id="push-入栈"><code>push</code> 入栈</h3>
+<p><code>push</code>指令将它的参数移动到硬件支持的<strong>栈</strong>内存顶端.
+特别地, <code>push</code> 首先将 ESP 中的值<strong>减少</strong> 4,
+然后将它的参数移动到一个 32 位的地址单元 ( %esp ). ESP ( 栈指针 )
+会随着不断入栈从而持续递减, 即栈内存是从高地址单元到低地址单元增长。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push %eax         将 EAX 送入栈</span><br><span class="line">push var(,1)      将 var 对应的 4 字节大小的数据送入栈中</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="pop-出栈"><a href="#pop-出栈" class="headerlink" title="pop 出栈"></a><code>pop</code> 出栈</h3><p><code>pop</code>指令从硬件支持的栈内存顶端移除 4 字节的数据, 并把这个数据放到该指令指定的参数中 ( 即寄存器或者内存单元 ). 其首先将内存中 ( %esp ) 的 4 字节数据放到指定的寄存器或者内存单元中, 然后让 <strong>ESP + 4</strong>。</p>
+<h3 id="pop-出栈"><code>pop</code> 出栈</h3>
+<p><code>pop</code>指令从硬件支持的栈内存顶端移除 4 字节的数据,
+并把这个数据放到该指令指定的参数中 ( 即寄存器或者内存单元 ).
+其首先将内存中 ( %esp ) 的 4 字节数据放到指定的寄存器或者内存单元中,
+然后让 <strong>ESP + 4</strong>。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pop %edi       将栈顶的元素移除, 并放入到寄存器 EDI 中</span><br><span class="line">pop (%ebx)     将栈顶的元素移除, 并放入从 EBX 开始的 4 个字节大小的内存单元中</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="lea-加载有效地址"><a href="#lea-加载有效地址" class="headerlink" title="lea 加载有效地址"></a><code>lea</code> 加载有效地址</h3><p><code>lea</code>指令将其第一个参数指定的内存单元 放入到 第二个参数指定的寄存器中。</p>
-<p><code>LEA AX,[1000H]</code>，作用是将源操作数 [1000H] 的偏移地址 1000H 送至 AX。理解时，可直接将[ ]去掉，等同于 <code>MOV AX,1000H</code>。 再如：<code>LEA BX,[AX]</code>，等同于 <code>MOV BX,AX</code>；<code>LEA BX,TABLE</code> 等同于 <code>MOV BX,OFFSET TABLE</code>。 但有时不能直接使用 <code>MOV</code> 代替： 比如：<code>LEA AX,[SI+6]</code> 不能直接替换成：<code>MOV AX,SI+6</code>；但可替换为： <code>MOV AX,SI</code> <code>ADD AX,6</code> 两步完成。</p>
+<h3 id="lea-加载有效地址"><code>lea</code> 加载有效地址</h3>
+<p><code>lea</code>指令将其第一个参数指定的内存单元 放入到
+第二个参数指定的寄存器中。</p>
+<p><code>LEA AX,[1000H]</code>，作用是将源操作数 [1000H] 的偏移地址
+1000H 送至 AX。理解时，可直接将[ ]去掉，等同于
+<code>MOV AX,1000H</code>。 再如：<code>LEA BX,[AX]</code>，等同于
+<code>MOV BX,AX</code>；<code>LEA BX,TABLE</code> 等同于
+<code>MOV BX,OFFSET TABLE</code>。 但有时不能直接使用 <code>MOV</code>
+代替： 比如：<code>LEA AX,[SI+6]</code>
+不能直接替换成：<code>MOV AX,SI+6</code>；但可替换为：
+<code>MOV AX,SI</code> <code>ADD AX,6</code> 两步完成。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lea (%ebx,%esi,8), %edi      EBX+8*ESI 的值被移入到了 EDI</span><br><span class="line">lea val(,1), %eax          val 的值被移入到了 EAX</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="逻辑运算指令"><a href="#逻辑运算指令" class="headerlink" title="逻辑运算指令"></a>逻辑运算指令</h2><h3 id="add-整数相加"><a href="#add-整数相加" class="headerlink" title="add 整数相加"></a><code>add</code> 整数相加</h3><p><code>add</code> 指令将两个参数相加，然后将结果存放到第二个参数中。</p>
+<h2 id="逻辑运算指令">逻辑运算指令</h2>
+<h3 id="add-整数相加"><code>add</code> 整数相加</h3>
+<p><code>add</code>
+指令将两个参数相加，然后将结果存放到第二个参数中。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add $10, %eax        EAX 中的值被设置为了 EAX+10</span><br><span class="line">addb $10, (%eax)       往 EAX 中的值 所代表的内存单元地址 加上 1 个字节的数字 10</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="sub-整数相减"><a href="#sub-整数相减" class="headerlink" title="sub 整数相减"></a><code>sub</code> 整数相减</h3><p><code>sub</code>指令将第二个参数的值与第一个相减，就是后面那个减去前面那个，然后把结果存储到第二个参数。</p>
+<h3 id="sub-整数相减"><code>sub</code> 整数相减</h3>
+<p><code>sub</code>指令将第二个参数的值与第一个相减，就是后面那个减去前面那个，然后把结果存储到第二个参数。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sub %ah, %al      AL 被设置成 AL-AH</span><br><span class="line">sub $216, %eax        将 EAX 中的值减去 216</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="inc-自增"><a href="#inc-自增" class="headerlink" title="inc 自增"></a><code>inc</code> 自增</h3><p><code>inc</code> 指令让它的参数加 1。</p>
+<h3 id="inc-自增"><code>inc</code> 自增</h3>
+<p><code>inc</code> 指令让它的参数加 1。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incl var(,1)        将 var 所代表的 32 位整数加上 1</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="dec-自减"><a href="#dec-自减" class="headerlink" title="dec 自减"></a><code>dec</code> 自减</h3><p><code>dec</code>指令让它的参数减1。</p>
+<h3 id="dec-自减"><code>dec</code> 自减</h3>
+<p><code>dec</code>指令让它的参数减1。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dec %eax       EAX 中的值减去 1</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="imul-整数相乘"><a href="#imul-整数相乘" class="headerlink" title="imul 整数相乘"></a><code>imul</code> 整数相乘</h3><p><code>imul</code> 指令有两种基本格式 : 第一种是 2 个参数的；第二种格式是 3 个参数的。</p>
-<p>2 个参数的这种格式, 先是将两个参数相乘, 然后把结果存到第二个参数中。<strong>运算结果 ( 即第二个参数 ) 必须是一个寄存器</strong>。</p>
-<p>3 个参数的这种格式，先是将它的第 1 个参数和第 2 个参数相乘，然后把结果存到第 3 个参数中，<strong>第 3 个参数必须是一个寄存器</strong>。此外，第 1 个参数必须是一个常数。</p>
+<h3 id="imul-整数相乘"><code>imul</code> 整数相乘</h3>
+<p><code>imul</code> 指令有两种基本格式 : 第一种是 2
+个参数的；第二种格式是 3 个参数的。</p>
+<p>2 个参数的这种格式, 先是将两个参数相乘,
+然后把结果存到第二个参数中。<strong>运算结果 ( 即第二个参数 )
+必须是一个寄存器</strong>。</p>
+<p>3 个参数的这种格式，先是将它的第 1 个参数和第 2
+个参数相乘，然后把结果存到第 3 个参数中，<strong>第 3
+个参数必须是一个寄存器</strong>。此外，第 1 个参数必须是一个常数。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">imul (%ebx), %eax        将 EAX 中的 32 位整数, 与 EBX 中的内容所指的内存单元, 相乘, 然后把结果存到 EAX 中</span><br><span class="line">imul $25, %edi, %esi        ESI 被设置为 EDI * 25.</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="idiv-整数相除"><a href="#idiv-整数相除" class="headerlink" title="idiv 整数相除"></a><code>idiv</code> 整数相除</h3><p><code>idiv</code>只有一个操作数，此操作数为除数，而被除数则为 EDX : EAX 中的内容（一个64位的整数），除法结果 ( 商 ) 存在 EAX 中，而所得的余数存在 EDX 中。</p>
+<h3 id="idiv-整数相除"><code>idiv</code> 整数相除</h3>
+<p><code>idiv</code>只有一个操作数，此操作数为除数，而被除数则为 EDX :
+EAX 中的内容（一个64位的整数），除法结果 ( 商 ) 存在 EAX
+中，而所得的余数存在 EDX 中。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">idiv %ebx       用 EDX : EAX 的值除以 EBX 的值。商存放在 EAX 中, 余数存放在 EDX 中</span><br><span class="line">idivw (%ebx)       将 EDX : EAX 的值除以存储在 EBX 所对应内存单元的 32 位值。商存放在 EAX 中, 余数存放在 EDX 中</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="and，or，xor-按位逻辑-与-或-异或-运算"><a href="#and，or，xor-按位逻辑-与-或-异或-运算" class="headerlink" title="and，or，xor   按位逻辑 与, 或, 异或 运算"></a><code>and</code>，<code>or</code>，<code>xor</code>   按位逻辑 与, 或, 异或 运算</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">and $0x0F, %eax       只留下 EAX 中最后 4 位数字 (二进制位)</span><br><span class="line">xor %edx, %edx       将 EDX 的值全部设置成 0</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="not-非"><a href="#not-非" class="headerlink" title="not 非"></a><code>not</code> 非</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not %eax     将 EAX 的所有值翻转</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="neg-取负指令"><a href="#neg-取负指令" class="headerlink" title="neg 取负指令"></a><code>neg</code> 取负指令</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neg %eax       EAX → -EAX</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="shl-按位左移"><a href="#shl-按位左移" class="headerlink" title="shl 按位左移"></a><code>shl</code> 按位左移</h3><p><code>shl</code>对第二个参数进行位运算，移动的位数由第一个参数决定。</p>
+<h3 id="andorxor-按位逻辑-与-或-异或-运算"><code>and</code>，<code>or</code>，<code>xor</code>
+按位逻辑 与, 或, 异或 运算</h3>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">and $0x0F, %eax       只留下 EAX 中最后 4 位数字 (二进制位)</span><br><span class="line">xor %edx, %edx       将 EDX 的值全部设置成 0</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="not-非"><code>not</code> 非</h3>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not %eax     将 EAX 的所有值翻转</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="neg-取负指令"><code>neg</code> 取负指令</h3>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neg %eax       EAX → -EAX</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="shl-按位左移"><code>shl</code> 按位左移</h3>
+<p><code>shl</code>对第二个参数进行位运算，移动的位数由第一个参数决定。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shl $1, %eax       将 EAX 的值乘以 2 (如果最高有效位是 0 的话)</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="shr-按位右移"><a href="#shr-按位右移" class="headerlink" title="　shr 按位右移"></a>　<code>shr</code> 按位右移</h3><p>同上</p>
+<p>###　<code>shr</code> 按位右移</p>
+<p>同上</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shr %cl, %ebx       将 EBX 的值除以 2n, 其中 n 为 CL 中的值, 运算最终结果存到 EBX 中</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="流程控制指令"><a href="#流程控制指令" class="headerlink" title="流程控制指令"></a>流程控制指令</h2><p>x86处理器的指令指针寄存器 ( EIP )为 32 位寄存器，它用来在内存中指示我们输入汇编指令的位置。就是说这个寄存器指向哪个内存单元，那个单元存储的机器码就是程序执行的指令。通常它是指向我们程序要执行的 下一条指令。</p>
-<h3 id="jmp-跳转指令"><a href="#jmp-跳转指令" class="headerlink" title="jmp 跳转指令"></a><code>jmp</code> 跳转指令</h3><p>将程序跳转到参数指定的内存地址，然后执行该内存地址的指令。</p>
+<h2 id="流程控制指令">流程控制指令</h2>
+<p>x86处理器的指令指针寄存器 ( EIP )为 32
+位寄存器，它用来在内存中指示我们输入汇编指令的位置。就是说这个寄存器指向哪个内存单元，那个单元存储的机器码就是程序执行的指令。通常它是指向我们程序要执行的
+下一条指令。</p>
+<h3 id="jmp-跳转指令"><code>jmp</code> 跳转指令</h3>
+<p>将程序跳转到参数指定的内存地址，然后执行该内存地址的指令。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp begin         跳转到打了 " begin " 这个标签的地方</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="jcondition-有条件的跳转"><a href="#jcondition-有条件的跳转" class="headerlink" title="jcondition 有条件的跳转"></a><code>jcondition</code> 有条件的跳转</h3><p>语法：</p>
+<h3 id="jcondition-有条件的跳转"><code>jcondition</code>
+有条件的跳转</h3>
+<p>语法：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">je &lt;label           当相等的时候跳转</span><br><span class="line">jne &lt;label          当不相等的时候跳转</span><br><span class="line">jz &lt;label           当最后结果为 0 的时候跳转</span><br><span class="line">jg &lt;label           当大于的时候跳转</span><br><span class="line">jge &lt;label          当大于等于的时候跳转</span><br><span class="line">jl &lt;label           当小于的时候跳转</span><br><span class="line">jle &lt;label          当小于等于的时候跳转</span><br></pre></td></tr></tbody></table></figure>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmp %ebx, %eax        某些指令执行前先对参数进行cmp操作</span><br><span class="line">jle done          如果 EAX 的值小于等于 EBX 的值, 就跳转到 " done " 标签, 否则就继续执行下一条指令</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="cmp-比较指令"><a href="#cmp-比较指令" class="headerlink" title="cmp 比较指令"></a><code>cmp</code> 比较指令</h3><p>比较两个参数的值，适当地设置机器状态字中的条件代码。此指令与sub指令类似，但是cmp不用将计算结果保存在操作数中。</p>
+<h3 id="cmp-比较指令"><code>cmp</code> 比较指令</h3>
+<p>比较两个参数的值，适当地设置机器状态字中的条件代码。此指令与sub指令类似，但是cmp不用将计算结果保存在操作数中。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmpb $10, (%ebx)</span><br><span class="line">jeq loop             如果 EBX 的值等于整数常量 10, 则跳转到标签 " loop " 的位置.</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="call，ret-子程序调用与返回"><a href="#call，ret-子程序调用与返回" class="headerlink" title="call，ret 子程序调用与返回"></a><code>call</code>，<code>ret</code> 子程序调用与返回</h3><p>这两个指令实现子程序的调用和返回。</p>
-<p><code>call</code> 指令首先将当前代码位置推到内存中硬件支持的栈内存上 ( 请看 <code>push</code> 指令 )，然后无条件跳转到标签参数指定的代码位置，<code>call</code> 指令结束后, 返回到调用之前的地址。</p>
-<p><code>ret</code> 指令实现子程序的返回。该指令首先从栈中取出代码 ( 类似于 <code>pop</code> 指令 )，然后它无条件跳转到检索到的代码位置。</p>
+<h3 id="callret-子程序调用与返回"><code>call</code>，<code>ret</code>
+子程序调用与返回</h3>
+<p>这两个指令实现子程序的调用和返回。</p>
+<p><code>call</code> 指令首先将当前代码位置推到内存中硬件支持的栈内存上
+( 请看 <code>push</code> 指令
+)，然后无条件跳转到标签参数指定的代码位置，<code>call</code> 指令结束后,
+返回到调用之前的地址。</p>
+<p><code>ret</code> 指令实现子程序的返回。该指令首先从栈中取出代码 (
+类似于 <code>pop</code> 指令 )，然后它无条件跳转到检索到的代码位置。</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">call &lt;label</span><br><span class="line">ret</span><br></pre></td></tr></tbody></table></figure>
+
     </div>
 
     
@@ -370,7 +432,10 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%B1%BBx86%E6%8C%87%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">三类x86指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%A7%BB%E5%8A%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">数据移动指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mov-%E7%A7%BB%E5%8A%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">mov 移动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push-%E5%85%A5%E6%A0%88"><span class="nav-number">1.1.2.</span> <span class="nav-text">push 入栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pop-%E5%87%BA%E6%A0%88"><span class="nav-number">1.1.3.</span> <span class="nav-text">pop 出栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lea-%E5%8A%A0%E8%BD%BD%E6%9C%89%E6%95%88%E5%9C%B0%E5%9D%80"><span class="nav-number">1.1.4.</span> <span class="nav-text">lea 加载有效地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E6%8C%87%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">逻辑运算指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#add-%E6%95%B4%E6%95%B0%E7%9B%B8%E5%8A%A0"><span class="nav-number">1.2.1.</span> <span class="nav-text">add 整数相加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sub-%E6%95%B4%E6%95%B0%E7%9B%B8%E5%87%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">sub 整数相减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inc-%E8%87%AA%E5%A2%9E"><span class="nav-number">1.2.3.</span> <span class="nav-text">inc 自增</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dec-%E8%87%AA%E5%87%8F"><span class="nav-number">1.2.4.</span> <span class="nav-text">dec 自减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#imul-%E6%95%B4%E6%95%B0%E7%9B%B8%E4%B9%98"><span class="nav-number">1.2.5.</span> <span class="nav-text">imul 整数相乘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#idiv-%E6%95%B4%E6%95%B0%E7%9B%B8%E9%99%A4"><span class="nav-number">1.2.6.</span> <span class="nav-text">idiv 整数相除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#and%EF%BC%8Cor%EF%BC%8Cxor-%E6%8C%89%E4%BD%8D%E9%80%BB%E8%BE%91-%E4%B8%8E-%E6%88%96-%E5%BC%82%E6%88%96-%E8%BF%90%E7%AE%97"><span class="nav-number">1.2.7.</span> <span class="nav-text">and，or，xor   按位逻辑 与, 或, 异或 运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#not-%E9%9D%9E"><span class="nav-number">1.2.8.</span> <span class="nav-text">not 非</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#neg-%E5%8F%96%E8%B4%9F%E6%8C%87%E4%BB%A4"><span class="nav-number">1.2.9.</span> <span class="nav-text">neg 取负指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shl-%E6%8C%89%E4%BD%8D%E5%B7%A6%E7%A7%BB"><span class="nav-number">1.2.10.</span> <span class="nav-text">shl 按位左移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shr-%E6%8C%89%E4%BD%8D%E5%8F%B3%E7%A7%BB"><span class="nav-number">1.2.11.</span> <span class="nav-text">　shr 按位右移</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E6%8C%87%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text">流程控制指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jmp-%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4"><span class="nav-number">1.3.1.</span> <span class="nav-text">jmp 跳转指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jcondition-%E6%9C%89%E6%9D%A1%E4%BB%B6%E7%9A%84%E8%B7%B3%E8%BD%AC"><span class="nav-number">1.3.2.</span> <span class="nav-text">jcondition 有条件的跳转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmp-%E6%AF%94%E8%BE%83%E6%8C%87%E4%BB%A4"><span class="nav-number">1.3.3.</span> <span class="nav-text">cmp 比较指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call%EF%BC%8Cret-%E5%AD%90%E7%A8%8B%E5%BA%8F%E8%B0%83%E7%94%A8%E4%B8%8E%E8%BF%94%E5%9B%9E"><span class="nav-number">1.3.4.</span> <span class="nav-text">call，ret 子程序调用与返回</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%B1%BBx86%E6%8C%87%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">三类x86指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%A7%BB%E5%8A%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">数据移动指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mov-%E7%A7%BB%E5%8A%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">mov 移动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push-%E5%85%A5%E6%A0%88"><span class="nav-number">1.1.2.</span> <span class="nav-text">push 入栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pop-%E5%87%BA%E6%A0%88"><span class="nav-number">1.1.3.</span> <span class="nav-text">pop 出栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lea-%E5%8A%A0%E8%BD%BD%E6%9C%89%E6%95%88%E5%9C%B0%E5%9D%80"><span class="nav-number">1.1.4.</span> <span class="nav-text">lea 加载有效地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E6%8C%87%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">逻辑运算指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#add-%E6%95%B4%E6%95%B0%E7%9B%B8%E5%8A%A0"><span class="nav-number">1.2.1.</span> <span class="nav-text">add 整数相加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sub-%E6%95%B4%E6%95%B0%E7%9B%B8%E5%87%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">sub 整数相减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inc-%E8%87%AA%E5%A2%9E"><span class="nav-number">1.2.3.</span> <span class="nav-text">inc 自增</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dec-%E8%87%AA%E5%87%8F"><span class="nav-number">1.2.4.</span> <span class="nav-text">dec 自减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#imul-%E6%95%B4%E6%95%B0%E7%9B%B8%E4%B9%98"><span class="nav-number">1.2.5.</span> <span class="nav-text">imul 整数相乘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#idiv-%E6%95%B4%E6%95%B0%E7%9B%B8%E9%99%A4"><span class="nav-number">1.2.6.</span> <span class="nav-text">idiv 整数相除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#andorxor-%E6%8C%89%E4%BD%8D%E9%80%BB%E8%BE%91-%E4%B8%8E-%E6%88%96-%E5%BC%82%E6%88%96-%E8%BF%90%E7%AE%97"><span class="nav-number">1.2.7.</span> <span class="nav-text">and，or，xor
+按位逻辑 与, 或, 异或 运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#not-%E9%9D%9E"><span class="nav-number">1.2.8.</span> <span class="nav-text">not 非</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#neg-%E5%8F%96%E8%B4%9F%E6%8C%87%E4%BB%A4"><span class="nav-number">1.2.9.</span> <span class="nav-text">neg 取负指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shl-%E6%8C%89%E4%BD%8D%E5%B7%A6%E7%A7%BB"><span class="nav-number">1.2.10.</span> <span class="nav-text">shl 按位左移</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E6%8C%87%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text">流程控制指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jmp-%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4"><span class="nav-number">1.3.1.</span> <span class="nav-text">jmp 跳转指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jcondition-%E6%9C%89%E6%9D%A1%E4%BB%B6%E7%9A%84%E8%B7%B3%E8%BD%AC"><span class="nav-number">1.3.2.</span> <span class="nav-text">jcondition
+有条件的跳转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmp-%E6%AF%94%E8%BE%83%E6%8C%87%E4%BB%A4"><span class="nav-number">1.3.3.</span> <span class="nav-text">cmp 比较指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#callret-%E5%AD%90%E7%A8%8B%E5%BA%8F%E8%B0%83%E7%94%A8%E4%B8%8E%E8%BF%94%E5%9B%9E"><span class="nav-number">1.3.4.</span> <span class="nav-text">call，ret
+子程序调用与返回</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -435,12 +500,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -513,6 +578,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

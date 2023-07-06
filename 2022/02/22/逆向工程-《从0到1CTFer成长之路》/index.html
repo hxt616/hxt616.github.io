@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="静态分析逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。 一、 IDA使用入门本节所需代码文件为1-helloworld。（https:&#x2F;&#x2F;book.nu1l.com&#x2F;tasks&#x2F;#&#x2F;pages&#x2F;reverse&#x2F;5.2）">
+  <meta name="description" content="静态分析 逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。 一、 IDA使用入门 本节所需代码文件为1-helloworld。（https:&#x2F;&#x2F;book.nu1l.com&#x2F;tasks&#x2F;#&#x2F;pages&#x2F;reverse&#x2F;5.2）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="逆向工程-《从0到1:CTFer成长之路》">
 <meta property="og:url" content="http://example.com/2022/02/22/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B-%E3%80%8A%E4%BB%8E0%E5%88%B01CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF%E3%80%8B/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="静态分析逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。 一、 IDA使用入门本节所需代码文件为1-helloworld。（https:&#x2F;&#x2F;book.nu1l.com&#x2F;tasks&#x2F;#&#x2F;pages&#x2F;reverse&#x2F;5.2）">
+<meta property="og:description" content="静态分析 逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。 一、 IDA使用入门 本节所需代码文件为1-helloworld。（https:&#x2F;&#x2F;book.nu1l.com&#x2F;tasks&#x2F;#&#x2F;pages&#x2F;reverse&#x2F;5.2）">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134203478.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134247988.png">
@@ -236,7 +236,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.8k</span>
+              <span>3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -255,89 +255,144 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h1><p>逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。</p>
-<h2 id="一、-IDA使用入门"><a href="#一、-IDA使用入门" class="headerlink" title="一、 IDA使用入门"></a>一、 IDA使用入门</h2><p>本节所需代码文件为1-helloworld。（<a target="_blank" rel="noopener" href="https://book.nu1l.com/tasks/#/pages/reverse/5.2）">https://book.nu1l.com/tasks/#/pages/reverse/5.2）</a></p>
+        <h1 id="静态分析">静态分析</h1>
+<p>逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA
+Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。</p>
+<h2 id="一-ida使用入门">一、 IDA使用入门</h2>
+<p>本节所需代码文件为1-helloworld。（https://book.nu1l.com/tasks/#/pages/reverse/5.2）</p>
 <span id="more"></span>
-<h3 id="1-打开文件"><a href="#1-打开文件" class="headerlink" title="1. 打开文件"></a>1. 打开文件</h3><p> 首先在打开文件前需要选择正确的架构版本（32bit/64bit）。可通过Linux中的file命令来查看：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134203478.png" alt="image-20220222134203478"></p>
+<p>### 1. 打开文件
+首先在打开文件前需要选择正确的架构版本（32bit/64bit）。可通过Linux中的file命令来查看：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134203478.png" alt="image-20220222134203478">
+<figcaption aria-hidden="true">image-20220222134203478</figcaption>
+</figure>
 <p>或者将文件任意拖进一个架构，然后在加载时即可知道文件的架构信息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134247988.png" alt="image-20220222134247988"></p>
-<h3 id="2-加载文件"><a href="#2-加载文件" class="headerlink" title="2. 加载文件"></a>2. 加载文件</h3><p>使用默认设置，单击“OK”进入IDA。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134336662.png" alt="image-20220222134336662"></p>
-<p>（1）导航栏<br>（2）反汇编的主窗口<br>（3）函数窗口：可通过Ctrl+F组合键进行筛选。<br>（4）输出窗口<br>（5）状态指示器：显示为“AU：idle”即代表IDA已经完成了对程序的自动化分析。<br>在反汇编窗口中使用右键菜单或者快捷键空格可以在控制流图和文本界面反汇编间切换。</p>
-<h3 id="3-数据类型操作"><a href="#3-数据类型操作" class="headerlink" title="3. 数据类型操作"></a>3. 数据类型操作</h3><p> 用户可根据地址的颜色来分辨某个位置的数据类型。<br> 代码位置：黑色<br> 数据位置：灰色<br> 未定义数据类型位置：黄色</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134422946.png" alt="image-20220222134422946"></p>
-<p>下面介绍一部分定义数据类型的快捷键。</p>
-<ul>
-<li>U（Undefine）键：取消一个地方已有的数据类型定义，此时会弹出确认的对话框，单击“Yes”按钮即可。</li>
-<li>D（Data）键：让某一个位置变成数据。一直按D键，这个位置的数据类型将会以1字节（byte/db）、2字节（word/dw）、4字节（dword/dd）、8字节（qword/dq）进行循环。</li>
-<li>C（Code）键：让某个位置变为指令。在定义为指令后，IDA会自动以此为起始位置进行递归下降反汇编。</li>
-<li>A（ASCII）键：会以该位置为起点定义一个以“\0”为结尾的字符串类型。</li>
-<li>*键：将此处定义为一个数组，此时弹出一个对话框，用来设置数组的属性。</li>
-<li>O（Offset）键：将此处定义为一个地址偏移。<h3 id="4-函数操作"><a href="#4-函数操作" class="headerlink" title="4. 函数操作"></a>4. 函数操作</h3></li>
-</ul>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134247988.png" alt="image-20220222134247988">
+<figcaption aria-hidden="true">image-20220222134247988</figcaption>
+</figure>
+<p>### 2. 加载文件 使用默认设置，单击“OK”进入IDA。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134336662.png" alt="image-20220222134336662">
+<figcaption aria-hidden="true">image-20220222134336662</figcaption>
+</figure>
+<p>（1）导航栏 （2）反汇编的主窗口
+（3）函数窗口：可通过Ctrl+F组合键进行筛选。 （4）输出窗口
+（5）状态指示器：显示为“AU：idle”即代表IDA已经完成了对程序的自动化分析。
+在反汇编窗口中使用右键菜单或者快捷键空格可以在控制流图和文本界面反汇编间切换。
+### 3. 数据类型操作 用户可根据地址的颜色来分辨某个位置的数据类型。
+代码位置：黑色 数据位置：灰色 未定义数据类型位置：黄色</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134422946.png" alt="image-20220222134422946">
+<figcaption aria-hidden="true">image-20220222134422946</figcaption>
+</figure>
+<p>下面介绍一部分定义数据类型的快捷键。 *
+U（Undefine）键：取消一个地方已有的数据类型定义，此时会弹出确认的对话框，单击“Yes”按钮即可。
+*
+D（Data）键：让某一个位置变成数据。一直按D键，这个位置的数据类型将会以1字节（byte/db）、2字节（word/dw）、4字节（dword/dd）、8字节（qword/dq）进行循环。
+*
+C（Code）键：让某个位置变为指令。在定义为指令后，IDA会自动以此为起始位置进行递归下降反汇编。
+* A（ASCII）键：会以该位置为起点定义一个以“\0”为结尾的字符串类型。 *
+<em>键：将此处定义为一个数组，此时弹出一个对话框，用来设置数组的属性。
+</em> O（Offset）键：将此处定义为一个地址偏移。 ### 4. 函数操作</p>
 <p>处理函数的操作：</p>
 <ul>
-<li>删除函数：在函数窗口中选中函数后，按Delete键。</li>
-<li>定义函数：在反汇编窗口中选中对应行后，按P键。</li>
-<li><p>修改函数参数：在函数窗口中选中并按Ctrl+E组合键，或在反汇编窗口的函数内部按Alt+P组合键。</p>
-<h3 id="5-导航操作"><a href="#5-导航操作" class="headerlink" title="5.导航操作"></a>5.导航操作</h3></li>
-<li><p>后退到上一位置：快捷键Esc。</p>
-</li>
-<li>前进到下一位置：快捷键Ctrl+Enter。</li>
-<li>跳转到某个特定位置：快捷键G，然后可以输入地址/已定义的名称。</li>
-<li><p>跳转到某一区域：快捷键Ctrl+S，然后选择区域即可。 </p>
-<h3 id="6-类型操作"><a href="#6-类型操作" class="headerlink" title="6. 类型操作"></a>6. 类型操作</h3><p>选中变量、函数后按Y键，弹出“Please enter the type declaration”对话框，从中输入正确的C语言类型，IDA就可以解析并自动应用这个类型。</p>
-<h3 id="7-IDA操作的模式"><a href="#7-IDA操作的模式" class="headerlink" title="7. IDA操作的模式"></a>7. IDA操作的模式</h3></li>
+<li><p>删除函数：在函数窗口中选中函数后，按Delete键。</p></li>
+<li><p>定义函数：在反汇编窗口中选中对应行后，按P键。</p></li>
+<li><p>修改函数参数：在函数窗口中选中并按Ctrl+E组合键，或在反汇编窗口的函数内部按Alt+P组合键。
+### 5.导航操作</p></li>
+<li><p>后退到上一位置：快捷键Esc。</p></li>
+<li><p>前进到下一位置：快捷键Ctrl+Enter。</p></li>
+<li><p>跳转到某个特定位置：快捷键G，然后可以输入地址/已定义的名称。</p></li>
+<li><p>跳转到某一区域：快捷键Ctrl+S，然后选择区域即可。 ### 6.
+类型操作</p></li>
 </ul>
-<h3 id="8-IDAPython"><a href="#8-IDAPython" class="headerlink" title="8. IDAPython"></a>8. IDAPython</h3><h3 id="9-IDA的其他功能"><a href="#9-IDA的其他功能" class="headerlink" title="9. IDA的其他功能"></a>9. IDA的其他功能</h3><ul>
-<li><strong>String窗口</strong>：按Shift+F12组合键即可打开。<ul>
-<li><strong>十六进制窗口</strong>：默认打开，可以按F2键对数据库中的数据进行修改，修改     后再次按F12键即可应用修改。</li>
-</ul>
-</li>
-</ul>
-<p>IDA更加详细的使用技巧：<a target="_blank" rel="noopener" href="https://leeyuxun.github.io/IDA%E5%9F%BA%E7%A1%80%E5%8A%9F%E8%83%BD%E6%80%BB%E7%BB%93.html">https://leeyuxun.github.io/IDA%E5%9F%BA%E7%A1%80%E5%8A%9F%E8%83%BD%E6%80%BB%E7%BB%93.html</a></p>
-<h2 id="二、-HexRays反编译器入门"><a href="#二、-HexRays反编译器入门" class="headerlink" title="二、 HexRays反编译器入门"></a>二、 HexRays反编译器入门</h2><p>HexRays能够充分利用IDA确定的函数局部变量和数据类型，优化后生成类似C语言的伪代码。</p>
-<h3 id="1-生成伪代码"><a href="#1-生成伪代码" class="headerlink" title="1.生成伪代码"></a>1.生成伪代码</h3><p>在反汇编窗口中定位到目标函数，按F5键即可显示反编译后的伪代码。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/5f390dd13ff64704a9f08e2500bcda86.png" alt="img"></p>
-<h3 id="2-伪代码构成"><a href="#2-伪代码构成" class="headerlink" title="2.伪代码构成"></a>2.伪代码构成</h3><p>HexRays生成的伪代码是有一定的结构的，每个函数反汇编后，第一行都为函数的原型，然后是局部变量的声明区域，最后是函数的语句。</p>
-<h3 id="3-修改标识符"><a href="#3-修改标识符" class="headerlink" title="3.修改标识符"></a>3.修改标识符</h3><p>HexRays非常强大，可以自动命名很多变量。但是有些变量的名称没有实际意义。因此HexRays提供了更改标识符名称的功能：将光标移动到标识符上，然后按N键，弹出更改名称的对话框，在输入框中输入一个合法的名称，单击“OK”即可。</p>
-<h3 id="4-切换数据显示格式"><a href="#4-切换数据显示格式" class="headerlink" title="4.切换数据显示格式"></a>4.切换数据显示格式</h3><ul>
-<li><p>Hexadecimal：十六进制显示，快捷键为H键。</p>
-</li>
-<li><p>Octal：八进制显示。</p>
-</li>
-<li><p>Char：将常量转化为‘A’的格式，快捷键为R键。</p>
-</li>
-<li><p>Enum：将常量转为枚举中的一个值，快捷键为M键。</p>
-</li>
-<li><p>Invert sign：将常量按照补码解析为负数，快捷键为_键。</p>
-</li>
-<li><p>Bitwise negate：将常量按位取反，形如C语言中的~0xF0，快捷键为 ~键。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134555155.png" alt="image-20220222134555155"></p>
-</li>
-</ul>
-<h3 id="5-修改变量类型"><a href="#5-修改变量类型" class="headerlink" title="5.修改变量类型"></a>5.修改变量类型</h3><p>HexRays充分利用了前面介绍过的IDA的类型分析系统，在要修改类型的标识符上按Y键，即可调出对话框来修改类型。</p>
-<p>注：<br><strong>byte</strong>——1字节整型，8位，char、<strong>int8;<br><strong>word</strong>——2字节整型，16字节，short、</strong>int16;<br><strong>dword</strong>——4字节整型，32字节，int、<strong>int32;<br><strong>qword</strong>——8字节整型，64字节，</strong>int64、long long。</p>
-<h1 id="动态调试与分析"><a href="#动态调试与分析" class="headerlink" title="动态调试与分析"></a>动态调试与分析</h1><h2 id="一、调试的基本原理"><a href="#一、调试的基本原理" class="headerlink" title="一、调试的基本原理"></a>一、调试的基本原理</h2><p>与IDE调试器的调试操作大同小异：在感兴趣的地方设置断点，使程序中断；然后一行行跟踪程序的执行，选择进入或略过一个函数；在跟踪的过程中查看程序各变量的值，从而了解程序的内部状态。</p>
-<h2 id="二、OllyDBG和x64DBG调试"><a href="#二、OllyDBG和x64DBG调试" class="headerlink" title="二、OllyDBG和x64DBG调试"></a>二、OllyDBG和x64DBG调试</h2><p>（注：OD仅支持32位程序）</p>
-<h3 id="1-打开文件-1"><a href="#1-打开文件-1" class="headerlink" title="1.打开文件"></a>1.打开文件</h3><p>x64DBG和OD的布局相同，左上区域为反汇编结果，左下区域为浏览程序内存数据的区域，右下区域为栈数据，右上区域为寄存器的显示区域。</p>
-<h3 id="2-控制程序运行"><a href="#2-控制程序运行" class="headerlink" title="2.控制程序运行"></a>2.控制程序运行</h3><p>按Ctrl+G组合键，可以跳转到目标地址；在反汇编窗口中，按F2键为切换当前 地址的断点状态，按F8键为单步步过，按F7键为单步步入，按F4键为运行到光标处位置，按F9键为运行。</p>
-<h3 id="3-简单的脱壳"><a href="#3-简单的脱壳" class="headerlink" title="3.简单的脱壳"></a>3.简单的脱壳</h3><p>“壳”是一种特殊的程序，对另一个程序进行变换后，利用变换的结果重新生成可执行文件。在运行时，它全部或部分还原储存在可执行文件中的变换结果，然后恢复原程序的的执行。<br>壳分为两种：压缩壳和加密壳。</p>
+<p>选中变量、函数后按Y键，弹出“Please enter the type
+declaration”对话框，从中输入正确的C语言类型，IDA就可以解析并自动应用这个类型。
+### 7. IDA操作的模式</p>
+<h3 id="idapython">8. IDAPython</h3>
+<p>### 9. IDA的其他功能 -
+<strong>String窗口</strong>：按Shift+F12组合键即可打开。 -
+<strong>十六进制窗口</strong>：默认打开，可以按F2键对数据库中的数据进行修改，修改
+后再次按F12键即可应用修改。</p>
+<p>IDA更加详细的使用技巧：https://leeyuxun.github.io/IDA%E5%9F%BA%E7%A1%80%E5%8A%9F%E8%83%BD%E6%80%BB%E7%BB%93.html</p>
+<h2 id="二-hexrays反编译器入门">二、 HexRays反编译器入门</h2>
+<p>HexRays能够充分利用IDA确定的函数局部变量和数据类型，优化后生成类似C语言的伪代码。
+### 1.生成伪代码
+在反汇编窗口中定位到目标函数，按F5键即可显示反编译后的伪代码。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/5f390dd13ff64704a9f08e2500bcda86.png" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h3 id="伪代码构成">2.伪代码构成</h3>
+<p>HexRays生成的伪代码是有一定的结构的，每个函数反汇编后，第一行都为函数的原型，然后是局部变量的声明区域，最后是函数的语句。</p>
+<h3 id="修改标识符">3.修改标识符</h3>
+<p>HexRays非常强大，可以自动命名很多变量。但是有些变量的名称没有实际意义。因此HexRays提供了更改标识符名称的功能：将光标移动到标识符上，然后按N键，弹出更改名称的对话框，在输入框中输入一个合法的名称，单击“OK”即可。</p>
+<h3 id="切换数据显示格式">4.切换数据显示格式</h3>
 <ul>
-<li>压缩壳<br> 注重对代码的压缩，从而生成更小的可执行文件。如UPX、ASPack等。</li>
-<li><p>加密壳<br> 注重对代码的保护，以阻碍逆向者进行分析。如VMP、ASProtect等。</p>
-<p><strong>未加壳</strong>：</p>
-</li>
+<li><p>Hexadecimal：十六进制显示，快捷键为H键。</p></li>
+<li><p>Octal：八进制显示。</p></li>
+<li><p>Char：将常量转化为‘A’的格式，快捷键为R键。</p></li>
+<li><p>Enum：将常量转为枚举中的一个值，快捷键为M键。</p></li>
+<li><p>Invert sign：将常量按照补码解析为负数，快捷键为_键。</p></li>
+<li><p>Bitwise negate：将常量按位取反，形如C语言中的~0xF0，快捷键为
+~键。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134555155.png" alt="image-20220222134555155">
+<figcaption aria-hidden="true">image-20220222134555155</figcaption>
+</figure></li>
 </ul>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134626958.png" alt="image-20220222134626958"></p>
-<p> <strong>加壳后</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134653293.png" alt="image-20220222134653293"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/13c82cdaba7445339895d7b97443f9a1.png" alt="img"></p>
+<h3 id="修改变量类型">5.修改变量类型</h3>
+<p>HexRays充分利用了前面介绍过的IDA的类型分析系统，在要修改类型的标识符上按Y键，即可调出对话框来修改类型。</p>
+<p>注： <strong>byte</strong>——1字节整型，8位，char、__int8;
+<strong>word</strong>——2字节整型，16字节，short、__int16;
+<strong>dword</strong>——4字节整型，32字节，int、__int32;
+<strong>qword</strong>——8字节整型，64字节，__int64、long long。</p>
+<h1 id="动态调试与分析">动态调试与分析</h1>
+<h2 id="一调试的基本原理">一、调试的基本原理</h2>
+<p>与IDE调试器的调试操作大同小异：在感兴趣的地方设置断点，使程序中断；然后一行行跟踪程序的执行，选择进入或略过一个函数；在跟踪的过程中查看程序各变量的值，从而了解程序的内部状态。
+## 二、OllyDBG和x64DBG调试 （注：OD仅支持32位程序） ### 1.打开文件
+x64DBG和OD的布局相同，左上区域为反汇编结果，左下区域为浏览程序内存数据的区域，右下区域为栈数据，右上区域为寄存器的显示区域。
+### 2.控制程序运行
+按Ctrl+G组合键，可以跳转到目标地址；在反汇编窗口中，按F2键为切换当前
+地址的断点状态，按F8键为单步步过，按F7键为单步步入，按F4键为运行到光标处位置，按F9键为运行。
+### 3.简单的脱壳
+“壳”是一种特殊的程序，对另一个程序进行变换后，利用变换的结果重新生成可执行文件。在运行时，它全部或部分还原储存在可执行文件中的变换结果，然后恢复原程序的的执行。
+壳分为两种：压缩壳和加密壳。 - 压缩壳
+注重对代码的压缩，从而生成更小的可执行文件。如UPX、ASPack等。 - 加密壳
+注重对代码的保护，以阻碍逆向者进行分析。如VMP、ASProtect等。</p>
+<p><strong>未加壳</strong>：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134626958.png" alt="image-20220222134626958">
+<figcaption aria-hidden="true">image-20220222134626958</figcaption>
+</figure>
+<p><strong>加壳后</strong>：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134653293.png" alt="image-20220222134653293">
+<figcaption aria-hidden="true">image-20220222134653293</figcaption>
+</figure>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/13c82cdaba7445339895d7b97443f9a1.png" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
 <p><strong>静态脱壳</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134746506.png" alt="image-20220222134746506"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134805516.png" alt="image-20220222134805516"></p>
-<p><strong>动态脱壳</strong>：<br>原理：大多数壳都有一个共同的特点。在壳准备开始解压时都要执行pushad，当壳解压完时都要调用popad。到底 pushad和 popad是什么干什么用的呢?其实 pushad是用来将所有普通寄存器顺序进栈的指令popad是所有普通寄存器顺序出栈指令。popad的出栈顺序和 pushad相反。壳为了保护寄存器，便在解压前将所有寄存器进栈保护起来，当解压完成后又将寄存器出栈，恢复其原貌，并将IP设置为原程序的OEP（Original Entry Point，程序的入口点）。这样我们就可以通过这个特点快速脱掉多种软件的壳。<br>参考：<br><a target="_blank" rel="noopener" href="https://wenku.baidu.com/view/82752bf4ba0d4a7302763a98.html">https://wenku.baidu.com/view/82752bf4ba0d4a7302763a98.html</a></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134746506.png" alt="image-20220222134746506">
+<figcaption aria-hidden="true">image-20220222134746506</figcaption>
+</figure>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134805516.png" alt="image-20220222134805516">
+<figcaption aria-hidden="true">image-20220222134805516</figcaption>
+</figure>
+<p><strong>动态脱壳</strong>：
+原理：大多数壳都有一个共同的特点。在壳准备开始解压时都要执行pushad，当壳解压完时都要调用popad。到底
+pushad和 popad是什么干什么用的呢?其实
+pushad是用来将所有普通寄存器顺序进栈的指令popad是所有普通寄存器顺序出栈指令。popad的出栈顺序和
+pushad相反。壳为了保护寄存器，便在解压前将所有寄存器进栈保护起来，当解压完成后又将寄存器出栈，恢复其原貌，并将IP设置为原程序的OEP（Original
+Entry
+Point，程序的入口点）。这样我们就可以通过这个特点快速脱掉多种软件的壳。
+参考：<br>https://wenku.baidu.com/view/82752bf4ba0d4a7302763a98.html</p>
 
     </div>
 
@@ -422,7 +477,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">静态分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-IDA%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8"><span class="nav-number">1.1.</span> <span class="nav-text">一、 IDA使用入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 打开文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8A%A0%E8%BD%BD%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 加载文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 数据类型操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%87%BD%E6%95%B0%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 函数操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%AF%BC%E8%88%AA%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.5.</span> <span class="nav-text">5.导航操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E7%B1%BB%E5%9E%8B%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.6.</span> <span class="nav-text">6. 类型操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-IDA%E6%93%8D%E4%BD%9C%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.1.7.</span> <span class="nav-text">7. IDA操作的模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-IDAPython"><span class="nav-number">1.1.8.</span> <span class="nav-text">8. IDAPython</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-IDA%E7%9A%84%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.9.</span> <span class="nav-text">9. IDA的其他功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-HexRays%E5%8F%8D%E7%BC%96%E8%AF%91%E5%99%A8%E5%85%A5%E9%97%A8"><span class="nav-number">1.2.</span> <span class="nav-text">二、 HexRays反编译器入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%94%9F%E6%88%90%E4%BC%AA%E4%BB%A3%E7%A0%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.生成伪代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BC%AA%E4%BB%A3%E7%A0%81%E6%9E%84%E6%88%90"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.伪代码构成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BF%AE%E6%94%B9%E6%A0%87%E8%AF%86%E7%AC%A6"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.修改标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%88%87%E6%8D%A2%E6%95%B0%E6%8D%AE%E6%98%BE%E7%A4%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.4.</span> <span class="nav-text">4.切换数据显示格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BF%AE%E6%94%B9%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.5.</span> <span class="nav-text">5.修改变量类型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E4%B8%8E%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">动态调试与分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%B0%83%E8%AF%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">一、调试的基本原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81OllyDBG%E5%92%8Cx64DBG%E8%B0%83%E8%AF%95"><span class="nav-number">2.2.</span> <span class="nav-text">二、OllyDBG和x64DBG调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.打开文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8E%A7%E5%88%B6%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.控制程序运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%AE%80%E5%8D%95%E7%9A%84%E8%84%B1%E5%A3%B3"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.简单的脱壳</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">静态分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-ida%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8"><span class="nav-number">1.1.</span> <span class="nav-text">一、 IDA使用入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#idapython"><span class="nav-number">1.1.1.</span> <span class="nav-text">8. IDAPython</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-hexrays%E5%8F%8D%E7%BC%96%E8%AF%91%E5%99%A8%E5%85%A5%E9%97%A8"><span class="nav-number">1.2.</span> <span class="nav-text">二、 HexRays反编译器入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E4%BB%A3%E7%A0%81%E6%9E%84%E6%88%90"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.伪代码构成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%A0%87%E8%AF%86%E7%AC%A6"><span class="nav-number">1.2.2.</span> <span class="nav-text">3.修改标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E6%95%B0%E6%8D%AE%E6%98%BE%E7%A4%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.3.</span> <span class="nav-text">4.切换数据显示格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.4.</span> <span class="nav-text">5.修改变量类型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E4%B8%8E%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">动态调试与分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%B0%83%E8%AF%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">一、调试的基本原理</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -487,12 +542,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -565,6 +620,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

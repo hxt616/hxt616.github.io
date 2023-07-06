@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Java中的Object（对象）是类的实例  静态成员和方法由static修饰，属于类，可以通过类名直接访问，无需创建类的实例。  非静态成员和方法属于类的实例，不需要static修饰，非静态成员和方法必须通过类的实例（对象）访问（通过new关键字创建对象后，再通过对象调用）。  示例： 12345678910111213141516171819202122232425public class">
+  <meta name="description" content="Java中的Object（对象）是类的实例 静态成员和方法由static修饰，属于类，可以通过类名直接访问，无需创建类的实例。 非静态成员和方法属于类的实例，不需要static修饰，非静态成员和方法必须通过类的实例（对象）访问（通过new关键字创建对象后，再通过对象调用）。 示例： 12345678910111213141516171819202122232425public class Exa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中的静态与非静态">
 <meta property="og:url" content="http://example.com/2023/04/02/Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E4%B8%8E%E9%9D%9E%E9%9D%99%E6%80%81/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="Java中的Object（对象）是类的实例  静态成员和方法由static修饰，属于类，可以通过类名直接访问，无需创建类的实例。  非静态成员和方法属于类的实例，不需要static修饰，非静态成员和方法必须通过类的实例（对象）访问（通过new关键字创建对象后，再通过对象调用）。  示例： 12345678910111213141516171819202122232425public class">
+<meta property="og:description" content="Java中的Object（对象）是类的实例 静态成员和方法由static修饰，属于类，可以通过类名直接访问，无需创建类的实例。 非静态成员和方法属于类的实例，不需要static修饰，非静态成员和方法必须通过类的实例（对象）访问（通过new关键字创建对象后，再通过对象调用）。 示例： 12345678910111213141516171819202122232425public class Exa">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-04-02T09:51:58.583Z">
 <meta property="article:modified_time" content="2023-04-02T10:42:55.694Z">
@@ -237,16 +237,17 @@
 
       
         <ul>
-<li><p>Java中的<code>Object</code>（对象）是类的实例</p>
-</li>
-<li><p>静态成员和方法由<code>static</code>修饰，属于类，可以通过类名直接访问，无需创建类的实例。</p>
-</li>
-<li><p>非静态成员和方法属于类的实例，不需要<code>static</code>修饰，非静态成员和方法必须通过类的实例（对象）访问（通过new关键字创建对象后，再通过对象调用）。</p>
-</li>
+<li><p>Java中的<code>Object</code>（对象）是类的实例</p></li>
+<li><p>静态成员和方法由<code>static</code>修饰，属于类，可以通过类名直接访问，无需创建类的实例。</p></li>
+<li><p>非静态成员和方法属于类的实例，不需要<code>static</code>修饰，非静态成员和方法必须通过类的实例（对象）访问（通过new关键字创建对象后，再通过对象调用）。</p></li>
 <li><p>示例：</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Example</span> {</span><br><span class="line">    <span class="comment">// 静态成员变量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">staticVariable</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 非静态成员变量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="variable">nonStaticVariable</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 静态方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">staticMethod</span><span class="params">()</span> {</span><br><span class="line">        System.out.println(<span class="string">"This is a static method."</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 非静态方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">nonStaticMethod</span><span class="params">()</span> {</span><br><span class="line">        System.out.println(<span class="string">"This is a non-static method."</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问静态成员和方法</span></span><br><span class="line">Example.staticVariable = <span class="number">1</span>;</span><br><span class="line">Example.staticMethod();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建类的实例并访问非静态成员和方法</span></span><br><span class="line"><span class="type">Example</span> <span class="variable">example</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Example</span>();</span><br><span class="line">example.nonStaticVariable = <span class="number">1</span>;</span><br><span class="line">example.nonStaticMethod();</span><br></pre></td></tr></tbody></table></figure>
-<p>在上面的示例代码中，我们定义了一个名为 <code>Example</code> 的类，并在其中定义了一个静态成员变量 <code>staticVariable</code>，一个非静态成员变量 <code>nonStaticVariable</code>，一个静态方法 <code>staticMethod</code> 和一个非静态方法 <code>nonStaticMethod</code>。我们展示了如何访问静态和非静态成员和方法。</p>
-</li>
+<p>在上面的示例代码中，我们定义了一个名为 <code>Example</code>
+的类，并在其中定义了一个静态成员变量
+<code>staticVariable</code>，一个非静态成员变量
+<code>nonStaticVariable</code>，一个静态方法 <code>staticMethod</code>
+和一个非静态方法
+<code>nonStaticMethod</code>。我们展示了如何访问静态和非静态成员和方法。</p></li>
 </ul>
 
     </div>
@@ -395,12 +396,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -473,6 +474,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

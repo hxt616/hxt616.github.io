@@ -241,14 +241,19 @@
 
       
         <p>我使用的是<code>oh-my-posh</code>。</p>
-<p><code>oh-my-posh</code> 是一个 <code>PowerShell</code> 主题框架，用于美化 <code>PowerShell</code> 提示符（prompt）。它可以让你自定义 <code>PowerShell</code> 提示符的样式，使其更加易读和美观。可参考官网的主题样式：<a target="_blank" rel="noopener" href="https://ohmyposh.dev/docs/themes">https://ohmyposh.dev/docs/themes</a></p>
+<p><code>oh-my-posh</code> 是一个 <code>PowerShell</code>
+主题框架，用于美化 <code>PowerShell</code>
+提示符（prompt）。它可以让你自定义 <code>PowerShell</code>
+提示符的样式，使其更加易读和美观。可参考官网的主题样式：https://ohmyposh.dev/docs/themes</p>
 <p>通过输入</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-PoshPrompt PowerLine</span><br></pre></td></tr></tbody></table></figure>
-<p>可预览<code>PowerLine</code>主题，这只是暂时性的<br><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/b5787722d59b4286b340086f0ab1145f.png" alt="在这里插入图片描述"></p>
+<p>可预览<code>PowerLine</code>主题，这只是暂时性的 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/b5787722d59b4286b340086f0ab1145f.png" alt="在这里插入图片描述"></p>
 <p>想要永久修改可通过执行以下命令用记事本打开配置文件</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">notepad $PROFILE</span><br></pre></td></tr></tbody></table></figure>
-<p>打开后如下：<br><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/31e8516211044bc2a8bd3b0646a5db98.png" alt="在这里插入图片描述"></p>
-<p>通过修改配置文件中的主题可修改默认打开主题：<br><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/1648e8d3bcf6411b9d307a5aa18afb37.png" alt="在这里插入图片描述"><br>若将上图中的”Sorin”改为“Agnoster”，则下次打开power shell便是修改后的主题。</p>
+<p>打开后如下： <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/31e8516211044bc2a8bd3b0646a5db98.png" alt="在这里插入图片描述"></p>
+<p>通过修改配置文件中的主题可修改默认打开主题： <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/1648e8d3bcf6411b9d307a5aa18afb37.png" alt="在这里插入图片描述">
+若将上图中的"Sorin"改为“Agnoster”，则下次打开power
+shell便是修改后的主题。</p>
 
     </div>
 
@@ -396,12 +401,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -474,6 +479,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

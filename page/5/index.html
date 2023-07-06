@@ -213,7 +213,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>687</span>
+              <span>737</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -232,27 +232,43 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="汇编语言（二）——寄存器"><a href="#汇编语言（二）——寄存器" class="headerlink" title="汇编语言（二）——寄存器"></a>汇编语言（二）——寄存器</h1><h2 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h2><p>8086CPU的所有寄存器都是16位的，可存放两个字节。AX、BX、CX、DX这四个寄存器通常用来存放一般性的数据，被称为通用寄存器。</p>
+          <h1 id="汇编语言二寄存器">汇编语言（二）——寄存器</h1>
+<h2 id="通用寄存器">通用寄存器</h2>
+<p>8086CPU的所有寄存器都是16位的，可存放两个字节。AX、BX、CX、DX这四个寄存器通常用来存放一般性的数据，被称为通用寄存器。</p>
 <p>上述每个寄存器都可分为两个可独立使用的8位寄存器来用：</p>
 <ul>
 <li>AX可分为AH和AL</li>
-<li>……</li>
+<li>......</li>
 </ul>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220417223837183.png" alt="image-20220417223837183"></p>
-<h2 id="16位结构的CPU"><a href="#16位结构的CPU" class="headerlink" title="16位结构的CPU"></a>16位结构的CPU</h2><ul>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220417223837183.png" alt="image-20220417223837183">
+<figcaption aria-hidden="true">image-20220417223837183</figcaption>
+</figure>
+<h2 id="位结构的cpu">16位结构的CPU</h2>
+<ul>
 <li>运算器一次最多可以处理16位的数据</li>
 <li>寄存器的最大宽度位16位</li>
 <li>寄存器和运算器之间的通路为16位</li>
 </ul>
 <p>16位CPU能一次性处理、传输、暂时存储16位的地址。</p>
 <p>8086CPU采用一种在内部用两个16位地址<strong>合成</strong>的方法来形成一个20位的<strong>物理地址</strong>（内存单位构成存储空间，每个内存单元在该空间都有唯一的地址，这个唯一的地址称为物理地址）。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220417225126237.png" alt="image-20220417225126237"></p>
-<p>上图中地址加法器采用<strong>物理地址 = 段地址 x 16 + 偏移地址</strong>的方法合成物理地址。</p>
-<h2 id="段的概念"><a href="#段的概念" class="headerlink" title="段的概念"></a>段的概念</h2><p>内存并没有分段，段的分类来自于CPU，由于CPU对物理地址的合成，我们可以用分段的方式来管理内存。同时可知一个段的起始地址一定是16的倍数，偏移地址为16位，16位地址的寻址能力为64KB，因此一个段的长度最大为64KB。</p>
-<h2 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h2><p>段地址在8086CPU的段寄存器中存放。该CPU有4个寄存器：CS、DS、SS、ES。</p>
-<h2 id="CS和IP"><a href="#CS和IP" class="headerlink" title="CS和IP"></a>CS和IP</h2><p>CS为<strong>代码</strong>段寄存器，IP为指令指针寄存器。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220417225126237.png" alt="image-20220417225126237">
+<figcaption aria-hidden="true">image-20220417225126237</figcaption>
+</figure>
+<p>上图中地址加法器采用<strong>物理地址 = 段地址 x 16 +
+偏移地址</strong>的方法合成物理地址。</p>
+<h2 id="段的概念">段的概念</h2>
+<p>内存并没有分段，段的分类来自于CPU，由于CPU对物理地址的合成，我们可以用分段的方式来管理内存。同时可知一个段的起始地址一定是16的倍数，偏移地址为16位，16位地址的寻址能力为64KB，因此一个段的长度最大为64KB。</p>
+<h2 id="段寄存器">段寄存器</h2>
+<p>段地址在8086CPU的段寄存器中存放。该CPU有4个寄存器：CS、DS、SS、ES。</p>
+<h2 id="cs和ip">CS和IP</h2>
+<p>CS为<strong>代码</strong>段寄存器，IP为指令指针寄存器。</p>
 <p>任意时刻，设CS中的内容为M，IP中的内容为N，则8086CPU将从内存<strong>Mx16+N</strong>单元开始，读取一条指令并执行。即任意时刻，CPU将CS:IP指向的内容当作指令执行。</p>
-<p>一个最简单的可以修改CS、IP的指令：<strong>jmp</strong>指令<br> <strong>jmp 2AE3:3</strong>，执行后：CS=2AE3H，IP=0003H，CPU将从2AE33H处读取指令。<br><strong>jmp ax</strong>相当于<strong>mov IP, ax</strong>。</p>
+<p>一个最简单的可以修改CS、IP的指令：<strong>jmp</strong>指令<br>
+<strong>jmp
+2AE3:3</strong>，执行后：CS=2AE3H，IP=0003H，CPU将从2AE33H处读取指令。<br><strong>jmp
+ax</strong>相当于<strong>mov IP, ax</strong>。</p>
 
       
     </div>
@@ -321,7 +337,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>83</span>
+              <span>152</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -341,11 +357,21 @@
 
       
           <p>今天在写逆向题目时想要运行一个Linux可执行文件，结果直接提示权限不够</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220410175645399.png" alt="image-20220410175645399"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220410175645399.png" alt="image-20220410175645399">
+<figcaption aria-hidden="true">image-20220410175645399</figcaption>
+</figure>
 <p>在搜索一番后打算记录一下解决方案</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220410175813130.png" alt="image-20220410175813130"></p>
-<p>通过执行 <code>chmod a+x ./文件名</code>，之后再次执行该文件即可成功</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220410175950181.png" alt="image-20220410175950181"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220410175813130.png" alt="image-20220410175813130">
+<figcaption aria-hidden="true">image-20220410175813130</figcaption>
+</figure>
+<p>通过执行
+<code>chmod a+x ./文件名</code>，之后再次执行该文件即可成功</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220410175950181.png" alt="image-20220410175950181">
+<figcaption aria-hidden="true">image-20220410175950181</figcaption>
+</figure>
 
       
     </div>
@@ -437,313 +463,339 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>参考维基百科（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Base64）、CTF">https://zh.wikipedia.org/wiki/Base64）、CTF</a> Wiki</p>
+          <p>参考维基百科（https://zh.wikipedia.org/wiki/Base64）、CTF Wiki</p>
 <p><strong>Base64</strong>是一种基于64个可打印字符来表示<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/二进制">二进制数据</a>的表示方法。由于2的6次方等于64，正好对应了64个字符，所以每6个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/位元">比特</a>为一个单元，对应某个可打印字符。</p>
-<p>转换的时候，将<strong>3 字节</strong>的数据，先后放入一个 <strong>24 位</strong>的缓冲区中，先来的字节占高位。数据不足 3 字节的话，于缓冲器中剩下的比特用 0 补足。</p>
-<p>通常而言 在逆向题目中，当我们能找到 <br><code>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/</code> <br>这样的索引表，再经过简单的分析基本就能判定是 Base64 编码。</p>
+<p>转换的时候，将<strong>3 字节</strong>的数据，先后放入一个 <strong>24
+位</strong>的缓冲区中，先来的字节占高位。数据不足 3
+字节的话，于缓冲器中剩下的比特用 0 补足。</p>
+<p>通常而言 在逆向题目中，当我们能找到
+<br><code>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/</code>
+<br>这样的索引表，再经过简单的分析基本就能判定是 Base64 编码。</p>
 <p><strong>示例</strong>：</p>
 <p>编码“Man”的结果为<code>TWFu</code>，详细原理如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220407163844733.png" alt="image-20220407163844733"></p>
-<p>如果要编码的字节数不能被3整除，最后会多出1个或2个字节，那么可以使用下面的方法进行处理：先使用0字节值在末尾补足，使其能够被3整除，然后再进行Base64的编码。在编码后的Base64文本后加上一个或两个<code>=</code>号，代表补足的字节数。也就是说，当最后剩余两个八位(待补足)字节（2个byte）时，最后一个6位的Base64字节块有四位是0值，最后附加上两个等号；如果最后剩余一个八位(待补足)字节（1个byte）时，最后一个6位的base字节块有两位是0值，最后附加一个等号。 参考下表：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220407163920831.png" alt="image-20220407163920831"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220407163844733.png" alt="image-20220407163844733">
+<figcaption aria-hidden="true">image-20220407163844733</figcaption>
+</figure>
+<p>如果要编码的字节数不能被3整除，最后会多出1个或2个字节，那么可以使用下面的方法进行处理：先使用0字节值在末尾补足，使其能够被3整除，然后再进行Base64的编码。在编码后的Base64文本后加上一个或两个<code>=</code>号，代表补足的字节数。也就是说，当最后剩余两个八位(待补足)字节（2个byte）时，最后一个6位的Base64字节块有四位是0值，最后附加上两个等号；如果最后剩余一个八位(待补足)字节（1个byte）时，最后一个6位的base字节块有两位是0值，最后附加一个等号。
+参考下表：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220407163920831.png" alt="image-20220407163920831">
+<figcaption aria-hidden="true">image-20220407163920831</figcaption>
+</figure>
 <p>附：Base64索引表</p>
-<div class="table-container">
 <table>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:center">十进制</th>
-<th style="text-align:center">二进制</th>
-<th style="text-align:center">字符</th>
-<th style="text-align:center"></th>
-<th style="text-align:center">十进制</th>
-<th style="text-align:center">二进制</th>
-<th style="text-align:center">字符</th>
-<th style="text-align:center"></th>
-<th style="text-align:center">十进制</th>
-<th style="text-align:center">二进制</th>
-<th style="text-align:center">字符</th>
-<th style="text-align:center"></th>
-<th style="text-align:center">十进制</th>
-<th style="text-align:center">二进制</th>
-<th style="text-align:center">字符</th>
+<tr class="header">
+<th style="text-align: center;">十进制</th>
+<th style="text-align: center;">二进制</th>
+<th style="text-align: center;">字符</th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">十进制</th>
+<th style="text-align: center;">二进制</th>
+<th style="text-align: center;">字符</th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">十进制</th>
+<th style="text-align: center;">二进制</th>
+<th style="text-align: center;">字符</th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">十进制</th>
+<th style="text-align: center;">二进制</th>
+<th style="text-align: center;">字符</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">000000</td>
-<td style="text-align:center">A</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">16</td>
-<td style="text-align:center">010000</td>
-<td style="text-align:center">Q</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">32</td>
-<td style="text-align:center">100000</td>
-<td style="text-align:center">g</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">48</td>
-<td style="text-align:center">110000</td>
-<td style="text-align:center">w</td>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">000000</td>
+<td style="text-align: center;">A</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">010000</td>
+<td style="text-align: center;">Q</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">32</td>
+<td style="text-align: center;">100000</td>
+<td style="text-align: center;">g</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">48</td>
+<td style="text-align: center;">110000</td>
+<td style="text-align: center;">w</td>
 </tr>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">000001</td>
-<td style="text-align:center">B</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">17</td>
-<td style="text-align:center">010001</td>
-<td style="text-align:center">R</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">33</td>
-<td style="text-align:center">100001</td>
-<td style="text-align:center">h</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">49</td>
-<td style="text-align:center">110001</td>
-<td style="text-align:center">x</td>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">000001</td>
+<td style="text-align: center;">B</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">17</td>
+<td style="text-align: center;">010001</td>
+<td style="text-align: center;">R</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">33</td>
+<td style="text-align: center;">100001</td>
+<td style="text-align: center;">h</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">49</td>
+<td style="text-align: center;">110001</td>
+<td style="text-align: center;">x</td>
 </tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">000010</td>
-<td style="text-align:center">C</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">18</td>
-<td style="text-align:center">010010</td>
-<td style="text-align:center">S</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">34</td>
-<td style="text-align:center">100010</td>
-<td style="text-align:center">i</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">50</td>
-<td style="text-align:center">110010</td>
-<td style="text-align:center">y</td>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">000010</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">18</td>
+<td style="text-align: center;">010010</td>
+<td style="text-align: center;">S</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">34</td>
+<td style="text-align: center;">100010</td>
+<td style="text-align: center;">i</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">110010</td>
+<td style="text-align: center;">y</td>
 </tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">000011</td>
-<td style="text-align:center">D</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">19</td>
-<td style="text-align:center">010011</td>
-<td style="text-align:center">T</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">35</td>
-<td style="text-align:center">100011</td>
-<td style="text-align:center">j</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">51</td>
-<td style="text-align:center">110011</td>
-<td style="text-align:center">z</td>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">000011</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;">010011</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">35</td>
+<td style="text-align: center;">100011</td>
+<td style="text-align: center;">j</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">51</td>
+<td style="text-align: center;">110011</td>
+<td style="text-align: center;">z</td>
 </tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">000100</td>
-<td style="text-align:center">E</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">20</td>
-<td style="text-align:center">010100</td>
-<td style="text-align:center">U</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">36</td>
-<td style="text-align:center">100100</td>
-<td style="text-align:center">k</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">52</td>
-<td style="text-align:center">110100</td>
-<td style="text-align:center">0</td>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">000100</td>
+<td style="text-align: center;">E</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">010100</td>
+<td style="text-align: center;">U</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">36</td>
+<td style="text-align: center;">100100</td>
+<td style="text-align: center;">k</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">52</td>
+<td style="text-align: center;">110100</td>
+<td style="text-align: center;">0</td>
 </tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">000101</td>
-<td style="text-align:center">F</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">21</td>
-<td style="text-align:center">010101</td>
-<td style="text-align:center">V</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">37</td>
-<td style="text-align:center">100101</td>
-<td style="text-align:center">l</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">53</td>
-<td style="text-align:center">110101</td>
-<td style="text-align:center">1</td>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">000101</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">21</td>
+<td style="text-align: center;">010101</td>
+<td style="text-align: center;">V</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">37</td>
+<td style="text-align: center;">100101</td>
+<td style="text-align: center;">l</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">53</td>
+<td style="text-align: center;">110101</td>
+<td style="text-align: center;">1</td>
 </tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">000110</td>
-<td style="text-align:center">G</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">22</td>
-<td style="text-align:center">010110</td>
-<td style="text-align:center">W</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">38</td>
-<td style="text-align:center">100110</td>
-<td style="text-align:center">m</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">54</td>
-<td style="text-align:center">110110</td>
-<td style="text-align:center">2</td>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">000110</td>
+<td style="text-align: center;">G</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">22</td>
+<td style="text-align: center;">010110</td>
+<td style="text-align: center;">W</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">38</td>
+<td style="text-align: center;">100110</td>
+<td style="text-align: center;">m</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">54</td>
+<td style="text-align: center;">110110</td>
+<td style="text-align: center;">2</td>
 </tr>
-<tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">000111</td>
-<td style="text-align:center">H</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">23</td>
-<td style="text-align:center">010111</td>
-<td style="text-align:center">X</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">39</td>
-<td style="text-align:center">100111</td>
-<td style="text-align:center">n</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">55</td>
-<td style="text-align:center">110111</td>
-<td style="text-align:center">3</td>
+<tr class="even">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">000111</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">23</td>
+<td style="text-align: center;">010111</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">39</td>
+<td style="text-align: center;">100111</td>
+<td style="text-align: center;">n</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">55</td>
+<td style="text-align: center;">110111</td>
+<td style="text-align: center;">3</td>
 </tr>
-<tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">001000</td>
-<td style="text-align:center">I</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">24</td>
-<td style="text-align:center">011000</td>
-<td style="text-align:center">Y</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">40</td>
-<td style="text-align:center">101000</td>
-<td style="text-align:center">o</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">56</td>
-<td style="text-align:center">111000</td>
-<td style="text-align:center">4</td>
+<tr class="odd">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">001000</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">011000</td>
+<td style="text-align: center;">Y</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">101000</td>
+<td style="text-align: center;">o</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">56</td>
+<td style="text-align: center;">111000</td>
+<td style="text-align: center;">4</td>
 </tr>
-<tr>
-<td style="text-align:center">9</td>
-<td style="text-align:center">001001</td>
-<td style="text-align:center">J</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">25</td>
-<td style="text-align:center">011001</td>
-<td style="text-align:center">Z</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">41</td>
-<td style="text-align:center">101001</td>
-<td style="text-align:center">p</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">57</td>
-<td style="text-align:center">111001</td>
-<td style="text-align:center">5</td>
+<tr class="even">
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">001001</td>
+<td style="text-align: center;">J</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">011001</td>
+<td style="text-align: center;">Z</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">41</td>
+<td style="text-align: center;">101001</td>
+<td style="text-align: center;">p</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">57</td>
+<td style="text-align: center;">111001</td>
+<td style="text-align: center;">5</td>
 </tr>
-<tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">001010</td>
-<td style="text-align:center">K</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">011010</td>
-<td style="text-align:center">a</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">42</td>
-<td style="text-align:center">101010</td>
-<td style="text-align:center">q</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">58</td>
-<td style="text-align:center">111010</td>
-<td style="text-align:center">6</td>
+<tr class="odd">
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">001010</td>
+<td style="text-align: center;">K</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">26</td>
+<td style="text-align: center;">011010</td>
+<td style="text-align: center;">a</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">42</td>
+<td style="text-align: center;">101010</td>
+<td style="text-align: center;">q</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">58</td>
+<td style="text-align: center;">111010</td>
+<td style="text-align: center;">6</td>
 </tr>
-<tr>
-<td style="text-align:center">11</td>
-<td style="text-align:center">001011</td>
-<td style="text-align:center">L</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">27</td>
-<td style="text-align:center">011011</td>
-<td style="text-align:center">b</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">43</td>
-<td style="text-align:center">101011</td>
-<td style="text-align:center">r</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">59</td>
-<td style="text-align:center">111011</td>
-<td style="text-align:center">7</td>
+<tr class="even">
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">001011</td>
+<td style="text-align: center;">L</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">27</td>
+<td style="text-align: center;">011011</td>
+<td style="text-align: center;">b</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">43</td>
+<td style="text-align: center;">101011</td>
+<td style="text-align: center;">r</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">59</td>
+<td style="text-align: center;">111011</td>
+<td style="text-align: center;">7</td>
 </tr>
-<tr>
-<td style="text-align:center">12</td>
-<td style="text-align:center">001100</td>
-<td style="text-align:center">M</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">28</td>
-<td style="text-align:center">011100</td>
-<td style="text-align:center">c</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">44</td>
-<td style="text-align:center">101100</td>
-<td style="text-align:center">s</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">60</td>
-<td style="text-align:center">111100</td>
-<td style="text-align:center">8</td>
+<tr class="odd">
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">001100</td>
+<td style="text-align: center;">M</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">28</td>
+<td style="text-align: center;">011100</td>
+<td style="text-align: center;">c</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">44</td>
+<td style="text-align: center;">101100</td>
+<td style="text-align: center;">s</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">60</td>
+<td style="text-align: center;">111100</td>
+<td style="text-align: center;">8</td>
 </tr>
-<tr>
-<td style="text-align:center">13</td>
-<td style="text-align:center">001101</td>
-<td style="text-align:center">N</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">29</td>
-<td style="text-align:center">011101</td>
-<td style="text-align:center">d</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">45</td>
-<td style="text-align:center">101101</td>
-<td style="text-align:center">t</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">61</td>
-<td style="text-align:center">111101</td>
-<td style="text-align:center">9</td>
+<tr class="even">
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">001101</td>
+<td style="text-align: center;">N</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">29</td>
+<td style="text-align: center;">011101</td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">45</td>
+<td style="text-align: center;">101101</td>
+<td style="text-align: center;">t</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">61</td>
+<td style="text-align: center;">111101</td>
+<td style="text-align: center;">9</td>
 </tr>
-<tr>
-<td style="text-align:center">14</td>
-<td style="text-align:center">001110</td>
-<td style="text-align:center">O</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">30</td>
-<td style="text-align:center">011110</td>
-<td style="text-align:center">e</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">46</td>
-<td style="text-align:center">101110</td>
-<td style="text-align:center">u</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">62</td>
-<td style="text-align:center">111110</td>
-<td style="text-align:center">+</td>
+<tr class="odd">
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">001110</td>
+<td style="text-align: center;">O</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">30</td>
+<td style="text-align: center;">011110</td>
+<td style="text-align: center;">e</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">46</td>
+<td style="text-align: center;">101110</td>
+<td style="text-align: center;">u</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">62</td>
+<td style="text-align: center;">111110</td>
+<td style="text-align: center;">+</td>
 </tr>
-<tr>
-<td style="text-align:center">15</td>
-<td style="text-align:center">001111</td>
-<td style="text-align:center">P</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">31</td>
-<td style="text-align:center">011111</td>
-<td style="text-align:center">f</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">47</td>
-<td style="text-align:center">101111</td>
-<td style="text-align:center">v</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">63</td>
-<td style="text-align:center">111111</td>
-<td style="text-align:center">/</td>
+<tr class="even">
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">001111</td>
+<td style="text-align: center;">P</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">31</td>
+<td style="text-align: center;">011111</td>
+<td style="text-align: center;">f</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">47</td>
+<td style="text-align: center;">101111</td>
+<td style="text-align: center;">v</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">63</td>
+<td style="text-align: center;">111111</td>
+<td style="text-align: center;">/</td>
 </tr>
 </tbody>
 </table>
-</div>
 
       
     </div>
@@ -816,7 +868,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>343</span>
+              <span>435</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -835,19 +887,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/117294551">https://zhuanlan.zhihu.com/p/117294551</a>         </p>
-<p>​         《从0到1：CTFer成长之路》P260</p>
-<p>使用文件：<a target="_blank" rel="noopener" href="https://book.nu1l.com/tasks/#/pages/reverse/5.3">https://book.nu1l.com/tasks/#/pages/reverse/5.3</a></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>堆栈平衡。首先通过pushad将所有寄存器一次性压入栈，然后通过popad指令恢复寄存器。</p>
-<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p>首先打开文件找到pushad</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175227302.png" alt="image-20220405175227302"></p>
+          <p>参考：https://zhuanlan.zhihu.com/p/117294551</p>
+<p>​ 《从0到1：CTFer成长之路》P260</p>
+<p>使用文件：https://book.nu1l.com/tasks/#/pages/reverse/5.3</p>
+<h2 id="原理">原理</h2>
+<p>堆栈平衡。首先通过pushad将所有寄存器一次性压入栈，然后通过popad指令恢复寄存器。</p>
+<h2 id="过程">过程</h2>
+<p>首先打开文件找到pushad</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175227302.png" alt="image-20220405175227302">
+<figcaption aria-hidden="true">image-20220405175227302</figcaption>
+</figure>
 <p>单步执行该指令（按F8键），此时发现ESP（<strong>栈顶指针</strong>）发生变化</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175320125.png" alt="image-20220405175320125"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175320125.png" alt="image-20220405175320125">
+<figcaption aria-hidden="true">image-20220405175320125</figcaption>
+</figure>
 <p>此时右击ESP选择<code>HW break[ESP]</code>，设置硬件读取断点，则当popad进行还原寄存器时会在该处发生中断。然后按F9键运行程序，在断点处中断，</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180030247.png" alt="image-20220405180030247"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180030247.png" alt="image-20220405180030247">
+<figcaption aria-hidden="true">image-20220405180030247</figcaption>
+</figure>
 <p>此时可删除断点，以防后续触发。然后便是分析图中指令。</p>
 <p>单击jmp语句，按F4键运行至此，再按F8键执行跳转，此时可发现OEP。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180412785.png" alt="image-20220405180412785"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180412785.png" alt="image-20220405180412785">
+<figcaption aria-hidden="true">image-20220405180412785</figcaption>
+</figure>
 
       
     </div>
@@ -916,7 +982,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>456</span>
+              <span>479</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -935,16 +1001,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="保护壳简介"><a href="#保护壳简介" class="headerlink" title="保护壳简介"></a>保护壳简介</h1><p>参考：CTF Wiki(保护壳简介)</p>
-<h2 id="壳是什么"><a href="#壳是什么" class="headerlink" title="壳是什么"></a>壳是什么</h2><p><strong>壳</strong> 是在一些计算机软件里也有一段专门负责保护软件不被非法修改或反编译的程序。</p>
+          <h1 id="保护壳简介">保护壳简介</h1>
+<p>参考：CTF Wiki(保护壳简介)</p>
+<h2 id="壳是什么">壳是什么</h2>
+<p><strong>壳</strong>
+是在一些计算机软件里也有一段专门负责保护软件不被非法修改或反编译的程序。</p>
 <p>它们一般都是先于程序运行，拿到控制权，然后完成它们保护软件的任务。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405135833408.png" alt="image-20220405135833408"></p>
-<h2 id="壳的分类"><a href="#壳的分类" class="headerlink" title="壳的分类"></a>壳的分类</h2><p>分为<strong>加密壳</strong>和<strong>压缩壳</strong>。</p>
-<h3 id="压缩壳"><a href="#压缩壳" class="headerlink" title="压缩壳"></a>压缩壳</h3><p>压缩壳可以帮助缩减 PE 文件的大小，隐藏了 PE 文件内部代码和资源，便于网络传输和保存。</p>
-<p>通常压缩壳有两类用途，一种只是单纯用于压缩普通 PE 文件的压缩壳，而另一种则会对源文件进行较大变形，严重破坏 PE 文件头，经常用于压缩恶意程序。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405135833408.png" alt="image-20220405135833408">
+<figcaption aria-hidden="true">image-20220405135833408</figcaption>
+</figure>
+<h2 id="壳的分类">壳的分类</h2>
+<p>分为<strong>加密壳</strong>和<strong>压缩壳</strong>。</p>
+<h3 id="压缩壳">压缩壳</h3>
+<p>压缩壳可以帮助缩减 PE 文件的大小，隐藏了 PE
+文件内部代码和资源，便于网络传输和保存。</p>
+<p>通常压缩壳有两类用途，一种只是单纯用于压缩普通 PE
+文件的压缩壳，而另一种则会对源文件进行较大变形，严重破坏 PE
+文件头，经常用于压缩恶意程序。</p>
 <p>常见的压缩壳有：Upx、ASpack、PECompat</p>
-<h3 id="加密壳"><a href="#加密壳" class="headerlink" title="加密壳"></a>加密壳</h3><p>加密壳或称保护壳，应用有多种防止代码逆向分析的技术，它最主要的功能是保护 PE 免受代码逆向分析。</p>
-<p>由于加密壳的主要目的不再是压缩文件资源，所以加密壳保护的 PE 程序通常比原文件大得多。</p>
+<h3 id="加密壳">加密壳</h3>
+<p>加密壳或称保护壳，应用有多种防止代码逆向分析的技术，它最主要的功能是保护
+PE 免受代码逆向分析。</p>
+<p>由于加密壳的主要目的不再是压缩文件资源，所以加密壳保护的 PE
+程序通常比原文件大得多。</p>
 <p>目前加密壳大量用于对安全性要求高，对破解敏感的应用程序，同时也有恶意程序用于避免（降低）杀毒软件的检测查杀。</p>
 <p>常见的加密壳有：ASProtector、Armadillo、EXECryptor、Themida、VMProtect</p>
 
@@ -1015,7 +1095,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>358</span>
+              <span>404</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1035,8 +1115,12 @@
 
       
           <p>《汇编语言》第三版 王爽</p>
-<h1 id="汇编语言（一）——总线"><a href="#汇编语言（一）——总线" class="headerlink" title="汇编语言（一）——总线"></a>汇编语言（一）——总线</h1><p>CPU和其他芯片的导线，通常称为总线。总线从物理上来讲，就是一根根导线的集合。根据传送信息的不同，总线从逻辑上又分为三类：地址总线、控制总线和数据总线。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220314193017202.png" alt="image-20220314193017202"></p>
+<h1 id="汇编语言一总线">汇编语言（一）——总线</h1>
+<p>CPU和其他芯片的导线，通常称为总线。总线从物理上来讲，就是一根根导线的集合。根据传送信息的不同，总线从逻辑上又分为三类：地址总线、控制总线和数据总线。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220314193017202.png" alt="image-20220314193017202">
+<figcaption aria-hidden="true">image-20220314193017202</figcaption>
+</figure>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/03/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%80%EF%BC%89/#more" rel="contents">
@@ -1112,7 +1196,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.8k</span>
+              <span>3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1131,8 +1215,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h1><p>逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。</p>
-<h2 id="一、-IDA使用入门"><a href="#一、-IDA使用入门" class="headerlink" title="一、 IDA使用入门"></a>一、 IDA使用入门</h2><p>本节所需代码文件为1-helloworld。（<a target="_blank" rel="noopener" href="https://book.nu1l.com/tasks/#/pages/reverse/5.2）">https://book.nu1l.com/tasks/#/pages/reverse/5.2）</a></p>
+          <h1 id="静态分析">静态分析</h1>
+<p>逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA
+Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。</p>
+<h2 id="一-ida使用入门">一、 IDA使用入门</h2>
+<p>本节所需代码文件为1-helloworld。（https://book.nu1l.com/tasks/#/pages/reverse/5.2）</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/02/22/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B-%E3%80%8A%E4%BB%8E0%E5%88%B01CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF%E3%80%8B/#more" rel="contents">
@@ -1208,7 +1295,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>736</span>
+              <span>801</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1227,27 +1314,42 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="仿射密码"><a href="#仿射密码" class="headerlink" title="仿射密码"></a>仿射密码</h1><h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h2><p>仿射密码是一种单字母替换密码的特例。</p>
+          <h1 id="仿射密码">仿射密码</h1>
+<h2 id="简介">1.简介</h2>
+<p>仿射密码是一种单字母替换密码的特例。</p>
 <p>该密码不如简单替换密码安全，因为它不仅容易受到针对替代密码的所有攻击方法，而且还存在其他缺点。其主要缺点来自以下方面：如果密码分析者可以发现（通过频率分析，暴力破解，猜测或其他方式）两个密文字符对应的明文，则可以通过联立方程组来求解密钥。</p>
-<h2 id="2-数学描述"><a href="#2-数学描述" class="headerlink" title="2.数学描述"></a>2.数学描述</h2><p>仿射密码的<strong>密钥</strong>由2个数字组成，我们将其称为a和b。以下讨论假定使用26个字符的字母（m = 26）。a应该选择为相对于m素数（即a应该没有与m相同的公因数&lt;除1以外&gt;）。例如15和26没有公因数(除1以外)，因此15是可以用来加密的值，然而12和26具有相同公因数（例如2），这样12不能被用于加密。加密时，我们首先将所有字母转换为数字（’a’= 0，’b’= 1，…，’z’= 25）。</p>
+<h2 id="数学描述">2.数学描述</h2>
+<p>仿射密码的<strong>密钥</strong>由2个数字组成，我们将其称为a和b。以下讨论假定使用26个字符的字母（m
+=
+26）。a应该选择为相对于m素数（即a应该没有与m相同的公因数&lt;除1以外&gt;）。例如15和26没有公因数(除1以外)，因此15是可以用来加密的值，然而12和26具有相同公因数（例如2），这样12不能被用于加密。加密时，我们首先将所有字母转换为数字（'a'=
+0，'b'= 1，...，'z'= 25）。</p>
 <p>对于密文c，给定任意的p（p是代表字母的数字），有：</p>
-<p>c = ap + b (mod m)    1&lt;=a&lt;=m,  1&lt;=b&lt;=m;</p>
+<p>c = ap + b (mod m) 1&lt;=a&lt;=m, 1&lt;=b&lt;=m;</p>
 <p>解密的公式为：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221205948026.png" alt="image-20220221205948026"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221205948026.png" alt="image-20220221205948026">
+<figcaption aria-hidden="true">image-20220221205948026</figcaption>
+</figure>
 <p>其中a-1是a的乘法逆元，为了找到a的乘法逆元，我们需要假定数字x满足：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210010143.png" alt="image-20220221210010143"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210010143.png" alt="image-20220221210010143">
+<figcaption aria-hidden="true">image-20220221210010143</figcaption>
+</figure>
 <p>如果我们发现x使得等式成立，那么X就是a的逆元，我们称之为a-1。</p>
 <p>解决此方程式最简单的方法是遍历1到25个数字，然后看哪个满足该方程式。</p>
-<h2 id="3-示例"><a href="#3-示例" class="headerlink" title="3.示例"></a>3.示例</h2><blockquote>
+<h2 id="示例">3.示例</h2>
+<blockquote>
 <p>令密钥a=5且b=7，加密defend the east wall of the castle</p>
 </blockquote>
-<p>我们将第一个字母’d’转换为数字3（’a’= 0，’b’= 1，…，’z’= 25）并将其代入等式中：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210037643.png" alt="image-20220221210037643"></p>
-<p>显而易见，我们可以依次得到明文：</p>
-<blockquote>
-<p>defendtheeastwallofthecastle</p>
-</blockquote>
-<p>详见：<a target="_blank" rel="noopener" href="https://cryptowikis.com/ClassicalCipher/SubstitutionCiphers/AffineCipher/">https://cryptowikis.com/ClassicalCipher/SubstitutionCiphers/AffineCipher/</a></p>
+<p>我们将第一个字母'd'转换为数字3（'a'= 0，'b'= 1，...，'z'=
+25）并将其代入等式中：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210037643.png" alt="image-20220221210037643">
+<figcaption aria-hidden="true">image-20220221210037643</figcaption>
+</figure>
+<p>显而易见，我们可以依次得到明文： &gt;
+defendtheeastwallofthecastle</p>
+<p>详见：https://cryptowikis.com/ClassicalCipher/SubstitutionCiphers/AffineCipher/</p>
 
       
     </div>
@@ -1316,7 +1418,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>666</span>
+              <span>686</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1335,10 +1437,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>今天在写逆向题目时遇到的一个知识点。</p>
-<h2 id="字节顺序（维基百科）"><a href="#字节顺序（维基百科）" class="headerlink" title="字节顺序（维基百科）"></a>字节顺序（维基百科）</h2><p>字节顺序，又称端序或尾序（英语：Endianness），在计算机科学领域中，指电脑内存中或在数字通信链路中，组成多字节的字的字节的排列顺序。</p>
-<p>在几乎所有的机器上，多字节对象都被存储为连续的字节序列。例如在C语言中，一个类型为int的变量x地址为0x100，那么其对应地址表达式&amp;x的值为0x100。且x的四个字节将被存储在电脑内存的0x100, 0x101, 0x102, 0x103位置。</p>
-<p>字节的排列方式有两个通用规则。例如，将一个多位数的低位放在较小的地址处，高位放在较大的地址处，则称小端序；反之则称大端序。在网络应用中，字节序是一个必须被考虑的因素，因为不同机器类型可能采用不同标准的字节序，所以均按照网络标准转化。<br><br><br></p>
+          <p>今天在写逆向题目时遇到的一个知识点。 ## 字节顺序（维基百科）
+字节顺序，又称端序或尾序（英语：Endianness），在计算机科学领域中，指电脑内存中或在数字通信链路中，组成多字节的字的字节的排列顺序。</p>
+<p>在几乎所有的机器上，多字节对象都被存储为连续的字节序列。例如在C语言中，一个类型为int的变量x地址为0x100，那么其对应地址表达式&amp;x的值为0x100。且x的四个字节将被存储在电脑内存的0x100,
+0x101, 0x102, 0x103位置。</p>
+<p>字节的排列方式有两个通用规则。例如，将一个多位数的低位放在较小的地址处，高位放在较大的地址处，则称小端序；反之则称大端序。在网络应用中，字节序是一个必须被考虑的因素，因为不同机器类型可能采用不同标准的字节序，所以均按照网络标准转化。
+<br><br></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/02/21/little-endian/#more" rel="contents">
@@ -1424,7 +1528,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
+first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
+more info. If you get any problems when using Hexo, you can find the
+answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
+you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/02/19/hello-world/#more" rel="contents">
@@ -1567,12 +1675,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -1645,6 +1753,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

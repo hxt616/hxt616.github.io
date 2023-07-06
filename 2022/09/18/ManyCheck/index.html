@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="复现第五届浙江省网络与信息安全竞赛中的第一道逆向题。 参考：https:&#x2F;&#x2F;blog.csdn.net&#x2F;fightforyourdream&#x2F;article&#x2F;details&#x2F;15805125 ManyCheck下载附件后，发现压缩包里有一个exe文件，和一个pdb文件（程序数据库文件）。直接用 Exeinfo PE 打开 exe 文件，查看相关信息  然后用IDA打开文件，直接按F5查看_main_">
+  <meta name="description" content="复现第五届浙江省网络与信息安全竞赛中的第一道逆向题。 参考：https:&#x2F;&#x2F;blog.csdn.net&#x2F;fightforyourdream&#x2F;article&#x2F;details&#x2F;15805125 ManyCheck 下载附件后，发现压缩包里有一个exe文件，和一个pdb文件（程序数据库文件）。直接用 Exeinfo PE 打开 exe 文件，查看相关信息   image-2022091812204673">
 <meta property="og:type" content="article">
 <meta property="og:title" content="复现省赛逆向-ManyCheck">
 <meta property="og:url" content="http://example.com/2022/09/18/ManyCheck/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="复现第五届浙江省网络与信息安全竞赛中的第一道逆向题。 参考：https:&#x2F;&#x2F;blog.csdn.net&#x2F;fightforyourdream&#x2F;article&#x2F;details&#x2F;15805125 ManyCheck下载附件后，发现压缩包里有一个exe文件，和一个pdb文件（程序数据库文件）。直接用 Exeinfo PE 打开 exe 文件，查看相关信息  然后用IDA打开文件，直接按F5查看_main_">
+<meta property="og:description" content="复现第五届浙江省网络与信息安全竞赛中的第一道逆向题。 参考：https:&#x2F;&#x2F;blog.csdn.net&#x2F;fightforyourdream&#x2F;article&#x2F;details&#x2F;15805125 ManyCheck 下载附件后，发现压缩包里有一个exe文件，和一个pdb文件（程序数据库文件）。直接用 Exeinfo PE 打开 exe 文件，查看相关信息   image-2022091812204673">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918122046736.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918124817540.png">
@@ -228,14 +228,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
+              <span>2.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -248,9 +248,14 @@
 
       
         <p>复现第五届浙江省网络与信息安全竞赛中的第一道逆向题。</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/fightforyourdream/article/details/15805125">https://blog.csdn.net/fightforyourdream/article/details/15805125</a></p>
-<h1 id="ManyCheck"><a href="#ManyCheck" class="headerlink" title="ManyCheck"></a>ManyCheck</h1><p>下载附件后，发现压缩包里有一个exe文件，和一个pdb文件（程序数据库文件）。直接用 Exeinfo PE 打开 exe 文件，查看相关信息</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918122046736.png" alt="image-20220918122046736"></p>
+<p>参考：https://blog.csdn.net/fightforyourdream/article/details/15805125</p>
+<h1 id="manycheck">ManyCheck</h1>
+<p>下载附件后，发现压缩包里有一个exe文件，和一个pdb文件（程序数据库文件）。直接用
+Exeinfo PE 打开 exe 文件，查看相关信息</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918122046736.png" alt="image-20220918122046736">
+<figcaption aria-hidden="true">image-20220918122046736</figcaption>
+</figure>
 <p>然后用IDA打开文件，直接按F5查看<code>_main_0</code>函数的伪代码</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main_0</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> savedregs; <span class="comment">// [esp+0h] [ebp+0h]</span></span><br><span class="line"></span><br><span class="line">  sub_4013BC(asc_40CC44, savedregs);</span><br><span class="line">  sub_4013BC(aLetsEnjoyThisE, savedregs);</span><br><span class="line">  sub_4013BC(asc_40CC94, savedregs);</span><br><span class="line">  sub_40100F();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>再按 Shift+F12 查看特殊字符串</p>
@@ -258,10 +263,16 @@
 <p>发现本题需要三次 check ，正确后给出flag。</p>
 <p>双击查看<code>sub_4013BC</code>函数，看不出什么名堂，再查看<code>sub_40100F()</code>函数，最后发现如下代码</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sub_401050</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> v0; <span class="comment">// ST08_4</span></span><br><span class="line">  <span class="type">char</span> v1; <span class="comment">// ST08_1</span></span><br><span class="line">  <span class="type">int</span> v3; <span class="comment">// [esp+0h] [ebp-8h]</span></span><br><span class="line">  <span class="type">int</span> v4; <span class="comment">// [esp+4h] [ebp-4h]</span></span><br><span class="line"></span><br><span class="line">  v4 = <span class="number">0</span>;</span><br><span class="line">  sub_4013BC((<span class="type">int</span>)aFirstCheck, <span class="number">77</span>);</span><br><span class="line">  sub_4013BC((<span class="type">int</span>)aGuessMyLuckyNu, v0);</span><br><span class="line">  <span class="built_in">scanf</span>(aD, &amp;v4);</span><br><span class="line">  <span class="keyword">if</span> ( v4 != v3 )</span><br><span class="line">    <span class="keyword">return</span> sub_4013BC((<span class="type">int</span>)aWhatAPity, v3);</span><br><span class="line">  sub_4013BC((<span class="type">int</span>)aBingo, v3);</span><br><span class="line">  byte_40CA37 = v1;</span><br><span class="line">  byte_40CA42 = v1 - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> sub_401014();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>分析代码可知第一个 check 的答案是<code>77</code>，再回到 String 窗口查看第二个 check ，需要计算出 n 和 m ，第三个 check 是关于 rotate 算法的，编写脚本</p>
+<p>分析代码可知第一个 check 的答案是<code>77</code>，再回到 String
+窗口查看第二个 check ，需要计算出 n 和 m ，第三个 check 是关于 rotate
+算法的，编写脚本</p>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line">n=math.sqrt(<span class="number">6388</span>-<span class="number">57</span>*<span class="number">59</span>)</span><br><span class="line">m=math.sqrt(<span class="number">2500</span>-<span class="number">1</span>-<span class="number">98</span>)</span><br><span class="line"><span class="built_in">print</span>(n,m)        <span class="comment">#n=55, m=49</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#third check</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">self, nums, k</span>):</span><br><span class="line">            <span class="comment"># Write your code here</span></span><br><span class="line">            length = <span class="built_in">len</span>(nums)</span><br><span class="line">            k = k % length</span><br><span class="line">            result = nums[length - k : length] + nums[:length - k]</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">r=Solution()</span><br><span class="line">flag=<span class="built_in">bin</span>(<span class="number">1718896489</span>)    <span class="comment">#flag=0b1100110011101000100011101101001（31位）</span></span><br><span class="line">flag=<span class="string">'0b01100110011101000100011101101001'</span>   <span class="comment">#在最前面加个'0',位数必须为整数个字节大小（8位，16位，32位）</span></span><br><span class="line">flag=<span class="built_in">list</span>(flag[<span class="number">2</span>:])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">''</span>.join(flag))</span><br><span class="line">s=r.rotate(flag,<span class="built_in">len</span>(flag)-<span class="number">16</span>)</span><br><span class="line">s=<span class="string">''</span>.join(s)</span><br><span class="line"><span class="built_in">print</span>(s)                     <span class="comment">#s='01000111011010010110011001110100'</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">int</span>(<span class="number">0b1000111011010010110011001110100</span>))       <span class="comment">#119809844</span></span><br></pre></td></tr></tbody></table></figure>
-<p>用OD打开 exe 文件，按F8运行至 first check ，按顺序输入：77、55、49、1198089844。得到flag</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918124817540.png" alt="image-20220918124817540"></p>
+<p>用OD打开 exe 文件，按F8运行至 first check
+，按顺序输入：77、55、49、1198089844。得到flag</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918124817540.png" alt="image-20220918124817540">
+<figcaption aria-hidden="true">image-20220918124817540</figcaption>
+</figure>
 <p><code>DASCTF{M71_Gift_08L}</code></p>
 
     </div>
@@ -348,7 +359,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ManyCheck"><span class="nav-number">1.</span> <span class="nav-text">ManyCheck</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#manycheck"><span class="nav-number">1.</span> <span class="nav-text">ManyCheck</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -413,12 +424,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -491,6 +502,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

@@ -236,13 +236,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>数据类型可以分为两类：基本数据类型（primitive type）和引用数据类型（reference type）。</p>
+        <p>数据类型可以分为两类：基本数据类型（primitive
+type）和引用数据类型（reference type）。</p>
 <p><strong>基本数据类型</strong>是指整数、浮点数、布尔值等。这些类型的值是直接存储在内存中的，它们的大小是固定的，因此它们的操作速度非常快。</p>
 <p><strong>引用数据类型</strong>是指<strong>对象</strong>、<strong>数组</strong>、<strong>函数</strong>等类型。这些类型的值是存储在内存中的地址，而不是直接存储在变量中。因此，当我们操作引用类型时，实际上是在操作存储在内存中的地址，而不是实际的值。这使得引用数据类型的操作速度相对较慢。</p>
 <p>一个重要的区别是，基本数据类型的值在传递给函数或赋值给另一个变量时，会被复制一份。而引用数据类型的值在传递给函数或赋值给另一个变量时，只会复制它的地址，而不是它的值。这意味着，如果我们修改了一个引用数据类型的值，它会影响到所有引用该值的变量。</p>
-<h2 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h2><p>例如，在Java中，int是一种基本数据类型，下面是一个示例代码：</p>
+<h2 id="基本数据类型">基本数据类型</h2>
+<p>例如，在Java中，int是一种基本数据类型，下面是一个示例代码：</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">javaCopy <span class="type">codeint</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> a; <span class="comment">// b的值是10，而不是a的地址</span></span><br><span class="line">b = <span class="number">20</span>; <span class="comment">// a的值仍然是10</span></span><br></pre></td></tr></tbody></table></figure>
-<h2 id="引用数据类型"><a href="#引用数据类型" class="headerlink" title="引用数据类型"></a>引用数据类型</h2><p><strong>对象</strong>通常是引用数据类型，例如下面这个例子：</p>
+<h2 id="引用数据类型">引用数据类型</h2>
+<p><strong>对象</strong>通常是引用数据类型，例如下面这个例子：</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PollQuestions</span> {</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">      <span class="type">Walrus</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">1000</span>, <span class="number">8.3</span>);</span><br><span class="line">      Walrus b;</span><br><span class="line">      b = a;</span><br><span class="line">      b.weight = <span class="number">5</span>;   <span class="comment">//修改b.weight的值，同时a.weight的值也被改变了</span></span><br><span class="line">      System.out.println(a);</span><br><span class="line">      System.out.println(b);       </span><br><span class="line">   }</span><br><span class="line">   </span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Walrus</span> {</span><br><span class="line">      <span class="keyword">public</span> <span class="type">int</span> weight;</span><br><span class="line">      <span class="keyword">public</span> <span class="type">double</span> tuskSize;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">public</span> <span class="title function_">Walrus</span><span class="params">(<span class="type">int</span> w, <span class="type">double</span> ts)</span> {</span><br><span class="line">         weight = w;</span><br><span class="line">         tuskSize = ts;</span><br><span class="line">      }</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> {</span><br><span class="line">         <span class="keyword">return</span> String.format(<span class="string">"weight: %d, tusk size: %.2f"</span>, weight, tuskSize);</span><br><span class="line">      }</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>输出结果为：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">weight: 5, tusk size: 8.30</span><br><span class="line">weight: 5, tusk size: 8.30</span><br></pre></td></tr></tbody></table></figure>
@@ -395,12 +398,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -473,6 +476,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

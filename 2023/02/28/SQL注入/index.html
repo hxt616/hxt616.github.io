@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="TryHackMe实验房间：https:&#x2F;&#x2F;tryhackme.com&#x2F;room&#x2F;sqlinjectionlm Introduction使用 SQL 的web应用程序可以转变为 SQL 注入的关键点在于用户提供的数据被包含在 SQL 查询中。 假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id 号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的 URL 可能">
+  <meta name="description" content="TryHackMe实验房间：https:&#x2F;&#x2F;tryhackme.com&#x2F;room&#x2F;sqlinjectionlm Introduction 使用 SQL 的web应用程序可以转变为 SQL 注入的关键点在于用户提供的数据被包含在 SQL 查询中。 假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id 号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的 URL 可">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL注入（SQLi）">
 <meta property="og:url" content="http://example.com/2023/02/28/SQL%E6%B3%A8%E5%85%A5/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="TryHackMe实验房间：https:&#x2F;&#x2F;tryhackme.com&#x2F;room&#x2F;sqlinjectionlm Introduction使用 SQL 的web应用程序可以转变为 SQL 注入的关键点在于用户提供的数据被包含在 SQL 查询中。 假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id 号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的 URL 可能">
+<meta property="og:description" content="TryHackMe实验房间：https:&#x2F;&#x2F;tryhackme.com&#x2F;room&#x2F;sqlinjectionlm Introduction 使用 SQL 的web应用程序可以转变为 SQL 注入的关键点在于用户提供的数据被包含在 SQL 查询中。 假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id 号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的 URL 可">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-02-28T06:30:13.089Z">
 <meta property="article:modified_time" content="2023-06-10T07:53:49.490Z">
@@ -224,7 +224,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.5k</span>
+              <span>2.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -243,56 +243,90 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>TryHackMe实验房间：<a target="_blank" rel="noopener" href="https://tryhackme.com/room/sqlinjectionlm">https://tryhackme.com/room/sqlinjectionlm</a></p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>使用 SQL 的web应用程序可以转变为 SQL 注入的关键点在于用户提供的数据被包含在 SQL 查询中。</p>
-<p>假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id 号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的 URL 可能如下所示：</p>
+        <p>TryHackMe实验房间：https://tryhackme.com/room/sqlinjectionlm</p>
+<h2 id="introduction">Introduction</h2>
+<p>使用 SQL 的web应用程序可以转变为 SQL
+注入的关键点在于用户提供的数据被包含在 SQL 查询中。</p>
+<p>假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id
+号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的
+URL 可能如下所示：</p>
 <p><code>https://website.thm/blog?id=1</code></p>
-<p>从上面的 URL 中，你可以看到所选的博客条目来自查询字符串(query string)中的 id 参数。Web应用程序需要从数据库中检索文章，并使用如下的SQL语句：</p>
+<p>从上面的 URL 中，你可以看到所选的博客条目来自查询字符串(query
+string)中的 id
+参数。Web应用程序需要从数据库中检索文章，并使用如下的SQL语句：</p>
 <p><code>SELECT * from blog where id=1 and private=0 LIMIT 1;</code></p>
-<p>发现上面的SQL语句正在博客表中查找 id 号为 1 且<code>private</code>列设置为 0 的文章，这意味着它可以被公众查看，并且使用了<code>limit</code>将结果限制为只有一个匹配项。</p>
-<p>正如在本文开头所提到的，当用户输入的数据被引入数据库查询时，就会引入SQL注入。在本例中，查询字符串中的 id 参数直接用于 SQL 查询。</p>
-<p>假设文章 id 2 仍然锁定为私有的，所以它不能在网站上查看。我们现在可以将 URL 改为：</p>
+<p>发现上面的SQL语句正在博客表中查找 id 号为 1
+且<code>private</code>列设置为 0
+的文章，这意味着它可以被公众查看，并且使用了<code>limit</code>将结果限制为只有一个匹配项。</p>
+<p>正如在本文开头所提到的，当用户输入的数据被引入数据库查询时，就会引入SQL注入。在本例中，查询字符串中的
+id 参数直接用于 SQL 查询。</p>
+<p>假设文章 id 2
+仍然锁定为私有的，所以它不能在网站上查看。我们现在可以将 URL 改为：</p>
 <p><code>https://website.thm/blog?id=2;--</code></p>
 <p>对应生成的 SQL 语句为：</p>
 <p><code>SELECT * from blog where id=2;-- and private=0 LIMIT 1;</code></p>
-<p>URL 中的分号表示 SQL 语句的结束，两个横杠(<code>--</code>)会导致之后的所有内容都被视为注释。通过这样做，实际上是在运行查询：</p>
+<p>URL 中的分号表示 SQL
+语句的结束，两个横杠(<code>--</code>)会导致之后的所有内容都被视为注释。通过这样做，实际上是在运行查询：</p>
 <p><code>SELECT * from blog where id=2;--</code></p>
 <p>无论是否将其设置为公开，它将返回 id 为 2 的文章。</p>
-<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="In-Band-SQLi"><a href="#In-Band-SQLi" class="headerlink" title="In-Band SQLi"></a>In-Band SQLi</h3><p>In-Band SQL 注入是最容易检测和利用的类型。In-Band 是指使用相同通信方法来利用漏洞并接受结果。例如，在网页上发现 SQL 注入漏洞，然后能够从数据库中将数据提取到同一页面。</p>
+<h2 id="分类">分类</h2>
+<h3 id="in-band-sqli">In-Band SQLi</h3>
+<p>In-Band SQL 注入是最容易检测和利用的类型。In-Band
+是指使用相同通信方法来利用漏洞并接受结果。例如，在网页上发现 SQL
+注入漏洞，然后能够从数据库中将数据提取到同一页面。</p>
 <ul>
 <li><p><strong>Error-Based SQL Injection</strong>(基于报错的SQL注入)</p>
-<p>这种类型的 SQL 注入对于轻松获取有关数据库结构的信息是最有用的，因为来自数据库的错误信息会直接打印到网页上，这通常可以用于枚举整个数据库。</p>
-</li>
-<li><p><strong>Union-Based SQL Injection</strong>(基于 union 的SQL注入)</p>
-<p>这种类型的注入使用 UNION 操作符和 SELECT 语句一起向页面返回其他结果。这是通过SQL注入漏洞提取大量数据的最常见方法。</p>
-</li>
+<p>这种类型的 SQL
+注入对于轻松获取有关数据库结构的信息是最有用的，因为来自数据库的错误信息会直接打印到网页上，这通常可以用于枚举整个数据库。</p></li>
+<li><p><strong>Union-Based SQL Injection</strong>(基于 union
+的SQL注入)</p>
+<p>这种类型的注入使用 UNION 操作符和 SELECT
+语句一起向页面返回其他结果。这是通过SQL注入漏洞提取大量数据的最常见方法。</p></li>
 </ul>
-<h3 id="Blind-SQLi"><a href="#Blind-SQLi" class="headerlink" title="Blind SQLi"></a>Blind SQLi</h3><p>与 in-band SQL 注入不同，blind SQL 注入几乎没有反馈来提示我们我们是否注入成功，这是因为错误消息已被禁用，但无论如何，注入依旧是有效的。</p>
+<h3 id="blind-sqli">Blind SQLi</h3>
+<p>与 in-band SQL 注入不同，blind SQL
+注入几乎没有反馈来提示我们我们是否注入成功，这是因为错误消息已被禁用，但无论如何，注入依旧是有效的。</p>
 <ul>
 <li><p>Authentication Bypass(身份验证绕过)</p>
-<p>最直接的 blind SQLi 技巧之一就是绕过登录表单等身份验证。连接到用户数据库的登录表单通常以这样的方式开发，即：web应用程序对用户名和密码的内容不感兴趣，而等关注两者是否在用户表中匹配。基本上，web应用程序会询问数据库“您是否是用户名为 <strong>bob</strong> 、密码为 <strong>bob123</strong> 的用户？”，数据库会回答“是”或“否”，并根据回答决定web应用程序是否允许你继续操作。</p>
-</li>
+<p>最直接的 blind SQLi
+技巧之一就是绕过登录表单等身份验证。连接到用户数据库的登录表单通常以这样的方式开发，即：web应用程序对用户名和密码的内容不感兴趣，而等关注两者是否在用户表中匹配。基本上，web应用程序会询问数据库“您是否是用户名为
+<strong>bob</strong> 、密码为 <strong>bob123</strong>
+的用户？”，数据库会回答“是”或“否”，并根据回答决定web应用程序是否允许你继续操作。</p></li>
 <li><p><strong>Boolean Based</strong>(布尔盲注)</p>
-<p>布尔盲注是指我们从注入尝试中收到的可能是<code>true/false</code>、<code>yes/no</code>、<code>on/off</code>、<code>1/0</code>或者任何只能有两个结果的响应。该结果表明攻击者的 SQL 注入是否成功。虽然响应只有两种结果，但还是能够枚举整个数据库的结构和内容。</p>
-<p>例如，可以通过布尔盲注来判断数据库的首字母(<code>admin123' UNION SELECT 1,2,3 where database() like 's%';--</code>)。</p>
-</li>
+<p>布尔盲注是指我们从注入尝试中收到的可能是<code>true/false</code>、<code>yes/no</code>、<code>on/off</code>、<code>1/0</code>或者任何只能有两个结果的响应。该结果表明攻击者的
+SQL
+注入是否成功。虽然响应只有两种结果，但还是能够枚举整个数据库的结构和内容。</p>
+<p>例如，可以通过布尔盲注来判断数据库的首字母(<code>admin123' UNION SELECT 1,2,3 where database() like 's%';--</code>)。</p></li>
 <li><p><strong>Time Based</strong>(时间盲注)</p>
-<p>时间盲注与上述的布尔盲注非常相似，因为发送相同的请求，但没有直观的指示您的查询是错误的还是正确的。相反，正确查询的指标是基于完成查询所需的时间。这种时间延迟是通过在 UNION 语句旁边使用内置方法（如 <strong>SLEEP(x)</strong>）引入的。SLEEP() 方法只能在 UNION SELECT 语句成功时执行。</p>
+<p>时间盲注与上述的布尔盲注非常相似，因为发送相同的请求，但没有直观的指示您的查询是错误的还是正确的。相反，正确查询的指标是基于完成查询所需的时间。这种时间延迟是通过在
+UNION 语句旁边使用内置方法（如
+<strong>SLEEP(x)</strong>）引入的。SLEEP() 方法只能在 UNION SELECT
+语句成功时执行。</p>
 <p>例如，当试图确定表中的列数时，可以使用以下查询：</p>
 <p><code>admin123' UNION SELECT SLEEP(5)</code></p>
 <p>如果未产生停顿，那么我们可以推断出该请求未成功，所以我们增加一列：</p>
 <p><code>admin123' UNION SELECT SLEEP(5),2;--</code></p>
-<p>直到产生 5 秒延迟为止。</p>
-</li>
+<p>直到产生 5 秒延迟为止。</p></li>
 </ul>
-<h3 id="Out-of-Band-SQLi"><a href="#Out-of-Band-SQLi" class="headerlink" title="Out of Band SQLi"></a>Out of Band SQLi</h3><p>此类 SQL 注入并不常见，因为它要么取决于数据库服务器上启用的特定功能，要么取决于web应用程序的业务逻辑，后者根据SQL查询的结果进行某种外部网络调用。</p>
-<p>Out-Of-Band 攻击通过两个不同的通信渠道进行分类，一个用于发起攻击，另一个用于收集结果。例如，攻击通道可以是web请求，数据收集通道可以监视对你控制的服务发出的HTTP/DNS请求。</p>
+<h3 id="out-of-band-sqli">Out of Band SQLi</h3>
+<p>此类 SQL
+注入并不常见，因为它要么取决于数据库服务器上启用的特定功能，要么取决于web应用程序的业务逻辑，后者根据SQL查询的结果进行某种外部网络调用。</p>
+<p>Out-Of-Band
+攻击通过两个不同的通信渠道进行分类，一个用于发起攻击，另一个用于收集结果。例如，攻击通道可以是web请求，数据收集通道可以监视对你控制的服务发出的HTTP/DNS请求。</p>
 <p>1） 攻击者通过注入 payload 向易受攻击的网站发出请求。</p>
 <p>2） 该网站对数据库进行SQL查询，并传递黑客的 payload 。</p>
-<p>3） payload 包含一个请求，该请求强制将包含数据库数据的HTTP请求返回给黑客的计算机。</p>
-<h2 id="预防措施"><a href="#预防措施" class="headerlink" title="预防措施"></a>预防措施</h2><h3 id="预编译语句（参数化查询）"><a href="#预编译语句（参数化查询）" class="headerlink" title="预编译语句（参数化查询）"></a>预编译语句（参数化查询）</h3><p>开发人员首先编写 SQL 查询，然后将任何用户输入作为参数添加。编写准备好的语句可以确保 SQL 代码结构不变，并且数据库可以区分查询和数据。作为一个好处，它还使您的代码看起来更干净、更容易阅读。</p>
-<h3 id="对输入进行验证"><a href="#对输入进行验证" class="headerlink" title="对输入进行验证"></a>对输入进行验证</h3><p>输入验证可以在很大程度上保护输入到 SQL 查询中的内容。使用允许列表可以将输入限制为仅某些字符串，或者编程语言中的字符串替换方法可以过滤你希望允许或不允许的字符。</p>
-<h3 id="对用户输入进行转义"><a href="#对用户输入进行转义" class="headerlink" title="对用户输入进行转义"></a>对用户输入进行转义</h3><p>允许用户输入包含诸如<code>'</code>、<code>"</code>、<code>$</code>、<code>\</code>之类的字符可能会导致SQL查询中断，或者更糟的是，正如我们所了解的那样，打开它们以接受注入攻击。转义用户输入是在这些字符前面加上反斜杠（\）的方法，这样会导致它们被解析为常规字符串而不是特殊字符。</p>
+<p>3） payload
+包含一个请求，该请求强制将包含数据库数据的HTTP请求返回给黑客的计算机。</p>
+<h2 id="预防措施">预防措施</h2>
+<h3 id="预编译语句参数化查询">预编译语句（参数化查询）</h3>
+<p>开发人员首先编写 SQL
+查询，然后将任何用户输入作为参数添加。编写准备好的语句可以确保 SQL
+代码结构不变，并且数据库可以区分查询和数据。作为一个好处，它还使您的代码看起来更干净、更容易阅读。</p>
+<h3 id="对输入进行验证">对输入进行验证</h3>
+<p>输入验证可以在很大程度上保护输入到 SQL
+查询中的内容。使用允许列表可以将输入限制为仅某些字符串，或者编程语言中的字符串替换方法可以过滤你希望允许或不允许的字符。</p>
+<h3 id="对用户输入进行转义">对用户输入进行转义</h3>
+<p>允许用户输入包含诸如<code>'</code>、<code>"</code>、<code>$</code>、<code>\</code>之类的字符可能会导致SQL查询中断，或者更糟的是，正如我们所了解的那样，打开它们以接受注入攻击。转义用户输入是在这些字符前面加上反斜杠（）的方法，这样会导致它们被解析为常规字符串而不是特殊字符。</p>
 
     </div>
 
@@ -377,7 +411,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#In-Band-SQLi"><span class="nav-number">2.1.</span> <span class="nav-text">In-Band SQLi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blind-SQLi"><span class="nav-number">2.2.</span> <span class="nav-text">Blind SQLi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Out-of-Band-SQLi"><span class="nav-number">2.3.</span> <span class="nav-text">Out of Band SQLi</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E9%98%B2%E6%8E%AA%E6%96%BD"><span class="nav-number">3.</span> <span class="nav-text">预防措施</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91%E8%AF%AD%E5%8F%A5%EF%BC%88%E5%8F%82%E6%95%B0%E5%8C%96%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">预编译语句（参数化查询）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%BE%93%E5%85%A5%E8%BF%9B%E8%A1%8C%E9%AA%8C%E8%AF%81"><span class="nav-number">3.2.</span> <span class="nav-text">对输入进行验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5%E8%BF%9B%E8%A1%8C%E8%BD%AC%E4%B9%89"><span class="nav-number">3.3.</span> <span class="nav-text">对用户输入进行转义</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#in-band-sqli"><span class="nav-number">2.1.</span> <span class="nav-text">In-Band SQLi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#blind-sqli"><span class="nav-number">2.2.</span> <span class="nav-text">Blind SQLi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#out-of-band-sqli"><span class="nav-number">2.3.</span> <span class="nav-text">Out of Band SQLi</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E9%98%B2%E6%8E%AA%E6%96%BD"><span class="nav-number">3.</span> <span class="nav-text">预防措施</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91%E8%AF%AD%E5%8F%A5%E5%8F%82%E6%95%B0%E5%8C%96%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.1.</span> <span class="nav-text">预编译语句（参数化查询）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%BE%93%E5%85%A5%E8%BF%9B%E8%A1%8C%E9%AA%8C%E8%AF%81"><span class="nav-number">3.2.</span> <span class="nav-text">对输入进行验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5%E8%BF%9B%E8%A1%8C%E8%BD%AC%E4%B9%89"><span class="nav-number">3.3.</span> <span class="nav-text">对用户输入进行转义</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -442,12 +476,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -520,6 +554,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

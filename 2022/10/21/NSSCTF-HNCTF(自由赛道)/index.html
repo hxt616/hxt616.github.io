@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="平台：NSSCTF 比赛：HNCTF(自由赛道) CrackMe附件名称为：动调下断点。可知这题应该使用动态调试。 先使用IDA打开文件，查看文件信息。按 shift+F12 查看是否有特殊字符串  双击.data:00403096    00000016    C    Congrats, u did it!!!，定位到该字符串下，右击查看该字符串所在的函数   发现是在 DialogFunc">
+  <meta name="description" content="平台：NSSCTF 比赛：HNCTF(自由赛道) CrackMe 附件名称为：动调下断点。可知这题应该使用动态调试。 先使用IDA打开文件，查看文件信息。按 shift+F12 查看是否有特殊字符串   image-20221021200456398  双击.data:00403096   00000016    C   Congrats, u did it!!!，定位到该字符串下，右击查看该字符">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NSSCTF-HNCTF(自由赛道)">
 <meta property="og:url" content="http://example.com/2022/10/21/NSSCTF-HNCTF(%E8%87%AA%E7%94%B1%E8%B5%9B%E9%81%93)/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="平台：NSSCTF 比赛：HNCTF(自由赛道) CrackMe附件名称为：动调下断点。可知这题应该使用动态调试。 先使用IDA打开文件，查看文件信息。按 shift+F12 查看是否有特殊字符串  双击.data:00403096    00000016    C    Congrats, u did it!!!，定位到该字符串下，右击查看该字符串所在的函数   发现是在 DialogFunc">
+<meta property="og:description" content="平台：NSSCTF 比赛：HNCTF(自由赛道) CrackMe 附件名称为：动调下断点。可知这题应该使用动态调试。 先使用IDA打开文件，查看文件信息。按 shift+F12 查看是否有特殊字符串   image-20221021200456398  双击.data:00403096   00000016    C   Congrats, u did it!!!，定位到该字符串下，右击查看该字符">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200456398.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200815897.png">
@@ -243,7 +243,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.1k</span>
+              <span>4.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -264,31 +264,66 @@
       
         <p>平台：NSSCTF</p>
 <p>比赛：HNCTF(自由赛道)</p>
-<h2 id="CrackMe"><a href="#CrackMe" class="headerlink" title="CrackMe"></a>CrackMe</h2><p>附件名称为：动调下断点。可知这题应该使用动态调试。</p>
-<p>先使用IDA打开文件，查看文件信息。按 shift+F12 查看是否有特殊字符串</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200456398.png" alt="image-20221021200456398"></p>
-<p>双击<code>.data:00403096    00000016    C    Congrats, u did it!!!</code>，定位到该字符串下，右击查看该字符串所在的函数</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200815897.png" alt="image-20221021200815897"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200830149.png" alt="image-20221021200830149"></p>
+<h2 id="crackme">CrackMe</h2>
+<p>附件名称为：动调下断点。可知这题应该使用动态调试。</p>
+<p>先使用IDA打开文件，查看文件信息。按 shift+F12
+查看是否有特殊字符串</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200456398.png" alt="image-20221021200456398">
+<figcaption aria-hidden="true">image-20221021200456398</figcaption>
+</figure>
+<p>双击<code>.data:00403096   00000016    C   Congrats, u did it!!!</code>，定位到该字符串下，右击查看该字符串所在的函数</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200815897.png" alt="image-20221021200815897">
+<figcaption aria-hidden="true">image-20221021200815897</figcaption>
+</figure>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200830149.png" alt="image-20221021200830149">
+<figcaption aria-hidden="true">image-20221021200830149</figcaption>
+</figure>
 <p>发现是在 DialogFunc 函数中，点击左侧函数名查看该函数</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021201601938.png" alt="image-20221021201601938"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021201601938.png" alt="image-20221021201601938">
+<figcaption aria-hidden="true">image-20221021201601938</figcaption>
+</figure>
 <p>分析视图逻辑，发现在打印最终的字符串之前进行了字符串的判断，猜测其中一个是flag</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021203157203.png" alt="image-20221021203157203"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021203157203.png" alt="image-20221021203157203">
+<figcaption aria-hidden="true">image-20221021203157203</figcaption>
+</figure>
 <p>双击查看这两个字符串的地址</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021203453448.png" alt="image-20221021203453448"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021203453448.png" alt="image-20221021203453448">
+<figcaption aria-hidden="true">image-20221021203453448</figcaption>
+</figure>
 <p>回到动态调试中，发现这两个字符串</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021203549793.png" alt="image-20221021203549793"></p>
-<p>在第一个 String 处设置断点（F2），然后按 F9 运行至断点处，弹出窗口要求我们进行输入，根据附件中的“要求.txt”，我在 name 框中输入了“CreakMe”，按下“Check”按钮后，查看 String 内容</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021204246992.png" alt="image-20221021204246992"></p>
-<p>窗口提示输入“Serial”，我便随便输入了几个数字，点击“About”按钮，然后按F8单步执行，无法成功，于是再次按下“Check”按钮，并再次尝试运行，单步执行成功，第一个 String 和第二个均发生了改变，第二个 String 内容为我刚输入的内容</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021204726038.png" alt="image-20221021204726038"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021203549793.png" alt="image-20221021203549793">
+<figcaption aria-hidden="true">image-20221021203549793</figcaption>
+</figure>
+<p>在第一个 String 处设置断点（F2），然后按 F9
+运行至断点处，弹出窗口要求我们进行输入，根据附件中的“要求.txt”，我在
+name 框中输入了“CreakMe”，按下“Check”按钮后，查看 String 内容</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021204246992.png" alt="image-20221021204246992">
+<figcaption aria-hidden="true">image-20221021204246992</figcaption>
+</figure>
+<p>窗口提示输入“Serial”，我便随便输入了几个数字，点击“About”按钮，然后按F8单步执行，无法成功，于是再次按下“Check”按钮，并再次尝试运行，单步执行成功，第一个
+String 和第二个均发生了改变，第二个 String 内容为我刚输入的内容</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021204726038.png" alt="image-20221021204726038">
+<figcaption aria-hidden="true">image-20221021204726038</figcaption>
+</figure>
 <p>猜测第一个 String 的内容为flag，尝试提交，flag正确。</p>
-<h2 id="getflag"><a href="#getflag" class="headerlink" title="getflag"></a>getflag</h2><p>使用IDA打开文件，直接F5查看伪代码</p>
+<h2 id="getflag">getflag</h2>
+<p>使用IDA打开文件，直接F5查看伪代码</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">{</span><br><span class="line">  LPSTR v3; <span class="comment">// ebx</span></span><br><span class="line">  CHAR v4; <span class="comment">// al</span></span><br><span class="line">  <span class="type">int</span> v5; <span class="comment">// esi</span></span><br><span class="line">  HMODULE v6; <span class="comment">// eax</span></span><br><span class="line">  LPSTR v8; <span class="comment">// edx</span></span><br><span class="line">  CHAR v9; <span class="comment">// al</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> _<span class="title">STARTUPINFOA</span> <span class="title">StartupInfo</span>;</span> <span class="comment">// [esp+0h] [ebp-5Ch]</span></span><br><span class="line">  <span class="type">int</span> *v11; <span class="comment">// [esp+50h] [ebp-Ch]</span></span><br><span class="line"></span><br><span class="line">  v11 = &amp;argc;</span><br><span class="line">  __main();</span><br><span class="line">  v3 = GetCommandLineA();</span><br><span class="line">  GetStartupInfoA(&amp;StartupInfo);</span><br><span class="line">  <span class="keyword">if</span> ( v3 )</span><br><span class="line">  {</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    {</span><br><span class="line">      v4 = *v3;</span><br><span class="line">      <span class="keyword">if</span> ( *v3 != <span class="number">32</span> &amp;&amp; v4 != <span class="number">9</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      ++v3;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> ( v4 == <span class="number">34</span> )</span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">do</span></span><br><span class="line">      {</span><br><span class="line">        v8 = v3++;</span><br><span class="line">        v9 = *v3;</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">while</span> ( *v3 != <span class="number">34</span> &amp;&amp; v9 );</span><br><span class="line">      <span class="keyword">if</span> ( v9 == <span class="number">34</span> )</span><br><span class="line">        v3 = v8 + <span class="number">2</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">while</span> ( *v3 &amp; <span class="number">0xDF</span> &amp;&amp; *v3 != <span class="number">9</span> )</span><br><span class="line">        ++v3;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">while</span> ( *v3 == <span class="number">32</span> || *v3 == <span class="number">9</span> )</span><br><span class="line">      ++v3;</span><br><span class="line">  }</span><br><span class="line">  v5 = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">if</span> ( StartupInfo.dwFlags &amp; <span class="number">1</span> )</span><br><span class="line">    v5 = StartupInfo.wShowWindow;</span><br><span class="line">  v6 = GetModuleHandleA(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">return</span> WinMain(v6, <span class="number">0</span>, v3, v5);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>发现第13行的 _main() 函数，双击查看</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __main()</span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> result; <span class="comment">// eax</span></span><br><span class="line"></span><br><span class="line">  result = dword_40802C;</span><br><span class="line">  <span class="keyword">if</span> ( !dword_40802C )</span><br><span class="line">  {</span><br><span class="line">    dword_40802C = <span class="number">1</span>;</span><br><span class="line">    result = __do_global_ctors();</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>没发现什么重要的函数，于是尝试运行该程序，发现需要点击 100000000 次鼠标才能得到flag。（还是算了吧）</p>
-<p>于是回到 main 函数中，跳过一些系统调用的函数，双击查看第48行的 WinMain 函数</p>
+<p>没发现什么重要的函数，于是尝试运行该程序，发现需要点击 100000000
+次鼠标才能得到flag。（还是算了吧）</p>
+<p>于是回到 main 函数中，跳过一些系统调用的函数，双击查看第48行的
+WinMain 函数</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __stdcall <span class="title function_">WinMain</span><span class="params">(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, <span class="type">int</span> nShowCmd)</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v4; <span class="comment">// eax</span></span><br><span class="line">  MSG Msg; <span class="comment">// [esp+34h] [ebp-54h]</span></span><br><span class="line">  WNDCLASSA WndClass; <span class="comment">// [esp+50h] [ebp-38h]</span></span><br><span class="line">  HWND v8; <span class="comment">// [esp+78h] [ebp-10h]</span></span><br><span class="line">  HWND hWnd; <span class="comment">// [esp+7Ch] [ebp-Ch]</span></span><br><span class="line"></span><br><span class="line">  WndClass.cbClsExtra = <span class="number">0</span>;</span><br><span class="line">  WndClass.cbWndExtra = <span class="number">0</span>;</span><br><span class="line">  WndClass.hbrBackground = (HBRUSH)<span class="number">6</span>;</span><br><span class="line">  WndClass.hCursor = <span class="number">0</span>;</span><br><span class="line">  WndClass.hIcon = <span class="number">0</span>;</span><br><span class="line">  WndClass.hInstance = hInstance;</span><br><span class="line">  WndClass.lpfnWndProc = WndProc;</span><br><span class="line">  WndClass.lpszClassName = <span class="string">"Main"</span>;</span><br><span class="line">  WndClass.lpszMenuName = <span class="number">0</span>;</span><br><span class="line">  WndClass.style = <span class="number">42</span>;</span><br><span class="line">  RegisterClassA(&amp;WndClass);</span><br><span class="line">  hWnd = GetForegroundWindow();</span><br><span class="line">  ShowWindow(hWnd, <span class="number">0</span>);</span><br><span class="line">  v8 = CreateWindowExA(<span class="number">0</span>, <span class="string">"Main"</span>, <span class="string">"flag"</span>, <span class="number">0xCF0000</span>u, <span class="number">200</span>, <span class="number">200</span>, <span class="number">430</span>, <span class="number">130</span>, <span class="number">0</span>, <span class="number">0</span>, hInstance, <span class="number">0</span>);</span><br><span class="line">  ShowWindow(v8, <span class="number">5</span>);</span><br><span class="line">  UpdateWindow(v8);</span><br><span class="line">  v4 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">  {</span><br><span class="line">    *(HWND *)((<span class="type">char</span> *)&amp;Msg.hwnd + v4) = <span class="number">0</span>;</span><br><span class="line">    v4 += <span class="number">4</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">while</span> ( v4 &lt; <span class="number">0x1C</span> );</span><br><span class="line">  <span class="keyword">while</span> ( GetMessageA(&amp;Msg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>) )</span><br><span class="line">  {</span><br><span class="line">    TranslateMessage(&amp;Msg);</span><br><span class="line">    DispatchMessageA(&amp;Msg);</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>双击查看 WndProc 函数</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __stdcall <span class="title function_">WndProc</span><span class="params">(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)</span></span><br><span class="line">{</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">tagRECT</span> <span class="title">Rect</span>;</span> <span class="comment">// [esp+3Ch] [ebp-5Ch]</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">tagPAINTSTRUCT</span> <span class="title">Paint</span>;</span> <span class="comment">// [esp+4Ch] [ebp-4Ch]</span></span><br><span class="line">  HDC hDC; <span class="comment">// [esp+8Ch] [ebp-Ch]</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ( Msg == <span class="number">15</span> )</span><br><span class="line">  {</span><br><span class="line">    hDC = BeginPaint(hWnd, &amp;Paint);</span><br><span class="line">    GetClientRect(hWnd, &amp;Rect);</span><br><span class="line">    DrawTextA(hDC, <span class="string">"Click to get the flag."</span>, <span class="number">-1</span>, &amp;Rect, <span class="number">0x85</span>u);</span><br><span class="line">    EndPaint(hWnd, &amp;Paint);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">if</span> ( Msg &gt; <span class="number">0xF</span> )</span><br><span class="line">  {</span><br><span class="line">    <span class="keyword">if</span> ( Msg != <span class="number">16</span> )</span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">if</span> ( Msg == <span class="number">273</span> )</span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">if</span> ( wParam == <span class="number">1234</span> )</span><br><span class="line">          OnButtonClick();</span><br><span class="line">        <span class="keyword">if</span> ( wParam == <span class="number">4321</span> )</span><br><span class="line">          check();</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">goto</span> LABEL_17;</span><br><span class="line">    }</span><br><span class="line">    DestroyWindow(hWnd);</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> ( Msg == <span class="number">1</span> )</span><br><span class="line">  {</span><br><span class="line">    CreateWindowExA(</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="string">"button"</span>,</span><br><span class="line">      <span class="string">"Click me."</span>,</span><br><span class="line">      <span class="number">0x50000000</span>u,</span><br><span class="line">      <span class="number">80</span>,</span><br><span class="line">      <span class="number">30</span>,</span><br><span class="line">      <span class="number">120</span>,</span><br><span class="line">      <span class="number">30</span>,</span><br><span class="line">      hWnd,</span><br><span class="line">      (HMENU)<span class="number">0x4D2</span>,</span><br><span class="line">      *(HINSTANCE *)(lParam + <span class="number">4</span>),</span><br><span class="line">      <span class="number">0</span>);</span><br><span class="line">    CreateWindowExA(</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="string">"button"</span>,</span><br><span class="line">      <span class="string">"Get flag"</span>,</span><br><span class="line">      <span class="number">0x50000000</span>u,</span><br><span class="line">      <span class="number">220</span>,</span><br><span class="line">      <span class="number">30</span>,</span><br><span class="line">      <span class="number">120</span>,</span><br><span class="line">      <span class="number">30</span>,</span><br><span class="line">      hWnd,</span><br><span class="line">      (HMENU)<span class="number">0x10E1</span>,</span><br><span class="line">      *(HINSTANCE *)(lParam + <span class="number">4</span>),</span><br><span class="line">      <span class="number">0</span>);</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  {</span><br><span class="line">    <span class="keyword">if</span> ( Msg != <span class="number">2</span> )</span><br><span class="line">    {</span><br><span class="line">LABEL_17:</span><br><span class="line">      DefWindowProcA(hWnd, Msg, wParam, lParam);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    MessageBoxA(<span class="number">0</span>, <span class="string">"Never gonna give you up."</span>, <span class="string">"Rick"</span>, <span class="number">0</span>);</span><br><span class="line">    PostQuitMessage(<span class="number">0</span>);</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
@@ -296,15 +331,32 @@
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int check()</span><br><span class="line">{</span><br><span class="line">  if ( click &gt; 99999999 )</span><br><span class="line">    return getflag();</span><br><span class="line">  sprintf(chk, "Click %d more times to get flag", 100000000 - click);</span><br><span class="line">  return MessageBoxA(0, chk, "Failed", 0);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>发现最重要的判断语句，只需要修改点击次数就能快速获得flag。</p>
 <p>回到 IDA View-A 窗口，点击 _check 函数</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021210814755.png" alt="image-20221021210814755"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021210814755.png" alt="image-20221021210814755">
+<figcaption aria-hidden="true">image-20221021210814755</figcaption>
+</figure>
 <p>点击空格键切换视图模式</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021210910536.png" alt="image-20221021210910536"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021210910536.png" alt="image-20221021210910536">
+<figcaption aria-hidden="true">image-20221021210910536</figcaption>
+</figure>
 <p>在 Hex 窗口中找到该地址</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021211008946.png" alt="image-20221021211008946"></p>
-<p>右击选择 Edit ，修改为<code>01 00 00 00</code>，注意内存中的存储顺序。然后通过下图进行保存</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021211427569.png" alt="image-20221021211427569"></p>
-<p>运行修改后的程序，点击一次 Click me 按钮，再点击 Get flag 按钮得到flag。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021211650450.png" alt="image-20221021211650450"></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021211008946.png" alt="image-20221021211008946">
+<figcaption aria-hidden="true">image-20221021211008946</figcaption>
+</figure>
+<p>右击选择 Edit
+，修改为<code>01 00 00 00</code>，注意内存中的存储顺序。然后通过下图进行保存</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021211427569.png" alt="image-20221021211427569">
+<figcaption aria-hidden="true">image-20221021211427569</figcaption>
+</figure>
+<p>运行修改后的程序，点击一次 Click me 按钮，再点击 Get flag
+按钮得到flag。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021211650450.png" alt="image-20221021211650450">
+<figcaption aria-hidden="true">image-20221021211650450</figcaption>
+</figure>
 
     </div>
 
@@ -389,7 +441,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CrackMe"><span class="nav-number">1.</span> <span class="nav-text">CrackMe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getflag"><span class="nav-number">2.</span> <span class="nav-text">getflag</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#crackme"><span class="nav-number">1.</span> <span class="nav-text">CrackMe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getflag"><span class="nav-number">2.</span> <span class="nav-text">getflag</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -454,12 +506,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">137k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -532,6 +584,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
