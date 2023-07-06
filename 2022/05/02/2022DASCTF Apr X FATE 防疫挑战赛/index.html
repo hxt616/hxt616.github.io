@@ -223,7 +223,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>765</span>
+              <span>760</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -244,15 +244,13 @@
       
         <h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><h2 id="CRYPTO"><a href="#CRYPTO" class="headerlink" title="CRYPTO"></a>CRYPTO</h2><h3 id="easy-real"><a href="#easy-real" class="headerlink" title="easy_real"></a><strong>easy_real</strong></h3><p>将n分解为两个质数，得到<br><code>q = 65267138038038699886916162739434586079731613825212388229424706115289974540917</code></p>
 <p>利用脚本将m求出<br></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line">e = <span class="number">23</span></span><br><span class="line">p = <span class="number">64310413306776406422334034047152581900365687374336418863191177338901198608319</span></span><br><span class="line">q = <span class="number">65267138038038699886916162739434586079731613825212388229424706115289974540917</span></span><br><span class="line">phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">d = gmpy2.invert(e,phi)</span><br><span class="line">m = gmpy2.powmod(c,d,p*q)</span><br><span class="line"><span class="built_in">print</span>(m)</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line">e = <span class="number">23</span></span><br><span class="line">p = <span class="number">64310413306776406422334034047152581900365687374336418863191177338901198608319</span></span><br><span class="line">q = <span class="number">65267138038038699886916162739434586079731613825212388229424706115289974540917</span></span><br><span class="line">phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">d = gmpy2.invert(e,phi)</span><br><span class="line">m = gmpy2.powmod(c,d,p*q)</span><br><span class="line"><span class="built_in">print</span>(m)</span><br></pre></td></tr></tbody></table></figure>
 <p><code>m = 2976168736142380455841784134407431434784057911773423743751382131043957</code></p>
 <p>将其转为16进制<code>6e64696f735f3b396b67453b574b38653b573f67576e3c5c3b6b7c6e75</code></p>
 <p>再转为ASCII码<code>ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu</code></p>
 <p>根据异或的运算规律编写脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&quot;ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu&quot;</span></span><br><span class="line">s = <span class="built_in">list</span>(s)</span><br><span class="line">flag=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">11</span>):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">29</span>):</span><br><span class="line">		flag+=<span class="built_in">chr</span>(<span class="built_in">ord</span>(s[i])^x)</span><br><span class="line">	<span class="built_in">print</span>(flag)</span><br></pre></td></tr></table></figure>
-
-<p>可知当x&#x3D;8时，得到flag{W31coM3_C0m3_7o_f4T3ctf}</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">"ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu"</span></span><br><span class="line">s = <span class="built_in">list</span>(s)</span><br><span class="line">flag=<span class="string">""</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">11</span>):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">29</span>):</span><br><span class="line">		flag+=<span class="built_in">chr</span>(<span class="built_in">ord</span>(s[i])^x)</span><br><span class="line">	<span class="built_in">print</span>(flag)</span><br></pre></td></tr></tbody></table></figure>
+<p>可知当x=8时，得到flag{W31coM3_C0m3_7o_f4T3ctf}</p>
 
     </div>
 
@@ -401,12 +399,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="我使用的是oh-my-posh。 oh-my-posh 是一个 PowerShell 主题框架，用于美化 PowerShell 提示符（prompt）。它可以让你自定义 PowerShell 提示符的样式，使其更加易读和美观。可参考官网的主题样式：https:&#x2F;&#x2F;ohmyposh.dev&#x2F;docs&#x2F;themes 通过输入 1Set-PoshPrompt PowerLine  可预览PowerLin">
+  <meta name="description" content="我使用的是oh-my-posh。 oh-my-posh 是一个 PowerShell 主题框架，用于美化 PowerShell 提示符（prompt）。它可以让你自定义 PowerShell 提示符的样式，使其更加易读和美观。可参考官网的主题样式：https:&#x2F;&#x2F;ohmyposh.dev&#x2F;docs&#x2F;themes 通过输入 1Set-PoshPrompt PowerLine 可预览PowerLine">
 <meta property="og:type" content="article">
 <meta property="og:title" content="修改PowerShell的主题">
 <meta property="og:url" content="http://example.com/2023/03/14/%E4%BF%AE%E6%94%B9PowerShell%E4%B8%BB%E9%A2%98/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="我使用的是oh-my-posh。 oh-my-posh 是一个 PowerShell 主题框架，用于美化 PowerShell 提示符（prompt）。它可以让你自定义 PowerShell 提示符的样式，使其更加易读和美观。可参考官网的主题样式：https:&#x2F;&#x2F;ohmyposh.dev&#x2F;docs&#x2F;themes 通过输入 1Set-PoshPrompt PowerLine  可预览PowerLin">
+<meta property="og:description" content="我使用的是oh-my-posh。 oh-my-posh 是一个 PowerShell 主题框架，用于美化 PowerShell 提示符（prompt）。它可以让你自定义 PowerShell 提示符的样式，使其更加易读和美观。可参考官网的主题样式：https:&#x2F;&#x2F;ohmyposh.dev&#x2F;docs&#x2F;themes 通过输入 1Set-PoshPrompt PowerLine 可预览PowerLine">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/b5787722d59b4286b340086f0ab1145f.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/31e8516211044bc2a8bd3b0646a5db98.png">
@@ -243,11 +243,10 @@
         <p>我使用的是<code>oh-my-posh</code>。</p>
 <p><code>oh-my-posh</code> 是一个 <code>PowerShell</code> 主题框架，用于美化 <code>PowerShell</code> 提示符（prompt）。它可以让你自定义 <code>PowerShell</code> 提示符的样式，使其更加易读和美观。可参考官网的主题样式：<a target="_blank" rel="noopener" href="https://ohmyposh.dev/docs/themes">https://ohmyposh.dev/docs/themes</a></p>
 <p>通过输入</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-PoshPrompt PowerLine</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-PoshPrompt PowerLine</span><br></pre></td></tr></tbody></table></figure>
 <p>可预览<code>PowerLine</code>主题，这只是暂时性的<br><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/b5787722d59b4286b340086f0ab1145f.png" alt="在这里插入图片描述"></p>
 <p>想要永久修改可通过执行以下命令用记事本打开配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">notepad $PROFILE</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">notepad $PROFILE</span><br></pre></td></tr></tbody></table></figure>
 <p>打开后如下：<br><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/31e8516211044bc2a8bd3b0646a5db98.png" alt="在这里插入图片描述"></p>
 <p>通过修改配置文件中的主题可修改默认打开主题：<br><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/1648e8d3bcf6411b9d307a5aa18afb37.png" alt="在这里插入图片描述"><br>若将上图中的”Sorin”改为“Agnoster”，则下次打开power shell便是修改后的主题。</p>
 
@@ -397,12 +396,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

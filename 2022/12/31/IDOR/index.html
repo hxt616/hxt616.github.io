@@ -247,9 +247,9 @@
 <h2 id="What-is-an-IDOR"><a href="#What-is-an-IDOR" class="headerlink" title="What is an IDOR"></a>What is an IDOR</h2><p><strong>IDOR</strong>，Insecure Direct Object Reference，翻译过来就是<strong>不安全的直接对象引用</strong>，该漏洞是访问控制漏洞(access control vulnerability)的一种。</p>
 <p>当web服务器接收到用户提供的输入来检索对象（文件、数据、文档）时，对用户输入数据的信任度过高，并且在服务端未进行验证，则可能会导致此类漏洞的发生。</p>
 <h2 id="An-IDOR-Example"><a href="#An-IDOR-Example" class="headerlink" title="An IDOR Example"></a>An IDOR Example</h2><p>假设你刚注册了一项在线服务，并且想要更改个人信息，点击相关按钮后跳转到<code>http://online-service.thm/profile?user_id=1305</code>，在该页面你能修改个人信息。好奇心驱使你尝试修改<code>user_id</code>的值，令你惊讶的是，你竟然可以看到其他用户的个人信息。这样的漏洞属于IDOR漏洞。</p>
-<h2 id="Finding-IDORs-in-Encoded-IDs"><a href="#Finding-IDORs-in-Encoded-IDs" class="headerlink" title="Finding IDORs in Encoded IDs"></a>Finding IDORs in Encoded IDs</h2><p>在网页之间通过<strong>post data</strong>、<strong>query strings</strong>或<strong>cookie</strong>等方式传递数据时，开发人员通常会将数据进行编码，编码是为了web服务器能够理解用户传递的数据。常见的编码有<strong>base64</strong>，解码网站为：<a target="_blank" rel="noopener" href="https://www.base64decode.org.可以通过修改编码内容并重新提交请求以查看是否包含idor漏洞./">https://www.base64decode.org。可以通过修改编码内容并重新提交请求以查看是否包含IDOR漏洞。</a></p>
+<h2 id="Finding-IDORs-in-Encoded-IDs"><a href="#Finding-IDORs-in-Encoded-IDs" class="headerlink" title="Finding IDORs in Encoded IDs"></a>Finding IDORs in Encoded IDs</h2><p>在网页之间通过<strong>post data</strong>、<strong>query strings</strong>或<strong>cookie</strong>等方式传递数据时，开发人员通常会将数据进行编码，编码是为了web服务器能够理解用户传递的数据。常见的编码有<strong>base64</strong>，解码网站为：<a target="_blank" rel="noopener" href="https://www.base64decode.org。可以通过修改编码内容并重新提交请求以查看是否包含IDOR漏洞。">https://www.base64decode.org。可以通过修改编码内容并重新提交请求以查看是否包含IDOR漏洞。</a></p>
 <h2 id="Finding-IDORs-in-Hashed-IDs"><a href="#Finding-IDORs-in-Hashed-IDs" class="headerlink" title="Finding IDORs in Hashed IDs"></a>Finding IDORs in Hashed IDs</h2><p>哈希加密后的ID一般比编码后的ID更加复杂，但也是遵循一种可预测的模式。</p>
-<p>可以利用<a target="_blank" rel="noopener" href="https://crackstation.net在线网站查询./">https://crackstation.net在线网站查询。</a></p>
+<p>可以利用<a target="_blank" rel="noopener" href="https://crackstation.net在线网站查询。">https://crackstation.net在线网站查询。</a></p>
 <h2 id="Finding-IDORs-in-Unpredictable-IDs"><a href="#Finding-IDORs-in-Unpredictable-IDs" class="headerlink" title="Finding IDORs in Unpredictable IDs"></a>Finding IDORs in Unpredictable IDs</h2><p>若是无法在 ID 中找到规律，即不可预测的，可以通过创建两个账户，并且交换它们的 ID 号，来判断是否存在IDOR漏洞。</p>
 <h2 id="Where-are-IDORs-located"><a href="#Where-are-IDORs-located" class="headerlink" title="Where are IDORs located"></a>Where are IDORs located</h2><p>攻击点可能不总是在地址栏中，可能在 <strong>AJAX请求</strong>或者 <strong>JavaScript文件</strong>中。例如，你可能会注意到访问<code>/user/details</code>会显示你的用户信息（通过 session 进行身份验证）。但是，通过参数挖掘，你可以发现一个称为<code>user_id</code>的参数，你可以通过修改此参数来显示其他用户的信息，例如 <code>/user/details?user_id = 123</code>。</p>
 
@@ -401,12 +401,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

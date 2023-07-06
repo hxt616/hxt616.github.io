@@ -223,7 +223,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>622</span>
+              <span>666</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -247,50 +247,32 @@
 <p>在几乎所有的机器上，多字节对象都被存储为连续的字节序列。例如在C语言中，一个类型为int的变量x地址为0x100，那么其对应地址表达式&amp;x的值为0x100。且x的四个字节将被存储在电脑内存的0x100, 0x101, 0x102, 0x103位置。</p>
 <p>字节的排列方式有两个通用规则。例如，将一个多位数的低位放在较小的地址处，高位放在较大的地址处，则称小端序；反之则称大端序。在网络应用中，字节序是一个必须被考虑的因素，因为不同机器类型可能采用不同标准的字节序，所以均按照网络标准转化。<br><br><br></p>
 <span id="more"></span>
-
 <p>下面以十六进制0x01234567为例其中 0x01 是最高位有效字节，0x67 是最低位有效字节。</p>
 <h2 id="小端序"><a href="#小端序" class="headerlink" title="小端序"></a>小端序</h2><p>指机器选择在内存中按照从 最低 有效字节到 最高 有效字节的顺序存储对象。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">…..</th>
-<th align="center">0x100</th>
-<th align="center">0x101</th>
-<th align="center">0x102</th>
-<th align="center">0x103</th>
-<th align="center">…</th>
+<th style="text-align:center">…..</th>
+<th style="text-align:center">0x100</th>
+<th style="text-align:center">0x101</th>
+<th style="text-align:center">0x102</th>
+<th style="text-align:center">0x103</th>
+<th style="text-align:center">…</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">…</td>
-<td align="center">67</td>
-<td align="center">45</td>
-<td align="center">23</td>
-<td align="center">01</td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<h2 id="大端序"><a href="#大端序" class="headerlink" title="大端序"></a>大端序</h2><p>指机器选择在内存中按照从 最高 有效字节到 最低 有效字节的顺序存储对象。</p>
-<table>
-<thead>
+<tbody>
 <tr>
-<th align="center">…..</th>
-<th align="center">0x100</th>
-<th align="center">0x101</th>
-<th align="center">0x102</th>
-<th align="center">0x103</th>
-<th align="center">…</th>
+<td style="text-align:center">…</td>
+<td style="text-align:center">67</td>
+<td style="text-align:center">45</td>
+<td style="text-align:center">23</td>
+<td style="text-align:center">01</td>
 </tr>
-</thead>
-<tbody><tr>
-<td align="center">…</td>
-<td align="center">01</td>
-<td align="center">23</td>
-<td align="center">45</td>
-<td align="center">67</td>
-<td align="center"></td>
-</tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+<h2 id="大端序"><a href="#大端序" class="headerlink" title="大端序"></a>大端序</h2><p>指机器选择在内存中按照从 最高 有效字节到 最低 有效字节的顺序存储对象。<br>| ….. | 0x100 | 0x101 | 0x102 | 0x103 | …  |<br>| :—-: | :—-: | :—-: | :—-: | :—-: | :—: |<br>|  …  |  01   |  23   |  45   |  67   |      |</p>
 <p>参考<a target="_blank" rel="noopener" href="https://oi-wiki.org/misc/endianness/">https://oi-wiki.org/misc/endianness/</a></p>
 <p>推荐文章：<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2016/11/byte-order.html">https://www.ruanyifeng.com/blog/2016/11/byte-order.html</a></p>
 
@@ -441,12 +423,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

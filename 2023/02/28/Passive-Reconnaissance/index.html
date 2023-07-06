@@ -286,8 +286,7 @@
 <li>名称服务器(Name Server)：请求哪个服务器解析域名？</li>
 </ul>
 <p>使用语法是<code>whois DOMAIN_NAME</code>，其中<code>DOMAIN_NAME</code>是你试图获取信息的域。假设我们需要获取<code>tryhackme.com</code>的信息，直接执行<code>whois tryhackme.com</code>。得到如下信息：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ whois tryhackme.com</span><br><span class="line">[Querying whois.verisign-grs.com]</span><br><span class="line">[Redirected to whois.namecheap.com]</span><br><span class="line">[Querying whois.namecheap.com]</span><br><span class="line">[whois.namecheap.com]</span><br><span class="line">Domain name: tryhackme.com</span><br><span class="line">Registry Domain ID: 2282723194_DOMAIN_COM-VRSN</span><br><span class="line">Registrar WHOIS Server: whois.namecheap.com</span><br><span class="line">Registrar URL: http://www.namecheap.com</span><br><span class="line">Updated Date: 2021-05-01T19:43:23.31Z</span><br><span class="line">Creation Date: 2018-07-05T19:46:15.00Z</span><br><span class="line">Registrar Registration Expiration Date: 2027-07-05T19:46:15.00Z</span><br><span class="line">Registrar: NAMECHEAP INC</span><br><span class="line">Registrar IANA ID: 1068</span><br><span class="line">Registrar Abuse Contact Email: abuse@namecheap.com</span><br><span class="line">Registrar Abuse Contact Phone: +1.6613102107</span><br><span class="line">Reseller: NAMECHEAP INC</span><br><span class="line">Domain Status: clientTransferProhibited https://icann.org/epp<span class="comment">#clientTransferProhibited</span></span><br><span class="line">Registry Registrant ID: </span><br><span class="line">Registrant Name: Withheld <span class="keyword">for</span> Privacy Purposes</span><br><span class="line">Registrant Organization: Privacy service provided by Withheld <span class="keyword">for</span> Privacy ehf</span><br><span class="line">[...]</span><br><span class="line">URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/</span><br><span class="line">&gt;&gt;&gt; Last update of WHOIS database: 2021-08-25T14:58:29.57Z &lt;&lt;&lt;</span><br><span class="line"><span class="string">For more information on Whois status codes, please visit https://icann.org/epp</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ whois tryhackme.com</span><br><span class="line">[Querying whois.verisign-grs.com]</span><br><span class="line">[Redirected to whois.namecheap.com]</span><br><span class="line">[Querying whois.namecheap.com]</span><br><span class="line">[whois.namecheap.com]</span><br><span class="line">Domain name: tryhackme.com</span><br><span class="line">Registry Domain ID: 2282723194_DOMAIN_COM-VRSN</span><br><span class="line">Registrar WHOIS Server: whois.namecheap.com</span><br><span class="line">Registrar URL: http://www.namecheap.com</span><br><span class="line">Updated Date: 2021-05-01T19:43:23.31Z</span><br><span class="line">Creation Date: 2018-07-05T19:46:15.00Z</span><br><span class="line">Registrar Registration Expiration Date: 2027-07-05T19:46:15.00Z</span><br><span class="line">Registrar: NAMECHEAP INC</span><br><span class="line">Registrar IANA ID: 1068</span><br><span class="line">Registrar Abuse Contact Email: abuse@namecheap.com</span><br><span class="line">Registrar Abuse Contact Phone: +1.6613102107</span><br><span class="line">Reseller: NAMECHEAP INC</span><br><span class="line">Domain Status: clientTransferProhibited https://icann.org/epp<span class="comment">#clientTransferProhibited</span></span><br><span class="line">Registry Registrant ID: </span><br><span class="line">Registrant Name: Withheld <span class="keyword">for</span> Privacy Purposes</span><br><span class="line">Registrant Organization: Privacy service provided by Withheld <span class="keyword">for</span> Privacy ehf</span><br><span class="line">[...]</span><br><span class="line">URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/</span><br><span class="line">&gt;&gt;&gt; Last update of WHOIS database: 2021-08-25T14:58:29.57Z &lt;&lt;&lt;</span><br><span class="line"><span class="string">For more information on Whois status codes, please visit https://icann.org/epp</span></span><br></pre></td></tr></tbody></table></figure>
 <p>我们可以看到大量信息；我们将按照显示的顺序检查它们。首先，我们注意到我们被重定向到<code>whois.namecheap.com</code>以获取信息。由此可知，在这种情况下，<code>namecheap.com</code>目前正在维护该域名的WHOIS记录。此外，我们可以看到创建日期以及最后更新日期和过期日期。</p>
 <p>接下来，我们获得有关注册商和注册人的信息。我们可以找到注册人的姓名和联系信息（除非他们使用某些隐私服务）。尽管未显示在上面，但我们获得了该域的管理员和技术联系人。最后，我们看到域名服务器，如果我们有任何DNS记录要查找，我们应该查询这些服务器。</p>
 <p>可以检查收集的信息以发现新的攻击面，例如社会工程或技术攻击。例如，根据渗透测试的范围，你可能会考虑对管理员用户的电子邮件服务器或DNS服务器进行攻击，假设这些服务器属于你的客户端，并且属于渗透测试的范畴。</p>
@@ -298,45 +297,47 @@
 <li><code>DOMAIN_NAME</code>是你需要查询的域名。</li>
 <li><code>SERVER</code>是要查询的DNS服务器，你可以选择要查询的任何本地或者公用的DNS服务器。Cloudflare 提供<code>1.1.1.1</code>和<code>1.0.0.1</code>，Google 提供<code>8.8.8.8</code>和<code>8.8.4.4</code>，Quad9 提供<code>9.9.9.9</code>和<code>149.112.112.112</code>。如果你想替换ISP的DNS服务器，可以选择更多的公共DNS服务器。</li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">Query type</th>
-<th align="center">Result</th>
+<th style="text-align:center">Query type</th>
+<th style="text-align:center">Result</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">A</td>
-<td align="center">IPv4 Addresses</td>
+<tbody>
+<tr>
+<td style="text-align:center">A</td>
+<td style="text-align:center">IPv4 Addresses</td>
 </tr>
 <tr>
-<td align="center">AAAA</td>
-<td align="center">IPv6 Addresses</td>
+<td style="text-align:center">AAAA</td>
+<td style="text-align:center">IPv6 Addresses</td>
 </tr>
 <tr>
-<td align="center">CNAME</td>
-<td align="center">Canonical Name</td>
+<td style="text-align:center">CNAME</td>
+<td style="text-align:center">Canonical Name</td>
 </tr>
 <tr>
-<td align="center">MX</td>
-<td align="center">Mail Servers</td>
+<td style="text-align:center">MX</td>
+<td style="text-align:center">Mail Servers</td>
 </tr>
 <tr>
-<td align="center">SOA</td>
-<td align="center">Start of Authority</td>
+<td style="text-align:center">SOA</td>
+<td style="text-align:center">Start of Authority</td>
 </tr>
 <tr>
-<td align="center">TXT</td>
-<td align="center">TXT Records</td>
+<td style="text-align:center">TXT</td>
+<td style="text-align:center">TXT Records</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>例如，使用<code>nslookup -type=A tryhackme.com 1.1.1.1</code>或<code>nslookup -type=a tryhackme.com 1.1.1.1</code>能够返回 tryhackme.com 使用过的所有 IPv4 地址。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ nslookup -<span class="built_in">type</span>=A tryhackme.com 1.1.1.1</span><br><span class="line">Server:		1.1.1.1</span><br><span class="line">Address:	1.1.1.1<span class="comment">#53</span></span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">Name:	tryhackme.com</span><br><span class="line">Address: 172.67.69.208</span><br><span class="line">Name:	tryhackme.com</span><br><span class="line">Address: 104.26.11.229</span><br><span class="line">Name:	tryhackme.com</span><br><span class="line">Address: 104.26.10.229</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ nslookup -<span class="built_in">type</span>=A tryhackme.com 1.1.1.1</span><br><span class="line">Server:		1.1.1.1</span><br><span class="line">Address:	1.1.1.1<span class="comment">#53</span></span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">Name:	tryhackme.com</span><br><span class="line">Address: 172.67.69.208</span><br><span class="line">Name:	tryhackme.com</span><br><span class="line">Address: 104.26.11.229</span><br><span class="line">Name:	tryhackme.com</span><br><span class="line">Address: 104.26.10.229</span><br></pre></td></tr></tbody></table></figure>
 <p>A 和 AAAA 记录分别用于返回 IPv4和 IPv6地址。从渗透测试的角度来看，这种查找非常有用。在上面的示例中，我们从一个域名开始，获得了三个 IPv4地址。假设这些 IP 地址位于渗透测试的范围之内，就可以进一步检查它们是否存在不安全性。</p>
 <p>假设你想了解特定域的电子邮件服务器和配置。可以使用 <code>nslookup-type = MX tryhackme.com</code>。这里有一个例子:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ nslookup -<span class="built_in">type</span>=MX tryhackme.com</span><br><span class="line">Server:		127.0.0.53</span><br><span class="line">Address:	127.0.0.53<span class="comment">#53</span></span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">tryhackme.com	mail exchanger = 5 alt1.aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 1 aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 10 alt4.aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 10 alt3.aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 5 alt2.aspmx.l.google.com.</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ nslookup -<span class="built_in">type</span>=MX tryhackme.com</span><br><span class="line">Server:		127.0.0.53</span><br><span class="line">Address:	127.0.0.53<span class="comment">#53</span></span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">tryhackme.com	mail exchanger = 5 alt1.aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 1 aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 10 alt4.aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 10 alt3.aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 5 alt2.aspmx.l.google.com.</span><br></pre></td></tr></tbody></table></figure>
 <p>我们可以看到 tryhackme.com 当前的电子邮件配置使用 Google。由于 MX 会查找 Mail Exchange 服务器，我们注意到当一个邮件服务器尝试向<code>@tryhackme.com</code> 发送电子邮件时，它会尝试连接到订单为 1 的 <code>aspmx.l.google.com</code>。如果繁忙或不可用，邮件服务器将尝试按顺序连接到下一个邮件交换服务器、 <code>alt1.aspmx.l.google.com</code> 或 <code>alt2.aspmx.l.google.com</code>。</p>
 <p>Google 提供了列出的邮件服务器; 因此，我们不应该期望邮件服务器运行的是一个易受攻击的服务器版本。但是，在其他情况下，我们可能会发现邮件服务器没有得到充分的安全保护或修补。</p>
 <p>当你继续被动地侦察你的目标时，这些信息可能会被证明是有价值的。你可以对其他域名重复类似的查询，并尝试不同的类型，例如<code>-type=txt</code>。谁知道你一路走来会发现什么样的信息呢！</p>
@@ -346,8 +347,7 @@
 <li><code>DOMAIN_NAME</code>是你正在查询的域名。</li>
 <li><code>TYPE</code>包含 DNS 记录类型。</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ dig tryhackme.com MX</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.16.19-RH &lt;&lt;&gt;&gt; tryhackme.com MX</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ dig tryhackme.com MX</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.16.19-RH &lt;&lt;&gt;&gt; tryhackme.com MX</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;</span><br></pre></td></tr></tbody></table></figure>
 <p>快速比较一下 <code>nslookup</code> 和 <code>dig</code>的输出，发现 <code>dig</code> 返回了更多的信息，比如默认情况下的 TTL (Time To Live)。如果想查询<code>1.1.1.1</code> DNS 服务器，可以执行 <code>dig @1.1.1.1 tryhackme.com MX</code>。</p>
 <h2 id="DNSDumpster"><a href="#DNSDumpster" class="headerlink" title="DNSDumpster"></a>DNSDumpster</h2><p>DNS 查找工具(如 nslookup 和 dig)无法自行查找子域。你正在检查的域可能包括一个不同的子域，该子域可以显示关于目标的许多信息。例如，如果 tryhackme.com 拥有子域名的 wiki.tryhackme.com 和 webmail.tryhackme.com ，那么你需要了解更多关于这两个域名的信息，因为它们可以保存关于你的目标的大量信息。有可能其中一个子域已经建立，但没有定期更新。缺乏适当的定期更新通常会导致脆弱的服务。但是我们怎么知道这样的子域存在呢？</p>
 <p>我们可以考虑使用多个搜索引擎来编制一个公开已知子域名的列表。一个搜索引擎是不够的; 此外，我们应该期望通过至少数十个搜索结果来找到有趣的数据。毕竟，你正在寻找没有明确公布的子域，因此不必将其添加到搜索结果的第一页。发现此类子域的另一种方法是依靠暴力强制查询来查找哪些子域具有DNS记录。</p>
@@ -362,42 +362,46 @@
 <li>地理位置</li>
 <li>服务器类型与版本</li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><div class="table-container">
+<table>
 <thead>
 <tr>
-<th align="center">Purpose</th>
-<th align="center">Commandline Example</th>
+<th style="text-align:center">Purpose</th>
+<th style="text-align:center">Commandline Example</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">Lookup WHOIS record</td>
-<td align="center"><code>whois tryhackme.com</code></td>
+<tbody>
+<tr>
+<td style="text-align:center">Lookup WHOIS record</td>
+<td style="text-align:center"><code>whois tryhackme.com</code></td>
 </tr>
 <tr>
-<td align="center">Lookup DNS A records</td>
-<td align="center"><code>nslookup -type=A tryhackme.com</code></td>
+<td style="text-align:center">Lookup DNS A records</td>
+<td style="text-align:center"><code>nslookup -type=A tryhackme.com</code></td>
 </tr>
 <tr>
-<td align="center">Lookup DNS MX records at DNS server</td>
-<td align="center"><code>nslookup -type=MX tryhackme.com 1.1.1.1</code></td>
+<td style="text-align:center">Lookup DNS MX records at DNS server</td>
+<td style="text-align:center"><code>nslookup -type=MX tryhackme.com 1.1.1.1</code></td>
 </tr>
 <tr>
-<td align="center">Lookup DNS TXT records</td>
-<td align="center"><code>nslookup -type=TXT tryhackme.com</code></td>
+<td style="text-align:center">Lookup DNS TXT records</td>
+<td style="text-align:center"><code>nslookup -type=TXT tryhackme.com</code></td>
 </tr>
 <tr>
-<td align="center">Lookup DNS A records</td>
-<td align="center"><code>dig tryhackme.com A</code></td>
+<td style="text-align:center">Lookup DNS A records</td>
+<td style="text-align:center"><code>dig tryhackme.com A</code></td>
 </tr>
 <tr>
-<td align="center">Lookup DNS MX records at DNS server</td>
-<td align="center"><code>dig @1.1.1.1 tryhackme.com MX</code></td>
+<td style="text-align:center">Lookup DNS MX records at DNS server</td>
+<td style="text-align:center"><code>dig @1.1.1.1 tryhackme.com MX</code></td>
 </tr>
 <tr>
-<td align="center">Lookup DNS TXT records</td>
-<td align="center"><code>dig tryhackme.com TXT</code></td>
+<td style="text-align:center">Lookup DNS TXT records</td>
+<td style="text-align:center"><code>dig tryhackme.com TXT</code></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 
     </div>
 
@@ -417,8 +421,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/02/28/SQL%E6%B3%A8%E5%85%A5/" rel="prev" title="SQL注入（SQLi）">
-      <i class="fa fa-chevron-left"></i> SQL注入（SQLi）
+    <a href="/2023/02/28/XSS/" rel="prev" title="XSS">
+      <i class="fa fa-chevron-left"></i> XSS
     </a></div>
       <div class="post-nav-item">
     <a href="/2023/02/28/Nmap-live-host/" rel="next" title="Nmap Live Host Discovery">
@@ -547,12 +551,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

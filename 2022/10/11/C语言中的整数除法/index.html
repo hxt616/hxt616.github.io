@@ -245,13 +245,10 @@
       
         <p>向下取整的运算称为Floor，用数学符号⌊⌋表示；向上取整的运算称为Ceiling，用数学符号⌈⌉表示。</p>
 <p>在C语言中整数除法取的既不是Floor也不是Ceiling，无论操作数是正是负总是把小数部分截掉，在<strong>数轴上向零的方向取整（Truncate toward Zero）</strong>，或者说当操作数为正的时候相当于Floor，当操作符为负的时候相当于Ceiling。例如：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> / <span class="number">60</span> = <span class="number">0</span>                 <span class="comment">//⌊59/60⌋=0      ⌈59/60⌉=1</span></span><br><span class="line"><span class="number">-59</span> / <span class="number">60</span> = <span class="number">0</span>                <span class="comment">//⌊-59/60⌋=-1    ⌈-59/60⌉=0</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> / <span class="number">58</span> = <span class="number">1</span></span><br><span class="line"><span class="number">-59</span> / <span class="number">58</span> = <span class="number">-1</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> / <span class="number">60</span> = <span class="number">0</span>                 <span class="comment">//⌊59/60⌋=0      ⌈59/60⌉=1</span></span><br><span class="line"><span class="number">-59</span> / <span class="number">60</span> = <span class="number">0</span>                <span class="comment">//⌊-59/60⌋=-1    ⌈-59/60⌉=0</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> / <span class="number">58</span> = <span class="number">1</span></span><br><span class="line"><span class="number">-59</span> / <span class="number">58</span> = <span class="number">-1</span></span><br></pre></td></tr></tbody></table></figure>
 <p>同时可以得到一个与取模运算有关的结论：%运算符的结果总是与被除数同号 。例如：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> % <span class="number">60</span> = <span class="number">59</span></span><br><span class="line"><span class="number">-59</span> % <span class="number">60</span> = <span class="number">-59</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> % <span class="number">60</span> = <span class="number">59</span></span><br><span class="line"><span class="number">-59</span> % <span class="number">60</span> = <span class="number">-59</span></span><br></pre></td></tr></tbody></table></figure>
 <p>注意：Python中的整数除法和整数取模运算与C语言不完全相同。</p>
 <p>参考：<a target="_blank" rel="noopener" href="https://docs.huihoo.com/c/linux-c-programming/ch04s02.html">https://docs.huihoo.com/c/linux-c-programming/ch04s02.html</a></p>
 
@@ -402,12 +399,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

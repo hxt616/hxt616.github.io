@@ -246,33 +246,31 @@
 <p>相关资料：</p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html">https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html</a> 动态库和静态库</p>
 <p><a target="_blank" rel="noopener" href="https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9">https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9</a>  gcc编译选项</p>
-<h1 id="GCC"><a href="#GCC" class="headerlink" title="GCC"></a>GCC</h1><p>GCC全称 the GNU Compiler Collection ，是一套<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%B7%A8%E7%A8%8B%E8%AA%9E%E8%A8%80">编程语言</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BC%96%E8%AF%91%E5%99%A8">编译器</a>，以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GPL">GPL</a>及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LGPL">LGPL</a>许可证所发行的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E8%BB%9F%E9%AB%94">自由软件</a>，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU%E8%A8%88%E5%8A%83">GNU计划</a>的关键部分，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU%E5%B7%A5%E5%85%B7%E9%93%BE">GNU工具链</a>的主要组成部分之一。可处理<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">Fortran</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80)">Pascal</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Objective-C">Objective-C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Java">Java</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Ada">Ada</a>，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Go">Go</a>与其他语言。</p>
+<h1 id="GCC"><a href="#GCC" class="headerlink" title="GCC"></a>GCC</h1><p>GCC全称 the GNU Compiler Collection ，是一套<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/編程語言">编程语言</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/编译器">编译器</a>，以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GPL">GPL</a>及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LGPL">LGPL</a>许可证所发行的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/自由軟體">自由软件</a>，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU計劃">GNU计划</a>的关键部分，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU工具链">GNU工具链</a>的主要组成部分之一。可处理<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">Fortran</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(程式語言">Pascal</a>)、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Objective-C">Objective-C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Java">Java</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Ada">Ada</a>，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Go">Go</a>与其他语言。</p>
 <p>GCC中包含gcc和g++，分别处理C语言和C++。关于这两者的区别可参考<a target="_blank" rel="noopener" href="http://c.biancheng.net/view/7936.html">http://c.biancheng.net/view/7936.html</a></p>
 <h2 id="gcc使用技巧"><a href="#gcc使用技巧" class="headerlink" title="gcc使用技巧"></a>gcc使用技巧</h2><ol>
 <li><p>当文件没有扩展名时，可使用 <code>-x</code> 选项指明当前文件的类型。比如当前有个文件demo，当直接使用gcc demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件，因此使用 <code>gcc -xc demo</code> （将文件当作C语言处理）。</p>
 </li>
 <li><p>gcc + 文件名，生成对应的可执行文件，默认为a.out 。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./a.out</span></span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./a.out</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p><code>-o</code>选项指定生成的可执行文件的文件名。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c -o helloworld         #用来指定要生成的文件名。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./helloworld</span></span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c -o helloworld         #用来指定要生成的文件名。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./helloworld</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure>
 </li>
-<li><p><code>-E</code>选项可控制GCC编译器仅对源码做<strong>预处理</strong>操作。<br>所谓预处理操作，主要是处理那些源文件和头文件中以 # 开头的命令（比如 #include、#define、#ifdef 等），并删除程序中所有的注释 &#x2F;&#x2F; 和 &#x2F;* … *&#x2F;。</p>
+<li><p><code>-E</code>选项可控制GCC编译器仅对源码做<strong>预处理</strong>操作。<br>所谓预处理操作，主要是处理那些源文件和头文件中以 # 开头的命令（比如 #include、#define、#ifdef 等），并删除程序中所有的注释 // 和 /<em> … </em>/。</p>
 <p>一般将预处理的内容保存在.i后缀的文件中 :</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -E helloworld.c -o helloworld.i</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -E helloworld.c -o helloworld.i</span></span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p><code>-S</code>选项可令GCC编译器仅将指定文件加工至<strong>编译阶段</strong>，并生成对应的汇编代码文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.i         #GCC编译器只需编译此文件。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.c         #GCC编译器需要对其进行预处理和编译这两步操作。</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.i         #GCC编译器只需编译此文件。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.c         #GCC编译器需要对其进行预处理和编译这两步操作。</span></span><br></pre></td></tr></tbody></table></figure>
 <p>以上这两行命令均能生成与原文件名相同的后缀为.s的文件（内容为汇编代码）。</p>
 </li>
 <li><p><code>-c</code>选项可让GCC编译器将指定文件加工至<strong>汇编阶段</strong>（但并不执行链接操作），并生成对应的目标文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -c helloworld.s         #生成了与原文件名相同的后缀为.o的文件，将汇编代码转变成机器可以执行的指令</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -c helloworld.s         #生成了与原文件名相同的后缀为.o的文件，将汇编代码转变成机器可以执行的指令</span></span><br></pre></td></tr></tbody></table></figure>
 <p>-c选项同样对.c和.i文件有用。</p>
 </li>
 <li><p>gcc执行<strong>链接操作</strong>。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.o -o helloworld           #生成可执行文件helloworld。</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.o -o helloworld           #生成可执行文件helloworld。</span></span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p><code>-g</code>选项可产生调试信息，可以使用<strong>gdb</strong>调试可执行文件。</p>
 </li>
@@ -428,12 +426,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

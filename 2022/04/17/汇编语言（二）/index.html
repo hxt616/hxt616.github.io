@@ -32,8 +32,8 @@
 <meta property="article:published_time" content="2022-04-16T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-04-13T06:06:03.852Z">
 <meta property="article:author" content="hxt">
-<meta property="article:tag" content="寄存器">
 <meta property="article:tag" content="汇编">
+<meta property="article:tag" content="寄存器">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220417223837183.png">
 
@@ -227,7 +227,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>702</span>
+              <span>687</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -261,12 +261,12 @@
 <p>16位CPU能一次性处理、传输、暂时存储16位的地址。</p>
 <p>8086CPU采用一种在内部用两个16位地址<strong>合成</strong>的方法来形成一个20位的<strong>物理地址</strong>（内存单位构成存储空间，每个内存单元在该空间都有唯一的地址，这个唯一的地址称为物理地址）。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220417225126237.png" alt="image-20220417225126237"></p>
-<p>上图中地址加法器采用<strong>物理地址 &#x3D; 段地址 x 16 + 偏移地址</strong>的方法合成物理地址。</p>
+<p>上图中地址加法器采用<strong>物理地址 = 段地址 x 16 + 偏移地址</strong>的方法合成物理地址。</p>
 <h2 id="段的概念"><a href="#段的概念" class="headerlink" title="段的概念"></a>段的概念</h2><p>内存并没有分段，段的分类来自于CPU，由于CPU对物理地址的合成，我们可以用分段的方式来管理内存。同时可知一个段的起始地址一定是16的倍数，偏移地址为16位，16位地址的寻址能力为64KB，因此一个段的长度最大为64KB。</p>
 <h2 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h2><p>段地址在8086CPU的段寄存器中存放。该CPU有4个寄存器：CS、DS、SS、ES。</p>
 <h2 id="CS和IP"><a href="#CS和IP" class="headerlink" title="CS和IP"></a>CS和IP</h2><p>CS为<strong>代码</strong>段寄存器，IP为指令指针寄存器。</p>
 <p>任意时刻，设CS中的内容为M，IP中的内容为N，则8086CPU将从内存<strong>Mx16+N</strong>单元开始，读取一条指令并执行。即任意时刻，CPU将CS:IP指向的内容当作指令执行。</p>
-<p>一个最简单的可以修改CS、IP的指令：<strong>jmp</strong>指令<br> <strong>jmp 2AE3:3</strong>，执行后：CS&#x3D;2AE3H，IP&#x3D;0003H，CPU将从2AE33H处读取指令。<br><strong>jmp ax</strong>相当于<strong>mov IP, ax</strong>。</p>
+<p>一个最简单的可以修改CS、IP的指令：<strong>jmp</strong>指令<br> <strong>jmp 2AE3:3</strong>，执行后：CS=2AE3H，IP=0003H，CPU将从2AE33H处读取指令。<br><strong>jmp ax</strong>相当于<strong>mov IP, ax</strong>。</p>
 
     </div>
 
@@ -276,8 +276,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag"># 寄存器</a>
               <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"># 汇编</a>
+              <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag"># 寄存器</a>
           </div>
 
         
@@ -416,12 +416,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

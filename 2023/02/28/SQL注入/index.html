@@ -274,25 +274,25 @@
 </li>
 <li><p><strong>Boolean Based</strong>(布尔盲注)</p>
 <p>布尔盲注是指我们从注入尝试中收到的可能是<code>true/false</code>、<code>yes/no</code>、<code>on/off</code>、<code>1/0</code>或者任何只能有两个结果的响应。该结果表明攻击者的 SQL 注入是否成功。虽然响应只有两种结果，但还是能够枚举整个数据库的结构和内容。</p>
-<p>例如，可以通过布尔盲注来判断数据库的首字母(<code>admin123&#39; UNION SELECT 1,2,3 where database() like &#39;s%&#39;;--</code>)。</p>
+<p>例如，可以通过布尔盲注来判断数据库的首字母(<code>admin123' UNION SELECT 1,2,3 where database() like 's%';--</code>)。</p>
 </li>
 <li><p><strong>Time Based</strong>(时间盲注)</p>
-<p>时间盲注与上述的布尔盲注非常相似，因为发送相同的请求，但没有直观的指示您的查询是错误的还是正确的。相反，正确查询的指标是基于完成查询所需的时间。这种时间延迟是通过在 UNION 语句旁边使用内置方法（如 **SLEEP(x)**）引入的。SLEEP() 方法只能在 UNION SELECT 语句成功时执行。</p>
+<p>时间盲注与上述的布尔盲注非常相似，因为发送相同的请求，但没有直观的指示您的查询是错误的还是正确的。相反，正确查询的指标是基于完成查询所需的时间。这种时间延迟是通过在 UNION 语句旁边使用内置方法（如 <strong>SLEEP(x)</strong>）引入的。SLEEP() 方法只能在 UNION SELECT 语句成功时执行。</p>
 <p>例如，当试图确定表中的列数时，可以使用以下查询：</p>
-<p><code>admin123&#39; UNION SELECT SLEEP(5)</code></p>
+<p><code>admin123' UNION SELECT SLEEP(5)</code></p>
 <p>如果未产生停顿，那么我们可以推断出该请求未成功，所以我们增加一列：</p>
-<p><code>admin123&#39; UNION SELECT SLEEP(5),2;--</code></p>
+<p><code>admin123' UNION SELECT SLEEP(5),2;--</code></p>
 <p>直到产生 5 秒延迟为止。</p>
 </li>
 </ul>
 <h3 id="Out-of-Band-SQLi"><a href="#Out-of-Band-SQLi" class="headerlink" title="Out of Band SQLi"></a>Out of Band SQLi</h3><p>此类 SQL 注入并不常见，因为它要么取决于数据库服务器上启用的特定功能，要么取决于web应用程序的业务逻辑，后者根据SQL查询的结果进行某种外部网络调用。</p>
-<p>Out-Of-Band 攻击通过两个不同的通信渠道进行分类，一个用于发起攻击，另一个用于收集结果。例如，攻击通道可以是web请求，数据收集通道可以监视对你控制的服务发出的HTTP&#x2F;DNS请求。</p>
+<p>Out-Of-Band 攻击通过两个不同的通信渠道进行分类，一个用于发起攻击，另一个用于收集结果。例如，攻击通道可以是web请求，数据收集通道可以监视对你控制的服务发出的HTTP/DNS请求。</p>
 <p>1） 攻击者通过注入 payload 向易受攻击的网站发出请求。</p>
 <p>2） 该网站对数据库进行SQL查询，并传递黑客的 payload 。</p>
 <p>3） payload 包含一个请求，该请求强制将包含数据库数据的HTTP请求返回给黑客的计算机。</p>
 <h2 id="预防措施"><a href="#预防措施" class="headerlink" title="预防措施"></a>预防措施</h2><h3 id="预编译语句（参数化查询）"><a href="#预编译语句（参数化查询）" class="headerlink" title="预编译语句（参数化查询）"></a>预编译语句（参数化查询）</h3><p>开发人员首先编写 SQL 查询，然后将任何用户输入作为参数添加。编写准备好的语句可以确保 SQL 代码结构不变，并且数据库可以区分查询和数据。作为一个好处，它还使您的代码看起来更干净、更容易阅读。</p>
 <h3 id="对输入进行验证"><a href="#对输入进行验证" class="headerlink" title="对输入进行验证"></a>对输入进行验证</h3><p>输入验证可以在很大程度上保护输入到 SQL 查询中的内容。使用允许列表可以将输入限制为仅某些字符串，或者编程语言中的字符串替换方法可以过滤你希望允许或不允许的字符。</p>
-<h3 id="对用户输入进行转义"><a href="#对用户输入进行转义" class="headerlink" title="对用户输入进行转义"></a>对用户输入进行转义</h3><p>允许用户输入包含诸如<code>&#39;</code>、<code>&quot;</code>、<code>$</code>、<code>\</code>之类的字符可能会导致SQL查询中断，或者更糟的是，正如我们所了解的那样，打开它们以接受注入攻击。转义用户输入是在这些字符前面加上反斜杠（\）的方法，这样会导致它们被解析为常规字符串而不是特殊字符。</p>
+<h3 id="对用户输入进行转义"><a href="#对用户输入进行转义" class="headerlink" title="对用户输入进行转义"></a>对用户输入进行转义</h3><p>允许用户输入包含诸如<code>'</code>、<code>"</code>、<code>$</code>、<code>\</code>之类的字符可能会导致SQL查询中断，或者更糟的是，正如我们所了解的那样，打开它们以接受注入攻击。转义用户输入是在这些字符前面加上反斜杠（\）的方法，这样会导致它们被解析为常规字符串而不是特殊字符。</p>
 
     </div>
 
@@ -312,12 +312,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/02/28/XSS/" rel="prev" title="XSS">
-      <i class="fa fa-chevron-left"></i> XSS
+    <a href="/2023/02/28/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/" rel="prev" title="命令注入">
+      <i class="fa fa-chevron-left"></i> 命令注入
     </a></div>
       <div class="post-nav-item">
-    <a href="/2023/02/28/Passive-Reconnaissance/" rel="next" title="Passive Reconnaissance（被动侦察）">
-      Passive Reconnaissance（被动侦察） <i class="fa fa-chevron-right"></i>
+    <a href="/2023/02/28/XSS/" rel="next" title="XSS">
+      XSS <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -442,12 +442,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

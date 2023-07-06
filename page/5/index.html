@@ -213,7 +213,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>702</span>
+              <span>687</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -247,12 +247,12 @@
 <p>16位CPU能一次性处理、传输、暂时存储16位的地址。</p>
 <p>8086CPU采用一种在内部用两个16位地址<strong>合成</strong>的方法来形成一个20位的<strong>物理地址</strong>（内存单位构成存储空间，每个内存单元在该空间都有唯一的地址，这个唯一的地址称为物理地址）。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220417225126237.png" alt="image-20220417225126237"></p>
-<p>上图中地址加法器采用<strong>物理地址 &#x3D; 段地址 x 16 + 偏移地址</strong>的方法合成物理地址。</p>
+<p>上图中地址加法器采用<strong>物理地址 = 段地址 x 16 + 偏移地址</strong>的方法合成物理地址。</p>
 <h2 id="段的概念"><a href="#段的概念" class="headerlink" title="段的概念"></a>段的概念</h2><p>内存并没有分段，段的分类来自于CPU，由于CPU对物理地址的合成，我们可以用分段的方式来管理内存。同时可知一个段的起始地址一定是16的倍数，偏移地址为16位，16位地址的寻址能力为64KB，因此一个段的长度最大为64KB。</p>
 <h2 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h2><p>段地址在8086CPU的段寄存器中存放。该CPU有4个寄存器：CS、DS、SS、ES。</p>
 <h2 id="CS和IP"><a href="#CS和IP" class="headerlink" title="CS和IP"></a>CS和IP</h2><p>CS为<strong>代码</strong>段寄存器，IP为指令指针寄存器。</p>
 <p>任意时刻，设CS中的内容为M，IP中的内容为N，则8086CPU将从内存<strong>Mx16+N</strong>单元开始，读取一条指令并执行。即任意时刻，CPU将CS:IP指向的内容当作指令执行。</p>
-<p>一个最简单的可以修改CS、IP的指令：<strong>jmp</strong>指令<br> <strong>jmp 2AE3:3</strong>，执行后：CS&#x3D;2AE3H，IP&#x3D;0003H，CPU将从2AE33H处读取指令。<br><strong>jmp ax</strong>相当于<strong>mov IP, ax</strong>。</p>
+<p>一个最简单的可以修改CS、IP的指令：<strong>jmp</strong>指令<br> <strong>jmp 2AE3:3</strong>，执行后：CS=2AE3H，IP=0003H，CPU将从2AE33H处读取指令。<br><strong>jmp ax</strong>相当于<strong>mov IP, ax</strong>。</p>
 
       
     </div>
@@ -437,8 +437,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>参考维基百科（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Base64%EF%BC%89%E3%80%81CTF">https://zh.wikipedia.org/wiki/Base64）、CTF</a> Wiki</p>
-<p><strong>Base64</strong>是一种基于64个可打印字符来表示<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E8%BF%9B%E5%88%B6">二进制数据</a>的表示方法。由于2的6次方等于64，正好对应了64个字符，所以每6个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BD%8D%E5%85%83">比特</a>为一个单元，对应某个可打印字符。</p>
+          <p>参考维基百科（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Base64）、CTF">https://zh.wikipedia.org/wiki/Base64）、CTF</a> Wiki</p>
+<p><strong>Base64</strong>是一种基于64个可打印字符来表示<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/二进制">二进制数据</a>的表示方法。由于2的6次方等于64，正好对应了64个字符，所以每6个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/位元">比特</a>为一个单元，对应某个可打印字符。</p>
 <p>转换的时候，将<strong>3 字节</strong>的数据，先后放入一个 <strong>24 位</strong>的缓冲区中，先来的字节占高位。数据不足 3 字节的话，于缓冲器中剩下的比特用 0 补足。</p>
 <p>通常而言 在逆向题目中，当我们能找到 <br><code>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/</code> <br>这样的索引表，再经过简单的分析基本就能判定是 Base64 编码。</p>
 <p><strong>示例</strong>：</p>
@@ -447,299 +447,303 @@
 <p>如果要编码的字节数不能被3整除，最后会多出1个或2个字节，那么可以使用下面的方法进行处理：先使用0字节值在末尾补足，使其能够被3整除，然后再进行Base64的编码。在编码后的Base64文本后加上一个或两个<code>=</code>号，代表补足的字节数。也就是说，当最后剩余两个八位(待补足)字节（2个byte）时，最后一个6位的Base64字节块有四位是0值，最后附加上两个等号；如果最后剩余一个八位(待补足)字节（1个byte）时，最后一个6位的base字节块有两位是0值，最后附加一个等号。 参考下表：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220407163920831.png" alt="image-20220407163920831"></p>
 <p>附：Base64索引表</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">十进制</th>
-<th align="center">二进制</th>
-<th align="center">字符</th>
-<th align="center"></th>
-<th align="center">十进制</th>
-<th align="center">二进制</th>
-<th align="center">字符</th>
-<th align="center"></th>
-<th align="center">十进制</th>
-<th align="center">二进制</th>
-<th align="center">字符</th>
-<th align="center"></th>
-<th align="center">十进制</th>
-<th align="center">二进制</th>
-<th align="center">字符</th>
+<th style="text-align:center">十进制</th>
+<th style="text-align:center">二进制</th>
+<th style="text-align:center">字符</th>
+<th style="text-align:center"></th>
+<th style="text-align:center">十进制</th>
+<th style="text-align:center">二进制</th>
+<th style="text-align:center">字符</th>
+<th style="text-align:center"></th>
+<th style="text-align:center">十进制</th>
+<th style="text-align:center">二进制</th>
+<th style="text-align:center">字符</th>
+<th style="text-align:center"></th>
+<th style="text-align:center">十进制</th>
+<th style="text-align:center">二进制</th>
+<th style="text-align:center">字符</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">0</td>
-<td align="center">000000</td>
-<td align="center">A</td>
-<td align="center"></td>
-<td align="center">16</td>
-<td align="center">010000</td>
-<td align="center">Q</td>
-<td align="center"></td>
-<td align="center">32</td>
-<td align="center">100000</td>
-<td align="center">g</td>
-<td align="center"></td>
-<td align="center">48</td>
-<td align="center">110000</td>
-<td align="center">w</td>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">000000</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">16</td>
+<td style="text-align:center">010000</td>
+<td style="text-align:center">Q</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">100000</td>
+<td style="text-align:center">g</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">48</td>
+<td style="text-align:center">110000</td>
+<td style="text-align:center">w</td>
 </tr>
 <tr>
-<td align="center">1</td>
-<td align="center">000001</td>
-<td align="center">B</td>
-<td align="center"></td>
-<td align="center">17</td>
-<td align="center">010001</td>
-<td align="center">R</td>
-<td align="center"></td>
-<td align="center">33</td>
-<td align="center">100001</td>
-<td align="center">h</td>
-<td align="center"></td>
-<td align="center">49</td>
-<td align="center">110001</td>
-<td align="center">x</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">000001</td>
+<td style="text-align:center">B</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">17</td>
+<td style="text-align:center">010001</td>
+<td style="text-align:center">R</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">33</td>
+<td style="text-align:center">100001</td>
+<td style="text-align:center">h</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">49</td>
+<td style="text-align:center">110001</td>
+<td style="text-align:center">x</td>
 </tr>
 <tr>
-<td align="center">2</td>
-<td align="center">000010</td>
-<td align="center">C</td>
-<td align="center"></td>
-<td align="center">18</td>
-<td align="center">010010</td>
-<td align="center">S</td>
-<td align="center"></td>
-<td align="center">34</td>
-<td align="center">100010</td>
-<td align="center">i</td>
-<td align="center"></td>
-<td align="center">50</td>
-<td align="center">110010</td>
-<td align="center">y</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">000010</td>
+<td style="text-align:center">C</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">18</td>
+<td style="text-align:center">010010</td>
+<td style="text-align:center">S</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">34</td>
+<td style="text-align:center">100010</td>
+<td style="text-align:center">i</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">50</td>
+<td style="text-align:center">110010</td>
+<td style="text-align:center">y</td>
 </tr>
 <tr>
-<td align="center">3</td>
-<td align="center">000011</td>
-<td align="center">D</td>
-<td align="center"></td>
-<td align="center">19</td>
-<td align="center">010011</td>
-<td align="center">T</td>
-<td align="center"></td>
-<td align="center">35</td>
-<td align="center">100011</td>
-<td align="center">j</td>
-<td align="center"></td>
-<td align="center">51</td>
-<td align="center">110011</td>
-<td align="center">z</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">000011</td>
+<td style="text-align:center">D</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">19</td>
+<td style="text-align:center">010011</td>
+<td style="text-align:center">T</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">35</td>
+<td style="text-align:center">100011</td>
+<td style="text-align:center">j</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">51</td>
+<td style="text-align:center">110011</td>
+<td style="text-align:center">z</td>
 </tr>
 <tr>
-<td align="center">4</td>
-<td align="center">000100</td>
-<td align="center">E</td>
-<td align="center"></td>
-<td align="center">20</td>
-<td align="center">010100</td>
-<td align="center">U</td>
-<td align="center"></td>
-<td align="center">36</td>
-<td align="center">100100</td>
-<td align="center">k</td>
-<td align="center"></td>
-<td align="center">52</td>
-<td align="center">110100</td>
-<td align="center">0</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">000100</td>
+<td style="text-align:center">E</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">010100</td>
+<td style="text-align:center">U</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">36</td>
+<td style="text-align:center">100100</td>
+<td style="text-align:center">k</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">52</td>
+<td style="text-align:center">110100</td>
+<td style="text-align:center">0</td>
 </tr>
 <tr>
-<td align="center">5</td>
-<td align="center">000101</td>
-<td align="center">F</td>
-<td align="center"></td>
-<td align="center">21</td>
-<td align="center">010101</td>
-<td align="center">V</td>
-<td align="center"></td>
-<td align="center">37</td>
-<td align="center">100101</td>
-<td align="center">l</td>
-<td align="center"></td>
-<td align="center">53</td>
-<td align="center">110101</td>
-<td align="center">1</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">000101</td>
+<td style="text-align:center">F</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">21</td>
+<td style="text-align:center">010101</td>
+<td style="text-align:center">V</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">37</td>
+<td style="text-align:center">100101</td>
+<td style="text-align:center">l</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">53</td>
+<td style="text-align:center">110101</td>
+<td style="text-align:center">1</td>
 </tr>
 <tr>
-<td align="center">6</td>
-<td align="center">000110</td>
-<td align="center">G</td>
-<td align="center"></td>
-<td align="center">22</td>
-<td align="center">010110</td>
-<td align="center">W</td>
-<td align="center"></td>
-<td align="center">38</td>
-<td align="center">100110</td>
-<td align="center">m</td>
-<td align="center"></td>
-<td align="center">54</td>
-<td align="center">110110</td>
-<td align="center">2</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">000110</td>
+<td style="text-align:center">G</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">22</td>
+<td style="text-align:center">010110</td>
+<td style="text-align:center">W</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">38</td>
+<td style="text-align:center">100110</td>
+<td style="text-align:center">m</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">54</td>
+<td style="text-align:center">110110</td>
+<td style="text-align:center">2</td>
 </tr>
 <tr>
-<td align="center">7</td>
-<td align="center">000111</td>
-<td align="center">H</td>
-<td align="center"></td>
-<td align="center">23</td>
-<td align="center">010111</td>
-<td align="center">X</td>
-<td align="center"></td>
-<td align="center">39</td>
-<td align="center">100111</td>
-<td align="center">n</td>
-<td align="center"></td>
-<td align="center">55</td>
-<td align="center">110111</td>
-<td align="center">3</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center">000111</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">23</td>
+<td style="text-align:center">010111</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">39</td>
+<td style="text-align:center">100111</td>
+<td style="text-align:center">n</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">55</td>
+<td style="text-align:center">110111</td>
+<td style="text-align:center">3</td>
 </tr>
 <tr>
-<td align="center">8</td>
-<td align="center">001000</td>
-<td align="center">I</td>
-<td align="center"></td>
-<td align="center">24</td>
-<td align="center">011000</td>
-<td align="center">Y</td>
-<td align="center"></td>
-<td align="center">40</td>
-<td align="center">101000</td>
-<td align="center">o</td>
-<td align="center"></td>
-<td align="center">56</td>
-<td align="center">111000</td>
-<td align="center">4</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">001000</td>
+<td style="text-align:center">I</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">24</td>
+<td style="text-align:center">011000</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">40</td>
+<td style="text-align:center">101000</td>
+<td style="text-align:center">o</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">56</td>
+<td style="text-align:center">111000</td>
+<td style="text-align:center">4</td>
 </tr>
 <tr>
-<td align="center">9</td>
-<td align="center">001001</td>
-<td align="center">J</td>
-<td align="center"></td>
-<td align="center">25</td>
-<td align="center">011001</td>
-<td align="center">Z</td>
-<td align="center"></td>
-<td align="center">41</td>
-<td align="center">101001</td>
-<td align="center">p</td>
-<td align="center"></td>
-<td align="center">57</td>
-<td align="center">111001</td>
-<td align="center">5</td>
+<td style="text-align:center">9</td>
+<td style="text-align:center">001001</td>
+<td style="text-align:center">J</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">25</td>
+<td style="text-align:center">011001</td>
+<td style="text-align:center">Z</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">41</td>
+<td style="text-align:center">101001</td>
+<td style="text-align:center">p</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">57</td>
+<td style="text-align:center">111001</td>
+<td style="text-align:center">5</td>
 </tr>
 <tr>
-<td align="center">10</td>
-<td align="center">001010</td>
-<td align="center">K</td>
-<td align="center"></td>
-<td align="center">26</td>
-<td align="center">011010</td>
-<td align="center">a</td>
-<td align="center"></td>
-<td align="center">42</td>
-<td align="center">101010</td>
-<td align="center">q</td>
-<td align="center"></td>
-<td align="center">58</td>
-<td align="center">111010</td>
-<td align="center">6</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center">001010</td>
+<td style="text-align:center">K</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">26</td>
+<td style="text-align:center">011010</td>
+<td style="text-align:center">a</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">101010</td>
+<td style="text-align:center">q</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">58</td>
+<td style="text-align:center">111010</td>
+<td style="text-align:center">6</td>
 </tr>
 <tr>
-<td align="center">11</td>
-<td align="center">001011</td>
-<td align="center">L</td>
-<td align="center"></td>
-<td align="center">27</td>
-<td align="center">011011</td>
-<td align="center">b</td>
-<td align="center"></td>
-<td align="center">43</td>
-<td align="center">101011</td>
-<td align="center">r</td>
-<td align="center"></td>
-<td align="center">59</td>
-<td align="center">111011</td>
-<td align="center">7</td>
+<td style="text-align:center">11</td>
+<td style="text-align:center">001011</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">27</td>
+<td style="text-align:center">011011</td>
+<td style="text-align:center">b</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">43</td>
+<td style="text-align:center">101011</td>
+<td style="text-align:center">r</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">59</td>
+<td style="text-align:center">111011</td>
+<td style="text-align:center">7</td>
 </tr>
 <tr>
-<td align="center">12</td>
-<td align="center">001100</td>
-<td align="center">M</td>
-<td align="center"></td>
-<td align="center">28</td>
-<td align="center">011100</td>
-<td align="center">c</td>
-<td align="center"></td>
-<td align="center">44</td>
-<td align="center">101100</td>
-<td align="center">s</td>
-<td align="center"></td>
-<td align="center">60</td>
-<td align="center">111100</td>
-<td align="center">8</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">001100</td>
+<td style="text-align:center">M</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">28</td>
+<td style="text-align:center">011100</td>
+<td style="text-align:center">c</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">44</td>
+<td style="text-align:center">101100</td>
+<td style="text-align:center">s</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">60</td>
+<td style="text-align:center">111100</td>
+<td style="text-align:center">8</td>
 </tr>
 <tr>
-<td align="center">13</td>
-<td align="center">001101</td>
-<td align="center">N</td>
-<td align="center"></td>
-<td align="center">29</td>
-<td align="center">011101</td>
-<td align="center">d</td>
-<td align="center"></td>
-<td align="center">45</td>
-<td align="center">101101</td>
-<td align="center">t</td>
-<td align="center"></td>
-<td align="center">61</td>
-<td align="center">111101</td>
-<td align="center">9</td>
+<td style="text-align:center">13</td>
+<td style="text-align:center">001101</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">29</td>
+<td style="text-align:center">011101</td>
+<td style="text-align:center">d</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">45</td>
+<td style="text-align:center">101101</td>
+<td style="text-align:center">t</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">61</td>
+<td style="text-align:center">111101</td>
+<td style="text-align:center">9</td>
 </tr>
 <tr>
-<td align="center">14</td>
-<td align="center">001110</td>
-<td align="center">O</td>
-<td align="center"></td>
-<td align="center">30</td>
-<td align="center">011110</td>
-<td align="center">e</td>
-<td align="center"></td>
-<td align="center">46</td>
-<td align="center">101110</td>
-<td align="center">u</td>
-<td align="center"></td>
-<td align="center">62</td>
-<td align="center">111110</td>
-<td align="center">+</td>
+<td style="text-align:center">14</td>
+<td style="text-align:center">001110</td>
+<td style="text-align:center">O</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">30</td>
+<td style="text-align:center">011110</td>
+<td style="text-align:center">e</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">46</td>
+<td style="text-align:center">101110</td>
+<td style="text-align:center">u</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">62</td>
+<td style="text-align:center">111110</td>
+<td style="text-align:center">+</td>
 </tr>
 <tr>
-<td align="center">15</td>
-<td align="center">001111</td>
-<td align="center">P</td>
-<td align="center"></td>
-<td align="center">31</td>
-<td align="center">011111</td>
-<td align="center">f</td>
-<td align="center"></td>
-<td align="center">47</td>
-<td align="center">101111</td>
-<td align="center">v</td>
-<td align="center"></td>
-<td align="center">63</td>
-<td align="center">111111</td>
-<td align="center">&#x2F;</td>
+<td style="text-align:center">15</td>
+<td style="text-align:center">001111</td>
+<td style="text-align:center">P</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">31</td>
+<td style="text-align:center">011111</td>
+<td style="text-align:center">f</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">47</td>
+<td style="text-align:center">101111</td>
+<td style="text-align:center">v</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">63</td>
+<td style="text-align:center">111111</td>
+<td style="text-align:center">/</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 
       
     </div>
@@ -1128,7 +1132,7 @@
 
       
           <h1 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h1><p>逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。</p>
-<h2 id="一、-IDA使用入门"><a href="#一、-IDA使用入门" class="headerlink" title="一、 IDA使用入门"></a>一、 IDA使用入门</h2><p>本节所需代码文件为1-helloworld。（<a target="_blank" rel="noopener" href="https://book.nu1l.com/tasks/#/pages/reverse/5.2%EF%BC%89">https://book.nu1l.com/tasks/#/pages/reverse/5.2）</a></p>
+<h2 id="一、-IDA使用入门"><a href="#一、-IDA使用入门" class="headerlink" title="一、 IDA使用入门"></a>一、 IDA使用入门</h2><p>本节所需代码文件为1-helloworld。（<a target="_blank" rel="noopener" href="https://book.nu1l.com/tasks/#/pages/reverse/5.2）">https://book.nu1l.com/tasks/#/pages/reverse/5.2）</a></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/02/22/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B-%E3%80%8A%E4%BB%8E0%E5%88%B01CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF%E3%80%8B/#more" rel="contents">
@@ -1204,7 +1208,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>806</span>
+              <span>736</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1225,9 +1229,9 @@
       
           <h1 id="仿射密码"><a href="#仿射密码" class="headerlink" title="仿射密码"></a>仿射密码</h1><h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h2><p>仿射密码是一种单字母替换密码的特例。</p>
 <p>该密码不如简单替换密码安全，因为它不仅容易受到针对替代密码的所有攻击方法，而且还存在其他缺点。其主要缺点来自以下方面：如果密码分析者可以发现（通过频率分析，暴力破解，猜测或其他方式）两个密文字符对应的明文，则可以通过联立方程组来求解密钥。</p>
-<h2 id="2-数学描述"><a href="#2-数学描述" class="headerlink" title="2.数学描述"></a>2.数学描述</h2><p>仿射密码的<strong>密钥</strong>由2个数字组成，我们将其称为a和b。以下讨论假定使用26个字符的字母（m &#x3D; 26）。a应该选择为相对于m素数（即a应该没有与m相同的公因数&lt;除1以外&gt;）。例如15和26没有公因数(除1以外)，因此15是可以用来加密的值，然而12和26具有相同公因数（例如2），这样12不能被用于加密。加密时，我们首先将所有字母转换为数字（’a’&#x3D; 0，’b’&#x3D; 1，…，’z’&#x3D; 25）。</p>
+<h2 id="2-数学描述"><a href="#2-数学描述" class="headerlink" title="2.数学描述"></a>2.数学描述</h2><p>仿射密码的<strong>密钥</strong>由2个数字组成，我们将其称为a和b。以下讨论假定使用26个字符的字母（m = 26）。a应该选择为相对于m素数（即a应该没有与m相同的公因数&lt;除1以外&gt;）。例如15和26没有公因数(除1以外)，因此15是可以用来加密的值，然而12和26具有相同公因数（例如2），这样12不能被用于加密。加密时，我们首先将所有字母转换为数字（’a’= 0，’b’= 1，…，’z’= 25）。</p>
 <p>对于密文c，给定任意的p（p是代表字母的数字），有：</p>
-<p>c &#x3D; ap + b (mod m)    1&lt;&#x3D;a&lt;&#x3D;m,  1&lt;&#x3D;b&lt;&#x3D;m;</p>
+<p>c = ap + b (mod m)    1&lt;=a&lt;=m,  1&lt;=b&lt;=m;</p>
 <p>解密的公式为：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221205948026.png" alt="image-20220221205948026"></p>
 <p>其中a-1是a的乘法逆元，为了找到a的乘法逆元，我们需要假定数字x满足：</p>
@@ -1235,9 +1239,9 @@
 <p>如果我们发现x使得等式成立，那么X就是a的逆元，我们称之为a-1。</p>
 <p>解决此方程式最简单的方法是遍历1到25个数字，然后看哪个满足该方程式。</p>
 <h2 id="3-示例"><a href="#3-示例" class="headerlink" title="3.示例"></a>3.示例</h2><blockquote>
-<p>令密钥a&#x3D;5且b&#x3D;7，加密defend the east wall of the castle</p>
+<p>令密钥a=5且b=7，加密defend the east wall of the castle</p>
 </blockquote>
-<p>我们将第一个字母’d’转换为数字3（’a’&#x3D; 0，’b’&#x3D; 1，…，’z’&#x3D; 25）并将其代入等式中：</p>
+<p>我们将第一个字母’d’转换为数字3（’a’= 0，’b’= 1，…，’z’= 25）并将其代入等式中：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210037643.png" alt="image-20220221210037643"></p>
 <p>显而易见，我们可以依次得到明文：</p>
 <blockquote>
@@ -1312,7 +1316,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>622</span>
+              <span>666</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1563,12 +1567,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

@@ -255,8 +255,7 @@
 <p>最近在学习CS61A，学到了一个新概念：frame</p>
 <h1 id="Frame"><a href="#Frame" class="headerlink" title="Frame"></a>Frame</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>An environment in which an expression is evaluated consists of a sequence of <em>frames</em>, depicted as boxes. Each frame contains <em>bindings</em>, each of which associates a name with its corresponding value.</p>
 <p>当我们对表达式求值时，实际上是在当前环境中求值，而该环境由一系列的“框架”组成。每个框架都包含绑定关系，将名称与其相应值相关联。</p>
-<h2 id="global-frame"><a href="#global-frame" class="headerlink" title="global frame"></a>global frame</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> pi</span><br><span class="line">tau = <span class="number">2</span> * pi</span><br></pre></td></tr></table></figure>
-
+<h2 id="global-frame"><a href="#global-frame" class="headerlink" title="global frame"></a>global frame</h2><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> pi</span><br><span class="line">tau = <span class="number">2</span> * pi</span><br></pre></td></tr></tbody></table></figure>
 <p>上述示例的环境中就只有 the global frame ，如下图所示</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008231614912.png" alt="image-20221008231614912"><br><a target="_blank" rel="noopener" href="http://composingprograms.com/tutor.html">http://composingprograms.com/tutor.html</a> （可通过该链接测试代码）</p>
 <p>import语句导入的函数和用户自定义的函数都被包含在 the global frame 中，如下图所示：</p>
@@ -427,12 +426,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

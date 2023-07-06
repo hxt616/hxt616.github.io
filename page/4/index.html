@@ -213,7 +213,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>668</span>
+              <span>653</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -232,22 +232,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="汇编语言（四）——-BX-和loop指令"><a href="#汇编语言（四）——-BX-和loop指令" class="headerlink" title="汇编语言（四）——[BX]和loop指令"></a>汇编语言（四）——[BX]和loop指令</h1><h2 id="bx"><a href="#bx" class="headerlink" title="[bx]"></a>[bx]</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [bx]</span><br></pre></td></tr></table></figure>
-
-<p>上述指令的功能：bx中存放的数据作为一个偏移地址 EA ，段地址 SA 默认在 ds 中，将 SA:EA 处的数据送入 ax 中，即：(ax)&#x3D;((ds)*16+(bx))。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov [bx], ax</span><br></pre></td></tr></table></figure>
-
-<p>该指令的功能则是：将 ax 中的数据送入内存 SA:EA 处，即：((ds)*16+(bx))&#x3D;(ax)。</p>
+          <h1 id="汇编语言（四）——-BX-和loop指令"><a href="#汇编语言（四）——-BX-和loop指令" class="headerlink" title="汇编语言（四）——[BX]和loop指令"></a>汇编语言（四）——[BX]和loop指令</h1><h2 id="bx"><a href="#bx" class="headerlink" title="[bx]"></a>[bx]</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [bx]</span><br></pre></td></tr></tbody></table></figure>
+<p>上述指令的功能：bx中存放的数据作为一个偏移地址 EA ，段地址 SA 默认在 ds 中，将 SA:EA 处的数据送入 ax 中，即：(ax)=((ds)*16+(bx))。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov [bx], ax</span><br></pre></td></tr></tbody></table></figure>
+<p>该指令的功能则是：将 ax 中的数据送入内存 SA:EA 处，即：((ds)*16+(bx))=(ax)。</p>
 <p>我们可以不写新的指令，<strong>仅通过改变 bx 中的数值，改变指令访问的内存单元</strong>。</p>
 <h2 id="Loop指令"><a href="#Loop指令" class="headerlink" title="Loop指令"></a>Loop指令</h2><p>CPU执行loop指令时要进行两步操作：</p>
 <ul>
-<li>(cx)&#x3D;(cx)-1。</li>
+<li>(cx)=(cx)-1。</li>
 <li>判断 cx 中的值，不为0则转至标号处执行程序，如果为0则向下执行。</li>
 </ul>
 <p>由上述可知 cx 中存放着循环次数。</p>
 <p>下面是一个关于loop的示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">计算2^12</span><br><span class="line">assume cs:code</span><br><span class="line">code segment</span><br><span class="line">	mov ax, 2</span><br><span class="line">	mov cx, 11</span><br><span class="line">S:  add ax, ax</span><br><span class="line">	loop s</span><br><span class="line">	mov ax, 4c00h</span><br><span class="line">	int 21h</span><br><span class="line">code ends</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">计算2^12</span><br><span class="line">assume cs:code</span><br><span class="line">code segment</span><br><span class="line">	mov ax, 2</span><br><span class="line">	mov cx, 11</span><br><span class="line">S:  add ax, ax</span><br><span class="line">	loop s</span><br><span class="line">	mov ax, 4c00h</span><br><span class="line">	int 21h</span><br><span class="line">code ends</span><br><span class="line">end</span><br></pre></td></tr></tbody></table></figure>
 <h2 id="段前缀"><a href="#段前缀" class="headerlink" title="段前缀"></a>段前缀</h2><p>可以在访问内存单元的指令中显式地给出内存单元的段地址所在的段寄存器。这些用于访问内存单元的指令中，用于显式地指明内存单元的段地址的 <code>ds:</code>（数据段寄存器）、<code>cs:</code>（代码段寄存器）、<code>ss:</code>（堆栈段寄存器）、<code>es:</code>（附加段寄存器），在汇编语言中称为段前缀。</p>
 <h2 id="一段安全的空间"><a href="#一段安全的空间" class="headerlink" title="一段安全的空间"></a>一段安全的空间</h2><p>一般的PC机中，DOS方式下，DOS和其他合法的程序一般不会使用0:200 ~ 0:2ff（00200h ~ 002ffh）的256个字节的空间。因此当我们需要直接向一段内存中写入内容时，就使用0:200 ~ 0:2ff这段空间。</p>
 
@@ -440,66 +437,47 @@
           <p>以AT&amp;T语法为例，AT&amp;T与Intel的区别见：<br><a target="_blank" rel="noopener" href="https://hxt616.github.io/2022/08/16/AT&amp;T%E5%92%8CIntel/">https://hxt616.github.io/2022/08/16/AT&amp;T%E5%92%8CIntel/</a></p>
 <p>本文参考《CTF All In One》：<a target="_blank" rel="noopener" href="https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html#334-%E6%8C%87%E4%BB%A4-instructions">https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html#334-%E6%8C%87%E4%BB%A4-instructions</a></p>
 <h1 id="三类x86指令"><a href="#三类x86指令" class="headerlink" title="三类x86指令"></a>三类x86指令</h1><h2 id="数据移动指令"><a href="#数据移动指令" class="headerlink" title="数据移动指令"></a>数据移动指令</h2><h3 id="mov-移动"><a href="#mov-移动" class="headerlink" title="mov 移动"></a><code>mov</code> 移动</h3><p><code>mov</code> 指令将数据从它的第一个参数 ( 即寄存器中的内容, 内存单元中的内容, 或者一个常数值 ) 复制到它的第二个参数 ( 即寄存器或者内存单元 ). 当寄存器到寄存器之间的数据移动是可行的时候, 直接地从内存单元中将数据移动到另一内存单元中是不行的. 在这种需要在内存单元中传递数据的情况下, 它数据来源的那个内存单元必须首先把那个内存单元中的数据加载到一个寄存器中, 然后才可以通过这个寄存器来把数据移动到目标内存单元中。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov %ebx, %eax        将 EBX 中的值复制到 EAX 中</span><br><span class="line">mov %ebx, var(,1)     将 EBX 中的 4 个字节大小的数据移动的内存中标签为 var 的地方去.( var 是一个 32 位常数)</span><br><span class="line">mov (%ebx), %eax      从 EBX 中的内存地址加载 4 个字节的数据到 EAX, 就是把 EBX 中的内容当作标签, 这个标签在内存中对应的数据放到 EAX 中</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov %ebx, %eax        将 EBX 中的值复制到 EAX 中</span><br><span class="line">mov %ebx, var(,1)     将 EBX 中的 4 个字节大小的数据移动的内存中标签为 var 的地方去.( var 是一个 32 位常数)</span><br><span class="line">mov (%ebx), %eax      从 EBX 中的内存地址加载 4 个字节的数据到 EAX, 就是把 EBX 中的内容当作标签, 这个标签在内存中对应的数据放到 EAX 中</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="push-入栈"><a href="#push-入栈" class="headerlink" title="push 入栈"></a><code>push</code> 入栈</h3><p><code>push</code>指令将它的参数移动到硬件支持的<strong>栈</strong>内存顶端. 特别地, <code>push</code> 首先将 ESP 中的值<strong>减少</strong> 4, 然后将它的参数移动到一个 32 位的地址单元 ( %esp ). ESP ( 栈指针 ) 会随着不断入栈从而持续递减, 即栈内存是从高地址单元到低地址单元增长。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push %eax         将 EAX 送入栈</span><br><span class="line">push var(,1)      将 var 对应的 4 字节大小的数据送入栈中</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push %eax         将 EAX 送入栈</span><br><span class="line">push var(,1)      将 var 对应的 4 字节大小的数据送入栈中</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="pop-出栈"><a href="#pop-出栈" class="headerlink" title="pop 出栈"></a><code>pop</code> 出栈</h3><p><code>pop</code>指令从硬件支持的栈内存顶端移除 4 字节的数据, 并把这个数据放到该指令指定的参数中 ( 即寄存器或者内存单元 ). 其首先将内存中 ( %esp ) 的 4 字节数据放到指定的寄存器或者内存单元中, 然后让 <strong>ESP + 4</strong>。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pop %edi       将栈顶的元素移除, 并放入到寄存器 EDI 中</span><br><span class="line">pop (%ebx)     将栈顶的元素移除, 并放入从 EBX 开始的 4 个字节大小的内存单元中</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pop %edi       将栈顶的元素移除, 并放入到寄存器 EDI 中</span><br><span class="line">pop (%ebx)     将栈顶的元素移除, 并放入从 EBX 开始的 4 个字节大小的内存单元中</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="lea-加载有效地址"><a href="#lea-加载有效地址" class="headerlink" title="lea 加载有效地址"></a><code>lea</code> 加载有效地址</h3><p><code>lea</code>指令将其第一个参数指定的内存单元 放入到 第二个参数指定的寄存器中。</p>
 <p><code>LEA AX,[1000H]</code>，作用是将源操作数 [1000H] 的偏移地址 1000H 送至 AX。理解时，可直接将[ ]去掉，等同于 <code>MOV AX,1000H</code>。 再如：<code>LEA BX,[AX]</code>，等同于 <code>MOV BX,AX</code>；<code>LEA BX,TABLE</code> 等同于 <code>MOV BX,OFFSET TABLE</code>。 但有时不能直接使用 <code>MOV</code> 代替： 比如：<code>LEA AX,[SI+6]</code> 不能直接替换成：<code>MOV AX,SI+6</code>；但可替换为： <code>MOV AX,SI</code> <code>ADD AX,6</code> 两步完成。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lea (%ebx,%esi,8), %edi      EBX+8*ESI 的值被移入到了 EDI</span><br><span class="line">lea val(,1), %eax          val 的值被移入到了 EAX</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lea (%ebx,%esi,8), %edi      EBX+8*ESI 的值被移入到了 EDI</span><br><span class="line">lea val(,1), %eax          val 的值被移入到了 EAX</span><br></pre></td></tr></tbody></table></figure>
 <h2 id="逻辑运算指令"><a href="#逻辑运算指令" class="headerlink" title="逻辑运算指令"></a>逻辑运算指令</h2><h3 id="add-整数相加"><a href="#add-整数相加" class="headerlink" title="add 整数相加"></a><code>add</code> 整数相加</h3><p><code>add</code> 指令将两个参数相加，然后将结果存放到第二个参数中。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add $10, %eax        EAX 中的值被设置为了 EAX+10</span><br><span class="line">addb $10, (%eax)       往 EAX 中的值 所代表的内存单元地址 加上 1 个字节的数字 10</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add $10, %eax        EAX 中的值被设置为了 EAX+10</span><br><span class="line">addb $10, (%eax)       往 EAX 中的值 所代表的内存单元地址 加上 1 个字节的数字 10</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="sub-整数相减"><a href="#sub-整数相减" class="headerlink" title="sub 整数相减"></a><code>sub</code> 整数相减</h3><p><code>sub</code>指令将第二个参数的值与第一个相减，就是后面那个减去前面那个，然后把结果存储到第二个参数。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sub %ah, %al      AL 被设置成 AL-AH</span><br><span class="line">sub $216, %eax        将 EAX 中的值减去 216</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sub %ah, %al      AL 被设置成 AL-AH</span><br><span class="line">sub $216, %eax        将 EAX 中的值减去 216</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="inc-自增"><a href="#inc-自增" class="headerlink" title="inc 自增"></a><code>inc</code> 自增</h3><p><code>inc</code> 指令让它的参数加 1。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incl var(,1)        将 var 所代表的 32 位整数加上 1</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incl var(,1)        将 var 所代表的 32 位整数加上 1</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="dec-自减"><a href="#dec-自减" class="headerlink" title="dec 自减"></a><code>dec</code> 自减</h3><p><code>dec</code>指令让它的参数减1。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dec %eax       EAX 中的值减去 1</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dec %eax       EAX 中的值减去 1</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="imul-整数相乘"><a href="#imul-整数相乘" class="headerlink" title="imul 整数相乘"></a><code>imul</code> 整数相乘</h3><p><code>imul</code> 指令有两种基本格式 : 第一种是 2 个参数的；第二种格式是 3 个参数的。</p>
 <p>2 个参数的这种格式, 先是将两个参数相乘, 然后把结果存到第二个参数中。<strong>运算结果 ( 即第二个参数 ) 必须是一个寄存器</strong>。</p>
 <p>3 个参数的这种格式，先是将它的第 1 个参数和第 2 个参数相乘，然后把结果存到第 3 个参数中，<strong>第 3 个参数必须是一个寄存器</strong>。此外，第 1 个参数必须是一个常数。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">imul (%ebx), %eax        将 EAX 中的 32 位整数, 与 EBX 中的内容所指的内存单元, 相乘, 然后把结果存到 EAX 中</span><br><span class="line">imul $25, %edi, %esi        ESI 被设置为 EDI * 25.</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">imul (%ebx), %eax        将 EAX 中的 32 位整数, 与 EBX 中的内容所指的内存单元, 相乘, 然后把结果存到 EAX 中</span><br><span class="line">imul $25, %edi, %esi        ESI 被设置为 EDI * 25.</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="idiv-整数相除"><a href="#idiv-整数相除" class="headerlink" title="idiv 整数相除"></a><code>idiv</code> 整数相除</h3><p><code>idiv</code>只有一个操作数，此操作数为除数，而被除数则为 EDX : EAX 中的内容（一个64位的整数），除法结果 ( 商 ) 存在 EAX 中，而所得的余数存在 EDX 中。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">idiv %ebx       用 EDX : EAX 的值除以 EBX 的值。商存放在 EAX 中, 余数存放在 EDX 中</span><br><span class="line">idivw (%ebx)       将 EDX : EAX 的值除以存储在 EBX 所对应内存单元的 32 位值。商存放在 EAX 中, 余数存放在 EDX 中</span><br></pre></td></tr></table></figure>
-
-<h3 id="and，or，xor-按位逻辑-与-或-异或-运算"><a href="#and，or，xor-按位逻辑-与-或-异或-运算" class="headerlink" title="and，or，xor   按位逻辑 与, 或, 异或 运算"></a><code>and</code>，<code>or</code>，<code>xor</code>   按位逻辑 与, 或, 异或 运算</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">and $0x0F, %eax       只留下 EAX 中最后 4 位数字 (二进制位)</span><br><span class="line">xor %edx, %edx       将 EDX 的值全部设置成 0</span><br></pre></td></tr></table></figure>
-
-<h3 id="not-非"><a href="#not-非" class="headerlink" title="not 非"></a><code>not</code> 非</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not %eax     将 EAX 的所有值翻转</span><br></pre></td></tr></table></figure>
-
-<h3 id="neg-取负指令"><a href="#neg-取负指令" class="headerlink" title="neg 取负指令"></a><code>neg</code> 取负指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neg %eax       EAX → -EAX</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">idiv %ebx       用 EDX : EAX 的值除以 EBX 的值。商存放在 EAX 中, 余数存放在 EDX 中</span><br><span class="line">idivw (%ebx)       将 EDX : EAX 的值除以存储在 EBX 所对应内存单元的 32 位值。商存放在 EAX 中, 余数存放在 EDX 中</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="and，or，xor-按位逻辑-与-或-异或-运算"><a href="#and，or，xor-按位逻辑-与-或-异或-运算" class="headerlink" title="and，or，xor   按位逻辑 与, 或, 异或 运算"></a><code>and</code>，<code>or</code>，<code>xor</code>   按位逻辑 与, 或, 异或 运算</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">and $0x0F, %eax       只留下 EAX 中最后 4 位数字 (二进制位)</span><br><span class="line">xor %edx, %edx       将 EDX 的值全部设置成 0</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="not-非"><a href="#not-非" class="headerlink" title="not 非"></a><code>not</code> 非</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not %eax     将 EAX 的所有值翻转</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="neg-取负指令"><a href="#neg-取负指令" class="headerlink" title="neg 取负指令"></a><code>neg</code> 取负指令</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neg %eax       EAX → -EAX</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="shl-按位左移"><a href="#shl-按位左移" class="headerlink" title="shl 按位左移"></a><code>shl</code> 按位左移</h3><p><code>shl</code>对第二个参数进行位运算，移动的位数由第一个参数决定。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shl $1, %eax       将 EAX 的值乘以 2 (如果最高有效位是 0 的话)</span><br></pre></td></tr></table></figure>
-
-<h3 id="shr-按位右移"><a href="#shr-按位右移" class="headerlink" title="shr 按位右移"></a><code>shr</code> 按位右移</h3><p>同上</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shr %cl, %ebx       将 EBX 的值除以 2n, 其中 n 为 CL 中的值, 运算最终结果存到 EBX 中</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shl $1, %eax       将 EAX 的值乘以 2 (如果最高有效位是 0 的话)</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="shr-按位右移"><a href="#shr-按位右移" class="headerlink" title="　shr 按位右移"></a>　<code>shr</code> 按位右移</h3><p>同上</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shr %cl, %ebx       将 EBX 的值除以 2n, 其中 n 为 CL 中的值, 运算最终结果存到 EBX 中</span><br></pre></td></tr></tbody></table></figure>
 <h2 id="流程控制指令"><a href="#流程控制指令" class="headerlink" title="流程控制指令"></a>流程控制指令</h2><p>x86处理器的指令指针寄存器 ( EIP )为 32 位寄存器，它用来在内存中指示我们输入汇编指令的位置。就是说这个寄存器指向哪个内存单元，那个单元存储的机器码就是程序执行的指令。通常它是指向我们程序要执行的 下一条指令。</p>
 <h3 id="jmp-跳转指令"><a href="#jmp-跳转指令" class="headerlink" title="jmp 跳转指令"></a><code>jmp</code> 跳转指令</h3><p>将程序跳转到参数指定的内存地址，然后执行该内存地址的指令。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp begin         跳转到打了 &quot; begin &quot; 这个标签的地方</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp begin         跳转到打了 " begin " 这个标签的地方</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="jcondition-有条件的跳转"><a href="#jcondition-有条件的跳转" class="headerlink" title="jcondition 有条件的跳转"></a><code>jcondition</code> 有条件的跳转</h3><p>语法：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">je &lt;label           当相等的时候跳转</span><br><span class="line">jne &lt;label          当不相等的时候跳转</span><br><span class="line">jz &lt;label           当最后结果为 0 的时候跳转</span><br><span class="line">jg &lt;label           当大于的时候跳转</span><br><span class="line">jge &lt;label          当大于等于的时候跳转</span><br><span class="line">jl &lt;label           当小于的时候跳转</span><br><span class="line">jle &lt;label          当小于等于的时候跳转</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmp %ebx, %eax        某些指令执行前先对参数进行cmp操作</span><br><span class="line">jle done          如果 EAX 的值小于等于 EBX 的值, 就跳转到 &quot; done &quot; 标签, 否则就继续执行下一条指令</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">je &lt;label           当相等的时候跳转</span><br><span class="line">jne &lt;label          当不相等的时候跳转</span><br><span class="line">jz &lt;label           当最后结果为 0 的时候跳转</span><br><span class="line">jg &lt;label           当大于的时候跳转</span><br><span class="line">jge &lt;label          当大于等于的时候跳转</span><br><span class="line">jl &lt;label           当小于的时候跳转</span><br><span class="line">jle &lt;label          当小于等于的时候跳转</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmp %ebx, %eax        某些指令执行前先对参数进行cmp操作</span><br><span class="line">jle done          如果 EAX 的值小于等于 EBX 的值, 就跳转到 " done " 标签, 否则就继续执行下一条指令</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="cmp-比较指令"><a href="#cmp-比较指令" class="headerlink" title="cmp 比较指令"></a><code>cmp</code> 比较指令</h3><p>比较两个参数的值，适当地设置机器状态字中的条件代码。此指令与sub指令类似，但是cmp不用将计算结果保存在操作数中。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmpb $10, (%ebx)</span><br><span class="line">jeq loop             如果 EBX 的值等于整数常量 10, 则跳转到标签 &quot; loop &quot; 的位置.</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmpb $10, (%ebx)</span><br><span class="line">jeq loop             如果 EBX 的值等于整数常量 10, 则跳转到标签 " loop " 的位置.</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="call，ret-子程序调用与返回"><a href="#call，ret-子程序调用与返回" class="headerlink" title="call，ret 子程序调用与返回"></a><code>call</code>，<code>ret</code> 子程序调用与返回</h3><p>这两个指令实现子程序的调用和返回。</p>
 <p><code>call</code> 指令首先将当前代码位置推到内存中硬件支持的栈内存上 ( 请看 <code>push</code> 指令 )，然后无条件跳转到标签参数指定的代码位置，<code>call</code> 指令结束后, 返回到调用之前的地址。</p>
 <p><code>ret</code> 指令实现子程序的返回。该指令首先从栈中取出代码 ( 类似于 <code>pop</code> 指令 )，然后它无条件跳转到检索到的代码位置。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">call &lt;label</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">call &lt;label</span><br><span class="line">ret</span><br></pre></td></tr></tbody></table></figure>
       
     </div>
 
@@ -658,7 +636,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>626</span>
+              <span>621</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -680,18 +658,19 @@
           <p>参考：    <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/70590839">https://zhuanlan.zhihu.com/p/70590839</a></p>
 <p>​               <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000040633213">https://segmentfault.com/a/1190000040633213</a>  （较为详细）</p>
 <p>​               <a target="_blank" rel="noopener" href="https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html">https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html</a> AT&amp;T汇编基础</p>
-<h1 id="AT-amp-T与Intel"><a href="#AT-amp-T与Intel" class="headerlink" title="AT&amp;T与Intel"></a>AT&amp;T与Intel</h1><p>AT&amp;T语法多应用于Unix&#x2F;Linux平台，Intel语法多应用于Windows系统。</p>
+<h1 id="AT-amp-T与Intel"><a href="#AT-amp-T与Intel" class="headerlink" title="AT&amp;T与Intel"></a>AT&amp;T与Intel</h1><p>AT&amp;T语法多应用于Unix/Linux平台，Intel语法多应用于Windows系统。</p>
 <p>以下是这两种语法的主要区别：</p>
 <ul>
 <li><p>目标操作数和源操作数的顺序不同。</p>
 <p>Intel：目标操作数在源操作数的左边。</p>
 <p>AT&amp;T：目标操作数在源操作数的右边。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">将2送入寄存器eax</span><br><span class="line"></span><br><span class="line">Intel:</span><br><span class="line">      mov eax, 2</span><br><span class="line"></span><br><span class="line">AT&amp;T:</span><br><span class="line">      mov $2, %eax</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">将2送入寄存器eax</span><br><span class="line"></span><br><span class="line">Intel:</span><br><span class="line">      mov eax, 2</span><br><span class="line"></span><br><span class="line">AT&amp;T:</span><br><span class="line">      mov $2, %eax</span><br></pre></td></tr></tbody></table></figure>
 </li>
-<li><p>AT&amp;T的立即数（立即数通常是指在<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%AB%8B%E5%8D%B3%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F/6686429">立即寻址方式</a>指令中给出的数。）前要加<code>$</code>，寄存器前要加<code>%</code>；Intel则不需要。</p>
+<li><p>AT&amp;T的立即数（立即数通常是指在<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/立即寻址方式/6686429">立即寻址方式</a>指令中给出的数。）前要加<code>$</code>，寄存器前要加<code>%</code>；Intel则不需要。</p>
 </li>
 <li><p>操作数字长的表示方法不同。在AT&amp;T汇编格式中，操作数的字长由操作符的最后一个字母决定，后缀<code>b</code>、<code>w</code>、<code>l</code>分别表示操作数为字节（byte，8bit）、字（word，16bit）和长字（long，32bit）；而在Intel汇编格式中，操作数的字长是用<code>byte ptr</code>和<code>word ptr</code>等前缀来表示的。</p>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">movb val,%al    # <span class="meta">AT</span>&amp;T</span><br><span class="line">movl <span class="built_in">al</span>,<span class="built_in">byte</span> <span class="built_in">ptr</span> val   # Intel</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight x86asm"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">movb val,%al    # <span class="meta">AT</span>&amp;T</span><br><span class="line">movl <span class="built_in">al</span>,<span class="built_in">byte</span> <span class="built_in">ptr</span> val   # Intel</span><br></pre></td></tr></tbody></table></figure>
+</li>
 </ul>
 <p>总结：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230521161130215.png" alt="image-20230521161130215"></p>
@@ -763,7 +742,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>741</span>
+              <span>736</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -787,8 +766,7 @@
 <p>由此提出字单位的概念：字单位，即存放了一个字型数据（16位）的内存单位，由两个地址连续的内存单位组成。</p>
 <h2 id="DS和-address"><a href="#DS和-address" class="headerlink" title="DS和[address]"></a>DS和[address]</h2><p>DS位<strong>数据</strong>段寄存器（注：CS为<strong>代码</strong>段寄存器），<code>[address]</code>表示一个内存单位，“[address]”中的address表示内存单位的偏移地址。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov bx, 1000H</span><br><span class="line">mov ds, bx</span><br><span class="line">mov al, [0]</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov bx, 1000H</span><br><span class="line">mov ds, bx</span><br><span class="line">mov al, [0]</span><br></pre></td></tr></tbody></table></figure>
 <p>上面的三条指令将10000H（1000:0）中的数据读到<code>al</code>中。指令执行时，8086CPU会自动从ds中取出段地址。</p>
 <p><strong>注意</strong>：8086CPU不支持将数据直接送入<strong>段寄存器</strong>的操作。因此将数据送入段寄存器中，需要另一个寄存器进行中转。</p>
 <h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><p>栈的操作规则：LIFO（Last In First Out，先进后出）。</p>
@@ -798,7 +776,7 @@
 <h3 id="出栈（POP）"><a href="#出栈（POP）" class="headerlink" title="出栈（POP）"></a>出栈（POP）</h3><p><code>pop ax</code>表示从栈顶取出数据送入ax中。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220813164450842.png" alt="image-20220813164450842"></p>
 <h3 id="SS-SP"><a href="#SS-SP" class="headerlink" title="SS:SP"></a>SS:SP</h3><p>任意时刻，SS:SP指向栈顶元素。</p>
-<p>执行<code>push ax</code>时，SP&#x3D;SP-2，SS:SP指向当前栈顶前面的单位，并以当前单位为新的栈顶，然后将ax中的内容送入SS:SP指向的内存单位处。</p>
+<p>执行<code>push ax</code>时，SP=SP-2，SS:SP指向当前栈顶前面的单位，并以当前单位为新的栈顶，然后将ax中的内容送入SS:SP指向的内存单位处。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220813175527754.png" alt="image-20220813175527754"></p>
 <h3 id="栈顶超界问题"><a href="#栈顶超界问题" class="headerlink" title="栈顶超界问题"></a>栈顶超界问题</h3><h4 id="执行push后栈顶超出栈空间"><a href="#执行push后栈顶超出栈空间" class="headerlink" title="执行push后栈顶超出栈空间"></a>执行push后栈顶超出栈空间</h4><p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220813180252161.png" alt="image-20220813180252161"></p>
 <p>此时1000EH和1000FH单元中的内容被覆盖。</p>
@@ -872,7 +850,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.5k</span>
+              <span>2.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -901,106 +879,57 @@
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/acceptedzhs/p/13161213.html">https://www.cnblogs.com/acceptedzhs/p/13161213.html</a> 较详细的gdb入门资料</p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/acceptedzhs/p/12562880.html">https://www.cnblogs.com/acceptedzhs/p/12562880.html</a> gdb高级技巧</p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lvdongjie/p/8994092.html">https://www.cnblogs.com/lvdongjie/p/8994092.html</a> GDB用法详解</p>
-<h1 id="GDB"><a href="#GDB" class="headerlink" title="GDB"></a>GDB</h1><p>维基百科上对GDB的解释是这样的：<strong>GNU调试器</strong>（英语：<strong>G</strong>NU <strong>D</strong>e<strong>b</strong>ugger，缩写：<strong>GDB</strong>），是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU">GNU</a>软件系统中的标准<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7">调试器</a>，此外GDB也是个具有移携性的调试器，经过移携需求的调修与重新编译，如今许多的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%A1%9EUNIX">类UNIX</a>操作系统上都可以使用GDB，而现有GDB所能支持调试的编程语言有<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%E8%AA%9E%E8%A8%80">C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%2B%2B">C++</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80)">Pascal</a>以及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">FORTRAN</a>。</p>
+<h1 id="GDB"><a href="#GDB" class="headerlink" title="GDB"></a>GDB</h1><p>维基百科上对GDB的解释是这样的：<strong>GNU调试器</strong>（英语：<strong>G</strong>NU <strong>D</strong>e<strong>b</strong>ugger，缩写：<strong>GDB</strong>），是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU">GNU</a>软件系统中的标准<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/调试工具">调试器</a>，此外GDB也是个具有移携性的调试器，经过移携需求的调修与重新编译，如今许多的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/類UNIX">类UNIX</a>操作系统上都可以使用GDB，而现有GDB所能支持调试的编程语言有<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C語言">C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%2B%2B">C++</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(程式語言">Pascal</a>)以及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">FORTRAN</a>。</p>
 <h2 id="GDB入门"><a href="#GDB入门" class="headerlink" title="GDB入门"></a>GDB入门</h2><p>将以下程序作为示例，将该文件命名为main.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span> <span class="type">int</span> n,sum;</span><br><span class="line">    n = <span class="number">1</span>;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(n &lt;= <span class="number">100</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sum = sum + n;</span><br><span class="line">        n = n+<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span> <span class="type">int</span> n,sum;</span><br><span class="line">    n = <span class="number">1</span>;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(n &lt;= <span class="number">100</span>)</span><br><span class="line">    {</span><br><span class="line">        sum = sum + n;</span><br><span class="line">        n = n+<span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>首先要使用gcc来编译源文件，且要使用<code>-g</code>选项，这样可以生成能够被gdb调试的可执行文件。</p>
 <p><code>root@ls-jc2uT1jQ:~# gcc -g main.c -o main</code>将可执行文件命名为main。</p>
 <ol>
 <li><p>启动GDB调试器</p>
-<p>方法一：<code>root@ls-jc2uT1jQ:~# gdb main [--silent]</code> (–silent选项会将部分没用的信息屏蔽)</p>
+<p>方法一：<code>root@ls-jc2uT1jQ:~# gdb main [--silent]</code> (—silent选项会将部分没用的信息屏蔽)</p>
 <p>方法二：也可不在gdb后加可执行文件名，进入gdb后利用file选项加载可执行文件</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gdb -q   &lt;---&quot;-q&quot;选项可省略不必要的输出信息</span></span><br><span class="line">(gdb) file main</span><br><span class="line">Reading symbols from main...</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gdb -q   &lt;---"-q"选项可省略不必要的输出信息</span></span><br><span class="line">(gdb) file main</span><br><span class="line">Reading symbols from main...</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>打印源代码</p>
 <p><code>l</code>选项会将带行号的源代码打印出来(注意“l”是“list”的缩写，不是数字“1”)，默认显示前十行代码，可直接回车查看后续代码。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gdb main --silent</span></span><br><span class="line">Reading symbols from main...</span><br><span class="line">(gdb) l</span><br><span class="line">1	<span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line">2	int main ()</span><br><span class="line">3	&#123;</span><br><span class="line">4	    unsigned long long int n, <span class="built_in">sum</span>;</span><br><span class="line">5	</span><br><span class="line">6	    n = 1;</span><br><span class="line">7	    <span class="built_in">sum</span> = 0;</span><br><span class="line">8	</span><br><span class="line">9	    <span class="keyword">while</span> (n &lt;= 100)</span><br><span class="line">10	    &#123;</span><br><span class="line">(gdb) </span><br><span class="line">11	        <span class="built_in">sum</span> = <span class="built_in">sum</span> + n;</span><br><span class="line">12	        n = n + 1;</span><br><span class="line">13	    &#125;</span><br><span class="line">14	</span><br><span class="line">15	    <span class="built_in">return</span> 0;</span><br><span class="line">16	&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gdb main --silent</span></span><br><span class="line">Reading symbols from main...</span><br><span class="line">(gdb) l</span><br><span class="line">1	<span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line">2	int main ()</span><br><span class="line">3	{</span><br><span class="line">4	    unsigned long long int n, <span class="built_in">sum</span>;</span><br><span class="line">5	</span><br><span class="line">6	    n = 1;</span><br><span class="line">7	    <span class="built_in">sum</span> = 0;</span><br><span class="line">8	</span><br><span class="line">9	    <span class="keyword">while</span> (n &lt;= 100)</span><br><span class="line">10	    {</span><br><span class="line">(gdb) </span><br><span class="line">11	        <span class="built_in">sum</span> = <span class="built_in">sum</span> + n;</span><br><span class="line">12	        n = n + 1;</span><br><span class="line">13	    }</span><br><span class="line">14	</span><br><span class="line">15	    <span class="built_in">return</span> 0;</span><br><span class="line">16	}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>设置断点。</p>
 <p><code>b 函数名|行号</code>（b为break的缩写）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b 9   &lt;---在第9行设置断点</span><br><span class="line">Breakpoint 1 at 0x1141: file main.c, line 9.</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b 9   &lt;---在第9行设置断点</span><br><span class="line">Breakpoint 1 at 0x1141: file main.c, line 9.</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>运行程序。</p>
-<table>
-<thead>
-<tr>
-<th align="left">指令</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">r（全称run）</td>
-<td align="left">从头开始运行程序至断点</td>
-</tr>
-<tr>
-<td align="left">c（全称continue）</td>
-<td align="left">从当前位置运行程序至下一个断点</td>
-</tr>
-<tr>
-<td align="left">u（全称until）行号</td>
-<td align="left">从当前位置运行程序至指定行号</td>
-</tr>
-</tbody></table>
+<p>| 指令               | 作用                           |<br>| :————————- | :——————————————- |<br>| r（全称run）       | 从头开始运行程序至断点         |<br>| c（全称continue）  | 从当前位置运行程序至下一个断点 |<br>| u（全称until）行号 | 从当前位置运行程序至指定行号   |</p>
 <p>以<code>r</code>为例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(gdb) r    &lt;---运行至断点，且处在断点的语句并不执行</span><br><span class="line">Starting program: /root/main </span><br><span class="line"></span><br><span class="line">Breakpoint 1, main () at main.c:9</span><br><span class="line">9	    <span class="keyword">while</span> (n &lt;= 100)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(gdb) r    &lt;---运行至断点，且处在断点的语句并不执行</span><br><span class="line">Starting program: /root/main </span><br><span class="line"></span><br><span class="line">Breakpoint 1, main () at main.c:9</span><br><span class="line">9	    <span class="keyword">while</span> (n &lt;= 100)</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>单步执行</p>
-<table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>n（全称next）</td>
-<td>单步执行，不进入函数内部</td>
-</tr>
-<tr>
-<td>s（全称step）</td>
-<td>单步执行，进入函数内部</td>
-</tr>
-</tbody></table>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(gdb) s    &lt;---执行<span class="keyword">while</span>循环，在11行停下，此时11行的代码并未执行</span><br><span class="line">11	        <span class="built_in">sum</span> = <span class="built_in">sum</span> + n;</span><br><span class="line">(gdb) n</span><br><span class="line">12	        n = n + 1;</span><br></pre></td></tr></table></figure>
-
-<p>拓展：si命令类似于s命令，ni命令类似于n命令。所不同的是，这两个命令（si&#x2F;ni）所针对的是汇编指令，而s&#x2F;n针对的是源代码。</p>
+<p>| 指令          | 作用                     |<br>| ——————- | ———————————— |<br>| n（全称next） | 单步执行，不进入函数内部 |<br>| s（全称step） | 单步执行，进入函数内部   |</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(gdb) s    &lt;---执行<span class="keyword">while</span>循环，在11行停下，此时11行的代码并未执行</span><br><span class="line">11	        <span class="built_in">sum</span> = <span class="built_in">sum</span> + n;</span><br><span class="line">(gdb) n</span><br><span class="line">12	        n = n + 1;</span><br></pre></td></tr></tbody></table></figure>
+<p>拓展：si命令类似于s命令，ni命令类似于n命令。所不同的是，这两个命令（si/ni）所针对的是汇编指令，而s/n针对的是源代码。</p>
 </li>
 <li><p>输出变量</p>
-<table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>p（全称print） 变量名</td>
-<td>打印一次变量名&#x2F;函数调用对应的值</td>
-</tr>
-<tr>
-<td>disp（display） 变量名</td>
-<td>设置在每次停下时都打印该变量名&#x2F;函数调用对应的值</td>
-</tr>
-</tbody></table>
+<p>| 指令                   | 作用                                            |<br>| ——————————— | ———————————————————————- |<br>| p（全称print） 变量名  | 打印一次变量名/函数调用对应的值                 |<br>| disp（display） 变量名 | 设置在每次停下时都打印该变量名/函数调用对应的值 |</p>
 <p>以p为例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) p n      &lt;---打印代码中变量n的值</span><br><span class="line"><span class="variable">$1</span> = 1</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) p n      &lt;---打印代码中变量n的值</span><br><span class="line"><span class="variable">$1</span> = 1</span><br></pre></td></tr></tbody></table></figure>
 <p>以disp为例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) disp n</span><br><span class="line">1: n = 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) disp n</span><br><span class="line">1: n = 1</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>退出调试</p>
 <p>直接输入<code>q</code>并回车</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(gdb) q</span><br><span class="line">A debugging session is active.</span><br><span class="line"></span><br><span class="line">	Inferior 1 [process 467365] will be killed.</span><br><span class="line"></span><br><span class="line">Quit anyway? (y or n) y</span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment">#    &lt;---已退出</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(gdb) q</span><br><span class="line">A debugging session is active.</span><br><span class="line"></span><br><span class="line">	Inferior 1 [process 467365] will be killed.</span><br><span class="line"></span><br><span class="line">Quit anyway? (y or n) y</span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment">#    &lt;---已退出</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
 </ol>
-<h2 id="GDB汇编调试"><a href="#GDB汇编调试" class="headerlink" title="GDB汇编调试"></a>GDB汇编调试</h2><h3 id="部分指令"><a href="#部分指令" class="headerlink" title="部分指令"></a><strong>部分指令</strong></h3><table>
+<h2 id="GDB汇编调试"><a href="#GDB汇编调试" class="headerlink" title="GDB汇编调试"></a>GDB汇编调试</h2><h3 id="部分指令"><a href="#部分指令" class="headerlink" title="部分指令"></a><strong>部分指令</strong></h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>指令</th>
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>si</td>
 <td>单步执行，进入函数内部</td>
 </tr>
@@ -1009,7 +938,7 @@
 <td>单步执行，不进入函数内部</td>
 </tr>
 <tr>
-<td>disp  &#x2F;i  $pc(或寄存器)</td>
+<td>disp  /i  $pc(或寄存器)</td>
 <td>显示出当前执行的语句，下一行展示相关寄存器和堆栈内容的变化</td>
 </tr>
 <tr>
@@ -1032,15 +961,16 @@
 <td>disassemble</td>
 <td>获取汇编代码</td>
 </tr>
-</tbody></table>
-<h3 id="查看指定内存地址处的内容："><a href="#查看指定内存地址处的内容：" class="headerlink" title="查看指定内存地址处的内容："></a><strong>查看指定内存地址处的内容</strong>：</h3><p>命令格式：<strong>x&#x2F;nfu  addr</strong> 如：<code>(gdb) x/3sw  $eax</code></p>
+</tbody>
+</table>
+</div>
+<h3 id="查看指定内存地址处的内容："><a href="#查看指定内存地址处的内容：" class="headerlink" title="查看指定内存地址处的内容："></a><strong>查看指定内存地址处的内容</strong>：</h3><p>命令格式：<strong>x/nfu  addr</strong> 如：<code>(gdb) x/3sw  $eax</code></p>
 <p><strong>x : examine 的缩写</strong></p>
 <p><strong>n : 表示要显示的内存单元个数</strong></p>
 <p><strong>f : 表示显示方式, 可取如下值</strong></p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x 按十六进制格式显示变量。</span><br><span class="line">d 按十进制格式显示变量。</span><br><span class="line">c 按字符格式显示变量。</span><br><span class="line">f 按浮点数格式显示变量。</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x 按十六进制格式显示变量。</span><br><span class="line">d 按十进制格式显示变量。</span><br><span class="line">c 按字符格式显示变量。</span><br><span class="line">f 按浮点数格式显示变量。</span><br></pre></td></tr></tbody></table></figure>
 <p><strong>u表示一个地址单元的长度</strong>，与n一起表示显示的地址长度</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b表示单字节，</span><br><span class="line">h表示双字节，</span><br><span class="line">w表示四字节，</span><br><span class="line">g表示八字节</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b表示单字节，</span><br><span class="line">h表示双字节，</span><br><span class="line">w表示四字节，</span><br><span class="line">g表示八字节</span><br></pre></td></tr></tbody></table></figure>
       
     </div>
 
@@ -1131,33 +1061,31 @@
 <p>相关资料：</p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html">https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html</a> 动态库和静态库</p>
 <p><a target="_blank" rel="noopener" href="https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9">https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9</a>  gcc编译选项</p>
-<h1 id="GCC"><a href="#GCC" class="headerlink" title="GCC"></a>GCC</h1><p>GCC全称 the GNU Compiler Collection ，是一套<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%B7%A8%E7%A8%8B%E8%AA%9E%E8%A8%80">编程语言</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BC%96%E8%AF%91%E5%99%A8">编译器</a>，以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GPL">GPL</a>及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LGPL">LGPL</a>许可证所发行的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E8%BB%9F%E9%AB%94">自由软件</a>，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU%E8%A8%88%E5%8A%83">GNU计划</a>的关键部分，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU%E5%B7%A5%E5%85%B7%E9%93%BE">GNU工具链</a>的主要组成部分之一。可处理<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">Fortran</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80)">Pascal</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Objective-C">Objective-C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Java">Java</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Ada">Ada</a>，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Go">Go</a>与其他语言。</p>
+<h1 id="GCC"><a href="#GCC" class="headerlink" title="GCC"></a>GCC</h1><p>GCC全称 the GNU Compiler Collection ，是一套<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/編程語言">编程语言</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/编译器">编译器</a>，以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GPL">GPL</a>及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LGPL">LGPL</a>许可证所发行的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/自由軟體">自由软件</a>，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU計劃">GNU计划</a>的关键部分，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU工具链">GNU工具链</a>的主要组成部分之一。可处理<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">Fortran</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(程式語言">Pascal</a>)、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Objective-C">Objective-C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Java">Java</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Ada">Ada</a>，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Go">Go</a>与其他语言。</p>
 <p>GCC中包含gcc和g++，分别处理C语言和C++。关于这两者的区别可参考<a target="_blank" rel="noopener" href="http://c.biancheng.net/view/7936.html">http://c.biancheng.net/view/7936.html</a></p>
 <h2 id="gcc使用技巧"><a href="#gcc使用技巧" class="headerlink" title="gcc使用技巧"></a>gcc使用技巧</h2><ol>
 <li><p>当文件没有扩展名时，可使用 <code>-x</code> 选项指明当前文件的类型。比如当前有个文件demo，当直接使用gcc demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件，因此使用 <code>gcc -xc demo</code> （将文件当作C语言处理）。</p>
 </li>
 <li><p>gcc + 文件名，生成对应的可执行文件，默认为a.out 。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./a.out</span></span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./a.out</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p><code>-o</code>选项指定生成的可执行文件的文件名。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c -o helloworld         #用来指定要生成的文件名。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./helloworld</span></span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c -o helloworld         #用来指定要生成的文件名。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./helloworld</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure>
 </li>
-<li><p><code>-E</code>选项可控制GCC编译器仅对源码做<strong>预处理</strong>操作。<br>所谓预处理操作，主要是处理那些源文件和头文件中以 # 开头的命令（比如 #include、#define、#ifdef 等），并删除程序中所有的注释 &#x2F;&#x2F; 和 &#x2F;* … *&#x2F;。</p>
+<li><p><code>-E</code>选项可控制GCC编译器仅对源码做<strong>预处理</strong>操作。<br>所谓预处理操作，主要是处理那些源文件和头文件中以 # 开头的命令（比如 #include、#define、#ifdef 等），并删除程序中所有的注释 // 和 /<em> … </em>/。</p>
 <p>一般将预处理的内容保存在.i后缀的文件中 :</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -E helloworld.c -o helloworld.i</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -E helloworld.c -o helloworld.i</span></span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p><code>-S</code>选项可令GCC编译器仅将指定文件加工至<strong>编译阶段</strong>，并生成对应的汇编代码文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.i         #GCC编译器只需编译此文件。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.c         #GCC编译器需要对其进行预处理和编译这两步操作。</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.i         #GCC编译器只需编译此文件。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.c         #GCC编译器需要对其进行预处理和编译这两步操作。</span></span><br></pre></td></tr></tbody></table></figure>
 <p>以上这两行命令均能生成与原文件名相同的后缀为.s的文件（内容为汇编代码）。</p>
 </li>
 <li><p><code>-c</code>选项可让GCC编译器将指定文件加工至<strong>汇编阶段</strong>（但并不执行链接操作），并生成对应的目标文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -c helloworld.s         #生成了与原文件名相同的后缀为.o的文件，将汇编代码转变成机器可以执行的指令</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -c helloworld.s         #生成了与原文件名相同的后缀为.o的文件，将汇编代码转变成机器可以执行的指令</span></span><br></pre></td></tr></tbody></table></figure>
 <p>-c选项同样对.c和.i文件有用。</p>
 </li>
 <li><p>gcc执行<strong>链接操作</strong>。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.o -o helloworld           #生成可执行文件helloworld。</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.o -o helloworld           #生成可执行文件helloworld。</span></span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p><code>-g</code>选项可产生调试信息，可以使用<strong>gdb</strong>调试可执行文件。</p>
 </li>
@@ -1233,7 +1161,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>162</span>
+              <span>137</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1254,9 +1182,9 @@
       
           <h1 id="16位地址的寻址能力为64KB"><a href="#16位地址的寻址能力为64KB" class="headerlink" title="16位地址的寻址能力为64KB"></a>16位地址的寻址能力为64KB</h1><p>一个内存单位的大小是1个字节（B）。</p>
 <p>16根地址总线可以寻址的范围为2的16次方个内存单位（单位：B）。</p>
-<p>2^16 B &#x3D; 2^10 * 2^6 B</p>
-<p>2^10 &#x3D; 1024 B &#x3D; 1KB</p>
-<p>所以 2^16 B &#x3D; 1KB * 64 &#x3D; 64KB</p>
+<p>2^16 B = 2^10 * 2^6 B</p>
+<p>2^10 = 1024 B = 1KB</p>
+<p>所以 2^16 B = 1KB * 64 = 64KB</p>
 <p>所以16位CPU的一个段的长度最大为64KB。</p>
 
       
@@ -1326,7 +1254,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>765</span>
+              <span>760</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1347,15 +1275,13 @@
       
           <h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><h2 id="CRYPTO"><a href="#CRYPTO" class="headerlink" title="CRYPTO"></a>CRYPTO</h2><h3 id="easy-real"><a href="#easy-real" class="headerlink" title="easy_real"></a><strong>easy_real</strong></h3><p>将n分解为两个质数，得到<br><code>q = 65267138038038699886916162739434586079731613825212388229424706115289974540917</code></p>
 <p>利用脚本将m求出<br></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line">e = <span class="number">23</span></span><br><span class="line">p = <span class="number">64310413306776406422334034047152581900365687374336418863191177338901198608319</span></span><br><span class="line">q = <span class="number">65267138038038699886916162739434586079731613825212388229424706115289974540917</span></span><br><span class="line">phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">d = gmpy2.invert(e,phi)</span><br><span class="line">m = gmpy2.powmod(c,d,p*q)</span><br><span class="line"><span class="built_in">print</span>(m)</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line">e = <span class="number">23</span></span><br><span class="line">p = <span class="number">64310413306776406422334034047152581900365687374336418863191177338901198608319</span></span><br><span class="line">q = <span class="number">65267138038038699886916162739434586079731613825212388229424706115289974540917</span></span><br><span class="line">phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">d = gmpy2.invert(e,phi)</span><br><span class="line">m = gmpy2.powmod(c,d,p*q)</span><br><span class="line"><span class="built_in">print</span>(m)</span><br></pre></td></tr></tbody></table></figure>
 <p><code>m = 2976168736142380455841784134407431434784057911773423743751382131043957</code></p>
 <p>将其转为16进制<code>6e64696f735f3b396b67453b574b38653b573f67576e3c5c3b6b7c6e75</code></p>
 <p>再转为ASCII码<code>ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu</code></p>
 <p>根据异或的运算规律编写脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&quot;ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu&quot;</span></span><br><span class="line">s = <span class="built_in">list</span>(s)</span><br><span class="line">flag=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">11</span>):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">29</span>):</span><br><span class="line">		flag+=<span class="built_in">chr</span>(<span class="built_in">ord</span>(s[i])^x)</span><br><span class="line">	<span class="built_in">print</span>(flag)</span><br></pre></td></tr></table></figure>
-
-<p>可知当x&#x3D;8时，得到flag{W31coM3_C0m3_7o_f4T3ctf}</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">"ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu"</span></span><br><span class="line">s = <span class="built_in">list</span>(s)</span><br><span class="line">flag=<span class="string">""</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">11</span>):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">29</span>):</span><br><span class="line">		flag+=<span class="built_in">chr</span>(<span class="built_in">ord</span>(s[i])^x)</span><br><span class="line">	<span class="built_in">print</span>(flag)</span><br></pre></td></tr></tbody></table></figure>
+<p>可知当x=8时，得到flag{W31coM3_C0m3_7o_f4T3ctf}</p>
 
       
     </div>
@@ -1491,12 +1417,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">135k</span>
+    <span title="站点总字数">134k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:03</span>
+    <span title="站点阅读时长">2:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
