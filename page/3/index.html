@@ -164,6 +164,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/16/%E5%85%B3%E4%BA%8Egit%E7%9A%84%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/16/%E5%85%B3%E4%BA%8Egit%E7%9A%84%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">关于git的远程仓库问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-16 23:49:51" itemprop="dateCreated datePublished" datetime="2022-10-16T23:49:51+08:00">2022-10-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>835</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近一直断断续续地学习git的使用方法，今天在学习的时候遇到了一个关于远程仓库的问题：<strong>如何在克隆远程仓库后，将其关联到自己的远程仓库。</strong></p>
+<p>当使用 git clone
+时，就会将远程仓库克隆到本地。利用命令<code>git remote -v</code>查看克隆的远程仓库的信息，例如：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/user/repo.git (fetch)</span><br><span class="line">origin  https://github.com/user/repo.git (push)</span><br></pre></td></tr></tbody></table></figure>
+<p>origin 为默认的远程仓库的别名。此时， origin 默认的 url
+是原始仓库的地址。想要关联到新的远程仓库主要有两种方法：</p>
+<h3 id="添加远程仓库">添加远程仓库</h3>
+<p>使用<code>git remote add</code>命令添加。</p>
+<p>该命令采用两个参数：远程名称（例如<code>new</code> ）、远程 URL（例如
+<code>https://github.com/user_1/repo.git</code>）。</p>
+<p>例如：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add new https://github.com/user_1/repo.git <span class="comment"># Set a new remote</span></span><br><span class="line"></span><br><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/user/repo.git (fetch) <span class="comment"># 原始仓库</span></span><br><span class="line">origin  https://github.com/user/repo.git (push)  <span class="comment"># 原始仓库</span></span><br><span class="line">new  https://github.com/user_1/repo.git (fetch) <span class="comment"># 新添加的远程仓库</span></span><br><span class="line">new  https://github.com/user_1/repo.git (push) <span class="comment"># 新添加的远程仓库</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="更改远程仓库的-url">更改远程仓库的 URL</h3>
+<p>使用<code>git remote set-url</code>命令更改 URL。</p>
+<p>参考：https://docs.github.com/cn/get-started/getting-started-with-git/managing-remote-repositories#changing-a-remote-repositorys-url</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/11/C%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%95%B4%E6%95%B0%E9%99%A4%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1389,121 +1484,10 @@ bx 中的数据加上 si 中的数据再加上 idata）。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/25/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%94%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/25/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%94%EF%BC%89/" class="post-title-link" itemprop="url">汇编语言（五）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-25 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-25T00:00:00+08:00">2022-08-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-23 10:12:37" itemprop="dateModified" datetime="2023-05-23T10:12:37+08:00">2023-05-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="汇编语言五包含多个段的程序">汇编语言（五）——包含多个段的程序</h1>
-<h2 id="在代码段中使用数据">在代码段中使用数据</h2>
-<p>计算以下8个数据的和，结果存在ax寄存器中：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
-<p>我们希望通过循环的方式进行累加，而在累加前，要将这些数据存储在一组地址连续的内存单元中。具体做法如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">assume cs:code</span><br><span class="line">code segment</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">	</span><br><span class="line">	start: mov bx, 0</span><br><span class="line">	       mov ax, 0</span><br><span class="line">	</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	   s:  add ax, cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s</span><br><span class="line">	</span><br><span class="line">	       mov ax, 4c00h</span><br><span class="line">	       int 21h</span><br><span class="line">code ends</span><br><span class="line">end start</span><br></pre></td></tr></tbody></table></figure>
-<p>程序中<code>dw</code>（define
-word）的含义是定义字型数据。上述程序中使用<code>dw</code>定义了8个字型数据，所占内存空间大小为16字节。</p>
-<p>程序在运行时，<code>CS</code>中存放的是代码段的段地址，由于用<code>dw</code>定义的数据处于代码段的在开始，因此偏移地址为0，则这8个数据所在地址为<code>CS:0</code>、<code>CS:2</code>、<code>CS:4</code>、<code>CS:6</code>、<code>CS:8</code>、<code>CS:A</code>、<code>CS:C</code>、<code>CS:E</code>。</p>
-<p><code>end</code>除了通知编译器程序结束外，还可以通知编译器程序的入口在什么位置。上述示例中，<code>end</code>后面的标号
-<strong>start</strong> 指明了程序的入口。</p>
-<h2 id="在代码段中使用栈">在代码段中使用栈</h2>
-<p>利用栈，将给定的数据逆序存放：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
-<p>代码如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg</span><br><span class="line">code segment</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">	dw 0, 0, 0, 0, 0, 0, 0, 0    用dw定义16个字型数据，在程序加载后，取得16个字的内存空间，							    存放这16个数据。在后面的程序中将这段空间当作栈来使用。</span><br><span class="line">	start: mov ax, cs</span><br><span class="line">	       mov ss, ax</span><br><span class="line">	       mov sp, 30h           将设置栈顶ss:sp指向cs:30</span><br><span class="line">	       </span><br><span class="line">	       mov bx, 0</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	    s: push cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s                以上将代码段0~15单元中的8个字型数据依次入栈</span><br><span class="line">	       </span><br><span class="line">	       mov bx, 0</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	   s0: pop cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s0               以上依次出栈8个字型数据到代码段0~15单元中</span><br><span class="line">	       </span><br><span class="line">	       mov ax, 4c00h</span><br><span class="line">	       int 21h</span><br><span class="line">	       </span><br><span class="line">codesg ends</span><br><span class="line">end start                        指明程序的入口在start处</span><br></pre></td></tr></tbody></table></figure>
-<p>由上述代码可知<code>cs:10 ~ cs:2F</code>内存空间用来当作栈使用，初始状态下栈为空，所以<code>ss:sp</code>要指向栈底，则设置<code>ss:sp</code>指向<code>cs:30</code>（入栈
-sp=sp-2）。</p>
-<h2 id="将数据代码栈放入不同的段">将数据、代码、栈放入不同的段</h2>
-<p>当数据、代码和栈需要的空间超过
-64KB，就不能放在一个段中(一个段的容量不能大于
-64KB，这是8086模式的限制，并不是所有处理器都这样)。</p>
-<p>示例代码如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">assume cs:code, ds:data, ss:stack</span><br><span class="line"></span><br><span class="line">data segment                数据段</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">data ends</span><br><span class="line"></span><br><span class="line">stack segment               栈段</span><br><span class="line">	dw 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0</span><br><span class="line">stack ends</span><br><span class="line"></span><br><span class="line">code segment                代码段</span><br><span class="line">start:  mov ax, stack </span><br><span class="line">        mov ss, ax</span><br><span class="line">        mov sp 20h          设置栈顶ss:sp指向stack:20</span><br><span class="line">        </span><br><span class="line">        mov ax, data</span><br><span class="line">        mov ds, ax          ds指向data段</span><br><span class="line">        </span><br><span class="line">        mov bx, 0           ds:bx指向data段中的第一个单元</span><br><span class="line">        </span><br><span class="line">        mov cx, 8</span><br><span class="line">s:      push [bx]</span><br><span class="line">        add bx, 2</span><br><span class="line">        loop s              以上将data段中的0~15单元中的8个字型数据依次入栈</span><br><span class="line">        </span><br><span class="line">        mov bx, 0</span><br><span class="line">        </span><br><span class="line">        mov cx, 8</span><br><span class="line">s0:     pop [bx]</span><br><span class="line">        add bx, 2</span><br><span class="line">        loop s0</span><br><span class="line">        </span><br><span class="line">        mov ax, 4c00h</span><br><span class="line">        int 21h</span><br><span class="line">code ends</span><br><span class="line"></span><br><span class="line">end start</span><br><span class="line">        </span><br></pre></td></tr></tbody></table></figure>
-<p><code>mov ax,data</code>的含义就是将名称<code>data</code>段的段地址送入<code>ax</code>。<code>data</code>段中的数据<code>0abch</code>的地址就是<code>data:6</code>。不能直接将数值直接送入段寄存器中，因此<code>mov ds,data</code>是错误的。正确的语句如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov ax, data</span><br><span class="line">mov ds, ax      利用ax寄存器作为中转</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1571,7 +1555,7 @@ sp=sp-2）。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1620,12 +1604,12 @@ sp=sp-2）。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">137k</span>
+    <span title="站点总字数">138k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:04</span>
+    <span title="站点阅读时长">2:05</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
