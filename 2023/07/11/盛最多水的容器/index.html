@@ -20,20 +20,24 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="参考：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;43568725 https:&#x2F;&#x2F;www.jiuzhang.com&#x2F;solutions&#x2F;rotate-array&#x2F; 翻转数组（Rotate Array） 给定一个数组，将数组向右移动k步，其中k为非负数。 123456Input: [1,2,3,4,5,6,7] and k &#x3D; 3Output: [5,6,7,1,2,3,4]Expl">
+  <meta name="description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;container-with-most-water&#x2F;  给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。 找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。 返回容器可以储存的最大水量。 说明：你不能倾斜容器。 示例 ：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Rotate">
-<meta property="og:url" content="http://example.com/2022/09/18/Rotate/index.html">
+<meta property="og:title" content="盛最多水的容器">
+<meta property="og:url" content="http://example.com/2023/07/11/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="参考：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;43568725 https:&#x2F;&#x2F;www.jiuzhang.com&#x2F;solutions&#x2F;rotate-array&#x2F; 翻转数组（Rotate Array） 给定一个数组，将数组向右移动k步，其中k为非负数。 123456Input: [1,2,3,4,5,6,7] and k &#x3D; 3Output: [5,6,7,1,2,3,4]Expl">
+<meta property="og:description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;container-with-most-water&#x2F;  给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。 找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。 返回容器可以储存的最大水量。 说明：你不能倾斜容器。 示例 ：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-09-18T04:12:30.994Z">
-<meta property="article:modified_time" content="2022-10-16T16:01:31.031Z">
+<meta property="og:image" content="https://aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com/aliyun-lc-upload/uploads/2018/07/25/question_11.jpg">
+<meta property="article:published_time" content="2023-07-11T01:55:08.101Z">
+<meta property="article:modified_time" content="2023-07-11T02:02:24.537Z">
 <meta property="article:author" content="hxt">
-<meta property="article:tag" content="rotate">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com/aliyun-lc-upload/uploads/2018/07/25/question_11.jpg">
 
-<link rel="canonical" href="http://example.com/2022/09/18/Rotate/">
+<link rel="canonical" href="http://example.com/2023/07/11/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">
 
 
 <script id="page-configurations">
@@ -46,7 +50,7 @@
   };
 </script>
 
-  <title>Rotate | hxt's Blog</title>
+  <title>盛最多水的容器 | hxt's Blog</title>
   
 
 
@@ -168,7 +172,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/18/Rotate/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/11/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -181,7 +185,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Rotate
+          盛最多水的容器
         </h1>
 
         <div class="post-meta">
@@ -190,23 +194,21 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-09-18 12:12:30" itemprop="dateCreated datePublished" datetime="2022-09-18T12:12:30+08:00">2022-09-18</time>
+              <time title="创建时间：2023-07-11 09:55:08 / 修改时间：10:02:24" itemprop="dateCreated datePublished" datetime="2023-07-11T09:55:08+08:00">2023-07-11</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-17 00:01:31" itemprop="dateModified" datetime="2022-10-17T00:01:31+08:00">2022-10-17</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
                 </span>
             </span>
 
@@ -223,7 +225,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>636</span>
+              <span>708</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -242,15 +244,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>参考：https://zhuanlan.zhihu.com/p/43568725
-https://www.jiuzhang.com/solutions/rotate-array/</p>
-<h1 id="翻转数组rotate-array">翻转数组（Rotate Array）</h1>
-<p>给定一个数组，将数组向右移动k步，其中k为非负数。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6,7] and k = 3</span><br><span class="line">Output: [5,6,7,1,2,3,4]</span><br><span class="line">Explanation:</span><br><span class="line">rotate 1 steps to the right: [7,1,2,3,4,5,6]</span><br><span class="line">rotate 2 steps to the right: [6,7,1,2,3,4,5]</span><br><span class="line">rotate 3 steps to the right: [5,6,7,1,2,3,4]</span><br></pre></td></tr></tbody></table></figure>
-<p>假设给定一个二进制数<code>a='0b11001101'</code>，（<strong>必须为8位或16位或32位</strong>）求
-rotate right 3 的结果，代码如下：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">self, nums, k</span>):</span><br><span class="line">            <span class="comment"># Write your code here</span></span><br><span class="line">            length = <span class="built_in">len</span>(nums)</span><br><span class="line">            k = k % length</span><br><span class="line">            result = nums[length - k : length] + nums[:length - k]</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">a=<span class="string">'0b11001101'</span></span><br><span class="line">a=<span class="built_in">list</span>(a[<span class="number">2</span>:])</span><br><span class="line">r=Solution()</span><br><span class="line">x=r.rotate(a,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span>(x)</span><br></pre></td></tr></tbody></table></figure>
-<p>运行结果为<code>['1', '0', '1', '1', '1', '0', '0', '1']</code>。</p>
+        <p>题目地址：https://leetcode.cn/problems/container-with-most-water/</p>
+<blockquote>
+<p>给定一个长度为 <code>n</code> 的整数数组 <code>height</code> 。有
+<code>n</code> 条垂线，第 <code>i</code> 条线的两个端点是
+<code>(i, 0)</code> 和 <code>(i, height[i])</code> 。</p>
+<p>找出其中的两条线，使得它们与 <code>x</code>
+轴共同构成的容器可以容纳最多的水。</p>
+<p>返回容器可以储存的最大水量。</p>
+<p><strong>说明：</strong>你不能倾斜容器。</p>
+<p><strong>示例 ：</strong></p>
+<figure>
+<img src="https://aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com/aliyun-lc-upload/uploads/2018/07/25/question_11.jpg" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;输入：[1,8,6,2,5,4,8,3,7]</span><br><span class="line">&gt;输出：49 </span><br><span class="line">&gt;解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。</span><br></pre></td></tr></tbody></table></figure>
+</blockquote>
+<p>这题的主要就是使用双指针的思想。分析可知矩形面积取决于两个垂直线中较短的那条，若是移动较长的垂直线，则面积是一定减小的，所以<strong>每次移动较短的垂直线</strong>，这样面积的变化才是有可能是增大的。</p>
+<p>完整代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">maxArea</span><span class="params">(<span class="type">int</span>* height, <span class="type">int</span> heightSize)</span>{</span><br><span class="line">    <span class="type">int</span> first=<span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> last = heightSize<span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> smax=<span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> s;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(;first&lt;last;){</span><br><span class="line">        s = (height[first] &lt;= height[last] ? height[first] : height[last]) * (last-first); <span class="comment">//矩形面积</span></span><br><span class="line">        <span class="keyword">if</span>(smax &lt; s)</span><br><span class="line">            smax = s;</span><br><span class="line">        <span class="keyword">if</span>(height[first]&lt;height[last]) <span class="comment">//找出较短的垂直线</span></span><br><span class="line">            first+=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            last-=<span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> smax;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -260,7 +272,9 @@ rotate right 3 的结果，代码如下：</p>
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/rotate/" rel="tag"># rotate</a>
+              <a href="/tags/C/" rel="tag"># C</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
           </div>
 
         
@@ -269,13 +283,10 @@ rotate right 3 的结果，代码如下：</p>
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/09/12/RSA%E7%AE%97%E6%B3%95/" rel="prev" title="RSA算法">
-      <i class="fa fa-chevron-left"></i> RSA算法
+    <a href="/2023/07/07/%E5%9B%9E%E6%96%87%E6%95%B0/" rel="prev" title="回文数">
+      <i class="fa fa-chevron-left"></i> 回文数
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/09/18/ManyCheck/" rel="next" title="复现省赛逆向-ManyCheck">
-      复现省赛逆向-ManyCheck <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -334,7 +345,6 @@ rotate right 3 的结果，代码如下：</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BF%BB%E8%BD%AC%E6%95%B0%E7%BB%84rotate-array"><span class="nav-number">1.</span> <span class="nav-text">翻转数组（Rotate Array）</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

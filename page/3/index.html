@@ -164,6 +164,192 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/21/NSSCTF-HNCTF(%E8%87%AA%E7%94%B1%E8%B5%9B%E9%81%93)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/21/NSSCTF-HNCTF(%E8%87%AA%E7%94%B1%E8%B5%9B%E9%81%93)/" class="post-title-link" itemprop="url">NSSCTF-HNCTF(自由赛道)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-21 21:17:04" itemprop="dateCreated datePublished" datetime="2022-10-21T21:17:04+08:00">2022-10-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-10 15:50:05" itemprop="dateModified" datetime="2023-06-10T15:50:05+08:00">2023-06-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Reverse/" itemprop="url" rel="index"><span itemprop="name">Reverse</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>平台：NSSCTF</p>
+<p>比赛：HNCTF(自由赛道)</p>
+<h2 id="crackme">CrackMe</h2>
+<p>附件名称为：动调下断点。可知这题应该使用动态调试。</p>
+<p>先使用IDA打开文件，查看文件信息。按 shift+F12
+查看是否有特殊字符串</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200456398.png" alt="image-20221021200456398">
+<figcaption aria-hidden="true">image-20221021200456398</figcaption>
+</figure>
+<p>双击<code>.data:00403096   00000016    C   Congrats, u did it!!!</code>，定位到该字符串下，右击查看该字符串所在的函数</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200815897.png" alt="image-20221021200815897">
+<figcaption aria-hidden="true">image-20221021200815897</figcaption>
+</figure>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021200830149.png" alt="image-20221021200830149">
+<figcaption aria-hidden="true">image-20221021200830149</figcaption>
+</figure>
+<p>发现是在 DialogFunc 函数中，点击左侧函数名查看该函数</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021201601938.png" alt="image-20221021201601938">
+<figcaption aria-hidden="true">image-20221021201601938</figcaption>
+</figure>
+<p>分析视图逻辑，发现在打印最终的字符串之前进行了字符串的判断，猜测其中一个是flag</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021203157203.png" alt="image-20221021203157203">
+<figcaption aria-hidden="true">image-20221021203157203</figcaption>
+</figure>
+<p>双击查看这两个字符串的地址</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021203453448.png" alt="image-20221021203453448">
+<figcaption aria-hidden="true">image-20221021203453448</figcaption>
+</figure>
+<p>回到动态调试中，发现这两个字符串</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021203549793.png" alt="image-20221021203549793">
+<figcaption aria-hidden="true">image-20221021203549793</figcaption>
+</figure>
+<p>在第一个 String 处设置断点（F2），然后按 F9
+运行至断点处，弹出窗口要求我们进行输入，根据附件中的“要求.txt”，我在
+name 框中输入了“CreakMe”，按下“Check”按钮后，查看 String 内容</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021204246992.png" alt="image-20221021204246992">
+<figcaption aria-hidden="true">image-20221021204246992</figcaption>
+</figure>
+<p>窗口提示输入“Serial”，我便随便输入了几个数字，点击“About”按钮，然后按F8单步执行，无法成功，于是再次按下“Check”按钮，并再次尝试运行，单步执行成功，第一个
+String 和第二个均发生了改变，第二个 String 内容为我刚输入的内容</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021204726038.png" alt="image-20221021204726038">
+<figcaption aria-hidden="true">image-20221021204726038</figcaption>
+</figure>
+<p>猜测第一个 String 的内容为flag，尝试提交，flag正确。</p>
+<h2 id="getflag">getflag</h2>
+<p>使用IDA打开文件，直接F5查看伪代码</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">{</span><br><span class="line">  LPSTR v3; <span class="comment">// ebx</span></span><br><span class="line">  CHAR v4; <span class="comment">// al</span></span><br><span class="line">  <span class="type">int</span> v5; <span class="comment">// esi</span></span><br><span class="line">  HMODULE v6; <span class="comment">// eax</span></span><br><span class="line">  LPSTR v8; <span class="comment">// edx</span></span><br><span class="line">  CHAR v9; <span class="comment">// al</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> _<span class="title">STARTUPINFOA</span> <span class="title">StartupInfo</span>;</span> <span class="comment">// [esp+0h] [ebp-5Ch]</span></span><br><span class="line">  <span class="type">int</span> *v11; <span class="comment">// [esp+50h] [ebp-Ch]</span></span><br><span class="line"></span><br><span class="line">  v11 = &amp;argc;</span><br><span class="line">  __main();</span><br><span class="line">  v3 = GetCommandLineA();</span><br><span class="line">  GetStartupInfoA(&amp;StartupInfo);</span><br><span class="line">  <span class="keyword">if</span> ( v3 )</span><br><span class="line">  {</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    {</span><br><span class="line">      v4 = *v3;</span><br><span class="line">      <span class="keyword">if</span> ( *v3 != <span class="number">32</span> &amp;&amp; v4 != <span class="number">9</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      ++v3;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> ( v4 == <span class="number">34</span> )</span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">do</span></span><br><span class="line">      {</span><br><span class="line">        v8 = v3++;</span><br><span class="line">        v9 = *v3;</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">while</span> ( *v3 != <span class="number">34</span> &amp;&amp; v9 );</span><br><span class="line">      <span class="keyword">if</span> ( v9 == <span class="number">34</span> )</span><br><span class="line">        v3 = v8 + <span class="number">2</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">while</span> ( *v3 &amp; <span class="number">0xDF</span> &amp;&amp; *v3 != <span class="number">9</span> )</span><br><span class="line">        ++v3;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">while</span> ( *v3 == <span class="number">32</span> || *v3 == <span class="number">9</span> )</span><br><span class="line">      ++v3;</span><br><span class="line">  }</span><br><span class="line">  v5 = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">if</span> ( StartupInfo.dwFlags &amp; <span class="number">1</span> )</span><br><span class="line">    v5 = StartupInfo.wShowWindow;</span><br><span class="line">  v6 = GetModuleHandleA(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">return</span> WinMain(v6, <span class="number">0</span>, v3, v5);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>发现第13行的 _main() 函数，双击查看</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __main()</span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> result; <span class="comment">// eax</span></span><br><span class="line"></span><br><span class="line">  result = dword_40802C;</span><br><span class="line">  <span class="keyword">if</span> ( !dword_40802C )</span><br><span class="line">  {</span><br><span class="line">    dword_40802C = <span class="number">1</span>;</span><br><span class="line">    result = __do_global_ctors();</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>没发现什么重要的函数，于是尝试运行该程序，发现需要点击 100000000
+次鼠标才能得到flag。（还是算了吧）</p>
+<p>于是回到 main 函数中，跳过一些系统调用的函数，双击查看第48行的
+WinMain 函数</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __stdcall <span class="title function_">WinMain</span><span class="params">(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, <span class="type">int</span> nShowCmd)</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v4; <span class="comment">// eax</span></span><br><span class="line">  MSG Msg; <span class="comment">// [esp+34h] [ebp-54h]</span></span><br><span class="line">  WNDCLASSA WndClass; <span class="comment">// [esp+50h] [ebp-38h]</span></span><br><span class="line">  HWND v8; <span class="comment">// [esp+78h] [ebp-10h]</span></span><br><span class="line">  HWND hWnd; <span class="comment">// [esp+7Ch] [ebp-Ch]</span></span><br><span class="line"></span><br><span class="line">  WndClass.cbClsExtra = <span class="number">0</span>;</span><br><span class="line">  WndClass.cbWndExtra = <span class="number">0</span>;</span><br><span class="line">  WndClass.hbrBackground = (HBRUSH)<span class="number">6</span>;</span><br><span class="line">  WndClass.hCursor = <span class="number">0</span>;</span><br><span class="line">  WndClass.hIcon = <span class="number">0</span>;</span><br><span class="line">  WndClass.hInstance = hInstance;</span><br><span class="line">  WndClass.lpfnWndProc = WndProc;</span><br><span class="line">  WndClass.lpszClassName = <span class="string">"Main"</span>;</span><br><span class="line">  WndClass.lpszMenuName = <span class="number">0</span>;</span><br><span class="line">  WndClass.style = <span class="number">42</span>;</span><br><span class="line">  RegisterClassA(&amp;WndClass);</span><br><span class="line">  hWnd = GetForegroundWindow();</span><br><span class="line">  ShowWindow(hWnd, <span class="number">0</span>);</span><br><span class="line">  v8 = CreateWindowExA(<span class="number">0</span>, <span class="string">"Main"</span>, <span class="string">"flag"</span>, <span class="number">0xCF0000</span>u, <span class="number">200</span>, <span class="number">200</span>, <span class="number">430</span>, <span class="number">130</span>, <span class="number">0</span>, <span class="number">0</span>, hInstance, <span class="number">0</span>);</span><br><span class="line">  ShowWindow(v8, <span class="number">5</span>);</span><br><span class="line">  UpdateWindow(v8);</span><br><span class="line">  v4 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">  {</span><br><span class="line">    *(HWND *)((<span class="type">char</span> *)&amp;Msg.hwnd + v4) = <span class="number">0</span>;</span><br><span class="line">    v4 += <span class="number">4</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">while</span> ( v4 &lt; <span class="number">0x1C</span> );</span><br><span class="line">  <span class="keyword">while</span> ( GetMessageA(&amp;Msg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>) )</span><br><span class="line">  {</span><br><span class="line">    TranslateMessage(&amp;Msg);</span><br><span class="line">    DispatchMessageA(&amp;Msg);</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>双击查看 WndProc 函数</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __stdcall <span class="title function_">WndProc</span><span class="params">(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)</span></span><br><span class="line">{</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">tagRECT</span> <span class="title">Rect</span>;</span> <span class="comment">// [esp+3Ch] [ebp-5Ch]</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">tagPAINTSTRUCT</span> <span class="title">Paint</span>;</span> <span class="comment">// [esp+4Ch] [ebp-4Ch]</span></span><br><span class="line">  HDC hDC; <span class="comment">// [esp+8Ch] [ebp-Ch]</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ( Msg == <span class="number">15</span> )</span><br><span class="line">  {</span><br><span class="line">    hDC = BeginPaint(hWnd, &amp;Paint);</span><br><span class="line">    GetClientRect(hWnd, &amp;Rect);</span><br><span class="line">    DrawTextA(hDC, <span class="string">"Click to get the flag."</span>, <span class="number">-1</span>, &amp;Rect, <span class="number">0x85</span>u);</span><br><span class="line">    EndPaint(hWnd, &amp;Paint);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">if</span> ( Msg &gt; <span class="number">0xF</span> )</span><br><span class="line">  {</span><br><span class="line">    <span class="keyword">if</span> ( Msg != <span class="number">16</span> )</span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">if</span> ( Msg == <span class="number">273</span> )</span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">if</span> ( wParam == <span class="number">1234</span> )</span><br><span class="line">          OnButtonClick();</span><br><span class="line">        <span class="keyword">if</span> ( wParam == <span class="number">4321</span> )</span><br><span class="line">          check();</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">goto</span> LABEL_17;</span><br><span class="line">    }</span><br><span class="line">    DestroyWindow(hWnd);</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> ( Msg == <span class="number">1</span> )</span><br><span class="line">  {</span><br><span class="line">    CreateWindowExA(</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="string">"button"</span>,</span><br><span class="line">      <span class="string">"Click me."</span>,</span><br><span class="line">      <span class="number">0x50000000</span>u,</span><br><span class="line">      <span class="number">80</span>,</span><br><span class="line">      <span class="number">30</span>,</span><br><span class="line">      <span class="number">120</span>,</span><br><span class="line">      <span class="number">30</span>,</span><br><span class="line">      hWnd,</span><br><span class="line">      (HMENU)<span class="number">0x4D2</span>,</span><br><span class="line">      *(HINSTANCE *)(lParam + <span class="number">4</span>),</span><br><span class="line">      <span class="number">0</span>);</span><br><span class="line">    CreateWindowExA(</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="string">"button"</span>,</span><br><span class="line">      <span class="string">"Get flag"</span>,</span><br><span class="line">      <span class="number">0x50000000</span>u,</span><br><span class="line">      <span class="number">220</span>,</span><br><span class="line">      <span class="number">30</span>,</span><br><span class="line">      <span class="number">120</span>,</span><br><span class="line">      <span class="number">30</span>,</span><br><span class="line">      hWnd,</span><br><span class="line">      (HMENU)<span class="number">0x10E1</span>,</span><br><span class="line">      *(HINSTANCE *)(lParam + <span class="number">4</span>),</span><br><span class="line">      <span class="number">0</span>);</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  {</span><br><span class="line">    <span class="keyword">if</span> ( Msg != <span class="number">2</span> )</span><br><span class="line">    {</span><br><span class="line">LABEL_17:</span><br><span class="line">      DefWindowProcA(hWnd, Msg, wParam, lParam);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    MessageBoxA(<span class="number">0</span>, <span class="string">"Never gonna give you up."</span>, <span class="string">"Rick"</span>, <span class="number">0</span>);</span><br><span class="line">    PostQuitMessage(<span class="number">0</span>);</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>分析代码可确定最主要的代码就在这个函数中，双击查看 check() 函数</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int check()</span><br><span class="line">{</span><br><span class="line">  if ( click &gt; 99999999 )</span><br><span class="line">    return getflag();</span><br><span class="line">  sprintf(chk, "Click %d more times to get flag", 100000000 - click);</span><br><span class="line">  return MessageBoxA(0, chk, "Failed", 0);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>发现最重要的判断语句，只需要修改点击次数就能快速获得flag。</p>
+<p>回到 IDA View-A 窗口，点击 _check 函数</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021210814755.png" alt="image-20221021210814755">
+<figcaption aria-hidden="true">image-20221021210814755</figcaption>
+</figure>
+<p>点击空格键切换视图模式</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021210910536.png" alt="image-20221021210910536">
+<figcaption aria-hidden="true">image-20221021210910536</figcaption>
+</figure>
+<p>在 Hex 窗口中找到该地址</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021211008946.png" alt="image-20221021211008946">
+<figcaption aria-hidden="true">image-20221021211008946</figcaption>
+</figure>
+<p>右击选择 Edit
+，修改为<code>01 00 00 00</code>，注意内存中的存储顺序。然后通过下图进行保存</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021211427569.png" alt="image-20221021211427569">
+<figcaption aria-hidden="true">image-20221021211427569</figcaption>
+</figure>
+<p>运行修改后的程序，点击一次 Click me 按钮，再点击 Get flag
+按钮得到flag。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221021211650450.png" alt="image-20221021211650450">
+<figcaption aria-hidden="true">image-20221021211650450</figcaption>
+</figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/16/%E5%85%B3%E4%BA%8Egit%E7%9A%84%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1356,134 +1542,6 @@ https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/31/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E5%85%AD%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/31/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E5%85%AD%EF%BC%89/" class="post-title-link" itemprop="url">汇编语言（六）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-31 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-31T00:00:00+08:00">2022-08-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-04-13 14:07:48" itemprop="dateModified" datetime="2023-04-13T14:07:48+08:00">2023-04-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="汇编语言六and和or灵活定位内存地址">汇编语言（六）——and和or，灵活定位内存地址</h1>
-<h2 id="and-和-or-指令及其应用">and 和 or 指令及其应用</h2>
-<h3 id="and-和-or">and 和 or</h3>
-<ol type="1">
-<li><p>and 指令：逻辑与指令，按位进行与运算。</p>
-<p>示例：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov al, 01100011B</span><br><span class="line">and al, 00111011B</span><br></pre></td></tr></tbody></table></figure>
-<p>执行后：al = 00100011B</p></li>
-<li><p>or 指令：逻辑或指令，按位进行或运算。</p>
-<p>示例：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov al, 01100011B</span><br><span class="line">or al, 00111011B</span><br></pre></td></tr></tbody></table></figure>
-<p>执行后：al = 01111011B</p></li>
-</ol>
-<h3 id="大小写转换问题">大小写转换问题</h3>
-<p>根据规律可知：大写字母 + 20H =
-小写字母。因此当字母对应的ASCII码大于等于61H时，则为小写字母，而已学的指令中无法实现判断的功能，于是寻找新的规律。可以看出，字母对应的ASCII码的二进制形式，除<strong>第5位</strong>（位数从0开始计算）外，大写字母与小写字母的其他各位都一样。大写字母第5位为<strong>0</strong>，小写字母第5位为<strong>1</strong>。通过使用
-and 和 or 指令对大小写进行转换。</p>
-<p>完整程序如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg,ds:datasg</span><br><span class="line"></span><br><span class="line">datasg segment</span><br><span class="line"> db 'BaSiC'</span><br><span class="line"> db 'iNfOrMaTiOn'</span><br><span class="line">datasg ends</span><br><span class="line"></span><br><span class="line">codesg segment</span><br><span class="line"> start: mov ax,datasg</span><br><span class="line">        mov ds,ax                        ;设置ds指向datasg段</span><br><span class="line">        mov bx,0                         ;设置(bx)=0，ds:bx指向'BaSiC'的第一个字母</span><br><span class="line">        mov cx,5                         ;设置循环次数 5，因为'BaSiC'有5个字母</span><br><span class="line">     s: mov al,[bx]                      ;将ASCII码从ds:bx所指向的单元中取出</span><br><span class="line">        and al,11011111B                 ;将 al 中的ASCII码的第5位 置为0，变为大写字母</span><br><span class="line">        mov [bx],al                      ;将转变后的ASCII码写回原单位</span><br><span class="line">        inc bx                           ;(bx)加1，ds:bx指向下一个字母</span><br><span class="line">        loop s</span><br><span class="line">        </span><br><span class="line">        mov bx,5                         ;设置(bx) = 5，ds:bx指向'iNfOrMaTiOn'的第一个字母</span><br><span class="line">        mov cx,11                        ;设置循环次数 11，因为'iNfOrMaTiOn'有11个字母</span><br><span class="line">    s0: mov al,[bx]</span><br><span class="line">        or al,00100000B                  ;将al中的ASCII码的第5位 置为1，变为小写字母</span><br><span class="line">        mov [bx],al</span><br><span class="line">        inc bx</span><br><span class="line">        loop s0</span><br><span class="line">        </span><br><span class="line">        mov ax,4c00h</span><br><span class="line">        int 21h</span><br><span class="line">codesg ends</span><br><span class="line">end start</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="定位内存地址">定位内存地址</h2>
-<h3 id="bxidata">[bx+idata]</h3>
-<p>[bx+idata]表示一个内存单元，它的偏移地址为 (bx)+idata（bx
-中的数值加上idata）。</p>
-<p>对于上面的程序，datasg
-段中的两个字符串，一个起始地址为0，另一个为5。于是我们可以将这两个字符串看作两个数组，分别用
-<strong>[0+bx]</strong> 和 <strong>[5+bx]</strong>
-来定位这两个字符串。</p>
-<p>改进的程序如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   mov ax,datasg</span><br><span class="line">   mov ds,ax</span><br><span class="line">   mov bx,0</span><br><span class="line">   mov cx,5</span><br><span class="line"></span><br><span class="line">s: mov al,[bx]                ;定位第一个字符串的字符</span><br><span class="line">   and al,11011111b</span><br><span class="line">   mov [bx],al</span><br><span class="line">   mov al,[5+bx]              ;定位第二个字符串的字符</span><br><span class="line">   or al,00100000b</span><br><span class="line">   mov [5+bx],al</span><br><span class="line">   inc bx</span><br><span class="line">   loop s</span><br></pre></td></tr></tbody></table></figure>
-<p>其中也可将<code>[bx]</code>写成<code>0[bx]</code>，<code>[5+bx]</code>写成<code>5[bx]</code>。</p>
-<h3 id="si-和-di">SI 和 DI</h3>
-<p>si 和 di 是8086CPU中和 bx 功能相近的寄存器，si 和 di
-<strong>不能</strong>分成两个8位寄存器来使用。</p>
-<h3 id="bxsi-和-bxdi">[bx+si] 和 [bx+di]</h3>
-<p>[bx+si] 表示一个内存单元，它的偏移地址为 (bx) + (si)（即 bx
-中的数值加上 si 中的数值）。</p>
-<p>指令<code>mov ax,[bx+si]</code>的数学化描述为：(ax)=((ds)*16+(bx)+(si))。</p>
-<h3 id="bxsiidata-和-bxdiidata">[bx+si+idata] 和 [bx+di+idata]</h3>
-<p>[bx+si+idata]表示一个内存单元，它的偏移地址为 (bx) + (si) +idata（即
-bx 中的数据加上 si 中的数据再加上 idata）。</p>
-<p>指令<code>mov ax,[bx+si+idata]</code>的数学化描述为：(ax)=((ds)*16+(bx)+(si)+idata)。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1555,7 +1613,7 @@ bx 中的数据加上 si 中的数据再加上 idata）。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1609,7 +1667,7 @@ bx 中的数据加上 si 中的数据再加上 idata）。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:05</span>
+    <span title="站点阅读时长">2:06</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
