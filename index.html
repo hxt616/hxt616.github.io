@@ -164,6 +164,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/" class="post-title-link" itemprop="url">最长公共前缀</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-17 12:59:29" itemprop="dateCreated datePublished" datetime="2023-07-17T12:59:29+08:00">2023-07-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-18 09:20:40" itemprop="dateModified" datetime="2023-07-18T09:20:40+08:00">2023-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/longest-common-prefix/</p>
+<blockquote>
+<p>编写一个函数来查找字符串数组中的最长公共前缀。</p>
+<p>如果不存在公共前缀，返回空字符串 <code>""</code>。</p>
+<p><strong>示例 ：</strong></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：strs = ["flower","flow","flight"]</span><br><span class="line">输出："fl"</span><br></pre></td></tr></tbody></table></figure>
+</blockquote>
+<p>又是因为基础不扎实找了半天bug<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>。</p>
+<p>例如下面这段代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> {</span><br><span class="line">    <span class="type">char</span> *str[] = {<span class="string">"Hello"</span>,<span class="string">"world"</span>};</span><br><span class="line">    <span class="type">char</span> *ptr = str[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改字符数组元素</span></span><br><span class="line">    ptr[<span class="number">2</span>] = <span class="string">'J'</span>;  <span class="comment">//报错</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>当声明一个字符指针数组<code>str[]</code>并初始化它为字符串常量时，每个元素都是一个指向字符串常量的指针。这意味着我们不能直接修改字符串常量中的字符。这时应该使用<code>malloc</code>函数开辟一片空间存放该字符串的副本，然后进行修改，可参考下面的完整代码。</p>
+<p>完整代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> * <span class="title function_">longestCommonPrefix</span><span class="params">(<span class="type">char</span> ** strs, <span class="type">int</span> strsSize)</span>{</span><br><span class="line">    <span class="type">char</span>* all = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="built_in">strlen</span>(strs[<span class="number">0</span>]) + <span class="number">1</span>); <span class="comment">// 分配空间</span></span><br><span class="line">    <span class="built_in">strcpy</span>(all, strs[<span class="number">0</span>]); <span class="comment">//存放strs[0]的副本</span></span><br><span class="line">    <span class="type">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">char</span> t; <span class="comment">//存放当前比较的字符</span></span><br><span class="line">    <span class="type">int</span> flag = <span class="number">1</span>; <span class="comment">//判断是否不匹配</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="built_in">strlen</span>(strs[<span class="number">0</span>]); j++) {</span><br><span class="line">        t = strs[<span class="number">0</span>][j];</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>; i &lt; strsSize&amp;&amp; j &lt; <span class="built_in">strlen</span>(strs[i]); i++) { <span class="comment">//for的条件语句判断是否溢出</span></span><br><span class="line">            <span class="keyword">if</span> (strs[i][j] != t) {</span><br><span class="line">                flag = <span class="number">0</span>;  <span class="comment">//当字符不匹配时，flag=0</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (i &lt; strsSize&amp;&amp;j &gt;= <span class="built_in">strlen</span>(strs[i])) <span class="comment">//当下标溢出时，flag=0，方便退出循环</span></span><br><span class="line">            flag=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (flag == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    all[j] = <span class="string">'\0'</span>;</span><br><span class="line">    <span class="keyword">return</span> all;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/11/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -291,10 +395,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-07-07 17:20:36 / 修改时间：17:23:09" itemprop="dateCreated datePublished" datetime="2023-07-07T17:20:36+08:00">2023-07-07</time>
+              <time title="创建时间：2023-07-07 17:20:36" itemprop="dateCreated datePublished" datetime="2023-07-07T17:20:36+08:00">2023-07-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-12 14:24:57" itemprop="dateModified" datetime="2023-07-12T14:24:57+08:00">2023-07-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -354,8 +464,9 @@
 <ul>
 <li><p><code>for</code>循环的运行顺序</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">100</span>; i++) </span><br><span class="line">{</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,i);  </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>i=0 ——&gt; i&lt;100 ——&gt; printf ——&gt; i++ ——&gt; i&lt;100 ——&gt;
-printf ——&gt; i++ ...</p>
+<p><code>i=0</code> ——&gt; <code>i&lt;100</code> ——&gt;
+<code>printf</code> ——&gt; <code>i++</code> ——&gt; <code>i&lt;100</code>
+——&gt; <code>printf</code> ——&gt; <code>i++</code> ...</p>
 <p>最后打印的<code>i</code>的值为<code>99</code>，而<code>i</code>的真实值为<code>100</code>。</p></li>
 </ul>
 <p>完整代码：</p>
@@ -1051,370 +1162,6 @@ shell便是修改后的主题。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/Nmap-live-host/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/28/Nmap-live-host/" class="post-title-link" itemprop="url">Nmap Live Host Discovery</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-02-28 14:30:13" itemprop="dateCreated datePublished" datetime="2023-02-28T14:30:13+08:00">2023-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-24 22:12:43" itemprop="dateModified" datetime="2023-01-24T22:12:43+08:00">2023-01-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>8.4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TryHackMe实验房间：https://tryhackme.com/room/nmap01</p>
-<h2 id="introduction">Introduction</h2>
-<p>这个房间主要介绍了如何使用 Nmap 查找活动主机(live
-host)。用于发现活动主机的方法包括：</p>
-<ul>
-<li>ARP 扫描：这种扫描使用 ARP 请求来发现活动主机。</li>
-<li>ICMP 扫描：这种扫描使用 ICMP 请求来标识活动主机。</li>
-<li>TCP / UDP ping 扫描：此扫描将数据包发送到 TCP 端口和 UDP
-端口以确定活动主机。</li>
-</ul>
-<p>我们还将介绍两种扫描器：<code>arp-scan</code>和<code>masscan</code>。并解释它们如何与
-Nmap 发现活动主机这一部分重叠。</p>
-<p>下面是 Nmap
-扫描通常要经历的步骤，其中很多步骤是可选的，取决于提供的参数。</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230122092609574.png" alt="image-20230122092609574">
-<figcaption aria-hidden="true">image-20230122092609574</figcaption>
-</figure>
-<h2 id="subnetworks子网">Subnetworks（子网）</h2>
-<p><em>网段</em>
-是使用共享介质连接的一组计算机，这些介质可以是以太网交换机或 WIFI
-接入点。在IP网络中，<em>子网</em>
-通常相当于连接在一起并配置为使用相同路由器的一个或多个网段。网段是指物理连接，而子网是指逻辑连接。</p>
-<p>下图中有四个网段或子网。每个子网有它自己的 IP
-地址范围，并通过路由器连接到更大的网络中。根据每个网络，可能有防火墙强制执行安全策略。</p>
-<figure>
-<img src="https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/aa787518e856e0094cb40da8399be0f3.png" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>如果你连接到相同的子网，你会期望你的扫描器依赖于 ARP
-(地址解析协议)查询来发现活动主机。ARP 查询的目的是获取硬件地址(MAC 地址)
-，这样就可以通过链路层进行通信，然而，我们可以利用这一点来推断主机是否在线。</p>
-<p>如果你在网络 A 中，使用 ARP
-只能发现该子网（10.1.100.0/24）中的设备。假设你已连接到与目标系统子网不同的子网。在这种情况下，扫描仪生成的所有数据包将通过默认网关（路由器）进行路由，以到达另一个子网上的系统。但是，ARP查询不会被路由，因此无法越过子网路由器。ARP
-是一个链路层协议，ARP 数据包被绑定到其对应的子网。</p>
-<h2 id="enumerating-targets枚举目标">Enumerating
-Targets（枚举目标）</h2>
-<p>在扫描之前，我们需要指定目标，一般而言，目标可以是：列表、范围或是一个子网，示例如下：</p>
-<ul>
-<li>list：<code>MACHINE_IP scanme.nmap.org example.com</code> 将扫描 3
-个IP地址。</li>
-<li>range：<code>10.11.12.15-20</code>将扫描 6
-个IP地址：<code>10.11.12.15</code>、<code>10.11.12.16</code> ······
-以及<code>10.11.12.20</code>。</li>
-<li>subnet：<code>MACHINE_IP/30</code>将扫描 4
-个IP地址。（转换为二进制来看，子网部分有 30 位，主机部分有 2
-位；因此共有 2<sup>2</sup>=4 个主机即 IP 地址）</li>
-</ul>
-<p>还可以提供一个文件作为目标列表的输入：<code>nmap -iL list_of_hosts.txt</code></p>
-<p>如果要检查 Nmap
-将扫描的主机列表，则可以使用<code>nmap -sL TARGETS</code>。此选项将为你提供
-Nmap 将要扫描而无需扫描的主机的详细列表；但是，Nmap
-将尝试对所有目标进行反向 DNS
-解析，以获取其域名。域名可能会向渗透测试者透露各种信息。（如果你不希望
-Nmap 连接到DNS服务器，则可以添加<code>-n</code>。）</p>
-<h2 id="discovering-live-hosts">Discovering Live Hosts</h2>
-<p>让我们回顾下图所示的 TCP/IP 层，利用协议来发现活动主机：</p>
-<ul>
-<li>ARP（链路层）：向网段上的广播地址发送一个帧，并要求具有特定 IP
-地址的计算机通过提供其MAC（硬件）地址进行响应。</li>
-<li>ICMP（网络层）：ICMP有<a target="_blank" rel="noopener" href="https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml">多种类型</a>。ICMP
-ping使用类型 8（Echo）和类型 0（Echo Reply）。如果你想 ping
-同一子网上的系统，ARP 查询应该在 ICMP Echo之前使用。</li>
-<li>TCP（传输层）：扫描仪可以向通用TCP或UDP端口发送一个特制的数据包，以检查目标是否会响应。此方法非常有效，尤其是当
-ICMP Echo 被阻止时。</li>
-<li>UDP（传输层）：同上。</li>
-</ul>
-<figure>
-<img src="https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/745e0412b319d324352c7b29863b74f4.png" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<h2 id="nmap-host-discovery-using-arp">Nmap Host Discovery Using
-ARP</h2>
-<p>Nmap 遵循以下方法来发现活动主机：</p>
-<ol type="1">
-<li>当特权用户试图扫描本地网络（以太网）上的目标时，Nmap使用ARP请求。特权用户是<code>root</code>用户或属于<code>sudoers</code>并可以运行<code>sudo</code>的用户。</li>
-<li>当特权用户尝试扫描本地网络外的目标时，Nmap 使用 ICMP
-回显请求、端口80的TCP ACK（确认）、端口443的 TCP SYN（同步）和 ICMP
-时间戳请求。</li>
-<li>当非特权用户试图扫描本地网络之外的目标时，Nmap 采用 TCP
-三次握手方式，将 SYN 数据包发送到 80 和 443 端口。</li>
-</ol>
-<p>默认情况下，Nmap 使用 ping
-扫描来查找活动主机，并且只扫描活动主机。如果希望使用 Nmap
-在不扫描系统端口的情况下发现在线主机，可以使用<code>nmap -sn TARGETS</code>。</p>
-<p>只有当你和目标系统在同一子网中时，ARP
-扫描才可能使用。在以太网（802.3）和
-WiFi（802.11）上，你需要知道目标系统的 MAC
-地址才能够与之通信。MAC地址是链路层报头所必需的；报头包含源 MAC
-地址和目标 MAC 地址以及其他字段。为了获得 MAC 地址，操作系统会发送 ARP
-查询。ARP 查询仅在目标与你所在的子网相同时有效，即在相同的以太网或 WiFi
-上。在对本地网络进行 Nmap 扫描期间，应该会看到许多 ARP 查询。如果您希望
-Nmap 只执行 ARP
-扫描而不扫描端口，那么可以使用<code>Nmap -PR -sn TARGETS</code>，其中<code>-PR</code>表示你只需要进行
-ARP 扫描。下面的示例显示了 Nmap 使用 ARP
-进行主机查找而不进行端口扫描。运行<code>nmap -PR -sn MACHINE_IP/24</code>来发现与目标机器在同一子网上的所有系统。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pentester@TryHackMe$ sudo nmap -PR -sn 10.10.210.6/24</span><br><span class="line"></span><br><span class="line">Starting Nmap 7.60 ( https://nmap.org ) at 2021-09-02 07:12 BST</span><br><span class="line">Nmap scan report for ip-10-10-210-75.eu-west-1.compute.internal (10.10.210.75)</span><br><span class="line">Host is up (0.00013s latency).</span><br><span class="line">MAC Address: 02:83:75:3A:F2:89 (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-210-100.eu-west-1.compute.internal (10.10.210.100)</span><br><span class="line">Host is up (-0.100s latency).</span><br><span class="line">MAC Address: 02:63:D0:1B:2D:CD (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-210-165.eu-west-1.compute.internal (10.10.210.165)</span><br><span class="line">Host is up (0.00025s latency).</span><br><span class="line">MAC Address: 02:59:79:4F:17:B7 (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-210-6.eu-west-1.compute.internal (10.10.210.6)</span><br><span class="line">Host is up.</span><br><span class="line">Nmap done: 256 IP addresses (4 hosts up) scanned in 3.12 seconds</span><br></pre></td></tr></tbody></table></figure>
-<p>在本例中，AtackBox 的 IP 地址是10.10.210.6，它使用 ARP
-请求来发现同一子网上的活动主机。</p>
-<figure>
-<img src="https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/f0ce4cd34b827f529255c5c73bb909d1.png" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>说到 ARP 扫描，我们应该提到一个围绕 ARP
-查询构建的扫描器：<code>arp-scan</code>；它提供了许多自定义扫描的选项。有关详细信息，请访问
-<a target="_blank" rel="noopener" href="http://www.royhills.co.uk/wiki/index.php/Main_Page">arp-scanner
-wiki</a>。一个常见的选择是 <code>arp-scan --localnet</code> 或者简单的
-<code>arp-scan -l</code>。这个命令将发送 ARP 查询到本地网络上所有有效的
-IP
-地址。此外，如果你的系统有多个接口，并且你有兴趣发现其中一个上的活动主机，你可以使用<code>-I</code>
-指定具体接口，例如，<code>sudo arp-scan -I eth0 -l</code>
-将向<code>eth0</code>接口上的所有有效IP地址发送 ARP 查询。</p>
-<p>在下面的示例中，我们使用<code>arp-scan ATTACKBOX_IP/24</code>扫描了
-AtackBox 的子网。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pentester@TryHackMe$ sudo arp-scan 10.10.210.6/24</span><br><span class="line">Interface: eth0, datalink type: EN10MB (Ethernet)</span><br><span class="line">WARNING: host part of 10.10.210.6/24 is non-zero</span><br><span class="line">Starting arp-scan 1.9 with 256 hosts (http://www.nta-monitor.com/tools/arp-scan/)</span><br><span class="line">10.10.210.75	02:83:75:3a:f2:89	(Unknown)</span><br><span class="line">10.10.210.100	02:63:d0:1b:2d:cd	(Unknown)</span><br><span class="line">10.10.210.165	02:59:79:4f:17:b7	(Unknown)</span><br><span class="line"></span><br><span class="line">4 packets received by filter, 0 packets dropped by kernel</span><br><span class="line">Ending arp-scan 1.9: 256 hosts scanned in 2.726 seconds (93.91 hosts/sec). 3 responded</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="nmap-host-discovery-using-icmp">Nmap Host Discovery Using
-ICMP</h2>
-<p>我们可以 ping 目标网络上的每个 IP 地址，看看谁用 ping reply (ICMP
-Type 0) 来响应我们的<code>ping</code> (ICMP Type 8/Echo)
-请求。尽管这将是最直接的方法，但它并不总是可靠的。许多防火墙会阻止 ICMP
-echo ；Windows 配置了一个主机防火墙，默认情况下阻止 ICMP echo
-请求。请记住，如果目标位于相同的子网上，则 ARP 查询将先于 ICMP
-请求。</p>
-<h3 id="pe">-PE</h3>
-<p>若要使用 ICMP echo request 来发现活动主机，请添加选项
-<code>-PE</code>。(记住，如果你不想进行端口扫描，请添加
-<code>-sn</code>。)如下图所示，ICMP echo 扫描通过发送 ICMP echo request
-来工作，并期望目标使用 ICMP echo reply 进行应答。</p>
-<figure>
-<img src="https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/25fb5fd5d2009cf69d7aae40e8fde2ec.png" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>在下面的示例中，我们使用<code>nmap -PE -sn MACHINE_IP/24</code>扫描了目标所在的子网。此扫描将向子网上的每个
-IP 地址发送 ICMP echo
-数据包。下面的输出显示了使用<code>sudo nmap -PE -sn MACHINE_IP/24</code>扫描虚拟机的
-C 类子网的结果。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">pentester@TryHackMe$ sudo nmap -PE -sn 10.10.68.220/24</span><br><span class="line"></span><br><span class="line">Starting Nmap 7.60 ( https://nmap.org ) at 2021-09-02 10:16 BST</span><br><span class="line">Nmap scan report for ip-10-10-68-50.eu-west-1.compute.internal (10.10.68.50)</span><br><span class="line">Host is up (0.00017s latency).</span><br><span class="line">MAC Address: 02:95:36:71:5B:87 (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-68-52.eu-west-1.compute.internal (10.10.68.52)</span><br><span class="line">Host is up (0.00017s latency).</span><br><span class="line">MAC Address: 02:48:E8:BF:78:E7 (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-68-77.eu-west-1.compute.internal (10.10.68.77)</span><br><span class="line">Host is up (-0.100s latency).</span><br><span class="line">MAC Address: 02:0F:0A:1D:76:35 (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-68-110.eu-west-1.compute.internal (10.10.68.110)</span><br><span class="line">Host is up (-0.10s latency).</span><br><span class="line">MAC Address: 02:6B:50:E9:C2:91 (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-68-140.eu-west-1.compute.internal (10.10.68.140)</span><br><span class="line">Host is up (0.00021s latency).</span><br><span class="line">MAC Address: 02:58:59:63:0B:6B (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-68-142.eu-west-1.compute.internal (10.10.68.142)</span><br><span class="line">Host is up (0.00016s latency).</span><br><span class="line">MAC Address: 02:C6:41:51:0A:0F (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-68-220.eu-west-1.compute.internal (10.10.68.220)</span><br><span class="line">Host is up (0.00026s latency).</span><br><span class="line">MAC Address: 02:25:3F:DB:EE:0B (Unknown)</span><br><span class="line">Nmap scan report for ip-10-10-68-222.eu-west-1.compute.internal (10.10.68.222)</span><br><span class="line">Host is up (0.00025s latency).</span><br><span class="line">MAC Address: 02:28:B1:2E:B0:1B (Unknown)</span><br><span class="line">Nmap done: 256 IP addresses (8 hosts up) scanned in 2.11 seconds</span><br></pre></td></tr></tbody></table></figure>
-<p>扫描输出显示八台主机已启动；此外，还显示了它们的MAC地址。一般来说，除非目标与我们的系统位于同一子网，否则我们没必要了解目标的
-MAC 地址。上面的输出表明，Nmap不需要发送 ICMP 数据包，因为它根据收到的
-ARP 响应确认这些主机已启动。</p>
-<p>我们将重复上面的扫描;
-然而，这一次，我们将从属于其他子网的系统进行扫描。结果是相似的，但没有
-MAC 地址。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">pentester@TryHackMe$ sudo nmap -PE -sn 10.10.68.220/24</span><br><span class="line"></span><br><span class="line">Starting Nmap 7.92 ( https://nmap.org ) at 2021-09-02 12:16 EEST</span><br><span class="line">Nmap scan report for 10.10.68.50</span><br><span class="line">Host is up (0.12s latency).</span><br><span class="line">Nmap scan report for 10.10.68.52</span><br><span class="line">Host is up (0.12s latency).</span><br><span class="line">Nmap scan report for 10.10.68.77</span><br><span class="line">Host is up (0.11s latency).</span><br><span class="line">Nmap scan report for 10.10.68.110</span><br><span class="line">Host is up (0.11s latency).</span><br><span class="line">Nmap scan report for 10.10.68.140</span><br><span class="line">Host is up (0.11s latency).</span><br><span class="line">Nmap scan report for 10.10.68.142</span><br><span class="line">Host is up (0.11s latency).</span><br><span class="line">Nmap scan report for 10.10.68.220</span><br><span class="line">Host is up (0.11s latency).</span><br><span class="line">Nmap scan report for 10.10.68.222</span><br><span class="line">Host is up (0.11s latency).</span><br><span class="line">Nmap done: 256 IP addresses (8 hosts up) scanned in 8.26 seconds</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="pp">-PP</h3>
-<p>因为 ICMP echo 请求往往会被阻塞，所以你还可以考虑使用 ICMP 时间戳或
-ICMP 地址掩码请求来判断系统是否在线。Nmap 使用时间戳请求(ICMP Type
-13)并检查它是否将获得时间戳应答(ICMP Type
-14)。添加<code>-PP</code>选项告诉 Nmap 使用 ICMP 时间戳请求。</p>
-<h3 id="pm">-PM</h3>
-<p>类似地，Nmap 通过添加<code>-PM</code>选项来使用地址掩码查询（ICMP
-Type
-17）。注意：该请求可能会被目标系统或防火墙过滤掉，这时，我们应该考虑使用另一种方法。</p>
-<h2 id="nmap-host-discovery-using-tcp-and-udp">Nmap Host Discovery Using
-TCP and UDP</h2>
-<h3 id="tcp-syn-ping"><strong>TCP SYN Ping</strong></h3>
-<p>我们可以将设置了SYN（同步）标志的数据包发送到 TCP 端口，默认情况下为
-80 ，并等待响应。开放端口应回复 SYN/ACK （确认）；关闭的端口将导致
-RST（重置）。在这种情况下，我们检查是否会得到任何回应，以推断主机是否启动。端口的特定状态在这里并不重要。下图提醒了
-TCP 3次握手通常如何工作。</p>
-<figure>
-<img src="https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/23e7f481f78de8d3e89ef845b747002d.png" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>TCP SYN ping
-使用方法：<code>-PS</code>选项。<code>-PS</code>后可添加端口号、范围、列表或它们的组合，例如，<code>-PS21</code>将会以
-21 号端口为目标，<code>-PS21-25</code>将会以端口 21 、22 、23 、24 、25
-为目标。</p>
-<h3 id="tcp-ack-ping"><strong>TCP ACK Ping</strong></h3>
-<p>默认情况下，使用端口 80 。语法类似于 TCP SYN ping
-。<code>-PA</code>后面应该是端口号、范围、列表或它们的组合。例如，<code>-PA21</code>、<code>-PA21-25</code>和<code>-PA80,443,8080</code>。如果未指定端口，将使用端口
-80 。你必须作为特权用户运行 Nmap
-才能完成此任务。如果你以非特权用户身份尝试，Nmap 将尝试进行3次握手。</p>
-<p>下图显示了任何带有 ACK 标志的 TCP 数据包都应该返回 设置了 RST 标志的
-TCP 数据包。由于带有 ACK 标志的 TCP 数据包不是任何 正在进行的连接
-的一部分，因此目标使用设置的 RST
-标志进行响应。预期响应用于检测目标主机是否已启动。</p>
-<figure>
-<img src="https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/db5ab44a8c700c4ab0603e85e456040d.png" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>下面是一个示例，运行<code>sudo nmap -PA -sn MACHINE_IP/24</code>以发现在线的主机。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pentester@TryHackMe$ sudo nmap -PA -sn 10.10.68.220/24</span><br><span class="line">Starting Nmap 7.92 ( https://nmap.org ) at 2021-09-02 13:46 EEST</span><br><span class="line">Nmap scan report for 10.10.68.52</span><br><span class="line">Host is up (0.11s latency).</span><br><span class="line">Nmap scan report for 10.10.68.121</span><br><span class="line">Host is up (0.12s latency).</span><br><span class="line">Nmap scan report for 10.10.68.125</span><br><span class="line">Host is up (0.10s latency).</span><br><span class="line">Nmap scan report for 10.10.68.134</span><br><span class="line">Host is up (0.10s latency).</span><br><span class="line">Nmap scan report for 10.10.68.220</span><br><span class="line">Host is up (0.10s latency).</span><br><span class="line">Nmap done: 256 IP addresses (5 hosts up) scanned in 29.89 seconds</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="udp-ping"><strong>UDP Ping</strong></h3>
-<p>与 TCP SYN ping 相反，将 UDP
-数据包发送到开放端口不会有任何答复。但是，如果我们向一个关闭的 UDP
-端口发送一个 UDP 数据包，我们希望得到一个 ICMP
-端口无法访问的数据包；这表明目标系统已经启动并可用。Nmap
-使用<code>-PU</code>来进行 UDP ping 。</p>
-<figure>
-<img src="https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/1b827ef60c39619e281c4ca51a6d57b6.png" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/c8b2d403667487322058619e561186d2.png" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<h3 id="masscan"><strong>Masscan</strong></h3>
-<p>另外，Masscan
-使用类似的方法来发现可用的系统。然而，为了快速完成网络扫描，Masscan
-在数据包生成速度方面非常积极。语法与 Nmap 非常相似：<code>-p</code>
-后面可以跟一个端口号、列表或范围。例如：</p>
-<ul>
-<li><code>masscan MACHINE_IP/24 -p443</code></li>
-<li><code>masscan MACHINE_IP/24 -p80,443</code></li>
-<li><code>masscan MACHINE_IP/24 -p22-25</code></li>
-<li><code>masscan MACHINE_IP/24 ‐‐top-ports 100</code></li>
-</ul>
-<h2 id="using-reverse-dns-lookup反向dns查找">Using Reverse-DNS
-Lookup（反向DNS查找）</h2>
-<p>Nmap 的默认行为是使用反向 DNS
-查找在线主机。因为主机名可以揭示很多东西，这可能是一个有用的步骤。但是，如果不希望发送此类
-DNS 查询，可以使用 <code>-n</code> 跳过此步骤。</p>
-<p>默认情况下，Nmap 将查找在线主机；但是，你可以使用选项 <code>-R</code>
-来查询 DNS 服务器，即使是针对脱机主机。如果要使用特定的 DNS
-服务器，可以添加<code>--dns-servers DNS_SERVER</code>选项。</p>
-<h2 id="总结">总结</h2>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Scan Type</th>
-<th style="text-align: center;">Example Command</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">ARP Scan</td>
-<td style="text-align: center;"><code>sudo nmap -PR -sn MACHINE_IP/24</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">ICMP Echo Scan</td>
-<td style="text-align: center;"><code>sudo nmap -PE -sn MACHINE_IP/24</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">ICMP Timestamp Scan</td>
-<td style="text-align: center;"><code>sudo nmap -PP -sn MACHINE_IP/24</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">ICMP Address Mask Scan</td>
-<td style="text-align: center;"><code>sudo nmap -PM -sn MACHINE_IP/24</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">TCP SYN Ping Scan</td>
-<td style="text-align: center;"><code>sudo nmap -PS22,80,443 -sn MACHINE_IP/30</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">TCP ACK Ping Scan</td>
-<td style="text-align: center;"><code>sudo nmap -PA22,80,443 -sn MACHINE_IP/30</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">UDP Ping Scan</td>
-<td style="text-align: center;"><code>sudo nmap -PU53,161,162 -sn MACHINE_IP/30</code></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Option</th>
-<th style="text-align: center;">Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><code>-n</code></td>
-<td style="text-align: center;">no DNS lookup</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><code>-R</code></td>
-<td style="text-align: center;">reverse-DNS lookup for all hosts</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><code>-sn</code></td>
-<td style="text-align: center;">host discovery only</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1486,7 +1233,7 @@ DNS 查询，可以使用 <code>-n</code> 跳过此步骤。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1535,12 +1282,12 @@ DNS 查询，可以使用 <code>-n</code> 跳过此步骤。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">138k</span>
+    <span title="站点总字数">139k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:06</span>
+    <span title="站点阅读时长">2:07</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

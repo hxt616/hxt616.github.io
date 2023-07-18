@@ -20,20 +20,24 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="解题思路 CRYPTO easy_real 将n分解为两个质数，得到q &#x3D; 65267138038038699886916162739434586079731613825212388229424706115289974540917 利用脚本将m求出 123456789import gmpy2import binasciie &#x3D; 23p &#x3D; 64310413306776406422334034047">
+  <meta name="description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;longest-common-prefix&#x2F;  编写一个函数来查找字符串数组中的最长公共前缀。 如果不存在公共前缀，返回空字符串 &quot;&quot;。 示例 ： 12输入：strs &#x3D; [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;]输出：&quot;fl&quot;  又是因为基础不扎实找了半天bug😢。 例如下面这段代码： 1234567891011#i">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2022DASCTF Apr X FATE 防疫挑战赛">
-<meta property="og:url" content="http://example.com/2022/05/02/2022DASCTF%20Apr%20X%20FATE%20%E9%98%B2%E7%96%AB%E6%8C%91%E6%88%98%E8%B5%9B/index.html">
+<meta property="og:title" content="最长公共前缀">
+<meta property="og:url" content="http://example.com/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="解题思路 CRYPTO easy_real 将n分解为两个质数，得到q &#x3D; 65267138038038699886916162739434586079731613825212388229424706115289974540917 利用脚本将m求出 123456789import gmpy2import binasciie &#x3D; 23p &#x3D; 64310413306776406422334034047">
+<meta property="og:description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;longest-common-prefix&#x2F;  编写一个函数来查找字符串数组中的最长公共前缀。 如果不存在公共前缀，返回空字符串 &quot;&quot;。 示例 ： 12输入：strs &#x3D; [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;]输出：&quot;fl&quot;  又是因为基础不扎实找了半天bug😢。 例如下面这段代码： 1234567891011#i">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-05-02T14:46:35.920Z">
-<meta property="article:modified_time" content="2022-08-29T03:55:10.644Z">
+<meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8">
+<meta property="article:published_time" content="2023-07-17T04:59:29.046Z">
+<meta property="article:modified_time" content="2023-07-18T01:20:40.494Z">
 <meta property="article:author" content="hxt">
-<meta property="article:tag" content="BUUCTF">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8">
 
-<link rel="canonical" href="http://example.com/2022/05/02/2022DASCTF%20Apr%20X%20FATE%20%E9%98%B2%E7%96%AB%E6%8C%91%E6%88%98%E8%B5%9B/">
+<link rel="canonical" href="http://example.com/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/">
 
 
 <script id="page-configurations">
@@ -46,7 +50,7 @@
   };
 </script>
 
-  <title>2022DASCTF Apr X FATE 防疫挑战赛 | hxt's Blog</title>
+  <title>最长公共前缀 | hxt's Blog</title>
   
 
 
@@ -168,7 +172,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/02/2022DASCTF%20Apr%20X%20FATE%20%E9%98%B2%E7%96%AB%E6%8C%91%E6%88%98%E8%B5%9B/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -181,7 +185,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          2022DASCTF Apr X FATE 防疫挑战赛
+          最长公共前缀
         </h1>
 
         <div class="post-meta">
@@ -191,14 +195,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-05-02 22:46:35" itemprop="dateCreated datePublished" datetime="2022-05-02T22:46:35+08:00">2022-05-02</time>
+              <time title="创建时间：2023-07-17 12:59:29" itemprop="dateCreated datePublished" datetime="2023-07-17T12:59:29+08:00">2023-07-17</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-29 11:55:10" itemprop="dateModified" datetime="2022-08-29T11:55:10+08:00">2022-08-29</time>
+                <time title="修改时间：2023-07-18 09:20:40" itemprop="dateModified" datetime="2023-07-18T09:20:40+08:00">2023-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -206,7 +210,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
                 </span>
             </span>
 
@@ -223,7 +231,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>760</span>
+              <span>1.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -242,18 +250,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="解题思路">解题思路</h1>
-<h2 id="crypto">CRYPTO</h2>
-<h3 id="easy_real"><strong>easy_real</strong></h3>
-<p>将n分解为两个质数，得到<br><code>q = 65267138038038699886916162739434586079731613825212388229424706115289974540917</code></p>
-<p>利用脚本将m求出<br></p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line">e = <span class="number">23</span></span><br><span class="line">p = <span class="number">64310413306776406422334034047152581900365687374336418863191177338901198608319</span></span><br><span class="line">q = <span class="number">65267138038038699886916162739434586079731613825212388229424706115289974540917</span></span><br><span class="line">phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">d = gmpy2.invert(e,phi)</span><br><span class="line">m = gmpy2.powmod(c,d,p*q)</span><br><span class="line"><span class="built_in">print</span>(m)</span><br></pre></td></tr></tbody></table></figure>
-<p><code>m = 2976168736142380455841784134407431434784057911773423743751382131043957</code></p>
-<p>将其转为16进制<code>6e64696f735f3b396b67453b574b38653b573f67576e3c5c3b6b7c6e75</code></p>
-<p>再转为ASCII码<code>ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu</code></p>
-<p>根据异或的运算规律编写脚本</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">"ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu"</span></span><br><span class="line">s = <span class="built_in">list</span>(s)</span><br><span class="line">flag=<span class="string">""</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">11</span>):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">29</span>):</span><br><span class="line">		flag+=<span class="built_in">chr</span>(<span class="built_in">ord</span>(s[i])^x)</span><br><span class="line">	<span class="built_in">print</span>(flag)</span><br></pre></td></tr></tbody></table></figure>
-<p>可知当x=8时，得到flag{W31coM3_C0m3_7o_f4T3ctf}</p>
+        <p>题目地址：https://leetcode.cn/problems/longest-common-prefix/</p>
+<blockquote>
+<p>编写一个函数来查找字符串数组中的最长公共前缀。</p>
+<p>如果不存在公共前缀，返回空字符串 <code>""</code>。</p>
+<p><strong>示例 ：</strong></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：strs = ["flower","flow","flight"]</span><br><span class="line">输出："fl"</span><br></pre></td></tr></tbody></table></figure>
+</blockquote>
+<p>又是因为基础不扎实找了半天bug<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>。</p>
+<p>例如下面这段代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> {</span><br><span class="line">    <span class="type">char</span> *str[] = {<span class="string">"Hello"</span>,<span class="string">"world"</span>};</span><br><span class="line">    <span class="type">char</span> *ptr = str[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改字符数组元素</span></span><br><span class="line">    ptr[<span class="number">2</span>] = <span class="string">'J'</span>;  <span class="comment">//报错</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>当声明一个字符指针数组<code>str[]</code>并初始化它为字符串常量时，每个元素都是一个指向字符串常量的指针。这意味着我们不能直接修改字符串常量中的字符。这时应该使用<code>malloc</code>函数开辟一片空间存放该字符串的副本，然后进行修改，可参考下面的完整代码。</p>
+<p>完整代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> * <span class="title function_">longestCommonPrefix</span><span class="params">(<span class="type">char</span> ** strs, <span class="type">int</span> strsSize)</span>{</span><br><span class="line">    <span class="type">char</span>* all = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="built_in">strlen</span>(strs[<span class="number">0</span>]) + <span class="number">1</span>); <span class="comment">// 分配空间</span></span><br><span class="line">    <span class="built_in">strcpy</span>(all, strs[<span class="number">0</span>]); <span class="comment">//存放strs[0]的副本</span></span><br><span class="line">    <span class="type">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">char</span> t; <span class="comment">//存放当前比较的字符</span></span><br><span class="line">    <span class="type">int</span> flag = <span class="number">1</span>; <span class="comment">//判断是否不匹配</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="built_in">strlen</span>(strs[<span class="number">0</span>]); j++) {</span><br><span class="line">        t = strs[<span class="number">0</span>][j];</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>; i &lt; strsSize&amp;&amp; j &lt; <span class="built_in">strlen</span>(strs[i]); i++) { <span class="comment">//for的条件语句判断是否溢出</span></span><br><span class="line">            <span class="keyword">if</span> (strs[i][j] != t) {</span><br><span class="line">                flag = <span class="number">0</span>;  <span class="comment">//当字符不匹配时，flag=0</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (i &lt; strsSize&amp;&amp;j &gt;= <span class="built_in">strlen</span>(strs[i])) <span class="comment">//当下标溢出时，flag=0，方便退出循环</span></span><br><span class="line">            flag=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (flag == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    all[j] = <span class="string">'\0'</span>;</span><br><span class="line">    <span class="keyword">return</span> all;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -263,7 +272,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/BUUCTF/" rel="tag"># BUUCTF</a>
+              <a href="/tags/C/" rel="tag"># C</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
           </div>
 
         
@@ -272,13 +283,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/04/17/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="prev" title="汇编语言（二）">
-      <i class="fa fa-chevron-left"></i> 汇编语言（二）
+    <a href="/2023/07/11/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/" rel="prev" title="盛最多水的容器">
+      <i class="fa fa-chevron-left"></i> 盛最多水的容器
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/07/13/%E5%9C%B0%E5%9D%80%E7%9A%84%E5%AF%BB%E5%9D%80%E8%83%BD%E5%8A%9B/" rel="next" title="地址的寻址能力">
-      地址的寻址能力 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -337,7 +345,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">解题思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#crypto"><span class="nav-number">1.1.</span> <span class="nav-text">CRYPTO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#easy_real"><span class="nav-number">1.1.1.</span> <span class="nav-text">easy_real</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
