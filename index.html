@@ -164,6 +164,207 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/30/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/12/30/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">移除元素（双指针）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-12-30 11:24:29 / 修改时间：11:48:53" itemprop="dateCreated datePublished" datetime="2023-12-30T11:24:29+08:00">2023-12-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>839</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/remove-element/</p>
+<p>本题使用双指针的思想（本题可理解为<strong>数组下标</strong>）</p>
+<ul>
+<li>初始时，快、慢指针均指向数组第一个元素；</li>
+<li>若当前快指针指向的元素<strong>不是</strong>待移除的元素时，两个指针<strong>同时移动</strong>，且将快指针指向的元素赋值给慢指针指向的数组元素(即移动元素)；</li>
+<li>快指针指向的元素<strong>是</strong>待移除的元素时，慢指针不动，快指针移动</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="type">int</span> fast; <span class="comment">//快指针</span></span><br><span class="line">    <span class="type">int</span> slow = <span class="number">0</span>; <span class="comment">//慢指针</span></span><br><span class="line">    <span class="keyword">for</span>(fast=<span class="number">0</span>; fast&lt;numsSize; fast++){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] != val){ <span class="comment">//不是待移除元素，则同时移动两指针</span></span><br><span class="line">            nums[slow++] = nums[fast];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> slow;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>下面是我自己的做法，比较繁琐<span class="github-emoji"><span>😅</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="type">int</span> slow=<span class="number">0</span>; <span class="comment">//慢指针</span></span><br><span class="line">    <span class="type">int</span> fast;</span><br><span class="line">    <span class="type">int</span> length = numsSize; <span class="comment">//记录新数组长度</span></span><br><span class="line">    <span class="keyword">for</span>(fast=<span class="number">0</span>; fast&lt;numsSize;){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] == val){</span><br><span class="line">            <span class="comment">//若待移除元素不是数组结尾元素，则需要移动元素</span></span><br><span class="line">            <span class="keyword">if</span>((++fast)&lt;numsSize) <span class="comment">//防止溢出，同时移动快指针</span></span><br><span class="line">                nums[slow] = nums[fast];</span><br><span class="line">            length--; <span class="comment">//移除元素，数组长度减小</span></span><br><span class="line">            <span class="keyword">continue</span>; <span class="comment">//不移动慢指针，只移动快指针</span></span><br><span class="line">        }</span><br><span class="line">        nums[slow] = nums[fast];</span><br><span class="line">        fast++;</span><br><span class="line">        slow++;  <span class="comment">//若不是待移除元素，则同时移动两指针</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> length;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/30/x%E7%9A%84%E5%B9%B3%E6%96%B9%E6%A0%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/12/30/x%E7%9A%84%E5%B9%B3%E6%96%B9%E6%A0%B9/" class="post-title-link" itemprop="url">x的平方根</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-12-30 08:40:26 / 修改时间：09:56:06" itemprop="dateCreated datePublished" datetime="2023-12-30T08:40:26+08:00">2023-12-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>558</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/sqrtx/</p>
+<p>这道题也是二分查找相关题目</p>
+<p>由题目可知 <em>x</em> 平方根的<strong>整数部分</strong> <em>ans</em>
+是<strong>满足 ans<sup>2</sup> ≤ x </strong>。下面分析用二分法求解
+<em>k</em> 值。</p>
+<p>根据 <em>x</em> 开方后是否是整数分为两种情况：</p>
+<ul>
+<li><p>能找到一个整数 <strong>k</strong> 使得 <strong>k<sup>2</sup>
+&lt;= x</strong>，使用二分法一定能找到该整数</p></li>
+<li><p><em>x</em> 平方根 <strong>k</strong> 为浮点数，且<strong>k ∈ (n,
+n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的整数部分<strong>ans</strong>即为<strong>n</strong></p>
+<blockquote>
+<p>因此需要在<code>if</code>判断语句中不断更新<strong>ans</strong>的值，使其取得更大的值；若是在<code>while</code>循环结束时才给<strong>ans</strong>赋值，则可能会导致<strong>ans</strong>等于<strong>n+1</strong></p>
+<p>注意：<code>mid</code>的数据类型应为<strong>long</strong>，防溢出（x
+的范围是 0 ~ 2<sup>31</sup>-1）</p>
+</blockquote></li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">mySqrt</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    <span class="type">int</span> left = <span class="number">0</span>;  <span class="comment">//左边界</span></span><br><span class="line">    <span class="type">int</span> right = x; <span class="comment">//右边界</span></span><br><span class="line">    <span class="type">long</span> mid = <span class="number">0</span>;  <span class="comment">//中间值</span></span><br><span class="line">    <span class="type">int</span> ans=<span class="number">-1</span>;    <span class="comment">//平方根整数部分</span></span><br><span class="line">    <span class="keyword">while</span>(left &lt;= right){</span><br><span class="line">        mid = left + (right - left) / <span class="number">2</span>; <span class="comment">//防止溢出</span></span><br><span class="line">        <span class="keyword">if</span>(mid * mid &lt;= x){</span><br><span class="line">            ans = mid;   <span class="comment">//更新ans的值</span></span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> right = mid - <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>类似题目：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/valid-perfect-square/">有效的完全平方数</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/29/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -978,191 +1179,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/25/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2ctf-wiki/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/06/25/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2ctf-wiki/" class="post-title-link" itemprop="url">本地部署ctf-wiki</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-06-25 23:04:06 / 修改时间：23:20:15" itemprop="dateCreated datePublished" datetime="2023-06-25T23:04:06+08:00">2023-06-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>955</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>首先打开 ctf-wiki 的GitHub仓库
-https://github.com/ctf-wiki/ctf-wiki/blob/master/README-zh_CN.md</p>
-<p>根据步骤操作，这里我用的是第一种方法：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 1. clone</span><br><span class="line">git clone https://github.com/ctf-wiki/ctf-wiki.git</span><br><span class="line"># 2. requirements</span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"># generate static file in site/</span><br><span class="line">python3 scripts/docs.py build-all        &lt;-----如果是Windows，使用'python'而不是'python3'</span><br><span class="line"># deploy at http://127.0.0.1:8008</span><br><span class="line">python3 scripts/docs.py serve</span><br></pre></td></tr></tbody></table></figure>
-<p>在运行<code>python scripts/docs.py build-all</code>时发生报错：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AttributeError: module 'jinja2' has no attribute 'contextfilter'</span><br></pre></td></tr></tbody></table></figure>
-<p>根据这篇<a target="_blank" rel="noopener" href="https://forums.docker.com/t/jinja-mkdocs-issue-breaks-docker101tutorial/122671">文章</a>，我进行了修改，首先使用<code>pip uninstall jinja2</code>删除存在的<code>jinja2</code>，然后打开<code>requirements.txt</code>文件，在最后一行添加<code>jinja2==3.0.3</code>，重新运行<code>pip install -r requirements.txt</code>，然后再次运行<code>python scripts/docs.py build-all</code>，成功解决报错，继续运行<code>python scripts/docs.py serve</code>，会出现</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Warning: this is a very simple server.</span><br><span class="line">For development, use the command live instead.</span><br><span class="line">This is here only to preview a site with translations already built.</span><br><span class="line">Make sure you run the build-all command first.</span><br><span class="line">Serving at: http://127.0.0.1:8008</span><br></pre></td></tr></tbody></table></figure>
-<p>此时在浏览器中打开<code>http://127.0.0.1:8008</code>即可访问ctf-wiki。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/05/18/primitive-type%E5%92%8Creference-type/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/05/18/primitive-type%E5%92%8Creference-type/" class="post-title-link" itemprop="url">primitive type和reference type</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-05-18 15:22:19 / 修改时间：15:22:02" itemprop="dateCreated datePublished" datetime="2023-05-18T15:22:19+08:00">2023-05-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>数据类型可以分为两类：基本数据类型（primitive
-type）和引用数据类型（reference type）。</p>
-<p><strong>基本数据类型</strong>是指整数、浮点数、布尔值等。这些类型的值是直接存储在内存中的，它们的大小是固定的，因此它们的操作速度非常快。</p>
-<p><strong>引用数据类型</strong>是指<strong>对象</strong>、<strong>数组</strong>、<strong>函数</strong>等类型。这些类型的值是存储在内存中的地址，而不是直接存储在变量中。因此，当我们操作引用类型时，实际上是在操作存储在内存中的地址，而不是实际的值。这使得引用数据类型的操作速度相对较慢。</p>
-<p>一个重要的区别是，基本数据类型的值在传递给函数或赋值给另一个变量时，会被复制一份。而引用数据类型的值在传递给函数或赋值给另一个变量时，只会复制它的地址，而不是它的值。这意味着，如果我们修改了一个引用数据类型的值，它会影响到所有引用该值的变量。</p>
-<h2 id="基本数据类型">基本数据类型</h2>
-<p>例如，在Java中，int是一种基本数据类型，下面是一个示例代码：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">javaCopy <span class="type">codeint</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> a; <span class="comment">// b的值是10，而不是a的地址</span></span><br><span class="line">b = <span class="number">20</span>; <span class="comment">// a的值仍然是10</span></span><br></pre></td></tr></tbody></table></figure>
-<h2 id="引用数据类型">引用数据类型</h2>
-<p><strong>对象</strong>通常是引用数据类型，例如下面这个例子：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PollQuestions</span> {</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">      <span class="type">Walrus</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">1000</span>, <span class="number">8.3</span>);</span><br><span class="line">      Walrus b;</span><br><span class="line">      b = a;</span><br><span class="line">      b.weight = <span class="number">5</span>;   <span class="comment">//修改b.weight的值，同时a.weight的值也被改变了</span></span><br><span class="line">      System.out.println(a);</span><br><span class="line">      System.out.println(b);       </span><br><span class="line">   }</span><br><span class="line">   </span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Walrus</span> {</span><br><span class="line">      <span class="keyword">public</span> <span class="type">int</span> weight;</span><br><span class="line">      <span class="keyword">public</span> <span class="type">double</span> tuskSize;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">public</span> <span class="title function_">Walrus</span><span class="params">(<span class="type">int</span> w, <span class="type">double</span> ts)</span> {</span><br><span class="line">         weight = w;</span><br><span class="line">         tuskSize = ts;</span><br><span class="line">      }</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> {</span><br><span class="line">         <span class="keyword">return</span> String.format(<span class="string">"weight: %d, tusk size: %.2f"</span>, weight, tuskSize);</span><br><span class="line">      }</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>输出结果为：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">weight: 5, tusk size: 8.30</span><br><span class="line">weight: 5, tusk size: 8.30</span><br></pre></td></tr></tbody></table></figure>
-<p>总之，这两种数据类型在编程中都非常常见，理解它们之间的区别非常重要。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1234,7 +1250,7 @@ type）和引用数据类型（reference type）。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1283,12 +1299,12 @@ type）和引用数据类型（reference type）。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">143k</span>
+    <span title="站点总字数">144k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:10</span>
+    <span title="站点阅读时长">2:11</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
