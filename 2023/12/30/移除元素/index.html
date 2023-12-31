@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8">
 <meta property="article:published_time" content="2023-12-30T03:24:29.806Z">
-<meta property="article:modified_time" content="2023-12-30T03:48:53.123Z">
+<meta property="article:modified_time" content="2023-12-30T06:45:56.312Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="LeetCode">
@@ -196,7 +196,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-12-30 11:24:29 / 修改时间：11:48:53" itemprop="dateCreated datePublished" datetime="2023-12-30T11:24:29+08:00">2023-12-30</time>
+              <time title="创建时间：2023-12-30 11:24:29 / 修改时间：14:45:56" itemprop="dateCreated datePublished" datetime="2023-12-30T11:24:29+08:00">2023-12-30</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -225,7 +225,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>839</span>
+              <span>855</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -254,6 +254,9 @@
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="type">int</span> fast; <span class="comment">//快指针</span></span><br><span class="line">    <span class="type">int</span> slow = <span class="number">0</span>; <span class="comment">//慢指针</span></span><br><span class="line">    <span class="keyword">for</span>(fast=<span class="number">0</span>; fast&lt;numsSize; fast++){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] != val){ <span class="comment">//不是待移除元素，则同时移动两指针</span></span><br><span class="line">            nums[slow++] = nums[fast];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> slow;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>下面是我自己的做法，比较繁琐<span class="github-emoji"><span>😅</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="type">int</span> slow=<span class="number">0</span>; <span class="comment">//慢指针</span></span><br><span class="line">    <span class="type">int</span> fast;</span><br><span class="line">    <span class="type">int</span> length = numsSize; <span class="comment">//记录新数组长度</span></span><br><span class="line">    <span class="keyword">for</span>(fast=<span class="number">0</span>; fast&lt;numsSize;){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] == val){</span><br><span class="line">            <span class="comment">//若待移除元素不是数组结尾元素，则需要移动元素</span></span><br><span class="line">            <span class="keyword">if</span>((++fast)&lt;numsSize) <span class="comment">//防止溢出，同时移动快指针</span></span><br><span class="line">                nums[slow] = nums[fast];</span><br><span class="line">            length--; <span class="comment">//移除元素，数组长度减小</span></span><br><span class="line">            <span class="keyword">continue</span>; <span class="comment">//不移动慢指针，只移动快指针</span></span><br><span class="line">        }</span><br><span class="line">        nums[slow] = nums[fast];</span><br><span class="line">        fast++;</span><br><span class="line">        slow++;  <span class="comment">//若不是待移除元素，则同时移动两指针</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> length;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>相关题目：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array/">删除排序数组中的重复项</a></p>
+</blockquote>
 
     </div>
 
