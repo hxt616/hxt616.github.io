@@ -164,6 +164,96 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/06/%E9%93%BE%E8%A1%A8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/06/%E9%93%BE%E8%A1%A8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">链表的相关问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-09-06 13:23:30 / 修改时间：13:39:00" itemprop="dateCreated datePublished" datetime="2023-09-06T13:23:30+08:00">2023-09-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>今天在学习链表时遇到了几个困惑的点（C语言）</p>
+<h2 id="使用malloc函数">使用malloc函数</h2>
+<p>使用结构体时，为了方便，往往会使用指针指向一个结构体，这时候就需要使用<code>malloc</code>为该指针开辟一个结构体大小的空间，如下：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> {</span></span><br><span class="line">    <span class="type">int</span> val;               <span class="comment">// 节点值</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">next</span>;</span> <span class="comment">// 指向下一节点的指针（引用）</span></span><br><span class="line">}Lnode,*LiStack <span class="comment">//LiStack是该结构体类型的指针</span></span><br><span class="line"></span><br><span class="line">LiStack l = (LiStack)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(LiStack));</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="在函数中调用结构体指针">在函数中调用结构体指针</h2>
+<p>网上的文章中有的函数调用中加了'*'号，有的又没加，所以我搜索了一下什么时候需要在函数调用时使用'*'号。下面是示例代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;malloc.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> {</span></span><br><span class="line">    <span class="type">int</span> val;               <span class="comment">// 节点值</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">next</span>;</span> <span class="comment">// 指向下一节点的指针（引用）</span></span><br><span class="line">}Lnode,*LiStack;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_List</span><span class="params">(LiStack a)</span></span><br><span class="line">{</span><br><span class="line">    a-&gt;next=<span class="literal">NULL</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">push</span><span class="params">(LiStack a, <span class="type">int</span> ele)</span> <span class="comment">//头插法</span></span><br><span class="line">{</span><br><span class="line">    Lnode * p = (Lnode *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Lnode));</span><br><span class="line">    p-&gt;next = a-&gt;next;</span><br><span class="line">    a-&gt;next = p;</span><br><span class="line">    p-&gt;val = ele;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">pop</span><span class="params">(LiStack a)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> dele;</span><br><span class="line">    <span class="keyword">if</span>(a-&gt;next!=<span class="literal">NULL</span>)</span><br><span class="line">    {</span><br><span class="line">        dele = a-&gt;next-&gt;val;</span><br><span class="line">        a-&gt;next = a-&gt;next-&gt;next;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    LiStack l = (LiStack)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(LiStack));</span><br><span class="line">    init_List(l);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++)</span><br><span class="line">        push(l,i);</span><br><span class="line">   </span><br><span class="line">    pop(l);</span><br><span class="line">    </span><br><span class="line">    Lnode *p = l-&gt;next;</span><br><span class="line">    <span class="keyword">while</span>(p!=<span class="literal">NULL</span>)</span><br><span class="line">    {</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%d "</span>,p-&gt;val);</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p>注意到上面的代码我在所有的函数调用中都没有在<code>LiStack a</code>的a前加<code>*</code>号，因为我使用的是带有<strong>头结点</strong>的链栈，头结点的地址（指针本身）不发生变化，只改变链栈中的内容，不需要加<code>*</code>号；如果不带头结点，且使用头插法，则每次插入/删除一个元素都需要改变第一个结点的指针本身，这时就需要使用<code>*</code>号使得函数调用中能同步修改主函数中的头指针。</p>
+<p>参考：https://www.zhihu.com/tardis/zm/art/421431276?source_id=1005</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1079,101 +1169,6 @@ type）和引用数据类型（reference type）。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/14/%E4%BF%AE%E6%94%B9PowerShell%E4%B8%BB%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/03/14/%E4%BF%AE%E6%94%B9PowerShell%E4%B8%BB%E9%A2%98/" class="post-title-link" itemprop="url">修改PowerShell的主题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-03-14 00:00:00 / 修改时间：11:23:02" itemprop="dateCreated datePublished" datetime="2023-03-14T00:00:00+08:00">2023-03-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%91%BD%E4%BB%A4%E8%A1%8C/" itemprop="url" rel="index"><span itemprop="name">命令行</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>317</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我使用的是<code>oh-my-posh</code>。</p>
-<p><code>oh-my-posh</code> 是一个 <code>PowerShell</code>
-主题框架，用于美化 <code>PowerShell</code>
-提示符（prompt）。它可以让你自定义 <code>PowerShell</code>
-提示符的样式，使其更加易读和美观。可参考官网的主题样式：https://ohmyposh.dev/docs/themes</p>
-<p>通过输入</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-PoshPrompt PowerLine</span><br></pre></td></tr></tbody></table></figure>
-<p>可预览<code>PowerLine</code>主题，这只是暂时性的 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/b5787722d59b4286b340086f0ab1145f.png" alt="在这里插入图片描述"></p>
-<p>想要永久修改可通过执行以下命令用记事本打开配置文件</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">notepad $PROFILE</span><br></pre></td></tr></tbody></table></figure>
-<p>打开后如下： <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/31e8516211044bc2a8bd3b0646a5db98.png" alt="在这里插入图片描述"></p>
-<p>通过修改配置文件中的主题可修改默认打开主题： <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/1648e8d3bcf6411b9d307a5aa18afb37.png" alt="在这里插入图片描述">
-若将上图中的"Sorin"改为“Agnoster”，则下次打开power
-shell便是修改后的主题。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1245,7 +1240,7 @@ shell便是修改后的主题。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">63</span>
+          <span class="site-state-item-count">64</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1294,12 +1289,12 @@ shell便是修改后的主题。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">148k</span>
+    <span title="站点总字数">149k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:15</span>
+    <span title="站点阅读时长">2:16</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
