@@ -164,6 +164,130 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/22/gcc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/22/gcc/" class="post-title-link" itemprop="url">gcc入门</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-22 12:00:48" itemprop="dateCreated datePublished" datetime="2022-07-22T12:00:48+08:00">2022-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-31 10:51:22" itemprop="dateModified" datetime="2022-08-31T10:51:22+08:00">2022-08-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GCC/" itemprop="url" rel="index"><span itemprop="name">GCC</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考：http://c.biancheng.net/gcc/</p>
+<p>相关资料：</p>
+<p>https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html
+动态库和静态库</p>
+<p>https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9
+gcc编译选项</p>
+<h1 id="gcc">GCC</h1>
+<p>GCC全称 the GNU Compiler Collection ，是一套<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/編程語言">编程语言</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/编译器">编译器</a>，以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GPL">GPL</a>及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LGPL">LGPL</a>许可证所发行的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/自由軟體">自由软件</a>，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU計劃">GNU计划</a>的关键部分，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU工具链">GNU工具链</a>的主要组成部分之一。可处理<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">Fortran</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(程式語言)">Pascal</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Objective-C">Objective-C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Java">Java</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Ada">Ada</a>，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Go">Go</a>与其他语言。</p>
+<p>GCC中包含gcc和g++，分别处理C语言和C++。关于这两者的区别可参考http://c.biancheng.net/view/7936.html</p>
+<h2 id="gcc使用技巧">gcc使用技巧</h2>
+<ol type="1">
+<li><p>当文件没有扩展名时，可使用 <code>-x</code>
+选项指明当前文件的类型。比如当前有个文件demo，当直接使用gcc
+demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件，因此使用
+<code>gcc -xc demo</code> （将文件当作C语言处理）。</p></li>
+<li><p>gcc + 文件名，生成对应的可执行文件，默认为a.out 。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./a.out</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p><code>-o</code>选项指定生成的可执行文件的文件名。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c -o helloworld         #用来指定要生成的文件名。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./helloworld</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p><code>-E</code>选项可控制GCC编译器仅对源码做<strong>预处理</strong>操作。<br>所谓预处理操作，主要是处理那些源文件和头文件中以
+# 开头的命令（比如 #include、#define、#ifdef
+等），并删除程序中所有的注释 // 和 /* ... */。</p>
+<p>一般将预处理的内容保存在.i后缀的文件中 :</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -E helloworld.c -o helloworld.i</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><p><code>-S</code>选项可令GCC编译器仅将指定文件加工至<strong>编译阶段</strong>，并生成对应的汇编代码文件。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.i         #GCC编译器只需编译此文件。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.c         #GCC编译器需要对其进行预处理和编译这两步操作。</span></span><br></pre></td></tr></tbody></table></figure>
+<p>以上这两行命令均能生成与原文件名相同的后缀为.s的文件（内容为汇编代码）。</p></li>
+<li><p><code>-c</code>选项可让GCC编译器将指定文件加工至<strong>汇编阶段</strong>（但并不执行链接操作），并生成对应的目标文件。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -c helloworld.s         #生成了与原文件名相同的后缀为.o的文件，将汇编代码转变成机器可以执行的指令</span></span><br></pre></td></tr></tbody></table></figure>
+<p>-c选项同样对.c和.i文件有用。</p></li>
+<li><p>gcc执行<strong>链接操作</strong>。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.o -o helloworld           #生成可执行文件helloworld。</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><p><code>-g</code>选项可产生调试信息，可以使用<strong>gdb</strong>调试可执行文件。</p></li>
+<li><p><code>-m32</code>选项指定生成32位机器的汇编代码，同理<code>-m64</code>则生成64位机器汇编代码。</p>
+<p>参考文章
+：https://blog.csdn.net/vantian/article/details/78748653?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166191228716782388062237%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=166191228716782388062237&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2<sub>all</sub>first_rank_ecpm_v1~pc_rank_34-1-78748653-null-null.142</p></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/13/%E5%9C%B0%E5%9D%80%E7%9A%84%E5%AF%BB%E5%9D%80%E8%83%BD%E5%8A%9B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1435,129 +1559,6 @@ Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/21/affine/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/21/affine/" class="post-title-link" itemprop="url">仿射密码</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-02-21 00:00:00" itemprop="dateCreated datePublished" datetime="2022-02-21T00:00:00+08:00">2022-02-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-12 12:40:54" itemprop="dateModified" datetime="2023-05-12T12:40:54+08:00">2023-05-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>801</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="仿射密码">仿射密码</h1>
-<h2 id="简介">1.简介</h2>
-<p>仿射密码是一种单字母替换密码的特例。</p>
-<p>该密码不如简单替换密码安全，因为它不仅容易受到针对替代密码的所有攻击方法，而且还存在其他缺点。其主要缺点来自以下方面：如果密码分析者可以发现（通过频率分析，暴力破解，猜测或其他方式）两个密文字符对应的明文，则可以通过联立方程组来求解密钥。</p>
-<h2 id="数学描述">2.数学描述</h2>
-<p>仿射密码的<strong>密钥</strong>由2个数字组成，我们将其称为a和b。以下讨论假定使用26个字符的字母（m
-=
-26）。a应该选择为相对于m素数（即a应该没有与m相同的公因数&lt;除1以外&gt;）。例如15和26没有公因数(除1以外)，因此15是可以用来加密的值，然而12和26具有相同公因数（例如2），这样12不能被用于加密。加密时，我们首先将所有字母转换为数字（'a'=
-0，'b'= 1，...，'z'= 25）。</p>
-<p>对于密文c，给定任意的p（p是代表字母的数字），有：</p>
-<p>c = ap + b (mod m) 1&lt;=a&lt;=m, 1&lt;=b&lt;=m;</p>
-<p>解密的公式为：</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221205948026.png" alt="image-20220221205948026">
-<figcaption aria-hidden="true">image-20220221205948026</figcaption>
-</figure>
-<p>其中a-1是a的乘法逆元，为了找到a的乘法逆元，我们需要假定数字x满足：</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210010143.png" alt="image-20220221210010143">
-<figcaption aria-hidden="true">image-20220221210010143</figcaption>
-</figure>
-<p>如果我们发现x使得等式成立，那么X就是a的逆元，我们称之为a-1。</p>
-<p>解决此方程式最简单的方法是遍历1到25个数字，然后看哪个满足该方程式。</p>
-<h2 id="示例">3.示例</h2>
-<blockquote>
-<p>令密钥a=5且b=7，加密defend the east wall of the castle</p>
-</blockquote>
-<p>我们将第一个字母'd'转换为数字3（'a'= 0，'b'= 1，...，'z'=
-25）并将其代入等式中：</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210037643.png" alt="image-20220221210037643">
-<figcaption aria-hidden="true">image-20220221210037643</figcaption>
-</figure>
-<p>显而易见，我们可以依次得到明文： &gt;
-defendtheeastwallofthecastle</p>
-<p>详见：https://cryptowikis.com/ClassicalCipher/SubstitutionCiphers/AffineCipher/</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1629,7 +1630,7 @@ defendtheeastwallofthecastle</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1678,12 +1679,12 @@ defendtheeastwallofthecastle</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">157k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:22</span>
+    <span title="站点阅读时长">2:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
