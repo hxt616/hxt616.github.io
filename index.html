@@ -164,6 +164,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/24/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/24/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/" class="post-title-link" itemprop="url">两数之和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-24 15:48:48 / 修改时间：16:03:46" itemprop="dateCreated datePublished" datetime="2024-01-24T15:48:48+08:00">2024-01-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>879</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/two-sum/</p>
+<p>这题用到了哈希表，相关概念参考<a target="_blank" rel="noopener" href="https://www.programmercarl.com/%E5%93%88%E5%B8%8C%E8%A1%A8%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80.html">这篇文章</a></p>
+<p>这题用 C++ 比较方便，需要用 map(key,value)，</p>
+<blockquote>
+<ul>
+<li>数组的大小是受限制的，而且如果元素很少，而哈希值太大会造成内存空间的浪费。</li>
+<li>set是一个集合，里面放的元素只能是一个key，而两数之和这道题目，不仅要判断y是否存在而且还要记录y的下标位置，因为要返回x
+和 y的下标。所以set 也不能用。</li>
+</ul>
+</blockquote>
+<p>步骤：</p>
+<ul>
+<li>遍历 nums，寻找<code>target-nums[i]</code>；</li>
+<li>若找不到，则将 nums[i] 添加到map中；</li>
+<li>否则返回<code>target-nums[i]</code>元素(key)对应的下标(value)；</li>
+</ul>
+<blockquote>
+<p>C++ ：</p>
+<ul>
+<li><p><code>auto</code>
+是一个关键字，用于自动推断变量的数据类型。它可以让编译器根据变量的初始化表达式来推断其类型，从而减少代码中的类型声明部分，使代码更加简洁和易读。</p></li>
+<li><p>关联容器（如<code>std::map</code>）的<code>end()</code>函数返回一个迭代器，指向容器中最后一个元素<strong>之后</strong>的位置。它并不指向任何有效的元素，本质上是一个“越过末尾”的迭代器。</p></li>
+</ul>
+</blockquote>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> {</span></span><br><span class="line">public:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt; <span class="title function_">twoSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> {</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">unordered_map</span> &lt;<span class="type">int</span>,<span class="type">int</span>&gt; <span class="built_in">map</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; nums.size(); i++) {</span><br><span class="line">            <span class="comment">// 遍历当前元素，并在map中寻找是否有匹配的key</span></span><br><span class="line">            <span class="keyword">auto</span> iter = <span class="built_in">map</span>.find(target - nums[i]); </span><br><span class="line">            <span class="keyword">if</span>(iter != <span class="built_in">map</span>.end()) {</span><br><span class="line">                <span class="keyword">return</span> {iter-&gt;second, i};</span><br><span class="line">            }</span><br><span class="line">            <span class="comment">// 如果没找到匹配对，就把访问过的元素和下标加入到map中</span></span><br><span class="line">            <span class="built_in">map</span>.insert(<span class="built_in">pair</span>&lt;<span class="type">int</span>, <span class="type">int</span>&gt;(nums[i], i)); </span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> {};</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/23/%E5%BF%AB%E4%B9%90%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1052,98 +1162,6 @@ NULL</li>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/09/%E8%AE%BE%E8%AE%A1%E9%93%BE%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/09/%E8%AE%BE%E8%AE%A1%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">设计链表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-01-09 14:00:21 / 修改时间：14:15:01" itemprop="dateCreated datePublished" datetime="2024-01-09T14:00:21+08:00">2024-01-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/design-linked-list/</p>
-<p>这题考察基本功，需要注意的细节不少，使用C语言则只能通过虚拟头节点实现。</p>
-<blockquote>
-<p>因为函数所传递的参数均为<strong>节点指针</strong>，而头插法会改变头节点指针（即头节点地址），若没有虚拟头节点，函数运行结束后，不会改变头节点指针的值（类似两个参数交换数值，改变的只是变量副本，与原变量无关），因此无法实现头插法</p>
-<p>除非参数为为头节点<strong>指针的地址</strong>，即<code>MyLinkedList** obj</code></p>
-</blockquote>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">MyLinkedList</span>{</span></span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">MyLinkedList</span> *<span class="title">next</span>;</span></span><br><span class="line">} MyLinkedList;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MyLinkedList* <span class="title function_">myLinkedListCreate</span><span class="params">()</span> {  <span class="comment">//初始化虚拟头节点（不存储数据），始终不变</span></span><br><span class="line">    MyLinkedList *head = (MyLinkedList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MyLinkedList));</span><br><span class="line">    head-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">myLinkedListGet</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> index)</span> { <span class="comment">//获取下标为index的节点的值</span></span><br><span class="line">    MyLinkedList *p = obj;</span><br><span class="line">    <span class="keyword">while</span>(index--){</span><br><span class="line">        <span class="keyword">if</span>(p-&gt;next==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }   <span class="comment">//循环结束p指向index的前一个节点</span></span><br><span class="line">    <span class="keyword">if</span>(p-&gt;next== <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> p-&gt;next-&gt;val;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListAddAtHead</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> val)</span> {  <span class="comment">//头插法</span></span><br><span class="line">    MyLinkedList *p = (MyLinkedList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MyLinkedList));</span><br><span class="line">    p-&gt;val = val;</span><br><span class="line">    p-&gt;next = obj-&gt;next;</span><br><span class="line">    obj-&gt;next = p;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListAddAtTail</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> val)</span> {  <span class="comment">//尾插法</span></span><br><span class="line">    MyLinkedList *p = obj;</span><br><span class="line">    <span class="keyword">while</span>(p-&gt;next!=<span class="literal">NULL</span>) {</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    p-&gt;next = (MyLinkedList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MyLinkedList));</span><br><span class="line">    p-&gt;next-&gt;val = val;</span><br><span class="line">    p-&gt;next-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListAddAtIndex</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> index, <span class="type">int</span> val)</span> { <span class="comment">//在下标为index的节点前插入节点</span></span><br><span class="line">    MyLinkedList *p = obj;   </span><br><span class="line">    <span class="keyword">while</span>(index--) {</span><br><span class="line">        <span class="keyword">if</span>(p-&gt;next==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    MyLinkedList *tmp = (MyLinkedList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MyLinkedList));</span><br><span class="line">    tmp-&gt;val = val;</span><br><span class="line">    tmp-&gt;next = p-&gt;next;</span><br><span class="line">    p-&gt;next = tmp;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListDeleteAtIndex</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> index)</span> { <span class="comment">//删除下标为index的节点</span></span><br><span class="line">    MyLinkedList *p = obj;</span><br><span class="line">    <span class="keyword">while</span>(index--) {</span><br><span class="line">        <span class="keyword">if</span>(p-&gt;next==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(p-&gt;next==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line">        MyLinkedList *del = p-&gt;next;</span><br><span class="line">        p-&gt;next = p-&gt;next-&gt;next;</span><br><span class="line">        <span class="built_in">free</span>(del);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListFree</span><span class="params">(MyLinkedList* obj)</span> {  <span class="comment">//释放链表空间</span></span><br><span class="line">    <span class="keyword">while</span>(obj != <span class="literal">NULL</span>){</span><br><span class="line">        MyLinkedList *tmp = obj;</span><br><span class="line">        obj = obj-&gt;next;</span><br><span class="line">        <span class="built_in">free</span>(tmp);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1215,7 +1233,7 @@ NULL</li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">74</span>
+          <span class="site-state-item-count">75</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1228,7 +1246,7 @@ NULL</li>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1264,12 +1282,12 @@ NULL</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">158k</span>
+    <span title="站点总字数">159k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:23</span>
+    <span title="站点阅读时长">2:24</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
