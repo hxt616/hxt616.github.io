@@ -20,17 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="May the Force be with you.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="hxt&#39;s Blog">
-<meta property="og:url" content="http://example.com/tags/%E5%AD%90%E5%9F%9F%E5%90%8D%E6%9E%9A%E4%B8%BE/index.html">
+  <meta name="description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;ransom-note&#x2F; 根据题目描述可知，一共26个字母，因此使用辅助数组（哈希表）比较方便。  使用辅助数组记录ransomNote中每个字母出现的次数，0~25下标对应26个字母 遍历magazine中的字符，将字符对应的辅助数组元素减1 最后判断ransomNote对应的辅助数组元素是否大于0，若大于0，则表示magazi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="赎金信">
+<meta property="og:url" content="http://example.com/2024/01/30/%E8%B5%8E%E9%87%91%E4%BF%A1/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="May the Force be with you.">
+<meta property="og:description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;ransom-note&#x2F; 根据题目描述可知，一共26个字母，因此使用辅助数组（哈希表）比较方便。  使用辅助数组记录ransomNote中每个字母出现的次数，0~25下标对应26个字母 遍历magazine中的字符，将字符对应的辅助数组元素减1 最后判断ransomNote对应的辅助数组元素是否大于0，若大于0，则表示magazi">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-30T02:39:56.346Z">
+<meta property="article:modified_time" content="2024-01-30T02:48:24.825Z">
 <meta property="article:author" content="hxt">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="哈希表">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/tags/%E5%AD%90%E5%9F%9F%E5%90%8D%E6%9E%9A%E4%B8%BE/">
+<link rel="canonical" href="http://example.com/2024/01/30/%E8%B5%8E%E9%87%91%E4%BF%A1/">
 
 
 <script id="page-configurations">
@@ -38,12 +43,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: 子域名枚举 | hxt's Blog</title>
+  <title>赎金信 | hxt's Blog</title>
   
 
 
@@ -158,51 +163,124 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">子域名枚举
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/30/%E8%B5%8E%E9%87%91%E4%BF%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          赎金信
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-30 10:39:56 / 修改时间：10:48:24" itemprop="dateCreated datePublished" datetime="2024-01-30T10:39:56+08:00">2024-01-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>639</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
+        <p>题目地址：https://leetcode.cn/problems/ransom-note/</p>
+<p>根据题目描述可知，一共26个字母，因此使用辅助数组（哈希表）比较方便。</p>
+<ul>
+<li>使用辅助数组记录<code>ransomNote</code>中每个字母出现的次数，0~25下标对应26个字母</li>
+<li>遍历<code>magazine</code>中的字符，将字符对应的辅助数组元素减1</li>
+<li>最后判断<code>ransomNote</code>对应的辅助数组元素是否大于0，若大于0，则表示<code>magazine</code>中的字符不够表示<code>ransomNote</code>，返回
+false</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> <span class="title function_">canConstruct</span><span class="params">(<span class="type">char</span>* ransomNote, <span class="type">char</span>* magazine)</span> {</span><br><span class="line">    <span class="type">int</span> hash[<span class="number">26</span>]; <span class="comment">//辅助数组，26个下标对应26个字母</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">26</span>; i++) {</span><br><span class="line">        hash[i] = <span class="number">0</span>;</span><br><span class="line">    }  <span class="comment">//初始化为0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; magazine[i]!=<span class="string">'\0'</span>; i++) {</span><br><span class="line">        hash[magazine[i]-<span class="string">'a'</span>]--;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; ransomNote[i]!=<span class="string">'\0'</span>; i++) {</span><br><span class="line">        hash[ransomNote[i]-<span class="string">'a'</span>]++;</span><br><span class="line">        <span class="keyword">if</span>(hash[ransomNote[i]-<span class="string">'a'</span>]&gt;<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-12-27T23:40:47+08:00"
-              content="2022-12-27">
-          12-27
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" rel="tag"># 哈希表</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/12/27/%E5%AD%90%E5%9F%9F%E5%90%8D%E6%9E%9A%E4%B8%BE/" itemprop="url">
-            <span itemprop="name">Subdomain Enumeration（子域名枚举）</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/01/29/%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%E2%85%A1/" rel="prev" title="四数相加Ⅱ">
+      <i class="fa fa-chevron-left"></i> 四数相加Ⅱ
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
