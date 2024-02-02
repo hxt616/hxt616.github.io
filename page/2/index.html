@@ -164,6 +164,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/19/%E9%93%BE%E8%A1%A8%E7%9B%B8%E4%BA%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/19/%E9%93%BE%E8%A1%A8%E7%9B%B8%E4%BA%A4/" class="post-title-link" itemprop="url">链表相交</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-19 13:37:29 / 修改时间：14:25:47" itemprop="dateCreated datePublished" datetime="2024-01-19T13:37:29+08:00">2024-01-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>925</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/</p>
+<p>这题也是408的原题。</p>
+<p>解决思路：</p>
+<ul>
+<li>分别定义两个指针指向两个字符串首地址</li>
+<li>计算出两个字符串的长度</li>
+<li>移动长度较大的字符串的指针，使得两个指针指向的节点到尾节点之间的节点个数相同（即链表末尾对齐）</li>
+<li>同时移动两个指针，若存在指针相同的节点则返回该节点，否则返回
+NULL</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode {</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * };</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> ListNode *<span class="title function_">getIntersectionNode</span><span class="params">(<span class="keyword">struct</span> ListNode *headA, <span class="keyword">struct</span> ListNode *headB)</span> {</span><br><span class="line">    <span class="type">int</span> count_A = <span class="number">0</span>;  <span class="comment">//记录A串字符个数</span></span><br><span class="line">    <span class="type">int</span> count_B = <span class="number">0</span>;  <span class="comment">//记录B串字符个数</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">pa</span> =</span> headA, *pb = headB;</span><br><span class="line">    <span class="keyword">while</span>(pa!=<span class="literal">NULL</span>) {</span><br><span class="line">        count_A++;</span><br><span class="line">        pa = pa-&gt;next;</span><br><span class="line">    }  <span class="comment">//计算字符个数</span></span><br><span class="line">    <span class="keyword">while</span>(pb!=<span class="literal">NULL</span>) {</span><br><span class="line">        count_B++;</span><br><span class="line">        pb = pb-&gt;next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    pa = headA;</span><br><span class="line">    pb = headB;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(count_A &gt; count_B) {</span><br><span class="line">        pa = pa-&gt;next;</span><br><span class="line">        count_A--;</span><br><span class="line">    } <span class="comment">//若A串比B串长，则移动A指针</span></span><br><span class="line">    <span class="keyword">while</span>(count_A &lt; count_B) {</span><br><span class="line">        pb = pb-&gt;next;</span><br><span class="line">        count_B--;</span><br><span class="line">    } <span class="comment">//若A串比B串短，则移动B指针</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(pa!=<span class="literal">NULL</span>) {</span><br><span class="line">        <span class="keyword">if</span>(pa == pb)</span><br><span class="line">            <span class="keyword">return</span> pa; <span class="comment">//若存在相同的节点，则返回该节点</span></span><br><span class="line">        pa = pa-&gt;next;</span><br><span class="line">        pb = pb-&gt;next;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/12/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1014,107 +1110,6 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/31/%E7%A7%BB%E5%8A%A8%E9%9B%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/12/31/%E7%A7%BB%E5%8A%A8%E9%9B%B6/" class="post-title-link" itemprop="url">移动零</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-12-31 09:50:28 / 修改时间：09:59:50" itemprop="dateCreated datePublished" datetime="2023-12-31T09:50:28+08:00">2023-12-31</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>797</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这题用<strong>双指针+交换数值</strong>的方法：</p>
-<ul>
-<li><p>初始时，快、慢指针同时指向nums[0]</p></li>
-<li><p>若快指针当前指向的元素不为0，则与慢指针指向的元素交换位置，快、慢指针均后移</p>
-<blockquote>
-<p>这里分为两种情况：</p>
-<ol type="1">
-<li>快、慢指针指向同一非零元素，则交换元素不改变该元素位置</li>
-<li>慢指针指向数值为<strong>0</strong>的元素，快指针指向非零元素，然后交换位置</li>
-</ol>
-</blockquote></li>
-<li><p>若快指针当前指向元素为<strong>0</strong>，则只向后移快指针</p></li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> *a, <span class="type">int</span> *b)</span>{ <span class="comment">//传入a、b的地址（实质上函数创建了a、b地址的副本pa和pb）</span></span><br><span class="line">    <span class="type">int</span> t = *a;  <span class="comment">//将a指向的变量数值赋给中间变量t</span></span><br><span class="line">    *a = *b;     <span class="comment">//将b指向的变量数值赋给a指向的变量</span></span><br><span class="line">    *b = t;      <span class="comment">//将中间变量t的值赋给b指向的变量</span></span><br><span class="line">}</span><br><span class="line"><span class="type">void</span> <span class="title function_">moveZeroes</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize)</span> {</span><br><span class="line">    <span class="type">int</span> slow = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> fast=<span class="number">0</span>; fast&lt;numsSize; fast++){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] != <span class="number">0</span>){</span><br><span class="line">            swap(&amp;nums[slow], &amp;nums[fast]);  <span class="comment">//交换位置</span></span><br><span class="line">            slow++;  <span class="comment">//慢指针后移</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>下面是我自己的做法，这题我自己的做法不太严谨，我是先将非零元素移至数组左边，右边元素覆盖为0，这种情况下元素移动次数不是最少，不如上面的方法</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">moveZeroes</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize)</span> {</span><br><span class="line">    <span class="type">int</span> slow = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> fast=<span class="number">0</span>; fast&lt;numsSize; fast++){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] != <span class="number">0</span>)</span><br><span class="line">            nums[slow++] = nums[fast];   <span class="comment">//移动元素</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=slow; i&lt;numsSize; i++)</span><br><span class="line">        nums[i]=<span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1186,7 +1181,7 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-count">79</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1235,7 +1230,7 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">160k</span>
+    <span title="站点总字数">161k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
