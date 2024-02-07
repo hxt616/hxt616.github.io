@@ -164,6 +164,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/" class="post-title-link" itemprop="url">最长公共前缀</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-17 12:59:29" itemprop="dateCreated datePublished" datetime="2023-07-17T12:59:29+08:00">2023-07-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-18 09:20:40" itemprop="dateModified" datetime="2023-07-18T09:20:40+08:00">2023-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/longest-common-prefix/</p>
+<blockquote>
+<p>编写一个函数来查找字符串数组中的最长公共前缀。</p>
+<p>如果不存在公共前缀，返回空字符串 <code>""</code>。</p>
+<p><strong>示例 ：</strong></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：strs = ["flower","flow","flight"]</span><br><span class="line">输出："fl"</span><br></pre></td></tr></tbody></table></figure>
+</blockquote>
+<p>又是因为基础不扎实找了半天bug<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>。</p>
+<p>例如下面这段代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> {</span><br><span class="line">    <span class="type">char</span> *str[] = {<span class="string">"Hello"</span>,<span class="string">"world"</span>};</span><br><span class="line">    <span class="type">char</span> *ptr = str[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改字符数组元素</span></span><br><span class="line">    ptr[<span class="number">2</span>] = <span class="string">'J'</span>;  <span class="comment">//报错</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>当声明一个字符指针数组<code>str[]</code>并初始化它为字符串常量时，每个元素都是一个指向字符串常量的指针。这意味着我们不能直接修改字符串常量中的字符。这时应该使用<code>malloc</code>函数开辟一片空间存放该字符串的副本，然后进行修改，可参考下面的完整代码。</p>
+<p>完整代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> * <span class="title function_">longestCommonPrefix</span><span class="params">(<span class="type">char</span> ** strs, <span class="type">int</span> strsSize)</span>{</span><br><span class="line">    <span class="type">char</span>* all = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="built_in">strlen</span>(strs[<span class="number">0</span>]) + <span class="number">1</span>); <span class="comment">// 分配空间</span></span><br><span class="line">    <span class="built_in">strcpy</span>(all, strs[<span class="number">0</span>]); <span class="comment">//存放strs[0]的副本</span></span><br><span class="line">    <span class="type">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">char</span> t; <span class="comment">//存放当前比较的字符</span></span><br><span class="line">    <span class="type">int</span> flag = <span class="number">1</span>; <span class="comment">//判断是否不匹配</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="built_in">strlen</span>(strs[<span class="number">0</span>]); j++) {</span><br><span class="line">        t = strs[<span class="number">0</span>][j];</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>; i &lt; strsSize&amp;&amp; j &lt; <span class="built_in">strlen</span>(strs[i]); i++) { <span class="comment">//for的条件语句判断是否溢出</span></span><br><span class="line">            <span class="keyword">if</span> (strs[i][j] != t) {</span><br><span class="line">                flag = <span class="number">0</span>;  <span class="comment">//当字符不匹配时，flag=0</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (i &lt; strsSize&amp;&amp;j &gt;= <span class="built_in">strlen</span>(strs[i])) <span class="comment">//当下标溢出时，flag=0，方便退出循环</span></span><br><span class="line">            flag=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (flag == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    all[j] = <span class="string">'\0'</span>;</span><br><span class="line">    <span class="keyword">return</span> all;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/11/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1072,306 +1176,6 @@ shell便是修改后的主题。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/Passive-Reconnaissance/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/28/Passive-Reconnaissance/" class="post-title-link" itemprop="url">Passive Reconnaissance（被动侦察）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-02-28 14:30:13" itemprop="dateCreated datePublished" datetime="2023-02-28T14:30:13+08:00">2023-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-18 22:45:42" itemprop="dateModified" datetime="2023-01-18T22:45:42+08:00">2023-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TryHackMe实验房间：https://tryhackme.com/room/passiverecon</p>
-<h2 id="introduction">Introduction</h2>
-<p>侦察(recon)可以定义为收集目标信息的初步调查。我们将侦察分为：</p>
-<ol type="1">
-<li>被动侦察</li>
-<li>主动侦察</li>
-</ol>
-<h3 id="被动侦察">被动侦察</h3>
-<p>在被动侦察中，你将依赖于公开可用的知识。它是你可以从公共可用资源访问的知识，而无需直接与目标进行接触。想象一下，你远远地看着目标领地，却没有踏足那片领地。</p>
-<p>被动侦察包括许多活动：</p>
-<ul>
-<li>从公共DNS服务器查找域的 DNS 记录。</li>
-<li>检查与目标网站相关的招聘广告。</li>
-<li>阅读有关目标公司的新闻文章。</li>
-</ul>
-<p>本文主要介绍三个命令行工具：</p>
-<ul>
-<li><code>whois</code></li>
-<li><code>nslookup</code></li>
-<li><code>dig</code></li>
-</ul>
-<p>以及两种在线服务的使用：</p>
-<ul>
-<li>DNSDumpster</li>
-<li>Shodan.io</li>
-</ul>
-<p>这两个在线服务允许我们收集有关目标的信息，而无需直接连接到目标。</p>
-<h3 id="主动侦察">主动侦察</h3>
-<p>另一方面，主动侦察则不能如此谨慎地进行。它需要与目标直接接触。就像你检查门窗的锁，以及其他潜在的入口。</p>
-<p>主动侦察包括的活动如下：</p>
-<ul>
-<li>连接到其中一个公司服务器，例如：HTTP、FTP、SMTP。</li>
-<li>打电话到公司试图获取信息（社会工程）。</li>
-<li>冒充修理工进入公司。</li>
-</ul>
-<p>考虑到主动侦察的侵入性，除非获得适当的法律授权，否则很快就会陷入法律麻烦。</p>
-<h2 id="whois">Whois</h2>
-<p>WHOIS 是遵循 <a target="_blank" rel="noopener" href="https://www.ietf.org/rfc/rfc3912.txt">RFC
-3912</a>
-规范的请求和响应协议。WHOIS服务器在TCP端口43上侦听传入的请求。域名注册商负责维护其租赁域名的WHOIS记录。WHOIS服务器回复与请求的域相关的各种信息。通过
-WHOIS ，我们可以了解到以下信息：</p>
-<ul>
-<li>注册商：域名是通过哪个注册商注册的？</li>
-<li>注册人的联系信息：姓名、组织、地址、电话等。(除非通过隐私服务隐藏)</li>
-<li>创建、更新和过期日期：域名首次注册是什么时候？上次更新是什么时候？什么时候需要更新？</li>
-<li>名称服务器(Name Server)：请求哪个服务器解析域名？</li>
-</ul>
-<p>使用语法是<code>whois DOMAIN_NAME</code>，其中<code>DOMAIN_NAME</code>是你试图获取信息的域。假设我们需要获取<code>tryhackme.com</code>的信息，直接执行<code>whois tryhackme.com</code>。得到如下信息：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ whois tryhackme.com</span><br><span class="line">[Querying whois.verisign-grs.com]</span><br><span class="line">[Redirected to whois.namecheap.com]</span><br><span class="line">[Querying whois.namecheap.com]</span><br><span class="line">[whois.namecheap.com]</span><br><span class="line">Domain name: tryhackme.com</span><br><span class="line">Registry Domain ID: 2282723194_DOMAIN_COM-VRSN</span><br><span class="line">Registrar WHOIS Server: whois.namecheap.com</span><br><span class="line">Registrar URL: http://www.namecheap.com</span><br><span class="line">Updated Date: 2021-05-01T19:43:23.31Z</span><br><span class="line">Creation Date: 2018-07-05T19:46:15.00Z</span><br><span class="line">Registrar Registration Expiration Date: 2027-07-05T19:46:15.00Z</span><br><span class="line">Registrar: NAMECHEAP INC</span><br><span class="line">Registrar IANA ID: 1068</span><br><span class="line">Registrar Abuse Contact Email: abuse@namecheap.com</span><br><span class="line">Registrar Abuse Contact Phone: +1.6613102107</span><br><span class="line">Reseller: NAMECHEAP INC</span><br><span class="line">Domain Status: clientTransferProhibited https://icann.org/epp<span class="comment">#clientTransferProhibited</span></span><br><span class="line">Registry Registrant ID: </span><br><span class="line">Registrant Name: Withheld <span class="keyword">for</span> Privacy Purposes</span><br><span class="line">Registrant Organization: Privacy service provided by Withheld <span class="keyword">for</span> Privacy ehf</span><br><span class="line">[...]</span><br><span class="line">URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/</span><br><span class="line">&gt;&gt;&gt; Last update of WHOIS database: 2021-08-25T14:58:29.57Z &lt;&lt;&lt;</span><br><span class="line"><span class="string">For more information on Whois status codes, please visit https://icann.org/epp</span></span><br></pre></td></tr></tbody></table></figure>
-<p>我们可以看到大量信息；我们将按照显示的顺序检查它们。首先，我们注意到我们被重定向到<code>whois.namecheap.com</code>以获取信息。由此可知，在这种情况下，<code>namecheap.com</code>目前正在维护该域名的WHOIS记录。此外，我们可以看到创建日期以及最后更新日期和过期日期。</p>
-<p>接下来，我们获得有关注册商和注册人的信息。我们可以找到注册人的姓名和联系信息（除非他们使用某些隐私服务）。尽管未显示在上面，但我们获得了该域的管理员和技术联系人。最后，我们看到域名服务器，如果我们有任何DNS记录要查找，我们应该查询这些服务器。</p>
-<p>可以检查收集的信息以发现新的攻击面，例如社会工程或技术攻击。例如，根据渗透测试的范围，你可能会考虑对管理员用户的电子邮件服务器或DNS服务器进行攻击，假设这些服务器属于你的客户端，并且属于渗透测试的范畴。</p>
-<p>需要注意的是，由于自动化工具滥用WHOIS查询来获取电子邮件地址，许多WHOIS服务对此采取了措施。例如，他们可能会修改电子邮件地址。此外，许多注册者订阅隐私服务，以避免垃圾邮件发送者获取他们的电子邮件地址，并保持他们的信息隐私。</p>
-<h2 id="nslookup">nslookup</h2>
-<p>使用<code>nslookup</code>（名称服务器查找）查找域名的IP地址。你需要发出命令<code>nslookup DOMAIN_NAME</code>，例如<code>nslookup tryhackme.com</code>。或者，更一般地，你可以使用<code>nslookup OPTIONS DOMAIN_NAME SERVER</code>。这三个主要参数是：</p>
-<ul>
-<li><code>OPTIONS</code>包括如下表所示的查询类型。例如，你可以使用<code>A</code>(用于IPv4)或者<code>AAAA</code>(用于IPv6)。</li>
-<li><code>DOMAIN_NAME</code>是你需要查询的域名。</li>
-<li><code>SERVER</code>是要查询的DNS服务器，你可以选择要查询的任何本地或者公用的DNS服务器。Cloudflare
-提供<code>1.1.1.1</code>和<code>1.0.0.1</code>，Google
-提供<code>8.8.8.8</code>和<code>8.8.4.4</code>，Quad9
-提供<code>9.9.9.9</code>和<code>149.112.112.112</code>。如果你想替换ISP的DNS服务器，可以选择更多的公共DNS服务器。</li>
-</ul>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Query type</th>
-<th style="text-align: center;">Result</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">A</td>
-<td style="text-align: center;">IPv4 Addresses</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">AAAA</td>
-<td style="text-align: center;">IPv6 Addresses</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">CNAME</td>
-<td style="text-align: center;">Canonical Name</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">MX</td>
-<td style="text-align: center;">Mail Servers</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">SOA</td>
-<td style="text-align: center;">Start of Authority</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">TXT</td>
-<td style="text-align: center;">TXT Records</td>
-</tr>
-</tbody>
-</table>
-<p>例如，使用<code>nslookup -type=A tryhackme.com 1.1.1.1</code>或<code>nslookup -type=a tryhackme.com 1.1.1.1</code>能够返回
-tryhackme.com 使用过的所有 IPv4 地址。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ nslookup -<span class="built_in">type</span>=A tryhackme.com 1.1.1.1</span><br><span class="line">Server:		1.1.1.1</span><br><span class="line">Address:	1.1.1.1<span class="comment">#53</span></span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">Name:	tryhackme.com</span><br><span class="line">Address: 172.67.69.208</span><br><span class="line">Name:	tryhackme.com</span><br><span class="line">Address: 104.26.11.229</span><br><span class="line">Name:	tryhackme.com</span><br><span class="line">Address: 104.26.10.229</span><br></pre></td></tr></tbody></table></figure>
-<p>A 和 AAAA 记录分别用于返回 IPv4和
-IPv6地址。从渗透测试的角度来看，这种查找非常有用。在上面的示例中，我们从一个域名开始，获得了三个
-IPv4地址。假设这些 IP
-地址位于渗透测试的范围之内，就可以进一步检查它们是否存在不安全性。</p>
-<p>假设你想了解特定域的电子邮件服务器和配置。可以使用
-<code>nslookup-type = MX tryhackme.com</code>。这里有一个例子:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ nslookup -<span class="built_in">type</span>=MX tryhackme.com</span><br><span class="line">Server:		127.0.0.53</span><br><span class="line">Address:	127.0.0.53<span class="comment">#53</span></span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">tryhackme.com	mail exchanger = 5 alt1.aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 1 aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 10 alt4.aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 10 alt3.aspmx.l.google.com.</span><br><span class="line">tryhackme.com	mail exchanger = 5 alt2.aspmx.l.google.com.</span><br></pre></td></tr></tbody></table></figure>
-<p>我们可以看到 tryhackme.com 当前的电子邮件配置使用 Google。由于 MX
-会查找 Mail Exchange
-服务器，我们注意到当一个邮件服务器尝试向<code>@tryhackme.com</code>
-发送电子邮件时，它会尝试连接到订单为 1 的
-<code>aspmx.l.google.com</code>。如果繁忙或不可用，邮件服务器将尝试按顺序连接到下一个邮件交换服务器、
-<code>alt1.aspmx.l.google.com</code> 或
-<code>alt2.aspmx.l.google.com</code>。</p>
-<p>Google 提供了列出的邮件服务器;
-因此，我们不应该期望邮件服务器运行的是一个易受攻击的服务器版本。但是，在其他情况下，我们可能会发现邮件服务器没有得到充分的安全保护或修补。</p>
-<p>当你继续被动地侦察你的目标时，这些信息可能会被证明是有价值的。你可以对其他域名重复类似的查询，并尝试不同的类型，例如<code>-type=txt</code>。谁知道你一路走来会发现什么样的信息呢！</p>
-<h2 id="dig">dig</h2>
-<p>对于更高级的 DNS 查询和其他功能，可以使用 <code>dig</code>，即“
-Domain Information Groper”的首字母缩写。让我们使用 dig 查找 MX
-记录，并将它们与 <code>nslookup</code> 进行比较。我们可以使用
-<code>dig DOMAIN _ NAME</code>，但是为了指定记录类型，我们将使用
-<code>dig DOMAIN_NAME TYPE</code>。或者，我们可以使用
-<code>dig @SERVER DOMAIN_NAME TYPE</code>选择要查询的服务器。</p>
-<ul>
-<li><code>SERVER</code>是要查询的 DNS服务器。</li>
-<li><code>DOMAIN_NAME</code>是你正在查询的域名。</li>
-<li><code>TYPE</code>包含 DNS 记录类型。</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user@TryHackMe$ dig tryhackme.com MX</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.16.19-RH &lt;&lt;&gt;&gt; tryhackme.com MX</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;</span><br></pre></td></tr></tbody></table></figure>
-<p>快速比较一下 <code>nslookup</code> 和 <code>dig</code>的输出，发现
-<code>dig</code> 返回了更多的信息，比如默认情况下的 TTL (Time To
-Live)。如果想查询<code>1.1.1.1</code> DNS 服务器，可以执行
-<code>dig @1.1.1.1 tryhackme.com MX</code>。</p>
-<h2 id="dnsdumpster">DNSDumpster</h2>
-<p>DNS 查找工具(如 nslookup 和
-dig)无法自行查找子域。你正在检查的域可能包括一个不同的子域，该子域可以显示关于目标的许多信息。例如，如果
-tryhackme.com 拥有子域名的 wiki.tryhackme.com 和 webmail.tryhackme.com
-，那么你需要了解更多关于这两个域名的信息，因为它们可以保存关于你的目标的大量信息。有可能其中一个子域已经建立，但没有定期更新。缺乏适当的定期更新通常会导致脆弱的服务。但是我们怎么知道这样的子域存在呢？</p>
-<p>我们可以考虑使用多个搜索引擎来编制一个公开已知子域名的列表。一个搜索引擎是不够的;
-此外，我们应该期望通过至少数十个搜索结果来找到有趣的数据。毕竟，你正在寻找没有明确公布的子域，因此不必将其添加到搜索结果的第一页。发现此类子域的另一种方法是依靠暴力强制查询来查找哪些子域具有DNS记录。</p>
-<p>为了避免这种耗时的搜索，可以使用一个在线服务，该在线服务可以提供 DNS
-查询的详细结果，如 <a target="_blank" rel="noopener" href="https://dnsdumpster.com/">DNSDumpster</a>。如果我们在 DNSDumpster
-中搜索 <code>tryhackme.com</code>，我们会发现子域名
-<code>blog.tryhackme.com</code> ，这是典型的 DNS
-查询所无法提供的。此外，DNSDumpster
-将以易于阅读的表格和图表的形式返回收集的 DNS 信息。DNSDumpster
-还将提供任何收集到的有关监听服务器的信息。</p>
-<h2 id="shodan.io">Shodan.io</h2>
-<p>当你的任务是针对特定目标运行渗透测试时，作为被动侦察阶段的一部分，像
-<a target="_blank" rel="noopener" href="https://www.shodan.io/">Shodan.io</a>
-这样的服务可以帮助你了解客户网络的各种信息，而不需要主动连接。此外，在防御方面，你可以使用
-Shodan.io 中的不同服务来了解属于你的组织的已连接和已公开的设备。</p>
-<p>Shodan.io
-试图连接到每一个可以在线访问的设备，以建立一个连接“事物”的搜索引擎，与网页搜索引擎形成对比。一旦得到响应，它就会收集与服务相关的所有信息，并将其保存在数据库中，以便进行搜索。以下是
-tryhackme.com 服务器的保存记录。</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230118223806186.png" alt="image-20230118223806186">
-<figcaption aria-hidden="true">image-20230118223806186</figcaption>
-</figure>
-<p>这个记录显示了一个 Web 服务器; 然而，正如前面提到的，Shodan.io
-收集与它能在线找到的任何设备相关的信息。在 Shodan.io 上搜索
-<code>tryhackme.com</code> 至少会显示上面截图所示的记录。通过 Shodan.io
-的搜索结果，我们可以了解到一些与搜索相关的东西，比如:</p>
-<ul>
-<li>IP地址</li>
-<li>托管公司</li>
-<li>地理位置</li>
-<li>服务器类型与版本</li>
-</ul>
-<h2 id="总结">总结</h2>
-<table>
-<colgroup>
-<col style="width: 46%">
-<col style="width: 53%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Purpose</th>
-<th style="text-align: center;">Commandline Example</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">Lookup WHOIS record</td>
-<td style="text-align: center;"><code>whois tryhackme.com</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Lookup DNS A records</td>
-<td style="text-align: center;"><code>nslookup -type=A tryhackme.com</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">Lookup DNS MX records at DNS server</td>
-<td style="text-align: center;"><code>nslookup -type=MX tryhackme.com 1.1.1.1</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Lookup DNS TXT records</td>
-<td style="text-align: center;"><code>nslookup -type=TXT tryhackme.com</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">Lookup DNS A records</td>
-<td style="text-align: center;"><code>dig tryhackme.com A</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Lookup DNS MX records at DNS server</td>
-<td style="text-align: center;"><code>dig @1.1.1.1 tryhackme.com MX</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">Lookup DNS TXT records</td>
-<td style="text-align: center;"><code>dig tryhackme.com TXT</code></td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1443,14 +1247,14 @@ tryhackme.com 服务器的保存记录。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-count">83</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1492,12 +1296,12 @@ tryhackme.com 服务器的保存记录。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">164k</span>
+    <span title="站点总字数">165k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:29</span>
+    <span title="站点阅读时长">2:30</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

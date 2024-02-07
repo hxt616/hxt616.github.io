@@ -164,6 +164,129 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/21/affine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/21/affine/" class="post-title-link" itemprop="url">仿射密码</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-02-21 00:00:00" itemprop="dateCreated datePublished" datetime="2022-02-21T00:00:00+08:00">2022-02-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-12 12:40:54" itemprop="dateModified" datetime="2023-05-12T12:40:54+08:00">2023-05-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>801</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="仿射密码">仿射密码</h1>
+<h2 id="简介">1.简介</h2>
+<p>仿射密码是一种单字母替换密码的特例。</p>
+<p>该密码不如简单替换密码安全，因为它不仅容易受到针对替代密码的所有攻击方法，而且还存在其他缺点。其主要缺点来自以下方面：如果密码分析者可以发现（通过频率分析，暴力破解，猜测或其他方式）两个密文字符对应的明文，则可以通过联立方程组来求解密钥。</p>
+<h2 id="数学描述">2.数学描述</h2>
+<p>仿射密码的<strong>密钥</strong>由2个数字组成，我们将其称为a和b。以下讨论假定使用26个字符的字母（m
+=
+26）。a应该选择为相对于m素数（即a应该没有与m相同的公因数&lt;除1以外&gt;）。例如15和26没有公因数(除1以外)，因此15是可以用来加密的值，然而12和26具有相同公因数（例如2），这样12不能被用于加密。加密时，我们首先将所有字母转换为数字（'a'=
+0，'b'= 1，...，'z'= 25）。</p>
+<p>对于密文c，给定任意的p（p是代表字母的数字），有：</p>
+<p>c = ap + b (mod m) 1&lt;=a&lt;=m, 1&lt;=b&lt;=m;</p>
+<p>解密的公式为：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221205948026.png" alt="image-20220221205948026">
+<figcaption aria-hidden="true">image-20220221205948026</figcaption>
+</figure>
+<p>其中a-1是a的乘法逆元，为了找到a的乘法逆元，我们需要假定数字x满足：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210010143.png" alt="image-20220221210010143">
+<figcaption aria-hidden="true">image-20220221210010143</figcaption>
+</figure>
+<p>如果我们发现x使得等式成立，那么X就是a的逆元，我们称之为a-1。</p>
+<p>解决此方程式最简单的方法是遍历1到25个数字，然后看哪个满足该方程式。</p>
+<h2 id="示例">3.示例</h2>
+<blockquote>
+<p>令密钥a=5且b=7，加密defend the east wall of the castle</p>
+</blockquote>
+<p>我们将第一个字母'd'转换为数字3（'a'= 0，'b'= 1，...，'z'=
+25）并将其代入等式中：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210037643.png" alt="image-20220221210037643">
+<figcaption aria-hidden="true">image-20220221210037643</figcaption>
+</figure>
+<p>显而易见，我们可以依次得到明文： &gt;
+defendtheeastwallofthecastle</p>
+<p>详见：https://cryptowikis.com/ClassicalCipher/SubstitutionCiphers/AffineCipher/</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/21/little-endian/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -467,14 +590,14 @@ you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hex
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-count">83</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -516,12 +639,12 @@ you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hex
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">164k</span>
+    <span title="站点总字数">165k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:29</span>
+    <span title="站点阅读时长">2:30</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
