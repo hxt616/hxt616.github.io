@@ -164,6 +164,115 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/16/AT&T%E5%92%8CIntel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/16/AT&T%E5%92%8CIntel/" class="post-title-link" itemprop="url">AT&T和Intel汇编语法区别</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-16 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-16T00:00:00+08:00">2022-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-19 22:47:47" itemprop="dateModified" datetime="2023-07-19T22:47:47+08:00">2023-07-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>738</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考： https://zhuanlan.zhihu.com/p/70590839</p>
+<p>​ https://segmentfault.com/a/1190000040633213 （较为详细）</p>
+<p>​
+https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html
+AT&amp;T汇编基础</p>
+<h1 id="att与intel">AT&amp;T与Intel</h1>
+<p>AT&amp;T语法多应用于Unix/Linux平台，Intel语法多应用于Windows系统。</p>
+<p>以下是这两种语法的主要区别：</p>
+<ul>
+<li><p>目标操作数和源操作数的顺序不同。</p>
+<p>Intel：目标操作数在源操作数的左边。</p>
+<p>AT&amp;T：目标操作数在源操作数的右边。</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">将2送入寄存器eax</span><br><span class="line">寄存器esp的值减去500(0x1f4)</span><br><span class="line"></span><br><span class="line">Intel:</span><br><span class="line">      mov eax, 2</span><br><span class="line">      sub esp, 0x1f4 </span><br><span class="line"></span><br><span class="line">AT&amp;T:</span><br><span class="line">      mov $2, %eax</span><br><span class="line">      sub $0x1f4, %esp</span><br><span class="line">      </span><br><span class="line">#注：sub指令是将目标操作数的值中减去源操作数的值，并将结果存储在目标操作数中</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>AT&amp;T的立即数（立即数通常是指在<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/立即寻址方式/6686429">立即寻址方式</a>指令中给出的数。）前要加<code>$</code>，寄存器前要加<code>%</code>；Intel则不需要。</p></li>
+<li><p>操作数字长的表示方法不同。在AT&amp;T汇编格式中，操作数的字长由操作符的最后一个字母决定，后缀<code>b</code>、<code>w</code>、<code>l</code>分别表示操作数为字节（byte，8bit）、字（word，16bit）和长字（long，32bit）；而在Intel汇编格式中，操作数的字长是用<code>byte ptr</code>和<code>word ptr</code>等前缀来表示的。</p>
+<figure class="highlight x86asm"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">movb val,%al    # <span class="meta">AT</span>&amp;T</span><br><span class="line">movl <span class="built_in">al</span>,<span class="built_in">byte</span> <span class="built_in">ptr</span> val   # Intel</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<p>总结：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230521161130215.png" alt="image-20230521161130215">
+<figcaption aria-hidden="true">image-20230521161130215</figcaption>
+</figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/10/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%89%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1634,119 +1743,6 @@ ax</strong>相当于<strong>mov IP, ax</strong>。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/05/%E5%A3%B3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/05/%E5%A3%B3/" class="post-title-link" itemprop="url">壳</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-04-05 00:00:00" itemprop="dateCreated datePublished" datetime="2022-04-05T00:00:00+08:00">2022-04-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-29 12:09:32" itemprop="dateModified" datetime="2022-08-29T12:09:32+08:00">2022-08-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">逆向工程</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>479</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="保护壳简介">保护壳简介</h1>
-<p>参考：CTF Wiki(保护壳简介)</p>
-<h2 id="壳是什么">壳是什么</h2>
-<p><strong>壳</strong>
-是在一些计算机软件里也有一段专门负责保护软件不被非法修改或反编译的程序。</p>
-<p>它们一般都是先于程序运行，拿到控制权，然后完成它们保护软件的任务。</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405135833408.png" alt="image-20220405135833408">
-<figcaption aria-hidden="true">image-20220405135833408</figcaption>
-</figure>
-<h2 id="壳的分类">壳的分类</h2>
-<p>分为<strong>加密壳</strong>和<strong>压缩壳</strong>。</p>
-<h3 id="压缩壳">压缩壳</h3>
-<p>压缩壳可以帮助缩减 PE 文件的大小，隐藏了 PE
-文件内部代码和资源，便于网络传输和保存。</p>
-<p>通常压缩壳有两类用途，一种只是单纯用于压缩普通 PE
-文件的压缩壳，而另一种则会对源文件进行较大变形，严重破坏 PE
-文件头，经常用于压缩恶意程序。</p>
-<p>常见的压缩壳有：Upx、ASpack、PECompat</p>
-<h3 id="加密壳">加密壳</h3>
-<p>加密壳或称保护壳，应用有多种防止代码逆向分析的技术，它最主要的功能是保护
-PE 免受代码逆向分析。</p>
-<p>由于加密壳的主要目的不再是压缩文件资源，所以加密壳保护的 PE
-程序通常比原文件大得多。</p>
-<p>目前加密壳大量用于对安全性要求高，对破解敏感的应用程序，同时也有恶意程序用于避免（降低）杀毒软件的检测查杀。</p>
-<p>常见的加密壳有：ASProtector、Armadillo、EXECryptor、Themida、VMProtect</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1818,7 +1814,7 @@ PE 免受代码逆向分析。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-count">86</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1867,12 +1863,12 @@ PE 免受代码逆向分析。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">168k</span>
+    <span title="站点总字数">170k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:33</span>
+    <span title="站点阅读时长">2:35</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
