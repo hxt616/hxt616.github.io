@@ -164,6 +164,304 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/28/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/" class="post-title-link" itemprop="url">命令注入</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-28 14:30:13" itemprop="dateCreated datePublished" datetime="2023-02-28T14:30:13+08:00">2023-02-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-10 15:48:59" itemprop="dateModified" datetime="2023-06-10T15:48:59+08:00">2023-06-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>TryHackMe实验房间：https://tryhackme.com/room/oscommandinjection</p>
+<h2 id="introduction">Introduction</h2>
+<p>命令注入(command
+injection)是滥用应用程序的行为在操作系统上执行命令，执行命令时使用与设备上运行应用程序相同的权限。例如，在一个名为joe的用户运行的web服务器上实现命令注入，将在这个joe用户下执行命令——从而获得joe拥有的任何权限。</p>
+<p>命令注入漏洞也被称为 <strong>RCE</strong> (Remote Code
+Execution)，因为攻击者可以诱导应用程序执行他们提供的一些 payload
+，而不需要直接访问机器本身(交互式shell)。Web服务器将处理攻击者传入的代码，并在用户权限和用户可访问的控制权限下执行该代码。</p>
+<p>命令注入之所以又被称为 RCE
+，是因为它能够在应用程序中远程执行代码，攻击者可以直接与目标系统进行交互。例如，攻击者可能会读取系统或用户文件、数据以及类似的内容。</p>
+<p>一个命令注入的例子：滥用应用程序来执行命令<code>whoami</code>，以列出当前的用户。</p>
+<h2 id="discovering-command-injection">Discovering Command
+Injection</h2>
+<p>存在命令注入漏洞是因为应用程序经常使用 PHP 、Python 和 NodeJS
+等编程语言中的函数来向当前机器的操作系统传递数据 并进行系统调用。</p>
+<p>在下面的代码段中，应用程序获取用户的输入，存储在变量<code>$title</code>中，然后应用程序通过该变量在目录中搜索对应的歌曲标题，下面分为四步分析。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112171437786.png" alt="image-20230112171437786">
+<figcaption aria-hidden="true">image-20230112171437786</figcaption>
+</figure>
+<ol type="1">
+<li>应用程序将 MP3文件存储在操作系统的某个目录中。</li>
+<li><code>$title</code>变量存放用户输入的字符串</li>
+<li><code>$title</code>变量中的数据被传递给命令<code>grep</code>，该命令在文件
+<em>songtitle.txt</em> 中查找用户希望的内容。</li>
+<li><em>songtitle.txt</em>文件的搜索结果将决定应用程序通知用户相关歌曲是否存在。</li>
+</ol>
+<p>这种信息通常存放在数据库中。这只是应用程序从用户获取输入然后以此与应用程序的操作系统交互的示例。</p>
+<p>攻击者可以让应用程序执行自己注入的命令来滥用此应用程序。他们可以要求该应用程序从敏感的文件中读取数据，而不是使用<code>grep</code>在
+<em>songtitle.txt</em> 中搜索条目。</p>
+<p>下面是用 Python 编写的代码片段：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112175932363.png" alt="image-20230112175932363">
+<figcaption aria-hidden="true">image-20230112175932363</figcaption>
+</figure>
+<ol type="1">
+<li><code>flask</code>包用于设置web服务器。</li>
+<li>一个使用<code>subprocess</code>包在设备上执行命令的函数。</li>
+<li>我们在web服务器中使用一个路由，它将执行提供的任何代码。例如，要执行<code>whoami</code>，我们需要访问<code>http://flaskapp.thm/whoami</code>。</li>
+</ol>
+<h2 id="exploiting-command-injection">Exploiting Command Injection</h2>
+<p>通常可以通过应用程序的行为来判断是否能够进行命令注入。</p>
+<p>使用用户输入用数据填充系统命令的应用程序通常会出现意外行为。例如，shell
+运算符 <code>;</code>、<code>&amp;</code> 和 <code>&amp;&amp;</code>
+将会组合两个或多个系统命令并执行它们。</p>
+<p>命令注入可以通过以下两种方法进行检测：</p>
+<ol type="1">
+<li>Blind command injection</li>
+<li>Verbose command injection</li>
+</ol>
+<p>下面是对这两种方法的详细介绍：</p>
+<table>
+<colgroup>
+<col style="width: 14%">
+<col style="width: 85%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Method</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Blind</td>
+<td style="text-align: center;">这种类型的注入在测试 payload
+时没有输出的地方（无回显），你必须调查应用程序的行为以确定 payload
+是否有效。</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Verbose</td>
+<td style="text-align: center;">这种注入是有回显的。例如，运行<code>whoami</code>命令可以查看应用程序当前的用户。Web应用程序会直接在页面上输出用户名。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="检测-blind-command-injection">检测 Blind Command Injection</h3>
+<p>发生该命令注入时没有可见的输出，因此不会立即显示出来。例如，执行一个命令，但
+Web 应用程序不输出任何消息。</p>
+<p>对于这种类型的命令注入，我们需要使用能够导致时间延迟的 payload
+。例如，<code>ping</code>和<code>sleep</code>命令是对测试 payload
+很重要。以<code>ping</code>为例，根据你指定的 <em>ping</em>
+次数，该应用程序将挂起 <em>x</em> 秒。</p>
+<p>另一种测试 blind command injection
+的方法是强制输出。这可以通过使用重定向操作符(例如:<code>&gt;</code>)来完成。例如，我们可以告诉web应用程序执行<code>whoami</code>等命令并将其重定向到一个文件中，然后我们可以使用<code>cat</code>等命令读取文件内容。</p>
+<p><code>curl</code>命令是测试命令注入的好方法，因为我们可以在 payload
+中使用<code>curl</code>来向应用程序传递数据或者从应用程序中传递数据。以下面的代码为例，该
+payload 可以向应用程序传递数据。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl http://vulnerable.app/process.php%3Fsearch%3DThe%20Beatles%3B%20whoami</span><br><span class="line">经过url解码后：curl http://vulnerable.app/process.php?search=The Beatles; whoami</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="检测-verbose-command-injection">检测 Verbose Command
+Injection</h3>
+<p>这种命令注入是指应用程序向你提供有关正在发生或正在执行的内容的反馈或输出。例如，<code>ping</code>和<code>whoami</code>等命令的输出直接显示在web应用程序上。</p>
+<h3 id="有用的-payload">有用的 payload</h3>
+<p>Linux：</p>
+<table>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 84%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Payload</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">whoami</td>
+<td style="text-align: center;">See what user the application is running
+under.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ls</td>
+<td style="text-align: center;">List the contents of the current
+directory. You may be able to find files such as configuration files,
+environment files (tokens and application keys), and many more valuable
+things.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ping</td>
+<td style="text-align: center;">This command will invoke the application
+to hang. This will be useful in testing an application for <strong>blind
+command injection</strong>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">sleep</td>
+<td style="text-align: center;">This is another useful payload in
+testing an application for <strong>blind command injection</strong>,
+where the machine does not have <code>ping</code> installed.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">nc</td>
+<td style="text-align: center;">Netcat can be used to spawn a reverse
+shell onto the vulnerable application. You can use this foothold to
+navigate around the target machine for other services, files, or
+potential means of escalating privileges.</td>
+</tr>
+</tbody>
+</table>
+<p>Windows：</p>
+<table>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 84%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Payload</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">whoami</td>
+<td style="text-align: center;">See what user the application is running
+under.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">dir</td>
+<td style="text-align: center;">List the contents of the current
+directory. You may be able to find files such as configuration files,
+environment files (tokens and application keys), and many more valuable
+things.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ping</td>
+<td style="text-align: center;">This command will invoke the application
+to hang. This will be useful in testing an application for <strong>blind
+command injection</strong>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">timeout</td>
+<td style="text-align: center;">This command will also invoke the
+application to hang. It is also useful for testing an application for
+<strong>blind command injection</strong> if the <code>ping</code>
+command is not installed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="remediating-command-injection预防命令注入">Remediating Command
+Injection（预防命令注入）</h2>
+<h3 id="vulnerable-functions易受攻击的函数"><strong>Vulnerable
+Functions</strong>（易受攻击的函数）</h3>
+<p>在 PHP 中，许多函数能够通过 shell
+与操作系统交互并执行命令，例如：</p>
+<ul>
+<li>Exec</li>
+<li>Passthru</li>
+<li>System</li>
+</ul>
+<p>以下面的代码为例，应用程序只接受和处理输入到表单的<strong>数字</strong>，意味着不会处理任何命令。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112214000991.png" alt="image-20230112214000991">
+<figcaption aria-hidden="true">image-20230112214000991</figcaption>
+</figure>
+<ol type="1">
+<li>应用程序只接受特定的字符格式（数字 0 -- 9）。</li>
+<li>应用程序仅执行该格式的数据。</li>
+</ol>
+<p>这些函数接受字符串或用户数据等输入，并执行系统上提供的任何内容。任何未经检查就使用这些函数的应用程序容易受到命令注入攻击。</p>
+<h3 id="input-sanitisation输入检测"><strong>Input
+sanitisation</strong>（输入检测）</h3>
+<p>对用户输入进行检测和过滤是防止命令注入的好方法。这是一个指定用户可以提交的数据格式或类型的过程。例如，只接受数字类型的数据或删除任何特殊字符（如<code>&gt;</code>、<code>&amp;</code>和<code>/</code>）的输入字段。</p>
+<p>在下面的代码中，<code>filter_input</code>函数用于检查用户输入的数据是否是数字，若不是数字，则这是一个无效的输入。</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">filter_input</span>(INPUT_GET, <span class="string">"number"</span>, FILTER_VALIDATE_NUMBER)) {</span><br><span class="line">        </span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="bypassing-filters绕过过滤器">Bypassing
+Filters（绕过过滤器）</h3>
+<p>应用程序将采用多种技术对从用户输入中获取的数据进行过滤和消毒。这些过滤器将限制你使用特定的
+payload
+；然而，我们可以利用应用程序背后的逻辑来绕过这些过滤器。例如，应用程序可以去掉引号，我们可以使用这个值的十六进制来实现相同的结果。</p>
+<p>当执行时，虽然给定的数据将采用与预期不同的格式，但仍可以对其进行解释，并具有相同的结果。</p>
+<h2 id="payload">Payload</h2>
+<p>https://github.com/payloadbox/command-injection-payload-list</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/Active-Reconnaissance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1791,7 +2089,7 @@ WinMain 函数</p>
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-17 00:11:34" itemprop="dateModified" datetime="2022-10-17T00:11:34+08:00">2022-10-17</time>
+                <time title="修改时间：2024-02-12 10:39:37" itemprop="dateModified" datetime="2024-02-12T10:39:37+08:00">2024-02-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1799,7 +2097,7 @@ WinMain 函数</p>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">C语言</span></a>
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
                 </span>
             </span>
 
@@ -1839,98 +2137,6 @@ Zero）</strong>，或者说当操作数为正的时候相当于Floor，当操�
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">59</span> % <span class="number">60</span> = <span class="number">59</span></span><br><span class="line"><span class="number">-59</span> % <span class="number">60</span> = <span class="number">-59</span></span><br></pre></td></tr></tbody></table></figure>
 <p>注意：Python中的整数除法和整数取模运算与C语言不完全相同。</p>
 <p>参考：https://docs.huihoo.com/c/linux-c-programming/ch04s02.html</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/10/CS61A-Homework-01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/10/CS61A-Homework-01/" class="post-title-link" itemprop="url">CS61A(sp21)-Homework 01</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-10-10 13:41:44 / 修改时间：18:56:00" itemprop="dateCreated datePublished" datetime="2022-10-10T13:41:44+08:00">2022-10-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="homework-01--q5if-function-vs-statement">Homework 01--Q5：If
-Function vs Statement</h1>
-<p>题目代码如下：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">if_function</span>(<span class="params">condition, true_result, false_result</span>):</span><br><span class="line">    <span class="string">"""Return true_result if condition is a true value, and</span></span><br><span class="line"><span class="string">    false_result otherwise.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; if_function(True, 2, 3)</span></span><br><span class="line"><span class="string">    2</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; if_function(False, 2, 3)</span></span><br><span class="line"><span class="string">    3</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; if_function(3==2, 'equal', 'not equal')</span></span><br><span class="line"><span class="string">    'not equal'</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; if_function(3&gt;2, 'bigger', 'smaller')</span></span><br><span class="line"><span class="string">    'bigger'</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> condition:</span><br><span class="line">        <span class="keyword">return</span> true_result</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> false_result</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">with_if_statement</span>():</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; result = with_if_statement()</span></span><br><span class="line"><span class="string">    61A</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; print(result)</span></span><br><span class="line"><span class="string">    None</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> cond():</span><br><span class="line">        <span class="keyword">return</span> true_func()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> false_func()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">with_if_function</span>():</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; result = with_if_function()</span></span><br><span class="line"><span class="string">    Welcome to</span></span><br><span class="line"><span class="string">    61A</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; print(result)</span></span><br><span class="line"><span class="string">    None</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> if_function(cond(), true_func(), false_func())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cond</span>():</span><br><span class="line">    <span class="string">"*** YOUR CODE HERE ***"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">true_func</span>():</span><br><span class="line">    <span class="string">"*** YOUR CODE HERE ***"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">false_func</span>():</span><br><span class="line">    <span class="string">"*** YOUR CODE HERE ***"</span></span><br></pre></td></tr></tbody></table></figure>
-<p>题目要求我们补全代码，并且要符合注释里的输出结果。</p>
-<p>分析代码，将<code>code()</code>、<code>true_func()</code>、<code>false_func()</code>带入<code>if_function(condition, true_result, false_result)</code>函数中，得到：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> cond():</span><br><span class="line">    <span class="keyword">return</span> true_func()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">return</span> false_func()</span><br></pre></td></tr></tbody></table></figure>
-<p>与<code>with_if_statement()</code>函数中的代码相同。我想了半天也没明白相同的代码为什么输出结果不同，后来查看正确答案才恍然大悟。</p>
-<p>当<code>with_if_function()</code>函数执行<code>return if_function(cond(), true_func(), false_func())</code>语句时，调用<code>if_function()</code>函数，而括号中的三个参数在函数调用时必须是确定的，意味着<code>code()</code>、<code>true_func()</code>、<code>false_func()</code>这三个函数在这个过程都需要被求值，相当于这三个函数都被调用过了，而<code>with_if_statement()</code>只调用了<code>code()</code>、<code>true_func()</code>这两个函数或者<code>code()</code>、<code>false_func()</code>这两个函数，因此<code>with_if_function()</code>比<code>with_if_statement()</code>多输出一行也就能够理解了。</p>
-<p>下面是我的题解：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cond</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">true_func</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Welcome to"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">false_func</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"61A"</span>)</span><br></pre></td></tr></tbody></table></figure>
 
       
     </div>
@@ -2017,7 +2223,7 @@ Function vs Statement</h1>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-count">89</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2030,7 +2236,7 @@ Function vs Statement</h1>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2066,12 +2272,12 @@ Function vs Statement</h1>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">172k</span>
+    <span title="站点总字数">173k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:36</span>
+    <span title="站点阅读时长">2:37</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
