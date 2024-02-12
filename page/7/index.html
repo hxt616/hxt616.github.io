@@ -164,6 +164,141 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/08/CS61A-frame/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/08/CS61A-frame/" class="post-title-link" itemprop="url">CS61A(sp21)-Lecture2</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-08 22:57:42" itemprop="dateCreated datePublished" datetime="2022-10-08T22:57:42+08:00">2022-10-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-10 13:41:13" itemprop="dateModified" datetime="2022-10-10T13:41:13+08:00">2022-10-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>842</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考资料：http://composingprograms.com/pages/13-defining-new-functions.html#calling-user-defined-functions</p>
+<p>最近在学习CS61A，学到了一个新概念：frame</p>
+<h1 id="frame">Frame</h1>
+<h2 id="定义">定义</h2>
+<p>An environment in which an expression is evaluated consists of a
+sequence of <em>frames</em>, depicted as boxes. Each frame contains
+<em>bindings</em>, each of which associates a name with its
+corresponding value.</p>
+<p>当我们对表达式求值时，实际上是在当前环境中求值，而该环境由一系列的“框架”组成。每个框架都包含绑定关系，将名称与其相应值相关联。</p>
+<h2 id="global-frame">global frame</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> pi</span><br><span class="line">tau = <span class="number">2</span> * pi</span><br></pre></td></tr></tbody></table></figure>
+<p>上述示例的环境中就只有 the global frame ，如下图所示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008231614912.png" alt="image-20221008231614912"><br>http://composingprograms.com/tutor.html
+（可通过该链接测试代码）</p>
+<p>import语句导入的函数和用户自定义的函数都被包含在 the global frame
+中，如下图所示：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008232149245.png" alt="image-20221008232149245">
+<figcaption aria-hidden="true">image-20221008232149245</figcaption>
+</figure>
+<h2 id="local-frame">local frame</h2>
+<p>调用用户自己定义的函数时，每个实例都有其自己独立的 local frame 。</p>
+<ul>
+<li><p>执行实例前</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235349096.png" alt="image-20221008235349096">
+<figcaption aria-hidden="true">image-20221008235349096</figcaption>
+</figure></li>
+<li><p>执行实例过程</p>
+<p>使用参数-2调用 square
+函数，因此创建了一个新的框架（frame），形式参数x绑定到值-2。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235439472.png" alt="image-20221008235439472">
+<figcaption aria-hidden="true">image-20221008235439472</figcaption>
+</figure>
+<p>在当前环境中查找名称x，该环境由显示的两个框架组成。在 mul(x,x)
+中的两次出现，且均为-2，因此 square 函数返回 4 。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235453861.png" alt="image-20221008235453861">
+<figcaption aria-hidden="true">image-20221008235453861</figcaption>
+</figure></li>
+<li><p>执行完成</p>
+<p>square所在的框架会消失，这里保留只是方便观察。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221010103200749.png" alt="image-20221010103200749">
+<figcaption aria-hidden="true">image-20221010103200749</figcaption>
+</figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/29/nssctf-%E8%B4%AA%E9%A3%9F%E8%9B%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1398,198 +1533,6 @@ flag!”。将“111”和“48”以char类型显示 <img src="https://cdn.jsde
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/21/x86%E6%8C%87%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/21/x86%E6%8C%87%E4%BB%A4/" class="post-title-link" itemprop="url">x86指令（Instructions）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-21 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-21T00:00:00+08:00">2022-08-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-13 19:59:44" itemprop="dateModified" datetime="2023-09-13T19:59:44+08:00">2023-09-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>以AT&amp;T语法为例，AT&amp;T与Intel的区别见：<br>https://hxt616.github.io/2022/08/16/AT&amp;T%E5%92%8CIntel/</p>
-<p>本文参考《CTF All In
-One》：https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html#334-%E6%8C%87%E4%BB%A4-instructions</p>
-<h1 id="三类x86指令">三类x86指令</h1>
-<h2 id="数据移动指令">数据移动指令</h2>
-<h3 id="mov-移动"><code>mov</code> 移动</h3>
-<p><code>mov</code> 指令将数据从它的第一个参数 ( 即寄存器中的内容,
-内存单元中的内容, 或者一个常数值 ) 复制到它的第二个参数 (
-即寄存器或者内存单元 ). 当寄存器到寄存器之间的数据移动是可行的时候,
-直接地从内存单元中将数据移动到另一内存单元中是不行的.
-在这种需要在内存单元中传递数据的情况下,
-它数据来源的那个内存单元必须首先把那个内存单元中的数据加载到一个寄存器中,
-然后才可以通过这个寄存器来把数据移动到目标内存单元中。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov %ebx, %eax        将 EBX 中的值复制到 EAX 中</span><br><span class="line">mov %ebx, var(,1)     将 EBX 中的 4 个字节大小的数据移动的内存中标签为 var 的地方去.( var 是一个 32 位常数)</span><br><span class="line">mov (%ebx), %eax      从 EBX 中的内存地址加载 4 个字节的数据到 EAX, 就是把 EBX 中的内容当作标签, 这个标签在内存中对应的数据放到 EAX 中</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="push-入栈"><code>push</code> 入栈</h3>
-<p><code>push</code>指令将它的参数移动到硬件支持的<strong>栈</strong>内存顶端.
-特别地, <code>push</code> 首先将 ESP 中的值<strong>减少</strong> 4,
-然后将它的参数移动到一个 32 位的地址单元 ( %esp ). ESP ( 栈指针 )
-会随着不断入栈从而持续递减, 即栈内存是从高地址单元到低地址单元增长。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push %eax         将 EAX 送入栈</span><br><span class="line">push var(,1)      将 var 对应的 4 字节大小的数据送入栈中</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="pop-出栈"><code>pop</code> 出栈</h3>
-<p><code>pop</code>指令从硬件支持的栈内存顶端移除 4 字节的数据,
-并把这个数据放到该指令指定的参数中 ( 即寄存器或者内存单元 ).
-其首先将内存中 ( %esp ) 的 4 字节数据放到指定的寄存器或者内存单元中,
-然后让 <strong>ESP + 4</strong>。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pop %edi       将栈顶的元素移除, 并放入到寄存器 EDI 中</span><br><span class="line">pop (%ebx)     将栈顶的元素移除, 并放入从 EBX 开始的 4 个字节大小的内存单元中</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="lea-加载有效地址"><code>lea</code> 加载有效地址</h3>
-<p><code>lea</code>指令将其第一个参数指定的内存单元 放入到
-第二个参数指定的寄存器中。</p>
-<p><code>LEA AX,[1000H]</code>，作用是将源操作数 [1000H] 的偏移地址
-1000H 送至 AX。理解时，可直接将[ ]去掉，等同于
-<code>MOV AX,1000H</code>。 再如：<code>LEA BX,[AX]</code>，等同于
-<code>MOV BX,AX</code>；<code>LEA BX,TABLE</code> 等同于
-<code>MOV BX,OFFSET TABLE</code>。 但有时不能直接使用 <code>MOV</code>
-代替： 比如：<code>LEA AX,[SI+6]</code>
-不能直接替换成：<code>MOV AX,SI+6</code>；但可替换为：
-<code>MOV AX,SI</code> <code>ADD AX,6</code> 两步完成。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lea (%ebx,%esi,8), %edi      EBX+8*ESI 的值被移入到了 EDI</span><br><span class="line">lea val(,1), %eax          val 的值被移入到了 EAX</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="逻辑运算指令">逻辑运算指令</h2>
-<h3 id="add-整数相加"><code>add</code> 整数相加</h3>
-<p><code>add</code>
-指令将两个参数相加，然后将结果存放到第二个参数中。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add $10, %eax        EAX 中的值被设置为了 EAX+10</span><br><span class="line">addb $10, (%eax)       往 EAX 中的值 所代表的内存单元地址 加上 1 个字节的数字 10</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="sub-整数相减"><code>sub</code> 整数相减</h3>
-<p><code>sub</code>指令将第二个参数的值与第一个相减，就是后面那个减去前面那个，然后把结果存储到第二个参数。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sub %ah, %al      AL 被设置成 AL-AH</span><br><span class="line">sub $216, %eax        将 EAX 中的值减去 216</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="inc-自增"><code>inc</code> 自增</h3>
-<p><code>inc</code> 指令让它的参数加 1。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incl var(,1)        将 var 所代表的 32 位整数加上 1</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="dec-自减"><code>dec</code> 自减</h3>
-<p><code>dec</code>指令让它的参数减1。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dec %eax       EAX 中的值减去 1</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="imul-整数相乘"><code>imul</code> 整数相乘</h3>
-<p><code>imul</code> 指令有两种基本格式 : 第一种是 2
-个参数的；第二种格式是 3 个参数的。</p>
-<p>2 个参数的这种格式, 先是将两个参数相乘,
-然后把结果存到第二个参数中。<strong>运算结果 ( 即第二个参数 )
-必须是一个寄存器</strong>。</p>
-<p>3 个参数的这种格式，先是将它的第 1 个参数和第 2
-个参数相乘，然后把结果存到第 3 个参数中，<strong>第 3
-个参数必须是一个寄存器</strong>。此外，第 1 个参数必须是一个常数。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">imul (%ebx), %eax        将 EAX 中的 32 位整数, 与 EBX 中的内容所指的内存单元, 相乘, 然后把结果存到 EAX 中</span><br><span class="line">imul $25, %edi, %esi        ESI 被设置为 EDI * 25.</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="idiv-整数相除"><code>idiv</code> 整数相除</h3>
-<p><code>idiv</code>只有一个操作数，此操作数为除数，而被除数则为 EDX :
-EAX 中的内容（一个64位的整数），除法结果 ( 商 ) 存在 EAX
-中，而所得的余数存在 EDX 中。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">idiv %ebx       用 EDX : EAX 的值除以 EBX 的值。商存放在 EAX 中, 余数存放在 EDX 中</span><br><span class="line">idivw (%ebx)       将 EDX : EAX 的值除以存储在 EBX 所对应内存单元的 32 位值。商存放在 EAX 中, 余数存放在 EDX 中</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="andorxor-按位逻辑-与-或-异或-运算"><code>and</code>，<code>or</code>，<code>xor</code>
-按位逻辑 与, 或, 异或 运算</h3>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">and $0x0F, %eax       只留下 EAX 中最后 4 位数字 (二进制位)</span><br><span class="line">xor %edx, %edx       将 EDX 的值全部设置成 0</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="not-非"><code>not</code> 非</h3>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not %eax     将 EAX 的所有值翻转</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="neg-取负指令"><code>neg</code> 取负指令</h3>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neg %eax       EAX → -EAX</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="shl-按位左移"><code>shl</code> 按位左移</h3>
-<p><code>shl</code>对第二个参数进行位运算，移动的位数由第一个参数决定。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shl $1, %eax       将 EAX 的值乘以 2 (如果最高有效位是 0 的话)</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="shr-按位右移"><code>shr</code> 按位右移</h3>
-<p>同上</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shr %cl, %ebx       将 EBX 的值除以 2n, 其中 n 为 CL 中的值, 运算最终结果存到 EBX 中</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="流程控制指令">流程控制指令</h2>
-<p>x86处理器的指令指针寄存器 ( EIP )为 32
-位寄存器，它用来在内存中指示我们输入汇编指令的位置。就是说这个寄存器指向哪个内存单元，那个单元存储的机器码就是程序执行的指令。通常它是指向我们程序要执行的
-下一条指令。</p>
-<h3 id="jmp-跳转指令"><code>jmp</code> 跳转指令</h3>
-<p>将程序跳转到参数指定的内存地址，然后执行该内存地址的指令。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp begin         跳转到打了 " begin " 这个标签的地方</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="jcondition-有条件的跳转"><code>jcondition</code>
-有条件的跳转</h3>
-<p>语法：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">je &lt;label           当相等的时候跳转</span><br><span class="line">jne &lt;label          当不相等的时候跳转</span><br><span class="line">jz &lt;label           当最后结果为 0 的时候跳转</span><br><span class="line">jg &lt;label           当大于的时候跳转</span><br><span class="line">jge &lt;label          当大于等于的时候跳转</span><br><span class="line">jl &lt;label           当小于的时候跳转</span><br><span class="line">jle &lt;label          当小于等于的时候跳转</span><br></pre></td></tr></tbody></table></figure>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmp %ebx, %eax        某些指令执行前先对参数进行cmp操作</span><br><span class="line">jle done          如果 EAX 的值小于等于 EBX 的值, 就跳转到 " done " 标签, 否则就继续执行下一条指令</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="cmp-比较指令"><code>cmp</code> 比较指令</h3>
-<p>比较两个参数的值，适当地设置机器状态字中的条件代码。此指令与sub指令类似，但是cmp不用将计算结果保存在操作数中。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmpb $10, (%ebx)</span><br><span class="line">jeq loop             如果 EBX 的值等于整数常量 10, 则跳转到标签 " loop " 的位置.</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="callret-子程序调用与返回"><code>call</code>，<code>ret</code>
-子程序调用与返回</h3>
-<p>这两个指令实现子程序的调用和返回。</p>
-<p><code>call</code> 指令首先将当前代码位置推到内存中硬件支持的栈内存上
-( 请看 <code>push</code> 指令
-)，然后无条件跳转到标签参数指定的代码位置，<code>call</code> 指令结束后,
-返回到调用之前的地址。</p>
-<p><code>ret</code> 指令实现子程序的返回。该指令首先从栈中取出代码 (
-类似于 <code>pop</code> 指令 )，然后它无条件跳转到检索到的代码位置。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">call &lt;label</span><br><span class="line">ret</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1661,7 +1604,7 @@ EAX 中的内容（一个64位的整数），除法结果 ( 商 ) 存在 EAX
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">87</span>
+          <span class="site-state-item-count">88</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1710,12 +1653,12 @@ EAX 中的内容（一个64位的整数），除法结果 ( 商 ) 存在 EAX
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">171k</span>
+    <span title="站点总字数">172k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:35</span>
+    <span title="站点阅读时长">2:36</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
