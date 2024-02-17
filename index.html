@@ -164,6 +164,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/17/%E5%89%8Dk%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/17/%E5%89%8Dk%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">前k个高频元素</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-02-17 09:09:36 / 修改时间：10:19:24" itemprop="dateCreated datePublished" datetime="2024-02-17T09:09:36+08:00">2024-02-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/top-k-frequent-elements/</p>
+<p>代码随想录中的思路是使用优先队列构建小顶堆，每次弹出最小频率的元素，剩余的k个元素就是前k个高频元素，用C++实现比较方便，但是使用C语言就比较繁琐。</p>
+<p>使用C语言实现则利用<strong>快速排序</strong>实现，思路如下：</p>
+<ul>
+<li><p>先定义一个结构体包括<strong>元素值</strong>和<strong>元素频率</strong></p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">map</span> {</span></span><br><span class="line">    <span class="type">int</span> ele; <span class="comment">//元素值</span></span><br><span class="line">    <span class="type">int</span> nu; <span class="comment">//记录次数</span></span><br><span class="line">} Map;</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>声明<code>cmp</code>和<code>cmps</code>函数，作为<code>qsort</code>的参数，实现升/降序排序（通过<code>a</code>、<code>b</code>的顺序判断）</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">cmp</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *a,<span class="type">const</span> <span class="type">void</span> *b)</span> {</span><br><span class="line">	<span class="keyword">return</span> *(<span class="type">int</span>*)a-*(<span class="type">int</span>*)b;  <span class="comment">//升序</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">cmps</span><span class="params">(<span class="type">const</span> <span class="type">void</span>* a,<span class="type">const</span> <span class="type">void</span>* b)</span>{</span><br><span class="line">    <span class="keyword">return</span> (*(Map*)b).nu - (*(Map*)a).nu; <span class="comment">//比较两个元素的频率（降序）</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>实现主体函数，先使用<code>qsort</code>对原数组进行升序排序，使得相同值的元素相邻。</p></li>
+<li><p>为结果数组<code>res</code>分配空间，给<code>*returnSize</code>赋值</p></li>
+<li><p>定义结构体数组，使用<code>for</code>循环统计每个元素出现的个数</p></li>
+<li><p>使用<code>qsort</code>对结构体的频率部分进行排序，最后将前k个结构体对应的元素值存入<code>res</code>中</p></li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Note: The returned array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">map</span> {</span></span><br><span class="line">    <span class="type">int</span> ele; <span class="comment">//元素值</span></span><br><span class="line">    <span class="type">int</span> nu; <span class="comment">//记录次数</span></span><br><span class="line">} Map;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">cmp</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *a,<span class="type">const</span> <span class="type">void</span> *b)</span> {</span><br><span class="line">	<span class="keyword">return</span> *(<span class="type">int</span>*)a-*(<span class="type">int</span>*)b;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">cmps</span><span class="params">(<span class="type">const</span> <span class="type">void</span>* a,<span class="type">const</span> <span class="type">void</span>* b)</span>{</span><br><span class="line">    <span class="keyword">return</span> (*(Map*)b).nu - (*(Map*)a).nu;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span>* <span class="title function_">topKFrequent</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> k, <span class="type">int</span>* returnSize)</span> {</span><br><span class="line">    </span><br><span class="line">    qsort(nums, numsSize, <span class="keyword">sizeof</span>(<span class="type">int</span>), cmp); <span class="comment">//升序排序</span></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> *res = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * k);</span><br><span class="line">    *returnSize = k;</span><br><span class="line"></span><br><span class="line">    Map <span class="built_in">map</span>[numsSize];</span><br><span class="line">    <span class="type">int</span> count=<span class="number">0</span>; <span class="comment">//记录结构体数组的下标</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">map</span>[<span class="number">0</span>].ele = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="built_in">map</span>[<span class="number">0</span>].nu = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;numsSize; i++) { <span class="comment">//统计每个元素出现的频率</span></span><br><span class="line">        <span class="keyword">if</span>(nums[i<span class="number">-1</span>] == nums[i])</span><br><span class="line">            <span class="built_in">map</span>[count].nu++;</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            <span class="built_in">map</span>[++count].ele = nums[i];</span><br><span class="line">            <span class="built_in">map</span>[count].nu=<span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">            </span><br><span class="line">    }</span><br><span class="line">    qsort(<span class="built_in">map</span>, count+<span class="number">1</span>, <span class="keyword">sizeof</span>(Map), cmps);  <span class="comment">//对频率进行排序</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;k; i++) {</span><br><span class="line">        res[i] = <span class="built_in">map</span>[i].ele;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/16/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9C%80%E5%A4%A7%E5%80%BC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1084,152 +1183,6 @@ len/2</strong>，则也不存在满足要求的子字符串</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/06/KMP%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/06/KMP%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">找出字符串中第一个匹配项的下标</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-02-06 22:25:15" itemprop="dateCreated datePublished" datetime="2024-02-06T22:25:15+08:00">2024-02-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-02-07 17:17:11" itemprop="dateModified" datetime="2024-02-07T17:17:11+08:00">2024-02-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/KMP%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">KMP算法</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/</p>
-<p>先介绍KMP算法</p>
-<h2 id="kmp算法">KMP算法</h2>
-<p>参考：https://www.zhihu.com/question/21923021</p>
-<h3 id="原理">原理</h3>
-<ul>
-<li><p>时间复杂度：O(n+m)</p></li>
-<li><p><strong>主串不回退</strong></p></li>
-<li><p>前缀：除最后一个字符之外的头部子串</p></li>
-<li><p>后缀：除第一个字符之外的尾部子串</p></li>
-<li><p>部分匹配值（PM）：<strong>最长相等前后缀长度</strong></p></li>
-<li><p>遇到不匹配的字符时：<strong>移动位数 = 已匹配的字符数 -
-已匹配的部分匹配值(不匹配前一位的next值)</strong></p>
-<blockquote>
-<p>模式串指针指向新的位置即<code>pos = next[pos-1]</code></p>
-<p><strong>next[pos-1]</strong>就是<strong>已匹配的部分匹配值</strong></p>
-</blockquote></li>
-<li><p>next
-数组：即当前元素对应的该元素<strong>前面的子串</strong>的<strong>部分匹配值</strong>（如下图所示）</p>
-<p><strong>若当前元素P[2]与主串不匹配，则模式串的指针跳转到P[next[2]]（即P[0]）</strong></p>
-<p><img src="https://code-thinking.cdn.bcebos.com/pics/KMP%E7%B2%BE%E8%AE%B28.png"></p></li>
-</ul>
-<h3 id="构造next数组">构造next数组：</h3>
-<ul>
-<li><p>设模式串为<strong>P</strong>，假设 next[0], next[1], ...
-next[x-1] 均已知，求 next[x]</p></li>
-<li><p>即此时已遍历到模式串 P[x]
-元素，需要比较已匹配前缀的后一个字符<strong>P[now]</strong>与<strong>P[x]</strong>是否相同：(next[x-1]
-= now)</p>
-<ol type="1">
-<li>若 P[now] = P[x] ，则 <strong>next[x] = next[x-1] + 1</strong></li>
-</ol>
-<p><img src="https://picx.zhimg.com/v2-6d6a40331cd9e44bfccd27ac5a764618_r.jpg?source=1def8aca"></p>
-<ol start="2" type="1">
-<li>若 P[now] != P[x] ，则需要缩小 now
-(即回退已匹配前缀)，now应该改成——使得
-<strong>A的k-前缀</strong>等于<strong>B的k-后缀</strong>
-的最大的k，而<strong>B的后缀等于A的后缀</strong>（因为A、B是相等的子串），所以只需找到A的k-前缀等于A的k-后缀的最大的k即<strong>A的最长公共前后缀的长度</strong>，也就是
-<strong>next[now-1]</strong></li>
-</ol>
-<p><img src="https://picx.zhimg.com/v2-c5ff4faaab9c3e13690deb86d8d17d71_r.jpg?source=1def8aca"></p>
-<ol start="3" type="1">
-<li>更新 now ：now = next[now-1] ，然后继续比较 P[now] 和 P[x]</li>
-</ol></li>
-<li><p>代码实现</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">getNext</span><span class="params">(<span class="type">int</span>* next, <span class="type">char</span>* P)</span> {</span><br><span class="line">    next[<span class="number">0</span>] = <span class="number">0</span>; <span class="comment">//初始化next数组</span></span><br><span class="line">    <span class="type">int</span> now = <span class="number">0</span>; <span class="comment">//开始比较时，模式串下标</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;<span class="built_in">strlen</span>(P); ) {</span><br><span class="line">        <span class="keyword">if</span>(P[now] == P[i]) { <span class="comment">//若相等，则更新next数组</span></span><br><span class="line">            now+=<span class="number">1</span>;</span><br><span class="line">            next[i] = now;</span><br><span class="line">            i++;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(now!=<span class="number">0</span>) <span class="comment">//若不相等，且now不为0，则回退now</span></span><br><span class="line">            now = next[now<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">else</span> { <span class="comment">//若now等于0，即模式串第一个字符与第二个字符不相等，则更新next[i]=0</span></span><br><span class="line">            next[i] = <span class="number">0</span>;</span><br><span class="line">            i++;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<p>注：只有next数组更新后（即next[i]不为空），下标i才能增加；否则继续修改now值，然后比较P[now]与P[i]，直到next数组更新</p>
-<h2 id="题目代码">题目代码</h2>
-<p>注：当<strong>主串第一个字符</strong>与<strong>模式串第一个字符</strong>不匹配时，只需<strong>移动主串指针</strong></p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">getNext</span><span class="params">(<span class="type">int</span>* next, <span class="type">char</span>* P)</span> {</span><br><span class="line">    next[<span class="number">0</span>] = <span class="number">0</span>; <span class="comment">//初始化next数组</span></span><br><span class="line">    <span class="type">int</span> now = <span class="number">0</span>; <span class="comment">//开始比较时，模式串下标</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;<span class="built_in">strlen</span>(P); ) {</span><br><span class="line">        <span class="keyword">if</span>(P[now] == P[i]) {</span><br><span class="line">            now+=<span class="number">1</span>;</span><br><span class="line">            next[i] = now;</span><br><span class="line">            i++;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(now!=<span class="number">0</span>)</span><br><span class="line">            now = next[now<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            next[i] = <span class="number">0</span>;</span><br><span class="line">            i++;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">strStr</span><span class="params">(<span class="type">char</span>* haystack, <span class="type">char</span>* needle)</span> {</span><br><span class="line">    <span class="type">int</span> length = <span class="built_in">strlen</span>(needle);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> next[length];</span><br><span class="line">    getNext(next, needle);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>, j=<span class="number">0</span>; i&lt;<span class="built_in">strlen</span>(haystack); ) {</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(haystack[i] == needle[j]) {  <span class="comment">//比较主串与模式串的字符</span></span><br><span class="line">            i++;</span><br><span class="line">            j++;</span><br><span class="line">        } <span class="comment">//若相等则同时增加下标</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(j != <span class="number">0</span>) <span class="comment">//若不相等，且模式串下标不为0，则更新模式串下标j</span></span><br><span class="line">            j = next[j<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">else</span>  <span class="comment">//若不相等且模式串下标为0，则只改变主串下标</span></span><br><span class="line">            i++;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(j==length) <span class="comment">//如果模式串遍历结束</span></span><br><span class="line">            <span class="keyword">return</span> i-j; <span class="comment">//返回第一个匹配项的下标</span></span><br><span class="line">    } </span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1301,7 +1254,7 @@ next[x-1] 均已知，求 next[x]</p></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-count">92</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1350,12 +1303,12 @@ next[x-1] 均已知，求 next[x]</p></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">176k</span>
+    <span title="站点总字数">177k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:40</span>
+    <span title="站点阅读时长">2:41</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
