@@ -28,7 +28,7 @@
 <meta property="og:description" content="先介绍文件共享的知识 文件共享 硬链接  基于索引结点 不同用户的目录项指向同一个索引结点 链接计数count  软链接  创建Link型(快捷方式)文件——记录文件存放路径 共享文件被删除，Link型文件依然存在，但是会查找失败 软链接索引结点中的引用计数值应该恒为1   建立符号链接时，引用计数不是复制原文件而是必为1  解决方案 vscode插件文件夹位置一般为C:\Users\{usern">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-02-19T09:25:15.460Z">
-<meta property="article:modified_time" content="2024-02-19T09:38:08.889Z">
+<meta property="article:modified_time" content="2024-02-19T09:41:16.815Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="Windows">
 <meta name="twitter:card" content="summary">
@@ -192,7 +192,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-02-19 17:25:15 / 修改时间：17:38:08" itemprop="dateCreated datePublished" datetime="2024-02-19T17:25:15+08:00">2024-02-19</time>
+              <time title="创建时间：2024-02-19 17:25:15 / 修改时间：17:41:16" itemprop="dateCreated datePublished" datetime="2024-02-19T17:25:15+08:00">2024-02-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -217,7 +217,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>524</span>
+              <span>521</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -258,7 +258,7 @@
 <ul>
 <li><p>先该文件夹<strong>剪切</strong>到其他位置，例如<code>D:\extensions</code></p></li>
 <li><p>管理员权限打开<strong>cmd</strong>，输入下面的命令：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mklink /D "C:\Users\19594\.vscode\extensions" "D:\VScode_extensions\extensions"</span><br></pre></td></tr></tbody></table></figure></li>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mklink /D "C:\Users\{username}\.vscode\extensions" "D:\extensions"</span><br></pre></td></tr></tbody></table></figure></li>
 <li><p>然后回车，搞定</p></li>
 </ul>
 <blockquote>
