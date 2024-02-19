@@ -164,6 +164,178 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/26/ContentDiscovery/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/12/26/ContentDiscovery/" class="post-title-link" itemprop="url">Content Discovery（搜集网站信息）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-12-26 23:21:48" itemprop="dateCreated datePublished" datetime="2022-12-26T23:21:48+08:00">2022-12-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-04 10:00:08" itemprop="dateModified" datetime="2023-01-04T10:00:08+08:00">2023-01-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Learn the various ways of discovering hidden or private content on a
+webserver that could lead to new vulnerabilities.</p>
+<p>TryHackMe实验房间： https://tryhackme.com/room/contentdiscovery</p>
+<h2 id="manually手动">Manually（手动）</h2>
+<h3 id="robots.txt">Robots.txt</h3>
+<p>该文件是个文档，它告诉搜索引擎哪些页面可以抓取，哪些页面不能抓取，而搜索引擎则通过读取robots.txt文件来识别这个页面是否允许被抓取；或者禁止特定的搜索引擎爬取网站。</p>
+<p>通常的做法是限制某些网站区域，使其不显示在搜索引擎结果中。这些页面可能是为网站客户提供的管理门户或文件，而<code>robots.txt</code>文件为我们提供了网站上大量（网站拥有者不希望我们访问的）网址。</p>
+<h3 id="favicon网页图标">Favicon（网页图标）</h3>
+<p>有时，当框架用于构建网站时，作为安装一部分的网页图标会被遗留下来，如果网站开发人员没有用自定义的图标替换它，这可以为我们提供关于框架的线索。OWASP托管一个公共框架图标数据库，您可以使用该数据库对照目标
+<strong>favicon</strong>
+进行检查（https://wiki.owasp.org/index.php/OWASP_favicon_database），一旦我们了解了框架堆栈，我们就可以使用外部资源来了解更多关于它的信息。</p>
+<p>注：上述网站中是使用 md5 哈希值来表示对应的图标。</p>
+<h3 id="sitemap.xml">Sitemap.xml</h3>
+<p>与限制搜索引擎爬虫的 robots.txt 文件不同，sitemap.xml
+文件提供了网站所有者希望在搜索引擎上列出的每个文件的列表。这些有时可能包含网站中难以导航的区域，甚至列出当前网站不再使用但仍在幕后工作的一些旧网页。</p>
+<h3 id="http-headers">HTTP Headers</h3>
+<p>当客户端向Web服务器发出请求时，服务器会返回各种 HTTP headers，这些
+headers 通常包含一些有用的信息，例如 webserver
+软件使用的编程/脚本语言，软件版本等。</p>
+<p>可以使用<code>curl</code>工具对服务器发起请求。</p>
+<h3 id="framework-stack框架">Framework Stack（框架）</h3>
+<p>找到网站的框架信息，并通过框架网站找到漏洞。</p>
+<h2 id="automated自动">Automated（自动）</h2>
+<p><strong>Automated Discovery</strong>
+是指使用工具发现内容而不是手动进行的过程。此过程是自动化的，因为它通常包含向Web服务器的数百，数千甚至数百万个请求。这些请求检查网站上是否存在文件或目录，使我们可以访问我们以前不知道的资源。使用称为
+<strong>Wordlists</strong> 的资源使此过程成为可能。</p>
+<p><strong>Wordlists</strong>
+只是包含一长串常用单词的文本文件；它们可以涵盖许多不同的用例。例如，密码表将包含最常用的密码。</p>
+<h3 id="ffuf">ffuf</h3>
+<p>ffuf 是一款Go语言编写的高速Web
+Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。使用 wordlists
+进行扫描。</p>
+<h3 id="dirb">dirb</h3>
+<p>基于字典的 web 目录扫描工具。</p>
+<h3 id="gobuster">Gobuster</h3>
+<p>主要用于网站目录扫描和子域名收集，对目录、文件、DNS和VHost等对象进行暴力破解攻击。</p>
+<h2 id="osintopen-source-intelligence">OSINT（Open-Source
+Intelligence）</h2>
+<h3 id="google-hacking-dorking">Google Hacking / Dorking</h3>
+<p>利用Google高级搜索获取信息，例如下面的表格：</p>
+<table>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 20%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Filter</strong></th>
+<th><strong>Example</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>site</td>
+<td>site:tryhackme.com</td>
+<td>returns results only from the specified website address</td>
+</tr>
+<tr class="even">
+<td>inurl</td>
+<td>inurl:admin</td>
+<td>returns results that have the specified word in the URL</td>
+</tr>
+<tr class="odd">
+<td>filetype</td>
+<td>filetype:pdf</td>
+<td>returns results which are a particular file extension</td>
+</tr>
+<tr class="even">
+<td>intitle</td>
+<td>intitle:admin</td>
+<td>returns results that contain the specified word in the title</td>
+</tr>
+</tbody>
+</table>
+<h3 id="wappalyzer">Wappalyzer</h3>
+<p>Wappalyzer（https://www.wappalyzer.com/）是一种在线工具，可以帮助识别网站使用的技术，例如框架、内容管理系统（CMS）、支付处理器等，甚至可以找到对应的版本号。</p>
+<h3 id="wayback-machine网站时光机">Wayback Machine（网站时光机）</h3>
+<p>网站时光机是万维网的数字档案馆，由位于美国加利福尼亚州旧金山的非营利组织互联网档案馆创建，亦为该组织最重要的服务之一。它允许用户“回到过去”，查看过去的网站的样子。通过该网站可以获取网站的一些依旧在使用的旧页面。</p>
+<h3 id="github">Github</h3>
+<p>可以使用GitHub的搜索功能来查找公司名称或网站名称，以尝试找到属于目标的存储库。一旦发现，或许可以访问尚未找到的源代码，密码或其他内容。</p>
+<h3 id="s3-buckets">S3 Buckets</h3>
+<p>S3
+Buckets是亚马逊AWS提供的一项存储服务，允许人们将文件甚至静态网站内容保存在通过HTTP和HTTPS访问的云中。文件的所有者可以设置访问权限，以使文件公开、私有甚至可写。有时，这些访问权限设置不正确，无意中允许访问公众无法访问的文件。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/21/NSSCTF-HNCTF(%E8%87%AA%E7%94%B1%E8%B5%9B%E9%81%93)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1284,264 +1456,6 @@ rotate right 3 的结果，代码如下：</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/12/RSA%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/09/12/RSA%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">RSA算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-09-12 15:40:22" itemprop="dateCreated datePublished" datetime="2022-09-12T15:40:22+08:00">2022-09-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-27 17:38:18" itemprop="dateModified" datetime="2023-01-27T17:38:18+08:00">2023-01-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">非对称加密算法</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考：https://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html</p>
-<p>​
-https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</p>
-<h2 id="非对称加密">非对称加密</h2>
-<p>它需要两个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/密钥">密钥</a>，一个是公开密钥，另一个是私有密钥；公钥用作加密，私钥则用作解密。使用公钥把<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/明文">明文</a>加密后所得的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/密文">密文</a>，只能用相对应的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/私钥">私钥</a>才能解密并得到原本的明文，最初用来加密的公钥不能用作解密。由于加密和解密需要两个不同的密钥，故被称为非对称加密；不同于加密和解密都使用同一个密钥的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/对称加密">对称加密</a>。公钥可以公开，可任意向外发布；私钥不可以公开，必须由用户自行严格秘密保管，绝不透过任何途径向任何人提供，也不会透露给被信任的要通信的另一方。（维基百科）</p>
-<h2 id="前置知识点">前置知识点</h2>
-<h3 id="互质">互质</h3>
-<ol type="1">
-<li>任意两个质数构成互质关系，比如13和61。</li>
-</ol>
-<p>　2.
-一个数是质数，另一个数只要不是前者的倍数，两者就构成互质关系，比如3和10。</p>
-<p>　3.
-如果两个数之中，较大的那个数是质数，则两者构成互质关系，比如97和57。</p>
-<p>　4. 1和任意一个自然数是都是互质关系，比如1和99。</p>
-<p>　5. p是大于1的整数，则p和p-1构成互质关系，比如57和56。</p>
-<p>　6. p是大于1的奇数，则p和p-2构成互质关系，比如17和15。</p>
-<h3 id="欧拉函数">欧拉函数</h3>
-<p>任意给定正整数 n，在小于等于 n 的正整数中，有 x 个与 n
-构成互质关系的正整数。计算 x 的方法就叫欧拉函数，用 φ(n) 表示。</p>
-<p>例：在 1 到 8 之中，与 8 形成互质关系的是 1、3、5、7，所以 φ(n) =
-4。</p>
-<p>关于 φ(n) 的计算方法，共五种情况：</p>
-<ol type="1">
-<li><p>如果n=1，则 φ(1) = 1
-。因为1与任何数（包括自身）都构成互质关系。</p></li>
-<li><p>如果n是质数，则 φ(n)=n-1
-。因为质数与小于它的每一个数，都构成互质关系。比如5与1、2、3、4都构成互质关系。</p></li>
-<li><p>如果n是质数的某一个次方，即 n = p^k
-(p为质数，k为大于等于1的整数)，则</p>
-<figure>
-<img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(p%5E%7Bk%7D)%3Dp%5E%7Bk%7D-p%5E%7Bk-1%7D&amp;chs=40" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>比如 φ(8) = φ(2^3) =2^3 - 2^2 = 8 -4 = 4。</p>
-<p>这是因为只有当一个数不包含质数p，才可能与n互质。而包含质数p的数一共有p<sup>(k-1)个，即1×p、2×p、3×p、...、p</sup>(k-1)×p，把它们去除，剩下的就是与n互质的数。</p>
-<p>上面的式子还可以写成下面的形式：</p>
-<figure>
-<img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(p%5E%7Bk%7D)%3Dp%5E%7Bk%7D-p%5E%7Bk-1%7D%3Dp%5E%7Bk%7D(1-\frac%7B1%7D%7Bp%7D)&amp;chs=60" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>可以看出，上面的第二种情况是 k=1 时的特例。</p></li>
-<li><p>如果n可以分解成两个互质的整数之积，</p>
-<blockquote>
-<p>　　n = p1 × p2</p>
-</blockquote>
-<p>则</p>
-<blockquote>
-<p>　　φ(n) = φ(p1p2) = φ(p1)φ(p2)</p>
-</blockquote></li>
-<li><p>任意一个大于1的正整数，都可以写成一系列质数的积，根据前面几种情况可以得出公式：</p>
-<figure>
-<img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(n)%3Dn(1-\frac%7B1%7D%7Bp_%7B1%7D%7D)(1-\frac%7B1%7D%7Bp_%7B2%7D%7D)...(1-\frac%7B1%7D%7Bp_%7Br%7D%7D)&amp;chs=60" alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure></li>
-</ol>
-<h3 id="欧拉定理">欧拉定理</h3>
-<p>如果两个正整数a和n互质，则n的欧拉函数 φ(n) 可以让下面的等式成立：</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221017000738261.png" alt="image-20221017000738261">
-<figcaption aria-hidden="true">image-20221017000738261</figcaption>
-</figure>
-<p>也就是说，a的φ(n)次方被n除的余数为1。</p>
-<p><strong>特殊情况：</strong></p>
-<p>假设正整数a与质数p互质，因为质数p的φ(p)等于p-1，则欧拉定理可以写成</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221017000807005.png" alt="image-20221017000807005">
-<figcaption aria-hidden="true">image-20221017000807005</figcaption>
-</figure>
-<h3 id="模反元素模逆元">模反元素（模逆元）</h3>
-<p>如果两个正整数a和n互质，那么一定可以找到整数b，使得 ab-1
-被n整除，或者说ab被n除的余数是1。</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220912153915183.png" alt="image-20220912153915183">
-<figcaption aria-hidden="true">image-20220912153915183</figcaption>
-</figure>
-<p>此时，b 就叫做 a 的模反元素。</p>
-<h2 id="rsa算法">RSA算法</h2>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230127173626821.png" alt="image-20230127173626821">
-<figcaption aria-hidden="true">image-20230127173626821</figcaption>
-</figure>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230127173800453.png" alt="image-20230127173800453">
-<figcaption aria-hidden="true">image-20230127173800453</figcaption>
-</figure>
-<h3 id="随机选择两个不相等的质数-p-和-q">1.随机选择两个不相等的质数 p 和
-q</h3>
-<p>假设选择了61和53。</p>
-<h3 id="计算-p-和-q-的乘积-n">2.计算 p 和 q 的乘积 n</h3>
-<p>把61和53相乘。</p>
-<blockquote>
-<p>n = 61×53 = 3233</p>
-</blockquote>
-<p>n的长度就是密钥长度。3233写成二进制是110010100001，一共有12位，所以这个密钥就是12位。实际应用中，RSA密钥一般是1024位，重要场合则为2048位。</p>
-<h3 id="计算-n-的欧拉函数-φn">3.计算 n 的欧拉函数 φ(n)</h3>
-<p>根据公式：</p>
-<blockquote>
-<p>φ(n) = (p-1)(q-1)</p>
-</blockquote>
-<p>算出 φ(3233) 等于 60×52 ，即 3120 。</p>
-<h3 id="随机选择一个整数-e条件是-1-e-φn-且-e-与-φn-互质">4.随机选择一个整数
-e，条件是 1 &lt; e &lt; φ(n) ，且 e 与 φ(n) 互质</h3>
-<p>假设随机选择了17。（实际应用中，常常选择65537。）</p>
-<h3 id="计算-e-对于-φn-的模反元素-d">5.计算 e 对于 φ(n) 的模反元素
-d</h3>
-<p><strong>d</strong> 满足公式：</p>
-<blockquote>
-<p>ed ≡ 1 (mod φ(n))</p>
-</blockquote>
-<p>等价于：</p>
-<blockquote>
-<p>ed - 1 = kφ(n)</p>
-</blockquote>
-<p>要找到模反元素d，实质上就是对下面这个二元一次方程求解：</p>
-<blockquote>
-<p>ex + φ(n)y = 1</p>
-</blockquote>
-<p>已知 e=17，φ(n)=3120，可得方程：</p>
-<blockquote>
-<p>17x + 3120y = 1</p>
-</blockquote>
-<p>利用扩展欧几里得算法求出结果（代码参考：https://xz.aliyun.com/t/2446）</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#利用gmpy2直接求解模反元素 </span></span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="built_in">print</span>(gmpy2.invert(<span class="number">17</span>, <span class="number">3120</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#用于扩展欧几里得算法的 Python 程序</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">egcd</span> ( a , b ):</span><br><span class="line">     <span class="keyword">if</span> (b == <span class="number">0</span>):</span><br><span class="line">         <span class="keyword">return</span> <span class="number">1</span>, <span class="number">0</span>, a</span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">         x , y , q = egcd( b , a % b ) <span class="comment"># q = GCD(a, b) = GCD(b, a%b)</span></span><br><span class="line">         x , y = y, ( x - (a // b) * y )</span><br><span class="line">         <span class="keyword">return</span> x, y, q </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mod_inv</span>(<span class="params">a,b</span>):</span><br><span class="line">    <span class="keyword">return</span> egcd(a,b)[<span class="number">0</span>]%b <span class="comment">#求a模b得逆元</span></span><br><span class="line"><span class="built_in">print</span>(mod_inv(<span class="number">17</span>,<span class="number">3120</span>))</span><br></pre></td></tr></tbody></table></figure>
-<p>可得 d = 2753 。</p>
-<h3 id="将-n-和-e-封装成公钥n-和-d-封装成私钥">6.将 n 和 e 封装成公钥，n
-和 d 封装成私钥</h3>
-<p>在上述的例子中，n=3233，e=17，d=2753，所以公钥就是
-(3233,17)，私钥就是（3233, 2753）。</p>
-<h3 id="rsa算法的可靠性">7.RSA算法的可靠性</h3>
-<p>上述共出现了 p 、q 、n 、φ(n) 、e 、d 这六个数字，公钥用到了 n 和 e
-，其余的四个数字都不公开。最关键的是 d，一旦 d
-泄露，就等于私钥泄露。</p>
-<p>那么如何推导出 d ？</p>
-<blockquote>
-<p>（1）ed≡1 (mod φ(n))。只有知道e和φ(n)，才能算出d。</p>
-<p>（2）φ(n)=(p-1)(q-1)。只有知道p和q，才能算出φ(n)。</p>
-<p>（3）n=pq。只有将n因数分解，才能算出p和q。</p>
-</blockquote>
-<p>因此只有先计算出 p 和 q ，才有可能推导出 d 。</p>
-<h3 id="加密和解密">8.加密和解密</h3>
-<h4 id="加密用公钥n-e">（1）加密用公钥（n, e）</h4>
-<p>假设鲍勃要向爱丽丝发送加密信息m，他就要用爱丽丝的公钥 (n,e)
-对m进行加密（<strong>m为原文</strong>）。这里需要注意，m必须是整数（字符串可以取ascii值或unicode值），且m必须小于n。</p>
-<p>加密的公式如下：</p>
-<blockquote>
-<p>m<sup>e</sup> ≡ c (mod n)</p>
-</blockquote>
-<p>爱丽丝的公钥是 (3233,
-17)，鲍勃的m假设是65，那么可以算出下面的等式：</p>
-<blockquote>
-<p>6517 ≡ 2790 (mod 3233)</p>
-</blockquote>
-<p>于是，c等于2790，鲍勃就把2790发给了爱丽丝，即 c
-是<strong>密文</strong>。</p>
-<h4 id="解密用私钥n-d">（2）解密用私钥（n, d）</h4>
-<p>爱丽丝拿到鲍勃发来的2790以后，就用自己的私钥(3233, 2753) 进行解密</p>
-<blockquote>
-<p>c<sup>d</sup> ≡ m (mod n)</p>
-</blockquote>
-<p>也就是说，c的d次方除以n的余数为m。现在，c等于2790，私钥是(3233,
-2753)，那么，爱丽丝算出</p>
-<blockquote>
-<p>2790<sup>2753</sup> ≡ 65 (mod 3233)</p>
-</blockquote>
-<p>解得加密前的原文：65。</p>
-<p>至此，"加密--解密"的整个过程全部完成。</p>
-<p>由上述公式可知，如果不知道 d ，就无法通过 c 求出 m 。</p>
-<h3 id="私钥解密的证明">9.私钥解密的证明</h3>
-<p>详见：
-https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1613,20 +1527,20 @@ https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">92</span>
+          <span class="site-state-item-count">93</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">28</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1662,12 +1576,12 @@ https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">177k</span>
+    <span title="站点总字数">178k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:41</span>
+    <span title="站点阅读时长">2:42</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

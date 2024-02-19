@@ -164,6 +164,264 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/12/RSA%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/12/RSA%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">RSA算法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-12 15:40:22" itemprop="dateCreated datePublished" datetime="2022-09-12T15:40:22+08:00">2022-09-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-27 17:38:18" itemprop="dateModified" datetime="2023-01-27T17:38:18+08:00">2023-01-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">非对称加密算法</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考：https://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html</p>
+<p>​
+https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</p>
+<h2 id="非对称加密">非对称加密</h2>
+<p>它需要两个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/密钥">密钥</a>，一个是公开密钥，另一个是私有密钥；公钥用作加密，私钥则用作解密。使用公钥把<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/明文">明文</a>加密后所得的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/密文">密文</a>，只能用相对应的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/私钥">私钥</a>才能解密并得到原本的明文，最初用来加密的公钥不能用作解密。由于加密和解密需要两个不同的密钥，故被称为非对称加密；不同于加密和解密都使用同一个密钥的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/对称加密">对称加密</a>。公钥可以公开，可任意向外发布；私钥不可以公开，必须由用户自行严格秘密保管，绝不透过任何途径向任何人提供，也不会透露给被信任的要通信的另一方。（维基百科）</p>
+<h2 id="前置知识点">前置知识点</h2>
+<h3 id="互质">互质</h3>
+<ol type="1">
+<li>任意两个质数构成互质关系，比如13和61。</li>
+</ol>
+<p>　2.
+一个数是质数，另一个数只要不是前者的倍数，两者就构成互质关系，比如3和10。</p>
+<p>　3.
+如果两个数之中，较大的那个数是质数，则两者构成互质关系，比如97和57。</p>
+<p>　4. 1和任意一个自然数是都是互质关系，比如1和99。</p>
+<p>　5. p是大于1的整数，则p和p-1构成互质关系，比如57和56。</p>
+<p>　6. p是大于1的奇数，则p和p-2构成互质关系，比如17和15。</p>
+<h3 id="欧拉函数">欧拉函数</h3>
+<p>任意给定正整数 n，在小于等于 n 的正整数中，有 x 个与 n
+构成互质关系的正整数。计算 x 的方法就叫欧拉函数，用 φ(n) 表示。</p>
+<p>例：在 1 到 8 之中，与 8 形成互质关系的是 1、3、5、7，所以 φ(n) =
+4。</p>
+<p>关于 φ(n) 的计算方法，共五种情况：</p>
+<ol type="1">
+<li><p>如果n=1，则 φ(1) = 1
+。因为1与任何数（包括自身）都构成互质关系。</p></li>
+<li><p>如果n是质数，则 φ(n)=n-1
+。因为质数与小于它的每一个数，都构成互质关系。比如5与1、2、3、4都构成互质关系。</p></li>
+<li><p>如果n是质数的某一个次方，即 n = p^k
+(p为质数，k为大于等于1的整数)，则</p>
+<figure>
+<img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(p%5E%7Bk%7D)%3Dp%5E%7Bk%7D-p%5E%7Bk-1%7D&amp;chs=40" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>比如 φ(8) = φ(2^3) =2^3 - 2^2 = 8 -4 = 4。</p>
+<p>这是因为只有当一个数不包含质数p，才可能与n互质。而包含质数p的数一共有p<sup>(k-1)个，即1×p、2×p、3×p、...、p</sup>(k-1)×p，把它们去除，剩下的就是与n互质的数。</p>
+<p>上面的式子还可以写成下面的形式：</p>
+<figure>
+<img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(p%5E%7Bk%7D)%3Dp%5E%7Bk%7D-p%5E%7Bk-1%7D%3Dp%5E%7Bk%7D(1-\frac%7B1%7D%7Bp%7D)&amp;chs=60" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>可以看出，上面的第二种情况是 k=1 时的特例。</p></li>
+<li><p>如果n可以分解成两个互质的整数之积，</p>
+<blockquote>
+<p>　　n = p1 × p2</p>
+</blockquote>
+<p>则</p>
+<blockquote>
+<p>　　φ(n) = φ(p1p2) = φ(p1)φ(p2)</p>
+</blockquote></li>
+<li><p>任意一个大于1的正整数，都可以写成一系列质数的积，根据前面几种情况可以得出公式：</p>
+<figure>
+<img src="https://chart.googleapis.com/chart?cht=tx&amp;chl=\phi(n)%3Dn(1-\frac%7B1%7D%7Bp_%7B1%7D%7D)(1-\frac%7B1%7D%7Bp_%7B2%7D%7D)...(1-\frac%7B1%7D%7Bp_%7Br%7D%7D)&amp;chs=60" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+</ol>
+<h3 id="欧拉定理">欧拉定理</h3>
+<p>如果两个正整数a和n互质，则n的欧拉函数 φ(n) 可以让下面的等式成立：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221017000738261.png" alt="image-20221017000738261">
+<figcaption aria-hidden="true">image-20221017000738261</figcaption>
+</figure>
+<p>也就是说，a的φ(n)次方被n除的余数为1。</p>
+<p><strong>特殊情况：</strong></p>
+<p>假设正整数a与质数p互质，因为质数p的φ(p)等于p-1，则欧拉定理可以写成</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221017000807005.png" alt="image-20221017000807005">
+<figcaption aria-hidden="true">image-20221017000807005</figcaption>
+</figure>
+<h3 id="模反元素模逆元">模反元素（模逆元）</h3>
+<p>如果两个正整数a和n互质，那么一定可以找到整数b，使得 ab-1
+被n整除，或者说ab被n除的余数是1。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220912153915183.png" alt="image-20220912153915183">
+<figcaption aria-hidden="true">image-20220912153915183</figcaption>
+</figure>
+<p>此时，b 就叫做 a 的模反元素。</p>
+<h2 id="rsa算法">RSA算法</h2>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230127173626821.png" alt="image-20230127173626821">
+<figcaption aria-hidden="true">image-20230127173626821</figcaption>
+</figure>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230127173800453.png" alt="image-20230127173800453">
+<figcaption aria-hidden="true">image-20230127173800453</figcaption>
+</figure>
+<h3 id="随机选择两个不相等的质数-p-和-q">1.随机选择两个不相等的质数 p 和
+q</h3>
+<p>假设选择了61和53。</p>
+<h3 id="计算-p-和-q-的乘积-n">2.计算 p 和 q 的乘积 n</h3>
+<p>把61和53相乘。</p>
+<blockquote>
+<p>n = 61×53 = 3233</p>
+</blockquote>
+<p>n的长度就是密钥长度。3233写成二进制是110010100001，一共有12位，所以这个密钥就是12位。实际应用中，RSA密钥一般是1024位，重要场合则为2048位。</p>
+<h3 id="计算-n-的欧拉函数-φn">3.计算 n 的欧拉函数 φ(n)</h3>
+<p>根据公式：</p>
+<blockquote>
+<p>φ(n) = (p-1)(q-1)</p>
+</blockquote>
+<p>算出 φ(3233) 等于 60×52 ，即 3120 。</p>
+<h3 id="随机选择一个整数-e条件是-1-e-φn-且-e-与-φn-互质">4.随机选择一个整数
+e，条件是 1 &lt; e &lt; φ(n) ，且 e 与 φ(n) 互质</h3>
+<p>假设随机选择了17。（实际应用中，常常选择65537。）</p>
+<h3 id="计算-e-对于-φn-的模反元素-d">5.计算 e 对于 φ(n) 的模反元素
+d</h3>
+<p><strong>d</strong> 满足公式：</p>
+<blockquote>
+<p>ed ≡ 1 (mod φ(n))</p>
+</blockquote>
+<p>等价于：</p>
+<blockquote>
+<p>ed - 1 = kφ(n)</p>
+</blockquote>
+<p>要找到模反元素d，实质上就是对下面这个二元一次方程求解：</p>
+<blockquote>
+<p>ex + φ(n)y = 1</p>
+</blockquote>
+<p>已知 e=17，φ(n)=3120，可得方程：</p>
+<blockquote>
+<p>17x + 3120y = 1</p>
+</blockquote>
+<p>利用扩展欧几里得算法求出结果（代码参考：https://xz.aliyun.com/t/2446）</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#利用gmpy2直接求解模反元素 </span></span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="built_in">print</span>(gmpy2.invert(<span class="number">17</span>, <span class="number">3120</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#用于扩展欧几里得算法的 Python 程序</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">egcd</span> ( a , b ):</span><br><span class="line">     <span class="keyword">if</span> (b == <span class="number">0</span>):</span><br><span class="line">         <span class="keyword">return</span> <span class="number">1</span>, <span class="number">0</span>, a</span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">         x , y , q = egcd( b , a % b ) <span class="comment"># q = GCD(a, b) = GCD(b, a%b)</span></span><br><span class="line">         x , y = y, ( x - (a // b) * y )</span><br><span class="line">         <span class="keyword">return</span> x, y, q </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mod_inv</span>(<span class="params">a,b</span>):</span><br><span class="line">    <span class="keyword">return</span> egcd(a,b)[<span class="number">0</span>]%b <span class="comment">#求a模b得逆元</span></span><br><span class="line"><span class="built_in">print</span>(mod_inv(<span class="number">17</span>,<span class="number">3120</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>可得 d = 2753 。</p>
+<h3 id="将-n-和-e-封装成公钥n-和-d-封装成私钥">6.将 n 和 e 封装成公钥，n
+和 d 封装成私钥</h3>
+<p>在上述的例子中，n=3233，e=17，d=2753，所以公钥就是
+(3233,17)，私钥就是（3233, 2753）。</p>
+<h3 id="rsa算法的可靠性">7.RSA算法的可靠性</h3>
+<p>上述共出现了 p 、q 、n 、φ(n) 、e 、d 这六个数字，公钥用到了 n 和 e
+，其余的四个数字都不公开。最关键的是 d，一旦 d
+泄露，就等于私钥泄露。</p>
+<p>那么如何推导出 d ？</p>
+<blockquote>
+<p>（1）ed≡1 (mod φ(n))。只有知道e和φ(n)，才能算出d。</p>
+<p>（2）φ(n)=(p-1)(q-1)。只有知道p和q，才能算出φ(n)。</p>
+<p>（3）n=pq。只有将n因数分解，才能算出p和q。</p>
+</blockquote>
+<p>因此只有先计算出 p 和 q ，才有可能推导出 d 。</p>
+<h3 id="加密和解密">8.加密和解密</h3>
+<h4 id="加密用公钥n-e">（1）加密用公钥（n, e）</h4>
+<p>假设鲍勃要向爱丽丝发送加密信息m，他就要用爱丽丝的公钥 (n,e)
+对m进行加密（<strong>m为原文</strong>）。这里需要注意，m必须是整数（字符串可以取ascii值或unicode值），且m必须小于n。</p>
+<p>加密的公式如下：</p>
+<blockquote>
+<p>m<sup>e</sup> ≡ c (mod n)</p>
+</blockquote>
+<p>爱丽丝的公钥是 (3233,
+17)，鲍勃的m假设是65，那么可以算出下面的等式：</p>
+<blockquote>
+<p>6517 ≡ 2790 (mod 3233)</p>
+</blockquote>
+<p>于是，c等于2790，鲍勃就把2790发给了爱丽丝，即 c
+是<strong>密文</strong>。</p>
+<h4 id="解密用私钥n-d">（2）解密用私钥（n, d）</h4>
+<p>爱丽丝拿到鲍勃发来的2790以后，就用自己的私钥(3233, 2753) 进行解密</p>
+<blockquote>
+<p>c<sup>d</sup> ≡ m (mod n)</p>
+</blockquote>
+<p>也就是说，c的d次方除以n的余数为m。现在，c等于2790，私钥是(3233,
+2753)，那么，爱丽丝算出</p>
+<blockquote>
+<p>2790<sup>2753</sup> ≡ 65 (mod 3233)</p>
+</blockquote>
+<p>解得加密前的原文：65。</p>
+<p>至此，"加密--解密"的整个过程全部完成。</p>
+<p>由上述公式可知，如果不知道 d ，就无法通过 c 求出 m 。</p>
+<h3 id="私钥解密的证明">9.私钥解密的证明</h3>
+<p>详见：
+https://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/31/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E5%85%AD%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1408,130 +1666,6 @@ AT&amp;T汇编基础</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/22/gcc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/22/gcc/" class="post-title-link" itemprop="url">gcc入门</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-07-22 12:00:48" itemprop="dateCreated datePublished" datetime="2022-07-22T12:00:48+08:00">2022-07-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-31 10:51:22" itemprop="dateModified" datetime="2022-08-31T10:51:22+08:00">2022-08-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/GCC/" itemprop="url" rel="index"><span itemprop="name">GCC</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考：http://c.biancheng.net/gcc/</p>
-<p>相关资料：</p>
-<p>https://www.cnblogs.com/fnlingnzb-learner/p/8059251.html
-动态库和静态库</p>
-<p>https://bravey.github.io/2019-04-25-GCC%E7%9A%84%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9
-gcc编译选项</p>
-<h1 id="gcc">GCC</h1>
-<p>GCC全称 the GNU Compiler Collection ，是一套<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/編程語言">编程语言</a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/编译器">编译器</a>，以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GPL">GPL</a>及<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LGPL">LGPL</a>许可证所发行的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/自由軟體">自由软件</a>，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU計劃">GNU计划</a>的关键部分，也是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GNU工具链">GNU工具链</a>的主要组成部分之一。可处理<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Fortran">Fortran</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Pascal_(程式語言)">Pascal</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Objective-C">Objective-C</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Java">Java</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Ada">Ada</a>，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Go">Go</a>与其他语言。</p>
-<p>GCC中包含gcc和g++，分别处理C语言和C++。关于这两者的区别可参考http://c.biancheng.net/view/7936.html</p>
-<h2 id="gcc使用技巧">gcc使用技巧</h2>
-<ol type="1">
-<li><p>当文件没有扩展名时，可使用 <code>-x</code>
-选项指明当前文件的类型。比如当前有个文件demo，当直接使用gcc
-demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件，因此使用
-<code>gcc -xc demo</code> （将文件当作C语言处理）。</p></li>
-<li><p>gcc + 文件名，生成对应的可执行文件，默认为a.out 。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./a.out</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><code>-o</code>选项指定生成的可执行文件的文件名。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.c -o helloworld         #用来指定要生成的文件名。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># ./helloworld</span></span><br><span class="line">hello world!</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><code>-E</code>选项可控制GCC编译器仅对源码做<strong>预处理</strong>操作。<br>所谓预处理操作，主要是处理那些源文件和头文件中以
-# 开头的命令（比如 #include、#define、#ifdef
-等），并删除程序中所有的注释 // 和 /* ... */。</p>
-<p>一般将预处理的内容保存在.i后缀的文件中 :</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -E helloworld.c -o helloworld.i</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><code>-S</code>选项可令GCC编译器仅将指定文件加工至<strong>编译阶段</strong>，并生成对应的汇编代码文件。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.i         #GCC编译器只需编译此文件。</span></span><br><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -S helloworld.c         #GCC编译器需要对其进行预处理和编译这两步操作。</span></span><br></pre></td></tr></tbody></table></figure>
-<p>以上这两行命令均能生成与原文件名相同的后缀为.s的文件（内容为汇编代码）。</p></li>
-<li><p><code>-c</code>选项可让GCC编译器将指定文件加工至<strong>汇编阶段</strong>（但并不执行链接操作），并生成对应的目标文件。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc -c helloworld.s         #生成了与原文件名相同的后缀为.o的文件，将汇编代码转变成机器可以执行的指令</span></span><br></pre></td></tr></tbody></table></figure>
-<p>-c选项同样对.c和.i文件有用。</p></li>
-<li><p>gcc执行<strong>链接操作</strong>。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ls-jc2uT1jQ:~<span class="comment"># gcc helloworld.o -o helloworld           #生成可执行文件helloworld。</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><code>-g</code>选项可产生调试信息，可以使用<strong>gdb</strong>调试可执行文件。</p></li>
-<li><p><code>-m32</code>选项指定生成32位机器的汇编代码，同理<code>-m64</code>则生成64位机器汇编代码。</p>
-<p>参考文章
-：https://blog.csdn.net/vantian/article/details/78748653?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166191228716782388062237%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=166191228716782388062237&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2<sub>all</sub>first_rank_ecpm_v1~pc_rank_34-1-78748653-null-null.142</p></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1603,20 +1737,20 @@ demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">92</span>
+          <span class="site-state-item-count">93</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">28</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1652,12 +1786,12 @@ demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">177k</span>
+    <span title="站点总字数">178k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:41</span>
+    <span title="站点阅读时长">2:42</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
