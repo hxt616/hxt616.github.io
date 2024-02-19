@@ -28,7 +28,7 @@
 <meta property="og:description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;binary-tree-level-order-traversal&#x2F; 层序遍历需要借助队列实现，首先入队根结点，然后出队同时将其左子树和右子树入队，接着出队，同时将当前出队结点的左右子树入队，继续出队，重复之前的操作。 这题的难点在于需要统计每一层的节点数，这里用队尾与队头之差表示。  先定义必要的变量 若二叉树不为空，则将根节点">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-02-19T14:24:35.860Z">
-<meta property="article:modified_time" content="2024-02-19T15:03:30.760Z">
+<meta property="article:modified_time" content="2024-02-19T15:05:42.640Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="LeetCode">
@@ -194,7 +194,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-02-19 22:24:35 / 修改时间：23:03:30" itemprop="dateCreated datePublished" datetime="2024-02-19T22:24:35+08:00">2024-02-19</time>
+              <time title="创建时间：2024-02-19 22:24:35 / 修改时间：23:05:42" itemprop="dateCreated datePublished" datetime="2024-02-19T22:24:35+08:00">2024-02-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
 <ul>
 <li>先定义必要的变量</li>
 <li>若二叉树不为空，则将根节点入队</li>
-<li><code>while</code>循环判断队列是否为空，嵌套一下内容：
+<li><code>while</code>循环判断队列是否为空，嵌套以下内容：
 <ul>
 <li>计算当前队列中的节点个数</li>
 <li>记录当前队头位置，然后队头节点出队</li>
