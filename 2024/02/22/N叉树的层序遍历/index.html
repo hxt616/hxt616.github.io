@@ -20,22 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="21号晚上，考研复习，插上移动硬盘，准备看看英语作文，结果提示音响了两次，文件资源管理器卡死。 重启后，发现电脑能够识别硬盘，但是只有个盘符，不显示磁盘容量，右键查看相关信息也为空。开始慌了，网上开始查解决方案，清一色使用DiskGenius修复。 回宿舍后开始下载DiskGenius专业版（只有专业版有相关功能），打开软件后，显示硬盘损坏，尝试“恢复文件”，确实扫描出了所有文件，但是电脑还是识别">
+  <meta name="description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;n-ary-tree-level-order-traversal&#x2F; 这题与二叉树的层序遍历基本相同，直接在之前的代码上稍作修改。 运行默认的2个测试用例，通过了；直接提交发现报错： 1234567891011121314&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="移动硬盘修复">
-<meta property="og:url" content="http://example.com/2023/11/23/%E7%A3%81%E7%9B%98%E4%BF%AE%E5%A4%8D/index.html">
+<meta property="og:title" content="N叉树的层序遍历">
+<meta property="og:url" content="http://example.com/2024/02/22/N%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="21号晚上，考研复习，插上移动硬盘，准备看看英语作文，结果提示音响了两次，文件资源管理器卡死。 重启后，发现电脑能够识别硬盘，但是只有个盘符，不显示磁盘容量，右键查看相关信息也为空。开始慌了，网上开始查解决方案，清一色使用DiskGenius修复。 回宿舍后开始下载DiskGenius专业版（只有专业版有相关功能），打开软件后，显示硬盘损坏，尝试“恢复文件”，确实扫描出了所有文件，但是电脑还是识别">
+<meta property="og:description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;n-ary-tree-level-order-traversal&#x2F; 这题与二叉树的层序遍历基本相同，直接在之前的代码上稍作修改。 运行默认的2个测试用例，通过了；直接提交发现报错： 1234567891011121314&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f613.png?v8">
-<meta property="article:published_time" content="2023-11-22T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-11-23T15:10:31.801Z">
+<meta property="article:published_time" content="2024-02-22T02:47:34.555Z">
+<meta property="article:modified_time" content="2024-02-22T02:47:34.556Z">
 <meta property="article:author" content="hxt">
-<meta property="article:tag" content="硬盘修复">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f613.png?v8">
 
-<link rel="canonical" href="http://example.com/2023/11/23/%E7%A3%81%E7%9B%98%E4%BF%AE%E5%A4%8D/">
+<link rel="canonical" href="http://example.com/2024/02/22/N%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>移动硬盘修复 | hxt's Blog</title>
+  <title>N叉树的层序遍历 | hxt's Blog</title>
   
 
 
@@ -170,7 +170,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/23/%E7%A3%81%E7%9B%98%E4%BF%AE%E5%A4%8D/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/22/N%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -183,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          移动硬盘修复
+          N叉树的层序遍历
         </h1>
 
         <div class="post-meta">
@@ -192,9 +192,8 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-11-23 00:00:00 / 修改时间：23:10:31" itemprop="dateCreated datePublished" datetime="2023-11-23T00:00:00+08:00">2023-11-23</time>
+              <time title="创建时间：2024-02-22 10:47:34" itemprop="dateCreated datePublished" datetime="2024-02-22T10:47:34+08:00">2024-02-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -202,7 +201,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%A1%AC%E7%9B%98/" itemprop="url" rel="index"><span itemprop="name">硬盘</span></a>
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
                 </span>
             </span>
 
@@ -219,14 +222,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
+              <span>2.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -238,13 +241,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>21号晚上，考研复习，插上移动硬盘，准备看看英语作文，结果提示音响了两次，文件资源管理器卡死。</p>
-<p>重启后，发现电脑能够识别硬盘，但是只有个盘符，不显示磁盘容量，右键查看相关信息也为空。开始慌了，网上开始查解决方案，清一色使用<strong>DiskGenius</strong>修复。</p>
-<p>回宿舍后开始下载DiskGenius专业版（只有专业版有相关功能），打开软件后，显示硬盘损坏，尝试“恢复文件”，确实扫描出了所有文件，但是电脑还是识别不了硬盘；尝试“扫描坏道”，结果未发现坏道<span class="github-emoji"><span>😓</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f613.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
-<p>重新搜索，突然想到好像Windows有相关的命令可以修复硬盘，参考这个<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/51203528">知乎回答</a></p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chkdsk G:/f    (G为盘符)</span><br></pre></td></tr></tbody></table></figure>
-<p>运行后回显如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">文件系统的类型是 NTFS。</span><br><span class="line">卷标是 hxt616。</span><br><span class="line"></span><br><span class="line">阶段 1: 检查基本文件系统结构...</span><br><span class="line">  已处理 120320 个文件记录。</span><br><span class="line">文件验证完成。</span><br><span class="line"> 阶段持续时间 (文件记录验证): 1.72 秒。</span><br><span class="line">  已处理 119 个大型文件记录。</span><br><span class="line"> 阶段持续时间 (孤立文件记录恢复): 0.00 毫秒。</span><br><span class="line">  已处理 0 个错误的文件记录。</span><br><span class="line"> 阶段持续时间 (文件记录检查错误): 0.22 毫秒。</span><br><span class="line"></span><br><span class="line">阶段 2: 检查文件名链接...</span><br><span class="line">正在更正文件 5 索引 $I30 的错误。</span><br><span class="line">CHKDSK 在文件 5 的索引 $I30 的卷位图中发现标记为已分配的可用空间。</span><br><span class="line">正在对文件 5 中的索引 $I30 进行排序。</span><br><span class="line">  已处理 323 个重新解析记录。</span><br><span class="line">  已处理 133520 个索引项。</span><br><span class="line">索引验证完成。</span><br><span class="line"> 阶段持续时间 (索引验证): 3.95 秒。</span><br><span class="line">CHKDSK 正在扫描未编制索引的文件以便重新连接到其原始目录。</span><br><span class="line">正在将孤立文件 $MFT (0)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $MFTMirr (1)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $LogFile (2)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $Volume (3)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $AttrDef (4)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 . (5)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $Bitmap (6)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $Boot (7)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $BadClus (8)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $Secure (9)恢复到目录文件 5。</span><br><span class="line">正在跳过有关恢复孤立项的进一步消息。</span><br><span class="line">  已扫描到 27 个未索引文件。</span><br><span class="line">  已将 27 个未编制索引的文件恢复到原始目录。</span><br><span class="line"> 阶段持续时间 (孤立文件重新连接): 0.00 毫秒。</span><br><span class="line">  已将 0 个未编制索引的文件恢复到回收箱。</span><br><span class="line"> 阶段持续时间 (孤立文件恢复到回收箱): 5.66 毫秒。</span><br><span class="line">  已处理 323 个重新解析记录。</span><br><span class="line"> 阶段持续时间 (重分析点和对象 ID 验证): 5.06 毫秒。</span><br><span class="line"></span><br><span class="line">阶段 3: 检查安全描述符...</span><br><span class="line">安全描述符验证完成。</span><br><span class="line"> 阶段持续时间 (安全描述符验证): 2.66 毫秒。</span><br><span class="line">  已处理 6601 个数据文件。</span><br><span class="line"> 阶段持续时间 (数据属性验证): 0.50 毫秒。</span><br><span class="line">CHKDSK 正在验证 Usn 日志...</span><br><span class="line">Usn 日志验证完成。</span><br><span class="line">正在更正主文件表(MFT)镜像的错误。</span><br><span class="line">正在更正主文件表(MFT) BITMAP 属性的错误。</span><br><span class="line">正在更正卷位图的错误。</span><br><span class="line"></span><br><span class="line">Windows 已更正文件系统。</span><br><span class="line">无需采取进一步操作。</span><br><span class="line"></span><br><span class="line">总共有  500105215 KB 磁盘空间。</span><br><span class="line">113401 个文件中有  396362324 KB。</span><br><span class="line">6602 个索引      49956 KB。</span><br><span class="line">坏扇区          0 KB。</span><br><span class="line">系统正在使用     201563 KB。</span><br><span class="line">日志文件占用了      65536 KB。</span><br><span class="line">磁盘上  103491372 KB 可用。</span><br><span class="line"></span><br><span class="line">每个分配单元中有       4096 字节。</span><br><span class="line">磁盘上共有  125026303 个分配单元。</span><br><span class="line">磁盘上有   25872843 个可用的分配单元。</span><br><span class="line">总持续时间: 5.86 秒 (5862 毫秒)。</span><br></pre></td></tr></tbody></table></figure>
+        <p>题目地址：https://leetcode.cn/problems/n-ary-tree-level-order-traversal/</p>
+<p>这题与二叉树的层序遍历基本相同，直接在之前的代码上稍作修改。</p>
+<p>运行默认的2个测试用例，通过了；直接提交发现报错：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">=================================================================</span><br><span class="line">==22==ERROR: AddressSanitizer: attempting double-free on 0x603000000100 in thread T0:</span><br><span class="line">    #0 0x7f28f87e7537 in __interceptor_free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127</span><br><span class="line">    #2 0x7f28f7e17d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)</span><br><span class="line">    #3 0x7f28f7e17e3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f)</span><br><span class="line">0x603000000100 is located 0 bytes inside of 20-byte region [0x603000000100,0x603000000114)</span><br><span class="line">freed by thread T0 here:</span><br><span class="line">    #0 0x7f28f87e7537 in __interceptor_free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127</span><br><span class="line">    #2 0x7f28f7e17d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)</span><br><span class="line">previously allocated by thread T0 here:</span><br><span class="line">    #0 0x7f28f87e7887 in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:145</span><br><span class="line">    #3 0x7f28f7e17d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)</span><br><span class="line">SUMMARY: AddressSanitizer: double-free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127 in __interceptor_free</span><br><span class="line">==22==ABORTING</span><br></pre></td></tr></tbody></table></figure>
+<p>搜了一下，上述报错原因是：<strong>这个错误提示是地址检测工具（AddressSanitizer）给出的。它指出了双重释放（double-free）的问题，意味着你试图释放已经被释放过的内存空间。</strong></p>
+<p>然后发现LeetCode上有人提过这个问题，解决方案是<strong>初始化<code>*returnColumnSizes</code></strong>，下面是正确代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>** <span class="title function_">levelOrder</span><span class="params">(<span class="keyword">struct</span> Node* root, <span class="type">int</span>* returnSize, <span class="type">int</span>** returnColumnSizes)</span> {</span><br><span class="line">    <span class="type">int</span>** res = (<span class="type">int</span>**)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>*)*<span class="number">1000</span>);</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(root==<span class="literal">NULL</span>){</span><br><span class="line">        *returnColumnSizes = <span class="literal">NULL</span>; <span class="comment">//很重要！！！</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span>* <span class="title">que</span>[10000];</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> count[<span class="number">1000</span>]; <span class="comment">//统计每一层节点的个数</span></span><br><span class="line">    <span class="type">int</span> front=<span class="number">0</span>, rear=<span class="number">0</span>; <span class="comment">//队头，队尾</span></span><br><span class="line">    que[rear++] = root; <span class="comment">//根结点入队</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(front!=rear) {</span><br><span class="line">        count[*returnSize] = rear-front; <span class="comment">//当前层所包含的节点个数</span></span><br><span class="line">        <span class="type">int</span> start = front;  <span class="comment">//当前层的起始节点下标</span></span><br><span class="line">        front = rear; <span class="comment">//当前层的最后一个节点下标</span></span><br><span class="line">        res[*returnSize] = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*count[*returnSize]); <span class="comment">//分配空间</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=start; i&lt;front; i++) {</span><br><span class="line">            res[*returnSize][i-start] = que[i]-&gt;val;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>; j&lt;que[i]-&gt;numChildren; j++) {</span><br><span class="line">                que[rear++] = que[i]-&gt;children[j];</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        (*returnSize)++; <span class="comment">//层数增加</span></span><br><span class="line">    }</span><br><span class="line">    *returnColumnSizes = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*(*returnSize));</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;*returnSize; i++) {</span><br><span class="line">        (*returnColumnSizes)[i] = count[i];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -254,7 +257,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E7%A1%AC%E7%9B%98%E4%BF%AE%E5%A4%8D/" rel="tag"># 硬盘修复</a>
+              <a href="/tags/C/" rel="tag"># C</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
           </div>
 
         
@@ -263,13 +268,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/09/06/%E9%93%BE%E8%A1%A8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/" rel="prev" title="链表的相关问题">
-      <i class="fa fa-chevron-left"></i> 链表的相关问题
+    <a href="/2024/02/19/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/" rel="prev" title="二叉树的层序遍历">
+      <i class="fa fa-chevron-left"></i> 二叉树的层序遍历
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/12/29/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="next" title="二分查找">
-      二分查找 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     

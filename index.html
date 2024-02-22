@@ -164,6 +164,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/22/N%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/22/N%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">N叉树的层序遍历</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-02-22 10:47:34" itemprop="dateCreated datePublished" datetime="2024-02-22T10:47:34+08:00">2024-02-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/n-ary-tree-level-order-traversal/</p>
+<p>这题与二叉树的层序遍历基本相同，直接在之前的代码上稍作修改。</p>
+<p>运行默认的2个测试用例，通过了；直接提交发现报错：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">=================================================================</span><br><span class="line">==22==ERROR: AddressSanitizer: attempting double-free on 0x603000000100 in thread T0:</span><br><span class="line">    #0 0x7f28f87e7537 in __interceptor_free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127</span><br><span class="line">    #2 0x7f28f7e17d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)</span><br><span class="line">    #3 0x7f28f7e17e3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f)</span><br><span class="line">0x603000000100 is located 0 bytes inside of 20-byte region [0x603000000100,0x603000000114)</span><br><span class="line">freed by thread T0 here:</span><br><span class="line">    #0 0x7f28f87e7537 in __interceptor_free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127</span><br><span class="line">    #2 0x7f28f7e17d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)</span><br><span class="line">previously allocated by thread T0 here:</span><br><span class="line">    #0 0x7f28f87e7887 in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:145</span><br><span class="line">    #3 0x7f28f7e17d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)</span><br><span class="line">SUMMARY: AddressSanitizer: double-free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127 in __interceptor_free</span><br><span class="line">==22==ABORTING</span><br></pre></td></tr></tbody></table></figure>
+<p>搜了一下，上述报错原因是：<strong>这个错误提示是地址检测工具（AddressSanitizer）给出的。它指出了双重释放（double-free）的问题，意味着你试图释放已经被释放过的内存空间。</strong></p>
+<p>然后发现LeetCode上有人提过这个问题，解决方案是<strong>初始化<code>*returnColumnSizes</code></strong>，下面是正确代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>** <span class="title function_">levelOrder</span><span class="params">(<span class="keyword">struct</span> Node* root, <span class="type">int</span>* returnSize, <span class="type">int</span>** returnColumnSizes)</span> {</span><br><span class="line">    <span class="type">int</span>** res = (<span class="type">int</span>**)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>*)*<span class="number">1000</span>);</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(root==<span class="literal">NULL</span>){</span><br><span class="line">        *returnColumnSizes = <span class="literal">NULL</span>; <span class="comment">//很重要！！！</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span>* <span class="title">que</span>[10000];</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> count[<span class="number">1000</span>]; <span class="comment">//统计每一层节点的个数</span></span><br><span class="line">    <span class="type">int</span> front=<span class="number">0</span>, rear=<span class="number">0</span>; <span class="comment">//队头，队尾</span></span><br><span class="line">    que[rear++] = root; <span class="comment">//根结点入队</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(front!=rear) {</span><br><span class="line">        count[*returnSize] = rear-front; <span class="comment">//当前层所包含的节点个数</span></span><br><span class="line">        <span class="type">int</span> start = front;  <span class="comment">//当前层的起始节点下标</span></span><br><span class="line">        front = rear; <span class="comment">//当前层的最后一个节点下标</span></span><br><span class="line">        res[*returnSize] = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*count[*returnSize]); <span class="comment">//分配空间</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=start; i&lt;front; i++) {</span><br><span class="line">            res[*returnSize][i-start] = que[i]-&gt;val;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>; j&lt;que[i]-&gt;numChildren; j++) {</span><br><span class="line">                que[rear++] = que[i]-&gt;children[j];</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        (*returnSize)++; <span class="comment">//层数增加</span></span><br><span class="line">    }</span><br><span class="line">    *returnColumnSizes = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*(*returnSize));</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;*returnSize; i++) {</span><br><span class="line">        (*returnColumnSizes)[i] = count[i];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/19/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1128,97 +1219,6 @@ false</p></li>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/08/%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/08/%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/" class="post-title-link" itemprop="url">用栈实现队列</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-02-08 20:28:33 / 修改时间：20:32:53" itemprop="dateCreated datePublished" datetime="2024-02-08T20:28:33+08:00">2024-02-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/implement-queue-using-stacks/</p>
-<p>用两个栈实现队列，很容易想到：将第一个栈(输入栈)中的元素保存到第二个栈中，此时第二个栈(输出栈)就是原来元素形成的队列。</p>
-<p><img src="https://code-thinking.cdn.bcebos.com/gifs/232.%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%E7%89%88%E6%9C%AC2.gif"></p>
-<p>实现的过程中，<code>myQueuePop()</code>函数总是有小错误：将输入栈将元素均存入了输出栈后，输入栈此时为<strong>空</strong>，调用取出队首元素后，不对输入栈进行处理；然后调用<code>myQueuePush()</code>函数，将新元素存入输入栈中，此时再调用<code>myQueuePop()</code>函数，将输入栈中新元素再存入输出栈中，接着取出队首元素，发生错误（元素顺序不正确）。</p>
-<p>修改后的<code>myQueuePop()</code>函数：先将输入栈中元素存入<strong>输出栈</strong>中，取出队首元素，然后将剩余元素重新存入<strong>输入栈</strong>中，后面在调用<code>myQueuePush()</code>函数不会影响到元素顺序。</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">int</span> stackInTop, stackOutTop;  <span class="comment">//记录栈顶下标</span></span><br><span class="line">    <span class="type">int</span> stackIn[<span class="number">100</span>], stackOut[<span class="number">100</span>]; <span class="comment">//用两个数组充当输入栈、输出栈</span></span><br><span class="line">} MyQueue;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MyQueue* <span class="title function_">myQueueCreate</span><span class="params">()</span> {</span><br><span class="line">    MyQueue* q = (MyQueue*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MyQueue));</span><br><span class="line">    q-&gt;stackInTop = <span class="number">0</span>;</span><br><span class="line">    q-&gt;stackOutTop = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myQueuePush</span><span class="params">(MyQueue* obj, <span class="type">int</span> x)</span> {</span><br><span class="line">    obj-&gt;stackIn[obj-&gt;stackInTop++] = x;</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">myQueuePop</span><span class="params">(MyQueue* obj)</span> {</span><br><span class="line">    <span class="type">int</span> stackOutTop = obj-&gt;stackOutTop;</span><br><span class="line">    <span class="type">int</span> stackInTop = obj-&gt;stackInTop;</span><br><span class="line">    <span class="keyword">if</span>(stackOutTop == <span class="number">0</span>) { <span class="comment">//输出栈为空</span></span><br><span class="line">        <span class="comment">//将第一个栈中元素复制到第二个栈中</span></span><br><span class="line">        <span class="keyword">while</span>(stackInTop &gt; <span class="number">0</span>) {</span><br><span class="line">            obj-&gt;stackOut[stackOutTop++] = obj-&gt;stackIn[--stackInTop];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="type">int</span> top = obj-&gt;stackOut[--stackOutTop]; <span class="comment">//记录队头元素</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(stackOutTop &gt; <span class="number">0</span>) { <span class="comment">//出队后更新第一个栈的元素</span></span><br><span class="line">        obj-&gt;stackIn[stackInTop++] = obj-&gt;stackOut[--stackOutTop];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    obj-&gt;stackOutTop = stackOutTop;</span><br><span class="line">    obj-&gt;stackInTop = stackInTop;</span><br><span class="line">    <span class="keyword">return</span> top;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">myQueuePeek</span><span class="params">(MyQueue* obj)</span> {</span><br><span class="line">    <span class="keyword">return</span> obj-&gt;stackIn[<span class="number">0</span>];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> <span class="title function_">myQueueEmpty</span><span class="params">(MyQueue* obj)</span> {</span><br><span class="line">    <span class="keyword">if</span>(obj-&gt;stackInTop==<span class="number">0</span> &amp;&amp; obj-&gt;stackOutTop==<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myQueueFree</span><span class="params">(MyQueue* obj)</span> {</span><br><span class="line">    obj = <span class="literal">NULL</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1290,7 +1290,7 @@ false</p></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1339,12 +1339,12 @@ false</p></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">179k</span>
+    <span title="站点总字数">181k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:43</span>
+    <span title="站点阅读时长">2:45</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
