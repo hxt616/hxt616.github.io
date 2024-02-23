@@ -187,8 +187,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-02-23 16:03:57" itemprop="dateCreated datePublished" datetime="2024-02-23T16:03:57+08:00">2024-02-23</time>
+              <time title="创建时间：2024-02-23 16:03:57 / 修改时间：16:08:28" itemprop="dateCreated datePublished" datetime="2024-02-23T16:03:57+08:00">2024-02-23</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -210,7 +211,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>192</span>
+              <span>764</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -232,7 +233,8 @@
           <p>题目地址：https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/</p>
 <p>一开始看到题目条件中有“树中节点的数量在<strong>[0,
 2<sup>12</sup>-1]</strong>范围内”，我一时没反应过来，觉得不能直接一次性分配这么大的空间，后面算了算发现节点数量不到<strong>5000</strong>，可以直接一次性分配。</p>
-<p>这题跟之前的二叉树层序遍历是一样的思路，直接套模板</p>
+<p>这题跟之前的二叉树层序遍历是一样的思路，直接套模板：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> Node* <span class="title function_">connect</span><span class="params">(<span class="keyword">struct</span> Node* root)</span> {</span><br><span class="line">    <span class="keyword">if</span>(root==<span class="literal">NULL</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span>* <span class="title">que</span>[5000];</span> <span class="comment">//队列</span></span><br><span class="line">    <span class="type">int</span> head=<span class="number">0</span>, rear=<span class="number">0</span>; <span class="comment">//队头/尾</span></span><br><span class="line">    que[rear++] = root;<span class="comment">//根结点入队</span></span><br><span class="line">    <span class="type">int</span> level=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(rear!=head) { <span class="comment">//队列不为空</span></span><br><span class="line">        <span class="type">int</span> start = head; <span class="comment">//记录当前队头位置</span></span><br><span class="line">        head = rear; <span class="comment">//出队</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = start; i&lt;head; i++) { <span class="comment">//注意这里的边界值start和head</span></span><br><span class="line">            <span class="keyword">if</span>(i+<span class="number">1</span>==head)</span><br><span class="line">                que[i]-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                que[i]-&gt;next = que[i+<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">if</span>(que[i]-&gt;left) { <span class="comment">//由于是完全二叉树，所以有左子树一定有右子树</span></span><br><span class="line">                que[rear++] = que[i]-&gt;left; <span class="comment">//左子树入队</span></span><br><span class="line">                que[rear++] = que[i]-&gt;right; <span class="comment">//右子树入队</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        (level)++; <span class="comment">//当前层遍历结束，准备进入下一层</span></span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
       
     </div>
@@ -1326,7 +1328,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:45</span>
+    <span title="站点阅读时长">2:46</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
