@@ -164,6 +164,430 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/07/Base64/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/07/Base64/" class="post-title-link" itemprop="url">Base64</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-07 16:47:53" itemprop="dateCreated datePublished" datetime="2022-04-07T16:47:53+08:00">2022-04-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-29 19:12:36" itemprop="dateModified" datetime="2022-08-29T19:12:36+08:00">2022-08-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">编码</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考维基百科（https://zh.wikipedia.org/wiki/Base64）、CTF Wiki</p>
+<p><strong>Base64</strong>是一种基于64个可打印字符来表示<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/二进制">二进制数据</a>的表示方法。由于2的6次方等于64，正好对应了64个字符，所以每6个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/位元">比特</a>为一个单元，对应某个可打印字符。</p>
+<p>转换的时候，将<strong>3 字节</strong>的数据，先后放入一个 <strong>24
+位</strong>的缓冲区中，先来的字节占高位。数据不足 3
+字节的话，于缓冲器中剩下的比特用 0 补足。</p>
+<p>通常而言 在逆向题目中，当我们能找到
+<br><code>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/</code>
+<br>这样的索引表，再经过简单的分析基本就能判定是 Base64 编码。</p>
+<p><strong>示例</strong>：</p>
+<p>编码“Man”的结果为<code>TWFu</code>，详细原理如下：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220407163844733.png" alt="image-20220407163844733">
+<figcaption aria-hidden="true">image-20220407163844733</figcaption>
+</figure>
+<p>如果要编码的字节数不能被3整除，最后会多出1个或2个字节，那么可以使用下面的方法进行处理：先使用0字节值在末尾补足，使其能够被3整除，然后再进行Base64的编码。在编码后的Base64文本后加上一个或两个<code>=</code>号，代表补足的字节数。也就是说，当最后剩余两个八位(待补足)字节（2个byte）时，最后一个6位的Base64字节块有四位是0值，最后附加上两个等号；如果最后剩余一个八位(待补足)字节（1个byte）时，最后一个6位的base字节块有两位是0值，最后附加一个等号。
+参考下表：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220407163920831.png" alt="image-20220407163920831">
+<figcaption aria-hidden="true">image-20220407163920831</figcaption>
+</figure>
+<p>附：Base64索引表</p>
+<table>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">十进制</th>
+<th style="text-align: center;">二进制</th>
+<th style="text-align: center;">字符</th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">十进制</th>
+<th style="text-align: center;">二进制</th>
+<th style="text-align: center;">字符</th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">十进制</th>
+<th style="text-align: center;">二进制</th>
+<th style="text-align: center;">字符</th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">十进制</th>
+<th style="text-align: center;">二进制</th>
+<th style="text-align: center;">字符</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">000000</td>
+<td style="text-align: center;">A</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">010000</td>
+<td style="text-align: center;">Q</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">32</td>
+<td style="text-align: center;">100000</td>
+<td style="text-align: center;">g</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">48</td>
+<td style="text-align: center;">110000</td>
+<td style="text-align: center;">w</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">000001</td>
+<td style="text-align: center;">B</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">17</td>
+<td style="text-align: center;">010001</td>
+<td style="text-align: center;">R</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">33</td>
+<td style="text-align: center;">100001</td>
+<td style="text-align: center;">h</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">49</td>
+<td style="text-align: center;">110001</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">000010</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">18</td>
+<td style="text-align: center;">010010</td>
+<td style="text-align: center;">S</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">34</td>
+<td style="text-align: center;">100010</td>
+<td style="text-align: center;">i</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">110010</td>
+<td style="text-align: center;">y</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">000011</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;">010011</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">35</td>
+<td style="text-align: center;">100011</td>
+<td style="text-align: center;">j</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">51</td>
+<td style="text-align: center;">110011</td>
+<td style="text-align: center;">z</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">000100</td>
+<td style="text-align: center;">E</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">010100</td>
+<td style="text-align: center;">U</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">36</td>
+<td style="text-align: center;">100100</td>
+<td style="text-align: center;">k</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">52</td>
+<td style="text-align: center;">110100</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">000101</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">21</td>
+<td style="text-align: center;">010101</td>
+<td style="text-align: center;">V</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">37</td>
+<td style="text-align: center;">100101</td>
+<td style="text-align: center;">l</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">53</td>
+<td style="text-align: center;">110101</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">000110</td>
+<td style="text-align: center;">G</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">22</td>
+<td style="text-align: center;">010110</td>
+<td style="text-align: center;">W</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">38</td>
+<td style="text-align: center;">100110</td>
+<td style="text-align: center;">m</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">54</td>
+<td style="text-align: center;">110110</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">000111</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">23</td>
+<td style="text-align: center;">010111</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">39</td>
+<td style="text-align: center;">100111</td>
+<td style="text-align: center;">n</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">55</td>
+<td style="text-align: center;">110111</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">001000</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">011000</td>
+<td style="text-align: center;">Y</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">101000</td>
+<td style="text-align: center;">o</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">56</td>
+<td style="text-align: center;">111000</td>
+<td style="text-align: center;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">001001</td>
+<td style="text-align: center;">J</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">011001</td>
+<td style="text-align: center;">Z</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">41</td>
+<td style="text-align: center;">101001</td>
+<td style="text-align: center;">p</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">57</td>
+<td style="text-align: center;">111001</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">001010</td>
+<td style="text-align: center;">K</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">26</td>
+<td style="text-align: center;">011010</td>
+<td style="text-align: center;">a</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">42</td>
+<td style="text-align: center;">101010</td>
+<td style="text-align: center;">q</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">58</td>
+<td style="text-align: center;">111010</td>
+<td style="text-align: center;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">001011</td>
+<td style="text-align: center;">L</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">27</td>
+<td style="text-align: center;">011011</td>
+<td style="text-align: center;">b</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">43</td>
+<td style="text-align: center;">101011</td>
+<td style="text-align: center;">r</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">59</td>
+<td style="text-align: center;">111011</td>
+<td style="text-align: center;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">001100</td>
+<td style="text-align: center;">M</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">28</td>
+<td style="text-align: center;">011100</td>
+<td style="text-align: center;">c</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">44</td>
+<td style="text-align: center;">101100</td>
+<td style="text-align: center;">s</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">60</td>
+<td style="text-align: center;">111100</td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">001101</td>
+<td style="text-align: center;">N</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">29</td>
+<td style="text-align: center;">011101</td>
+<td style="text-align: center;">d</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">45</td>
+<td style="text-align: center;">101101</td>
+<td style="text-align: center;">t</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">61</td>
+<td style="text-align: center;">111101</td>
+<td style="text-align: center;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">001110</td>
+<td style="text-align: center;">O</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">30</td>
+<td style="text-align: center;">011110</td>
+<td style="text-align: center;">e</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">46</td>
+<td style="text-align: center;">101110</td>
+<td style="text-align: center;">u</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">62</td>
+<td style="text-align: center;">111110</td>
+<td style="text-align: center;">+</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">001111</td>
+<td style="text-align: center;">P</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">31</td>
+<td style="text-align: center;">011111</td>
+<td style="text-align: center;">f</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">47</td>
+<td style="text-align: center;">101111</td>
+<td style="text-align: center;">v</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">63</td>
+<td style="text-align: center;">111111</td>
+<td style="text-align: center;">/</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/05/ESP%E5%AE%9A%E5%BE%8B%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1021,7 +1445,7 @@ you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hex
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1075,7 +1499,7 @@ you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hex
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:46</span>
+    <span title="站点阅读时长">2:47</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
