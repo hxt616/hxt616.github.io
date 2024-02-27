@@ -164,6 +164,156 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/19/%E7%A7%BB%E5%8A%A8vscode%E6%8F%92%E4%BB%B6%E4%BD%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/19/%E7%A7%BB%E5%8A%A8vscode%E6%8F%92%E4%BB%B6%E4%BD%8D%E7%BD%AE/" class="post-title-link" itemprop="url">移动vscode插件位置</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-02-19 17:25:15 / 修改时间：17:41:16" itemprop="dateCreated datePublished" datetime="2024-02-19T17:25:15+08:00">2024-02-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4/" itemprop="url" rel="index"><span itemprop="name">存储空间</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>521</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>先介绍文件共享的知识</p>
+<h2 id="文件共享">文件共享</h2>
+<h4 id="硬链接">硬链接</h4>
+<ul>
+<li>基于索引结点</li>
+<li>不同用户的目录项指向同一个索引结点</li>
+<li><strong>链接计数count</strong></li>
+</ul>
+<h4 id="软链接">软链接</h4>
+<ul>
+<li>创建Link型(快捷方式)文件——记录文件存放路径</li>
+<li>共享文件被删除，Link型文件<strong>依然存在</strong>，但是会查找失败</li>
+<li>软链接索引结点中的<strong>引用计数值</strong>应该<strong>恒为1</strong></li>
+</ul>
+<blockquote>
+<p>建立符号链接时，引用计数<strong>不是复制原文件</strong>而是<strong>必为1</strong></p>
+</blockquote>
+<h2 id="解决方案">解决方案</h2>
+<p>vscode插件文件夹位置一般为<code>C:\Users\{username}\.vscode\extensions</code></p>
+<ul>
+<li><p>先该文件夹<strong>剪切</strong>到其他位置，例如<code>D:\extensions</code></p></li>
+<li><p>管理员权限打开<strong>cmd</strong>，输入下面的命令：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mklink /D "C:\Users\{username}\.vscode\extensions" "D:\extensions"</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>然后回车，搞定</p></li>
+</ul>
+<blockquote>
+<p>mklink用法：<code>MKLINK [[/D] | [/H] | [/J]] Link Target</code></p>
+<table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 78%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">参数</th>
+<th style="text-align: center;">可选/必须</th>
+<th style="text-align: center;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">/D</td>
+<td style="text-align: center;">可选</td>
+<td style="text-align: center;">创建目录符号链接而不是文件符号链接（默认为文件符号链接）</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">/H</td>
+<td style="text-align: center;">可选</td>
+<td style="text-align: center;">创建硬链接而不是符号链接</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">/J</td>
+<td style="text-align: center;">可选</td>
+<td style="text-align: center;">创建目录连接点</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Link</td>
+<td style="text-align: center;">必选</td>
+<td style="text-align: center;">指定新的符号链接名称</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Target</td>
+<td style="text-align: center;">必选</td>
+<td style="text-align: center;">指定新符号链接引用的路径（绝对路径或相对路径均可）</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/17/%E5%89%8Dk%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1064,125 +1214,6 @@ nums[i]==nums[i-1]，则说明三元组中第一个数不变，又因为此时�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/07/%E9%87%8D%E5%A4%8D%E7%9A%84%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/07/%E9%87%8D%E5%A4%8D%E7%9A%84%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-title-link" itemprop="url">重复的子字符串</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-02-07 17:17:53 / 修改时间：19:33:05" itemprop="dateCreated datePublished" datetime="2024-02-07T17:17:53+08:00">2024-02-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/KMP%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">KMP算法</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/repeated-substring-pattern/</p>
-<p>注：这题的意思是判断给定的字符串能否<strong>只通过它的子字符串构成</strong>而<strong>不包含其他字符串</strong></p>
-<p><a target="_blank" rel="noopener" href="https://programmercarl.com/0459.%E9%87%8D%E5%A4%8D%E7%9A%84%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2.html#%E6%80%9D%E8%B7%AF">解题思路</a>：</p>
-<ul>
-<li><p>一个字符串能由它的子字符串构成，则<strong>该子字符串的长度不可能大于整个字符串长度的一半</strong></p></li>
-<li><p>字符串s的最长相等<strong>前、后缀</strong>不包含的字符串就是<strong>最小重复的子串</strong></p>
-<p><img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20220728205249.png"></p>
-<blockquote>
-<p>步骤一：因为 <strong>前缀和后缀是相等的字符串</strong>，t[0] 与
-k[0]相同， t[1] 与 k[1]相同，所以 s[0] 一定和 s[2]相同，s[1] 一定和
-s[3]相同，即：，s[0]s[1]与s[2]s[3]相同 。</p>
-<p>步骤二： 因为在同一个字符串位置，所以 t[2] 与 k[0]相同，t[3] 与
-k[1]相同。</p>
-<p>步骤三： 因为 这是相等的前缀和后缀，t[2] 与 k[2]相同 ，t[3]与k[3]
-相同，所以，s[2]一定和s[4]相同，s[3]一定和s[5]相同，即：s[2]s[3] 与
-s[4]s[5]相同。</p>
-<p>步骤四：循环往复。</p>
-</blockquote></li>
-<li><p>如果len % (len - next[len - 1]) == 0
-，则说明<strong>数组的长度</strong>正好可以被
-<strong>数组长度-最长相等前后缀的长度</strong> 整除
-，说明该字符串有重复的子字符串</p>
-<blockquote>
-<p>若<strong>next[len-1]==-1</strong>,
-则没有最长相等前后缀，也就不可能由重复的子字符串构成</p>
-<p>若<strong>len-next[len-1] &gt;
-len/2</strong>，则也不存在满足要求的子字符串</p>
-</blockquote></li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">getNext</span><span class="params">(<span class="type">int</span>* next, <span class="type">char</span>* P)</span> {</span><br><span class="line">    next[<span class="number">0</span>] = <span class="number">0</span>; <span class="comment">//初始化next数组</span></span><br><span class="line">    <span class="type">int</span> now = <span class="number">0</span>; <span class="comment">//开始比较时，模式串下标</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;<span class="built_in">strlen</span>(P); ) {</span><br><span class="line">        <span class="keyword">if</span>(P[now] == P[i]) {</span><br><span class="line">            now+=<span class="number">1</span>;</span><br><span class="line">            next[i] = now;</span><br><span class="line">            i++;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(now!=<span class="number">0</span>)</span><br><span class="line">            now = next[now<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            next[i] = <span class="number">0</span>;</span><br><span class="line">            i++;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> <span class="title function_">repeatedSubstringPattern</span><span class="params">(<span class="type">char</span>* s)</span> {</span><br><span class="line">    <span class="type">int</span> len = <span class="built_in">strlen</span>(s);</span><br><span class="line">    <span class="type">int</span> next[len];</span><br><span class="line">    </span><br><span class="line">    getNext(next, s);   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(next[len<span class="number">-1</span>]!=<span class="number">0</span> &amp;&amp; len%(len-next[len<span class="number">-1</span>])==<span class="number">0</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1254,7 +1285,7 @@ len/2</strong>，则也不存在满足要求的子字符串</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">103</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1303,7 +1334,7 @@ len/2</strong>，则也不存在满足要求的子字符串</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">186k</span>
+    <span title="站点总字数">188k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
