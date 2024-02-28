@@ -164,6 +164,206 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/09/%E5%88%A0%E9%99%A4%E7%9B%B8%E9%82%BB%E9%87%8D%E5%A4%8D%E9%A1%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/09/%E5%88%A0%E9%99%A4%E7%9B%B8%E9%82%BB%E9%87%8D%E5%A4%8D%E9%A1%B9/" class="post-title-link" itemprop="url">删除字符串中的所有相邻重复项</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-02-09 18:41:02 / 修改时间：18:43:35" itemprop="dateCreated datePublished" datetime="2024-02-09T18:41:02+08:00">2024-02-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>474</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/</p>
+<ul>
+<li>定义一个辅助数组作为栈</li>
+<li>将第一个字符入栈</li>
+<li>使用for循环遍历给定的 s
+字符串，若当前遍历到的字符与栈顶字符相同，则出栈；若不同则入栈</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>* <span class="title function_">removeDuplicates</span><span class="params">(<span class="type">char</span>* s)</span> {</span><br><span class="line">    <span class="type">int</span> n = <span class="built_in">strlen</span>(s);</span><br><span class="line">    <span class="type">char</span> *t = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">char</span>)*(n+<span class="number">1</span>)); <span class="comment">//辅助数组作为栈</span></span><br><span class="line">    <span class="type">int</span> top=<span class="number">0</span>; <span class="comment">//栈顶</span></span><br><span class="line">    t[top++] = s[<span class="number">0</span>]; <span class="comment">//先将第一个字符入栈</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;<span class="built_in">strlen</span>(s); i++) {</span><br><span class="line">        <span class="keyword">if</span>(top&gt;<span class="number">0</span> &amp;&amp; s[i]==t[top<span class="number">-1</span>]) {</span><br><span class="line">            top--;</span><br><span class="line">        }  <span class="comment">//若s[i]与栈顶元素相同，则出栈</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            t[top++] =  s[i];</span><br><span class="line">    }</span><br><span class="line">    t[top] = <span class="string">'\0'</span>; <span class="comment">//截断字符串</span></span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/09/%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/09/%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/" class="post-title-link" itemprop="url">有效的括号</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-02-09 16:20:37 / 修改时间：17:42:47" itemprop="dateCreated datePublished" datetime="2024-02-09T16:20:37+08:00">2024-02-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/valid-parentheses/</p>
+<p>有关括号匹配的题一般都是用栈来实现。</p>
+<p>下面是我自己的代码，比较繁琐：</p>
+<ul>
+<li>遍历 s
+字符串，遇到左括号就入栈，遇到右括号则判断<strong>栈内是否为空</strong>，若不为空则<strong>判断栈顶元素</strong>是否为对应的右括号；若不满足条件则返回
+false ，满足条件则栈顶元素出栈</li>
+<li>循环结束后判断栈内是否为空，若不为空（有多余的左括号）则返回
+false</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> <span class="title function_">isValid</span><span class="params">(<span class="type">char</span>* s)</span> {</span><br><span class="line">    <span class="type">char</span> tmp[<span class="number">10000</span>]; <span class="comment">//栈（暂存左括号）</span></span><br><span class="line">    <span class="type">int</span> j=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="built_in">strlen</span>(s); i++) {</span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">'('</span> || s[i]==<span class="string">'{'</span> || s[i]==<span class="string">'['</span>) {</span><br><span class="line">            tmp[j++] = s[i];</span><br><span class="line">        } <span class="comment">//左括号入栈</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">')'</span> &amp;&amp; (j&lt;=<span class="number">0</span> || tmp[j<span class="number">-1</span>]!=<span class="string">'('</span>)) {</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'}'</span> &amp;&amp; (j&lt;=<span class="number">0</span> || tmp[j<span class="number">-1</span>]!=<span class="string">'{'</span>)) {</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">']'</span> &amp;&amp; (j&lt;=<span class="number">0</span> || tmp[j<span class="number">-1</span>]!=<span class="string">'['</span>)) {</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            j--;</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(j &gt; <span class="number">0</span>) <span class="comment">//若栈不为空则返回false</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>下面介绍<a target="_blank" rel="noopener" href="https://programmercarl.com/0020.%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7.html#%E6%80%9D%E8%B7%AF">代码随想录</a>的解法：</p>
+<p>遍历 s 字符串，遇到左括号，则入栈；遇到右括号则与栈顶元素进行配对</p>
+<ul>
+<li><p>第一种情况：已经遍历完了字符串，但是栈不为空，说明有相应的左括号没有右括号来匹配，所以return
+false</p></li>
+<li><p>第二种情况：遍历字符串匹配的过程中，发现栈里没有要匹配的字符。所以return
+false</p></li>
+<li><p>第三种情况：遍历字符串匹配的过程中，栈已经为空了，没有匹配的字符了，说明右括号没有找到对应的左括号return
+false</p></li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//辅助函数：判断栈顶元素与输入的括号是否为一对。若不是，则返回False</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">notMatch</span><span class="params">(<span class="type">char</span> par, <span class="type">char</span>* <span class="built_in">stack</span>, <span class="type">int</span> stackTop)</span> {</span><br><span class="line">    <span class="keyword">switch</span>(par) {</span><br><span class="line">        <span class="keyword">case</span> <span class="string">']'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">stack</span>[stackTop - <span class="number">1</span>] != <span class="string">'['</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">')'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">stack</span>[stackTop - <span class="number">1</span>] != <span class="string">'('</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'}'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">stack</span>[stackTop - <span class="number">1</span>] != <span class="string">'{'</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> <span class="title function_">isValid</span><span class="params">(<span class="type">char</span> * s)</span>{</span><br><span class="line">    <span class="type">int</span> strLen = <span class="built_in">strlen</span>(s);</span><br><span class="line">    <span class="comment">//开辟栈空间</span></span><br><span class="line">    <span class="type">char</span> <span class="built_in">stack</span>[<span class="number">5000</span>];</span><br><span class="line">    <span class="type">int</span> stackTop = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//遍历字符串</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; strLen; i++) {</span><br><span class="line">        <span class="comment">//取出当前下标所对应字符</span></span><br><span class="line">        <span class="type">char</span> tempChar = s[i];</span><br><span class="line">        <span class="comment">//若当前字符为左括号，则入栈</span></span><br><span class="line">        <span class="keyword">if</span>(tempChar == <span class="string">'('</span> || tempChar == <span class="string">'['</span> || tempChar == <span class="string">'{'</span>)</span><br><span class="line">            <span class="built_in">stack</span>[stackTop++] = tempChar;</span><br><span class="line">        <span class="comment">//若当前字符为右括号，且栈中无元素或右括号与栈顶元素不符，返回False</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(stackTop == <span class="number">0</span> || notMatch(tempChar, <span class="built_in">stack</span>, stackTop))</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//当前字符与栈顶元素为一对括号，将栈顶元素出栈</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            stackTop--;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">//若栈中有元素，返回False。若没有元素（stackTop为0），返回True</span></span><br><span class="line">    <span class="keyword">return</span> !stackTop;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/08/%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1025,189 +1225,6 @@ address]转换成本地管理的地址。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/30/%E8%B5%8E%E9%87%91%E4%BF%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/30/%E8%B5%8E%E9%87%91%E4%BF%A1/" class="post-title-link" itemprop="url">赎金信</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-01-30 10:39:56 / 修改时间：10:48:24" itemprop="dateCreated datePublished" datetime="2024-01-30T10:39:56+08:00">2024-01-30</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>639</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/ransom-note/</p>
-<p>根据题目描述可知，一共26个字母，因此使用辅助数组（哈希表）比较方便。</p>
-<ul>
-<li>使用辅助数组记录<code>ransomNote</code>中每个字母出现的次数，0~25下标对应26个字母</li>
-<li>遍历<code>magazine</code>中的字符，将字符对应的辅助数组元素减1</li>
-<li>最后判断<code>ransomNote</code>对应的辅助数组元素是否大于0，若大于0，则表示<code>magazine</code>中的字符不够表示<code>ransomNote</code>，返回
-false</li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> <span class="title function_">canConstruct</span><span class="params">(<span class="type">char</span>* ransomNote, <span class="type">char</span>* magazine)</span> {</span><br><span class="line">    <span class="type">int</span> hash[<span class="number">26</span>]; <span class="comment">//辅助数组，26个下标对应26个字母</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">26</span>; i++) {</span><br><span class="line">        hash[i] = <span class="number">0</span>;</span><br><span class="line">    }  <span class="comment">//初始化为0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; magazine[i]!=<span class="string">'\0'</span>; i++) {</span><br><span class="line">        hash[magazine[i]-<span class="string">'a'</span>]--;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; ransomNote[i]!=<span class="string">'\0'</span>; i++) {</span><br><span class="line">        hash[ransomNote[i]-<span class="string">'a'</span>]++;</span><br><span class="line">        <span class="keyword">if</span>(hash[ransomNote[i]-<span class="string">'a'</span>]&gt;<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/29/%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%E2%85%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/29/%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%E2%85%A1/" class="post-title-link" itemprop="url">四数相加Ⅱ</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-01-29 11:24:59 / 修改时间：20:41:28" itemprop="dateCreated datePublished" datetime="2024-01-29T11:24:59+08:00">2024-01-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>605</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/4sum-ii/</p>
-<p>本题的解题思路与<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/two-sum/">两数之和</a>类似。不同的是本题给出了四个数组，只需将其分为两组即可，使用C++中的<code>unordered_map</code>（&lt;key,
-value&gt;），<code>key</code>对应<code>n1</code>和<code>n2</code>之和，<code>value</code>对应<code>n1</code>与<code>n2</code>之和出现的次数。</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> {</span></span><br><span class="line">public:</span><br><span class="line">    <span class="type">int</span> <span class="title function_">fourSumCount</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;&amp; nums1, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;&amp; nums2, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;&amp; nums3, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;&amp; nums4)</span> {</span><br><span class="line">        <span class="built_in">unordered_map</span> &lt;<span class="type">int</span>, <span class="type">int</span>&gt; <span class="built_in">map</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> n1 : nums1)</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> n2 : nums2) {</span><br><span class="line">                <span class="built_in">map</span>[n1+n2]++;</span><br><span class="line">            }  <span class="comment">//先统计前两个数组中任意两个元素之和出现次数</span></span><br><span class="line">        <span class="type">int</span> count=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> n3 : nums3)</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> n4 : nums4) {</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">map</span>.find(<span class="number">0</span>-(n3+n4)) != <span class="built_in">map</span>.end())</span><br><span class="line">                    count += <span class="built_in">map</span>[<span class="number">0</span>-(n3+n4)];  <span class="comment">//若找到满足条件的key，则累加</span></span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1279,7 +1296,7 @@ value&gt;），<code>key</code>对应<code>n1</code>和<code>n2</code>之和，<
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">105</span>
+          <span class="site-state-item-count">107</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1328,12 +1345,12 @@ value&gt;），<code>key</code>对应<code>n1</code>和<code>n2</code>之和，<
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">189k</span>
+    <span title="站点总字数">191k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:52</span>
+    <span title="站点阅读时长">2:54</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

@@ -164,6 +164,237 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/05/ESP%E5%AE%9A%E5%BE%8B%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/05/ESP%E5%AE%9A%E5%BE%8B%E6%B3%95/" class="post-title-link" itemprop="url">ESP定律法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-05 18:05:05" itemprop="dateCreated datePublished" datetime="2022-04-05T18:05:05+08:00">2022-04-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-29 20:59:29" itemprop="dateModified" datetime="2022-08-29T20:59:29+08:00">2022-08-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">逆向工程</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%84%B1%E5%A3%B3/" itemprop="url" rel="index"><span itemprop="name">脱壳</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>435</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考：https://zhuanlan.zhihu.com/p/117294551</p>
+<p>​ 《从0到1：CTFer成长之路》P260</p>
+<p>使用文件：https://book.nu1l.com/tasks/#/pages/reverse/5.3</p>
+<h2 id="原理">原理</h2>
+<p>堆栈平衡。首先通过pushad将所有寄存器一次性压入栈，然后通过popad指令恢复寄存器。</p>
+<h2 id="过程">过程</h2>
+<p>首先打开文件找到pushad</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175227302.png" alt="image-20220405175227302">
+<figcaption aria-hidden="true">image-20220405175227302</figcaption>
+</figure>
+<p>单步执行该指令（按F8键），此时发现ESP（<strong>栈顶指针</strong>）发生变化</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405175320125.png" alt="image-20220405175320125">
+<figcaption aria-hidden="true">image-20220405175320125</figcaption>
+</figure>
+<p>此时右击ESP选择<code>HW break[ESP]</code>，设置硬件读取断点，则当popad进行还原寄存器时会在该处发生中断。然后按F9键运行程序，在断点处中断，</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180030247.png" alt="image-20220405180030247">
+<figcaption aria-hidden="true">image-20220405180030247</figcaption>
+</figure>
+<p>此时可删除断点，以防后续触发。然后便是分析图中指令。</p>
+<p>单击jmp语句，按F4键运行至此，再按F8键执行跳转，此时可发现OEP。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405180412785.png" alt="image-20220405180412785">
+<figcaption aria-hidden="true">image-20220405180412785</figcaption>
+</figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/05/%E5%A3%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/05/%E5%A3%B3/" class="post-title-link" itemprop="url">壳</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-05 00:00:00" itemprop="dateCreated datePublished" datetime="2022-04-05T00:00:00+08:00">2022-04-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-29 12:09:32" itemprop="dateModified" datetime="2022-08-29T12:09:32+08:00">2022-08-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">逆向工程</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>479</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="保护壳简介">保护壳简介</h1>
+<p>参考：CTF Wiki(保护壳简介)</p>
+<h2 id="壳是什么">壳是什么</h2>
+<p><strong>壳</strong>
+是在一些计算机软件里也有一段专门负责保护软件不被非法修改或反编译的程序。</p>
+<p>它们一般都是先于程序运行，拿到控制权，然后完成它们保护软件的任务。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220405135833408.png" alt="image-20220405135833408">
+<figcaption aria-hidden="true">image-20220405135833408</figcaption>
+</figure>
+<h2 id="壳的分类">壳的分类</h2>
+<p>分为<strong>加密壳</strong>和<strong>压缩壳</strong>。</p>
+<h3 id="压缩壳">压缩壳</h3>
+<p>压缩壳可以帮助缩减 PE 文件的大小，隐藏了 PE
+文件内部代码和资源，便于网络传输和保存。</p>
+<p>通常压缩壳有两类用途，一种只是单纯用于压缩普通 PE
+文件的压缩壳，而另一种则会对源文件进行较大变形，严重破坏 PE
+文件头，经常用于压缩恶意程序。</p>
+<p>常见的压缩壳有：Upx、ASpack、PECompat</p>
+<h3 id="加密壳">加密壳</h3>
+<p>加密壳或称保护壳，应用有多种防止代码逆向分析的技术，它最主要的功能是保护
+PE 免受代码逆向分析。</p>
+<p>由于加密壳的主要目的不再是压缩文件资源，所以加密壳保护的 PE
+程序通常比原文件大得多。</p>
+<p>目前加密壳大量用于对安全性要求高，对破解敏感的应用程序，同时也有恶意程序用于避免（降低）杀毒软件的检测查杀。</p>
+<p>常见的加密壳有：ASProtector、Armadillo、EXECryptor、Themida、VMProtect</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/14/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -790,7 +1021,7 @@ you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hex
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">105</span>
+          <span class="site-state-item-count">107</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -839,12 +1070,12 @@ you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hex
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">189k</span>
+    <span title="站点总字数">191k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:52</span>
+    <span title="站点阅读时长">2:54</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

@@ -164,6 +164,314 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/29/nssctf-%E8%B4%AA%E9%A3%9F%E8%9B%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/29/nssctf-%E8%B4%AA%E9%A3%9F%E8%9B%87/" class="post-title-link" itemprop="url">Reverse-贪食蛇</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-29 21:11:43" itemprop="dateCreated datePublished" datetime="2022-09-29T21:11:43+08:00">2022-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-10 15:50:28" itemprop="dateModified" datetime="2023-06-10T15:50:28+08:00">2023-06-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Reverse/" itemprop="url" rel="index"><span itemprop="name">Reverse</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="nssctf-reverse-贪食蛇">NSSCTF-Reverse-贪食蛇</h1>
+<p>题目来自于NSSCTF: SWPU NSS新生赛（校外通道）</p>
+<p>下载附件，用IDA打开，首先按 shift+F12 打开 String
+窗口，没发现什么，于是直接 F5 查看伪代码</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl __noreturn <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">{</span><br><span class="line">  __main();</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  {</span><br><span class="line">    gameStartMenu();</span><br><span class="line">    gameMainLoop();</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>双击查看各个函数，发现主要的代码实现在<code>gameMainLoop()</code>函数中，两百多行代码看不出什么来，我便准备运行该程序：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929205947106.png" alt="image-20220929205947106">
+<figcaption aria-hidden="true">image-20220929205947106</figcaption>
+</figure>
+<p>要得到 60
+分以上才能得到flag，玩了一局发现有点难度，猜想能够修改判断条件，将 60
+分改成 1 分不就轻松了吗。再次查看<code>gameMainLoop()</code></p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">gameMainLoop</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">void</span> *v0; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">int</span> v1; <span class="comment">// edx</span></span><br><span class="line">  <span class="type">int</span> v2; <span class="comment">// ecx</span></span><br><span class="line">  <span class="type">int</span> v3; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">signed</span> <span class="type">int</span> v4; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">signed</span> <span class="type">int</span> v5; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">signed</span> <span class="type">int</span> v6; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">signed</span> <span class="type">int</span> v7; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">char</span> v8; <span class="comment">// cl</span></span><br><span class="line">  <span class="type">char</span> v9; <span class="comment">// cl</span></span><br><span class="line">  <span class="type">int</span> result; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">int</span> v11; <span class="comment">// [esp+2Dh] [ebp-ECBh]</span></span><br><span class="line">  _BYTE v12[<span class="number">3</span>]; <span class="comment">// [esp+31h] [ebp-EC7h]</span></span><br><span class="line">  <span class="type">int</span> v13; <span class="comment">// [esp+50Ch] [ebp-9ECh]</span></span><br><span class="line">  <span class="type">int</span> v14[<span class="number">625</span>]; <span class="comment">// [esp+510h] [ebp-9E8h]</span></span><br><span class="line">  <span class="type">char</span> v15; <span class="comment">// [esp+ED7h] [ebp-21h]</span></span><br><span class="line">  <span class="type">int</span> j; <span class="comment">// [esp+ED8h] [ebp-20h]</span></span><br><span class="line">  <span class="type">char</span> v17; <span class="comment">// [esp+EDFh] [ebp-19h]</span></span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [esp+EE0h] [ebp-18h]</span></span><br><span class="line">  <span class="type">int</span> v19; <span class="comment">// [esp+EE4h] [ebp-14h]</span></span><br><span class="line">  <span class="type">int</span> v20; <span class="comment">// [esp+EE8h] [ebp-10h]</span></span><br><span class="line">  <span class="type">int</span> v21; <span class="comment">// [esp+EECh] [ebp-Ch]</span></span><br><span class="line"></span><br><span class="line">  gameBegin();</span><br><span class="line">  v0 = <span class="built_in">malloc</span>(<span class="number">1u</span>);</span><br><span class="line">  srand((<span class="type">unsigned</span> <span class="type">int</span>)v0);</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">  {</span><br><span class="line">    v21 = <span class="number">12</span>;</span><br><span class="line">    v20 = <span class="number">12</span>;</span><br><span class="line">    v19 = <span class="number">4</span>;</span><br><span class="line">    <span class="built_in">memset</span>(v14, <span class="number">0</span>, <span class="keyword">sizeof</span>(v14));</span><br><span class="line">    <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">24</span>; i += <span class="number">2</span> )</span><br><span class="line">    {</span><br><span class="line">      v1 = <span class="number">624</span> - i;</span><br><span class="line">      v2 = <span class="number">25</span> * i;</span><br><span class="line">      v3 = <span class="number">25</span> * (i + <span class="number">1</span>) - <span class="number">1</span>;</span><br><span class="line">      v14[v3] = <span class="number">-2</span>;</span><br><span class="line">      v14[v2] = v14[v3];</span><br><span class="line">      v14[v1] = v14[v2];</span><br><span class="line">      v14[i] = v14[v1];</span><br><span class="line">    }</span><br><span class="line">    v17 = <span class="number">100</span>;</span><br><span class="line">    v15 = <span class="number">3</span>;</span><br><span class="line">    v11 = <span class="number">0</span>;</span><br><span class="line">    v13 = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">memset</span>(</span><br><span class="line">      (<span class="type">void</span> *)((<span class="type">unsigned</span> <span class="type">int</span>)v12 &amp; <span class="number">0xFFFFFFFC</span>),</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="number">4</span> * (((<span class="type">unsigned</span> <span class="type">int</span>)((<span class="type">char</span> *)&amp;v11 - ((<span class="type">unsigned</span> <span class="type">int</span>)v12 &amp; <span class="number">0xFFFFFFFC</span>) + <span class="number">1251</span>) &amp; <span class="number">0xFFFFFFFC</span>) &gt;&gt; <span class="number">2</span>));</span><br><span class="line">    sprintf_s(&amp;v11, <span class="number">32</span>, <span class="string">"mode con: cols=%d lines=%d"</span>, <span class="number">50</span>, <span class="number">25</span>);</span><br><span class="line">    system((<span class="type">const</span> <span class="type">char</span> *)&amp;v11);</span><br><span class="line">    <span class="keyword">for</span> ( j = <span class="number">2</span>; j; --j )</span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">do</span></span><br><span class="line">        i = rand() % <span class="number">625</span>;</span><br><span class="line">      <span class="keyword">while</span> ( v14[i] );</span><br><span class="line">      v14[i] = <span class="number">-1</span>;</span><br><span class="line">    }</span><br><span class="line">    system(<span class="string">"title GluttonousSnake"</span>);</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    {</span><br><span class="line">      <span class="keyword">if</span> ( _kbhit() )</span><br><span class="line">      {</span><br><span class="line">        v15 = _getch();</span><br><span class="line">        <span class="keyword">if</span> ( v15 )</span><br><span class="line">        {</span><br><span class="line">          <span class="keyword">switch</span> ( v15 )</span><br><span class="line">          {</span><br><span class="line">            <span class="keyword">case</span> <span class="number">27</span>:</span><br><span class="line">              <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">              <span class="keyword">return</span> result;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">32</span>:</span><br><span class="line">              _getch();</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">65</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">75</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">97</span>:</span><br><span class="line">              <span class="keyword">if</span> ( v17 != <span class="number">100</span> )</span><br><span class="line">                v17 = <span class="number">97</span>;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">68</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">77</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">100</span>:</span><br><span class="line">              <span class="keyword">if</span> ( v17 != <span class="number">97</span> )</span><br><span class="line">                v17 = <span class="number">100</span>;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">72</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">87</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">119</span>:</span><br><span class="line">              <span class="keyword">if</span> ( v17 != <span class="number">115</span> )</span><br><span class="line">                v17 = <span class="number">119</span>;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">80</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">83</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="number">115</span>:</span><br><span class="line">              <span class="keyword">if</span> ( v17 != <span class="number">119</span> )</span><br><span class="line">                v17 = <span class="number">115</span>;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">          }</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> ( v17 == <span class="number">100</span> )</span><br><span class="line">      {</span><br><span class="line">        v5 = v21 &gt; <span class="number">23</span> ? <span class="number">-24</span> : <span class="number">1</span>;</span><br><span class="line">        v21 += v5;</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> ( v17 &gt; <span class="number">100</span> )</span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">if</span> ( v17 == <span class="number">115</span> )</span><br><span class="line">        {</span><br><span class="line">          v6 = v20 &gt; <span class="number">23</span> ? <span class="number">-24</span> : <span class="number">1</span>;</span><br><span class="line">          v20 += v6;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ( v17 == <span class="number">119</span> )</span><br><span class="line">        {</span><br><span class="line">          <span class="keyword">if</span> ( v20 &lt;= <span class="number">0</span> )</span><br><span class="line">            v7 = <span class="number">-24</span>;</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">            v7 = <span class="number">1</span>;</span><br><span class="line">          v20 -= v7;</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> ( v17 == <span class="number">97</span> )</span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">if</span> ( v21 &lt;= <span class="number">0</span> )</span><br><span class="line">          v4 = <span class="number">-24</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          v4 = <span class="number">1</span>;</span><br><span class="line">        v21 -= v4;</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> ( v14[<span class="number">25</span> * v20 + v21] &gt; <span class="number">1</span> || v14[<span class="number">25</span> * v20 + v21] == <span class="number">-2</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">if</span> ( v14[<span class="number">25</span> * v20 + v21] == <span class="number">-1</span> )</span><br><span class="line">      {</span><br><span class="line">        ++v19;</span><br><span class="line">        <span class="keyword">do</span></span><br><span class="line">          i = rand() % <span class="number">625</span>;</span><br><span class="line">        <span class="keyword">while</span> ( v14[i] );</span><br><span class="line">        v14[i] = <span class="number">-1</span>;</span><br><span class="line">        sprintf_s(&amp;v11, <span class="number">32</span>, <span class="string">"title score:%d"</span>, v19 - <span class="number">4</span>);</span><br><span class="line">        system((<span class="type">const</span> <span class="type">char</span> *)&amp;v11);</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">624</span>; ++i )</span><br><span class="line">        {</span><br><span class="line">          <span class="keyword">if</span> ( v14[i] &gt; <span class="number">0</span> )</span><br><span class="line">            --v14[i];</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">      v14[v21 + <span class="number">25</span> * v20] = v19;</span><br><span class="line">      <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">1249</span>; ++i )</span><br><span class="line">      {</span><br><span class="line">        <span class="keyword">if</span> ( v14[i / <span class="number">2</span>] )</span><br><span class="line">        {</span><br><span class="line">          <span class="keyword">if</span> ( v14[i / <span class="number">2</span>] &lt;= <span class="number">0</span> )</span><br><span class="line">          {</span><br><span class="line">            <span class="keyword">if</span> ( v14[i / <span class="number">2</span>] == <span class="number">-2</span> )</span><br><span class="line">            {</span><br><span class="line">              <span class="keyword">if</span> ( i &amp; <span class="number">1</span> )</span><br><span class="line">                v9 = <span class="number">93</span>;</span><br><span class="line">              <span class="keyword">else</span></span><br><span class="line">                v9 = <span class="number">91</span>;</span><br><span class="line">              *((_BYTE *)&amp;v11 + i) = v9;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            {</span><br><span class="line">              *((_BYTE *)&amp;v11 + i) = <span class="number">48</span>;</span><br><span class="line">            }</span><br><span class="line">          }</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">          {</span><br><span class="line">            <span class="keyword">if</span> ( i &amp; <span class="number">1</span> )</span><br><span class="line">              v8 = <span class="number">41</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">              v8 = <span class="number">40</span>;</span><br><span class="line">            *((_BYTE *)&amp;v11 + i) = v8;</span><br><span class="line">          }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        {</span><br><span class="line">          *((_BYTE *)&amp;v11 + i) = <span class="number">32</span>;</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">      system(<span class="string">"cls"</span>);</span><br><span class="line">      <span class="built_in">printf</span>((<span class="type">const</span> <span class="type">char</span> *)&amp;v11);</span><br><span class="line">      sub_4020C0(v19);</span><br><span class="line">      Sleep(<span class="number">0x64</span>u);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> ( isFlag )</span><br><span class="line">    {</span><br><span class="line">      decode_flag(&amp;t_flag);</span><br><span class="line">      <span class="built_in">strcat</span>(s_flag, &amp;t_flag);</span><br><span class="line">      gameEndmenu(v19, s_flag);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    {</span><br><span class="line">      gameEndmenu(v19, flag);</span><br><span class="line">    }</span><br><span class="line">    result = _getch();</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">while</span> ( result == <span class="number">32</span> );</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>在第 192 行发现<code>sub_4020C0()</code>函数，双击查看</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl <span class="title function_">sub_4020C0</span><span class="params">(<span class="type">int</span> a1)</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> result; <span class="comment">// eax</span></span><br><span class="line"></span><br><span class="line">  result = a1 - <span class="number">4</span>;</span><br><span class="line">  <span class="keyword">if</span> ( a1 - <span class="number">4</span> &gt; <span class="number">60</span> )</span><br><span class="line">    result = isFlag++ + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>果然发现了
+“60”，然后就是对其进行修改，在左侧函数栏中找到<code>sub_4020C0()</code>函数，切换到
+text view 状态</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.text:00401C1C ; __unwind {</span><br><span class="line">.text:00401C1C                 push    ebp</span><br><span class="line">.text:00401C1D                 mov     ebp, esp</span><br><span class="line">.text:00401C1F                 mov     eax, [ebp+arg_0]</span><br><span class="line">.text:00401C22                 sub     eax, 4</span><br><span class="line">.text:00401C25                 cmp     eax, 3Ch     &lt;------3Ch转换为10进制为60</span><br><span class="line">.text:00401C28                 jle     short loc_401C37</span><br><span class="line">.text:00401C2A                 mov     eax, ds:_isFlag</span><br><span class="line">.text:00401C2F                 add     eax, 1</span><br><span class="line">.text:00401C32                 mov     ds:_isFlag, eax</span><br></pre></td></tr></tbody></table></figure>
+<p>在 Hex View 中找到对应的地址，找到 3C 所在的位置</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929210757529.png" alt="image-20220929210757529">
+<figcaption aria-hidden="true">image-20220929210757529</figcaption>
+</figure>
+<p>右键进行修改，改为<code>01</code>，然后通过下面的操作进行保存</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929210917237.png" alt="image-20220929210917237">
+<figcaption aria-hidden="true">image-20220929210917237</figcaption>
+</figure>
+<p>再次运行该程序，得了两分后直接撞墙退出游戏，发现flag</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220929211044604.png" alt="image-20220929211044604">
+<figcaption aria-hidden="true">image-20220929211044604</figcaption>
+</figure>
+<p><code>NSSCTF{YourAreTheMasterOfGame!}</code></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/21/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/21/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/" class="post-title-link" itemprop="url">汇编语言（七）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-21 13:32:09" itemprop="dateCreated datePublished" datetime="2022-09-21T13:32:09+08:00">2022-09-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-04-13 14:08:05" itemprop="dateModified" datetime="2023-04-13T14:08:05+08:00">2023-04-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="汇编语言七数据处理">汇编语言（七）——数据处理</h1>
+<p>reg（寄存器）：ax、bx、cx、dx、ah、al、bh、bl、ch、cl、dh、dl、sp、bp、si、di；</p>
+<p>sreg（段寄存器）：ds、ss、cs、es。</p>
+<h2 id="bxsidi-和-bp">bx、si、di 和 bp</h2>
+<p>在8086CPU中，只有标题中这四个寄存器可以用在 <code>[...]</code>
+中来进行内存单元的寻址。</p>
+<ul>
+<li><p>下面的指令是错误的：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [cx]</span><br><span class="line">mov ax, [ax]</span><br><span class="line">mov ax, [dx]</span><br><span class="line">mov ax, [ds]</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>这四个寄存器可以单个出现，也可以这四种组合出现：bx 和 si 、bx 和
+di 、bp 和 si 、bp 和 di 。</p>
+<p>注：<strong>[bx + bp]</strong> 、<strong>[si + di]</strong>
+，这两个组合是错误的。</p></li>
+<li><p>只要在 <code>[...]</code> 中使用了寄存器 <strong>bp</strong>
+，而指令中没有显性地给出段地址，段地址就默认在 <code>ss</code> 中。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [bp]                      含义：(ax) = ((ss)*16+(bp))</span><br><span class="line">mov ax, [bp+idata]                含义：(ax) = ((ss)*16+(bp)+idata)</span><br><span class="line">mov ax, [bp+si]                   含义：(ax) = ((ss)*16+(bp)+(si))</span><br><span class="line">mov ax, [bp+si+idata]             含义：(ax) = ((ss)*16+(bp)+(si)+idata)</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h2 id="数据所在位置">数据所在位置</h2>
+<p>指令在执行前，所要处理的数据可以在三个位置：<strong>CPU内部</strong>、<strong>内存</strong>、<strong>端口</strong>。</p>
+<h2 id="数据位置的表达">数据位置的表达</h2>
+<ol type="1">
+<li><p>立即数（idata）</p>
+<p>对于直接包含在机器指令中的数据（执行前在CPU指令缓存器中），被称为立即数。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">add bx,2000h</span><br><span class="line">or bx,00010000b</span><br><span class="line">mov al,'a'</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>寄存器</p>
+<p>指令要处理的数据在寄存器中，在汇编指令中给出相应的寄存器名。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov ax,bx</span><br><span class="line">mov ds,ax</span><br><span class="line">push bx</span><br><span class="line">mov ds:[0],bx</span><br><span class="line">push ds</span><br><span class="line">mov ss,ax</span><br><span class="line">mov sp,ax</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>段地址（SA）和偏移地址（EA）</p>
+<p>指令要处理的数据在内存中，在汇编指令中可用 [X] 的格式给出 EA，SA
+在某个段寄存器中。</p>
+<p>存放段地址的寄存器可以是默认的，比如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[0]</span><br><span class="line">mov ax,[di]</span><br><span class="line">mov ax,[bx+8]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+si+8]</span><br></pre></td></tr></tbody></table></figure>
+<p>等指令，段地址默认在 <strong>ds</strong> 中。</p>
+<p>存放段地址的寄存器也可以显性给出，比如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,ds:[bp]             含义：(ax)=((ds)*16)+(bp)</span><br><span class="line">mov ax,es:[bx]</span><br><span class="line">mov ax,ss:[bx+si]</span><br><span class="line">mov ax,cs:[bx+si+8]</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h2 id="寻址方式">寻址方式</h2>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220924122435330.png" alt="image-20220924122435330">
+<figcaption aria-hidden="true">image-20220924122435330</figcaption>
+</figure>
+<h2 id="指令要处理的数据所占的字长">指令要处理的数据所占的字长</h2>
+<ol type="1">
+<li><p>通过寄存器指明要处理的数据的字长</p>
+<p>字操作：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">mov bx,ds:[0]</span><br><span class="line">mov ds,ax</span><br><span class="line">mov ds:[0],ax</span><br><span class="line">inc ax</span><br><span class="line">add ax,1000</span><br></pre></td></tr></tbody></table></figure>
+<p>字节操作：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov al,1</span><br><span class="line">mov al,bl</span><br><span class="line">mov al,ds:[0]</span><br><span class="line">mov ds:[0],al</span><br><span class="line">inc al</span><br><span class="line">add al,100</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>在没有寄存器名存在的情况下，用操作符<code>X ptr</code>指明内存单元的长度，X
+在汇编指令中可以为 word 或 byte 。</p>
+<p>下面的指令中用了 word ptr
+指明了指令访问的内存单元是一个<strong>字单元</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov word ptr ds:[0],1</span><br><span class="line">inc word ptr [bx]</span><br><span class="line">inc word ptr ds:[0]</span><br><span class="line">add word ptr [bx],2</span><br></pre></td></tr></tbody></table></figure>
+<p>下面的指令中，用 byte ptr
+指明了指令访问的内存单元是一个<strong>字节单元</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov byte ptr ds:[0],1</span><br><span class="line">inc byte ptr [bx]</span><br><span class="line">inc byte ptr ds:[0]</span><br><span class="line">add byte ptr [bx],2</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>其他方法</p>
+<p>有些指令默认了访问的是字单元还是字节单元，比如：push [1000H]
+就不用指明访问的是字单元还是字节单元，因为 push
+指令只进行<strong>字操作</strong>。</p></li>
+</ol>
+<h2 id="div指令">div指令</h2>
+<p>div是除法指令。</p>
+<ul>
+<li>除数：有8位和16位两种，在一个寄存器或内存单元中。</li>
+<li>被除数：默认放在 <strong>AX</strong> 或 <strong>DX
+和AX</strong>中，如果除数为8位，被除数则为16位，默认在 AX
+中存放；如果输出为16位，被除数则为32位，在 DX 和 AX 中存放，DX
+存放高16位，AX 存放低16位。</li>
+<li>结果：如果除数为8位，则 AL 存储商，AH 存储余数；如果除数为16位，则
+AX 存储除法操作的商，DX 存储除法操作的余数。</li>
+</ul>
+<p>格式如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div reg</span><br><span class="line">div 内存单元</span><br></pre></td></tr></tbody></table></figure>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div byte ptr ds:[0]   含义：(al)=(ax)/((ds)*16+0)的商；</span><br><span class="line">						 (ah)=(ax)/((ds)*16+0)的余数</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div word ptr es:[0]   含义：(ax)=[(dx)*10000H+(ax)]/((es)*16+0)的商</span><br><span class="line">                           (dx)=[(dx)*10000H+(ax)]/((es)*16+0)的余数</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="伪指令-dd">伪指令 dd</h2>
+<p><strong>dd</strong> 是用来定义 dword（double
+word）双字型数据的。比如</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data segment</span><br><span class="line">  db 1</span><br><span class="line">  dw 1</span><br><span class="line">  dd 1</span><br><span class="line">data ends</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>第一个数据为 01H，在<code>data:0</code>处，占1个字节；</li>
+<li>第二个数据为 0001H，在<code>data:1</code>处，占1个字；</li>
+<li>第三个数据为 00000001H，在<code>data:3</code>处，占2个字。</li>
+</ul>
+<h2 id="dup">dup</h2>
+<p>dup是一个操作符，在汇编语言中同 db、dw、dd
+等一样，也是由编译器识别处理的符号。它是和 db、dw、dd
+等数据定义伪指令配合使用的，用来进行数据的重复。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db 3 dup (0)             ;定义了3个字节，值都为 0，相当于 db 0,0,0</span><br><span class="line">db 3 dup (0,1,2)         ;定义了9个字节，相当于 db 0,1,2,0,1,2,0,1,2</span><br><span class="line">db 3 dup('abc','ABC')    ;定义了18个字节，相当于 db 'abcABCabcABCabcABC'</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/18/ManyCheck/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1282,212 +1590,6 @@ EAX 中的内容（一个64位的整数），除法结果 ( 商 ) 存在 EAX
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/cat%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E4%B9%B1%E7%A0%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/20/cat%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E4%B9%B1%E7%A0%81/" class="post-title-link" itemprop="url">cat查看文件内容乱码</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-20 10:46:37" itemprop="dateCreated datePublished" datetime="2022-08-20T10:46:37+08:00">2022-08-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-29 11:59:22" itemprop="dateModified" datetime="2022-08-29T11:59:22+08:00">2022-08-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%91%BD%E4%BB%A4%E8%A1%8C/" itemprop="url" rel="index"><span itemprop="name">命令行</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>125</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>当我使用cat查看文件内容时，出现了乱码：</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220820104158727.png" alt="image-20220820104158727">
-<figcaption aria-hidden="true">image-20220820104158727</figcaption>
-</figure>
-<p>我的文件是以UTF8的编码形式保存，因此通过<code>cat &lt;filename&gt; -Encoding UTF8</code>可解决：</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220820104552230.png" alt="image-20220820104552230">
-<figcaption aria-hidden="true">image-20220820104552230</figcaption>
-</figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/16/AT&T%E5%92%8CIntel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/16/AT&T%E5%92%8CIntel/" class="post-title-link" itemprop="url">AT&T和Intel汇编语法区别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-16 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-16T00:00:00+08:00">2022-08-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-19 22:47:47" itemprop="dateModified" datetime="2023-07-19T22:47:47+08:00">2023-07-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>738</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考： https://zhuanlan.zhihu.com/p/70590839</p>
-<p>​ https://segmentfault.com/a/1190000040633213 （较为详细）</p>
-<p>​
-https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html
-AT&amp;T汇编基础</p>
-<h1 id="att与intel">AT&amp;T与Intel</h1>
-<p>AT&amp;T语法多应用于Unix/Linux平台，Intel语法多应用于Windows系统。</p>
-<p>以下是这两种语法的主要区别：</p>
-<ul>
-<li><p>目标操作数和源操作数的顺序不同。</p>
-<p>Intel：目标操作数在源操作数的左边。</p>
-<p>AT&amp;T：目标操作数在源操作数的右边。</p>
-<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">将2送入寄存器eax</span><br><span class="line">寄存器esp的值减去500(0x1f4)</span><br><span class="line"></span><br><span class="line">Intel:</span><br><span class="line">      mov eax, 2</span><br><span class="line">      sub esp, 0x1f4 </span><br><span class="line"></span><br><span class="line">AT&amp;T:</span><br><span class="line">      mov $2, %eax</span><br><span class="line">      sub $0x1f4, %esp</span><br><span class="line">      </span><br><span class="line">#注：sub指令是将目标操作数的值中减去源操作数的值，并将结果存储在目标操作数中</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>AT&amp;T的立即数（立即数通常是指在<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/立即寻址方式/6686429">立即寻址方式</a>指令中给出的数。）前要加<code>$</code>，寄存器前要加<code>%</code>；Intel则不需要。</p></li>
-<li><p>操作数字长的表示方法不同。在AT&amp;T汇编格式中，操作数的字长由操作符的最后一个字母决定，后缀<code>b</code>、<code>w</code>、<code>l</code>分别表示操作数为字节（byte，8bit）、字（word，16bit）和长字（long，32bit）；而在Intel汇编格式中，操作数的字长是用<code>byte ptr</code>和<code>word ptr</code>等前缀来表示的。</p>
-<figure class="highlight x86asm"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">movb val,%al    # <span class="meta">AT</span>&amp;T</span><br><span class="line">movl <span class="built_in">al</span>,<span class="built_in">byte</span> <span class="built_in">ptr</span> val   # Intel</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<p>总结：</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230521161130215.png" alt="image-20230521161130215">
-<figcaption aria-hidden="true">image-20230521161130215</figcaption>
-</figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1559,7 +1661,7 @@ AT&amp;T汇编基础</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">105</span>
+          <span class="site-state-item-count">107</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1608,12 +1710,12 @@ AT&amp;T汇编基础</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">189k</span>
+    <span title="站点总字数">191k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:52</span>
+    <span title="站点阅读时长">2:54</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
