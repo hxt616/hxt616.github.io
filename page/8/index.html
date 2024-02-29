@@ -164,6 +164,177 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/SQL%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/28/SQL%E6%B3%A8%E5%85%A5/" class="post-title-link" itemprop="url">SQL注入（SQLi）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-28 14:30:13" itemprop="dateCreated datePublished" datetime="2023-02-28T14:30:13+08:00">2023-02-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-10 15:53:49" itemprop="dateModified" datetime="2023-06-10T15:53:49+08:00">2023-06-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>TryHackMe实验房间：https://tryhackme.com/room/sqlinjectionlm</p>
+<h2 id="introduction">Introduction</h2>
+<p>使用 SQL 的web应用程序可以转变为 SQL
+注入的关键点在于用户提供的数据被包含在 SQL 查询中。</p>
+<p>假设，你遇到了一个在线博客，每个博客条目都有一个唯一的 id
+号，博客条目可以设置为公共或私有，这取决于它们是否已经准备好公开发布，博客条目的
+URL 可能如下所示：</p>
+<p><code>https://website.thm/blog?id=1</code></p>
+<p>从上面的 URL 中，你可以看到所选的博客条目来自查询字符串(query
+string)中的 id
+参数。Web应用程序需要从数据库中检索文章，并使用如下的SQL语句：</p>
+<p><code>SELECT * from blog where id=1 and private=0 LIMIT 1;</code></p>
+<p>发现上面的SQL语句正在博客表中查找 id 号为 1
+且<code>private</code>列设置为 0
+的文章，这意味着它可以被公众查看，并且使用了<code>limit</code>将结果限制为只有一个匹配项。</p>
+<p>正如在本文开头所提到的，当用户输入的数据被引入数据库查询时，就会引入SQL注入。在本例中，查询字符串中的
+id 参数直接用于 SQL 查询。</p>
+<p>假设文章 id 2
+仍然锁定为私有的，所以它不能在网站上查看。我们现在可以将 URL 改为：</p>
+<p><code>https://website.thm/blog?id=2;--</code></p>
+<p>对应生成的 SQL 语句为：</p>
+<p><code>SELECT * from blog where id=2;-- and private=0 LIMIT 1;</code></p>
+<p>URL 中的分号表示 SQL
+语句的结束，两个横杠(<code>--</code>)会导致之后的所有内容都被视为注释。通过这样做，实际上是在运行查询：</p>
+<p><code>SELECT * from blog where id=2;--</code></p>
+<p>无论是否将其设置为公开，它将返回 id 为 2 的文章。</p>
+<h2 id="分类">分类</h2>
+<h3 id="in-band-sqli">In-Band SQLi</h3>
+<p>In-Band SQL 注入是最容易检测和利用的类型。In-Band
+是指使用相同通信方法来利用漏洞并接受结果。例如，在网页上发现 SQL
+注入漏洞，然后能够从数据库中将数据提取到同一页面。</p>
+<ul>
+<li><p><strong>Error-Based SQL Injection</strong>(基于报错的SQL注入)</p>
+<p>这种类型的 SQL
+注入对于轻松获取有关数据库结构的信息是最有用的，因为来自数据库的错误信息会直接打印到网页上，这通常可以用于枚举整个数据库。</p></li>
+<li><p><strong>Union-Based SQL Injection</strong>(基于 union
+的SQL注入)</p>
+<p>这种类型的注入使用 UNION 操作符和 SELECT
+语句一起向页面返回其他结果。这是通过SQL注入漏洞提取大量数据的最常见方法。</p></li>
+</ul>
+<h3 id="blind-sqli">Blind SQLi</h3>
+<p>与 in-band SQL 注入不同，blind SQL
+注入几乎没有反馈来提示我们我们是否注入成功，这是因为错误消息已被禁用，但无论如何，注入依旧是有效的。</p>
+<ul>
+<li><p>Authentication Bypass(身份验证绕过)</p>
+<p>最直接的 blind SQLi
+技巧之一就是绕过登录表单等身份验证。连接到用户数据库的登录表单通常以这样的方式开发，即：web应用程序对用户名和密码的内容不感兴趣，而等关注两者是否在用户表中匹配。基本上，web应用程序会询问数据库“您是否是用户名为
+<strong>bob</strong> 、密码为 <strong>bob123</strong>
+的用户？”，数据库会回答“是”或“否”，并根据回答决定web应用程序是否允许你继续操作。</p></li>
+<li><p><strong>Boolean Based</strong>(布尔盲注)</p>
+<p>布尔盲注是指我们从注入尝试中收到的可能是<code>true/false</code>、<code>yes/no</code>、<code>on/off</code>、<code>1/0</code>或者任何只能有两个结果的响应。该结果表明攻击者的
+SQL
+注入是否成功。虽然响应只有两种结果，但还是能够枚举整个数据库的结构和内容。</p>
+<p>例如，可以通过布尔盲注来判断数据库的首字母(<code>admin123' UNION SELECT 1,2,3 where database() like 's%';--</code>)。</p></li>
+<li><p><strong>Time Based</strong>(时间盲注)</p>
+<p>时间盲注与上述的布尔盲注非常相似，因为发送相同的请求，但没有直观的指示您的查询是错误的还是正确的。相反，正确查询的指标是基于完成查询所需的时间。这种时间延迟是通过在
+UNION 语句旁边使用内置方法（如
+<strong>SLEEP(x)</strong>）引入的。SLEEP() 方法只能在 UNION SELECT
+语句成功时执行。</p>
+<p>例如，当试图确定表中的列数时，可以使用以下查询：</p>
+<p><code>admin123' UNION SELECT SLEEP(5)</code></p>
+<p>如果未产生停顿，那么我们可以推断出该请求未成功，所以我们增加一列：</p>
+<p><code>admin123' UNION SELECT SLEEP(5),2;--</code></p>
+<p>直到产生 5 秒延迟为止。</p></li>
+</ul>
+<h3 id="out-of-band-sqli">Out of Band SQLi</h3>
+<p>此类 SQL
+注入并不常见，因为它要么取决于数据库服务器上启用的特定功能，要么取决于web应用程序的业务逻辑，后者根据SQL查询的结果进行某种外部网络调用。</p>
+<p>Out-Of-Band
+攻击通过两个不同的通信渠道进行分类，一个用于发起攻击，另一个用于收集结果。例如，攻击通道可以是web请求，数据收集通道可以监视对你控制的服务发出的HTTP/DNS请求。</p>
+<p>1） 攻击者通过注入 payload 向易受攻击的网站发出请求。</p>
+<p>2） 该网站对数据库进行SQL查询，并传递黑客的 payload 。</p>
+<p>3） payload
+包含一个请求，该请求强制将包含数据库数据的HTTP请求返回给黑客的计算机。</p>
+<h2 id="预防措施">预防措施</h2>
+<h3 id="预编译语句参数化查询">预编译语句（参数化查询）</h3>
+<p>开发人员首先编写 SQL
+查询，然后将任何用户输入作为参数添加。编写准备好的语句可以确保 SQL
+代码结构不变，并且数据库可以区分查询和数据。作为一个好处，它还使您的代码看起来更干净、更容易阅读。</p>
+<h3 id="对输入进行验证">对输入进行验证</h3>
+<p>输入验证可以在很大程度上保护输入到 SQL
+查询中的内容。使用允许列表可以将输入限制为仅某些字符串，或者编程语言中的字符串替换方法可以过滤你希望允许或不允许的字符。</p>
+<h3 id="对用户输入进行转义">对用户输入进行转义</h3>
+<p>允许用户输入包含诸如<code>'</code>、<code>"</code>、<code>$</code>、<code>\</code>之类的字符可能会导致SQL查询中断，或者更糟的是，正如我们所了解的那样，打开它们以接受注入攻击。转义用户输入是在这些字符前面加上反斜杠（）的方法，这样会导致它们被解析为常规字符串而不是特殊字符。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/XSS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2285,105 +2456,10 @@ WinMain 函数</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/16/%E5%85%B3%E4%BA%8Egit%E7%9A%84%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/16/%E5%85%B3%E4%BA%8Egit%E7%9A%84%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">关于git的远程仓库问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-10-16 23:49:51" itemprop="dateCreated datePublished" datetime="2022-10-16T23:49:51+08:00">2022-10-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>835</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近一直断断续续地学习git的使用方法，今天在学习的时候遇到了一个关于远程仓库的问题：<strong>如何在克隆远程仓库后，将其关联到自己的远程仓库。</strong></p>
-<p>当使用 git clone
-时，就会将远程仓库克隆到本地。利用命令<code>git remote -v</code>查看克隆的远程仓库的信息，例如：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/user/repo.git (fetch)</span><br><span class="line">origin  https://github.com/user/repo.git (push)</span><br></pre></td></tr></tbody></table></figure>
-<p>origin 为默认的远程仓库的别名。此时， origin 默认的 url
-是原始仓库的地址。想要关联到新的远程仓库主要有两种方法：</p>
-<h3 id="添加远程仓库">添加远程仓库</h3>
-<p>使用<code>git remote add</code>命令添加。</p>
-<p>该命令采用两个参数：远程名称（例如<code>new</code> ）、远程 URL（例如
-<code>https://github.com/user_1/repo.git</code>）。</p>
-<p>例如：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add new https://github.com/user_1/repo.git <span class="comment"># Set a new remote</span></span><br><span class="line"></span><br><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/user/repo.git (fetch) <span class="comment"># 原始仓库</span></span><br><span class="line">origin  https://github.com/user/repo.git (push)  <span class="comment"># 原始仓库</span></span><br><span class="line">new  https://github.com/user_1/repo.git (fetch) <span class="comment"># 新添加的远程仓库</span></span><br><span class="line">new  https://github.com/user_1/repo.git (push) <span class="comment"># 新添加的远程仓库</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="更改远程仓库的-url">更改远程仓库的 URL</h3>
-<p>使用<code>git remote set-url</code>命令更改 URL。</p>
-<p>参考：https://docs.github.com/cn/get-started/getting-started-with-git/managing-remote-repositories#changing-a-remote-repositorys-url</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2451,7 +2527,7 @@ WinMain 函数</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">111</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2500,12 +2576,12 @@ WinMain 函数</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">193k</span>
+    <span title="站点总字数">194k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:56</span>
+    <span title="站点阅读时长">2:57</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
