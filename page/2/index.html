@@ -164,6 +164,104 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/27/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/27/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">二叉树的所有路径</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-02-27 13:23:00 / 修改时间：14:01:15" itemprop="dateCreated datePublished" datetime="2024-02-27T13:23:00+08:00">2024-02-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/binary-tree-paths</p>
+<p>使用深度优先搜索——先序遍历，通过递归不断回溯，找到所有的路径</p>
+<ul>
+<li>先判断root是否是空节点</li>
+<li>然后判断root的孩子节点</li>
+<li>若孩子节点不为空，则将当前节点值<strong>加入<code>sta</code>数组</strong>（记录路径,可看作栈），然后分别遍历当前节点的左子树和右子树</li>
+<li>若孩子节点为空，说明当前节点是叶节点（并没有加入<code>sta</code>数组），使用<code>sprintf</code>拼接路径，然后再将当前叶节点加入路径</li>
+<li>然后将当前路径加入路径数组<code>ans</code></li>
+</ul>
+<blockquote>
+<p><code>spritnf</code>返回了本次函数调用最终打印到字符缓冲区中的字符数目</p>
+</blockquote>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">path</span><span class="params">(<span class="keyword">struct</span> TreeNode* root, <span class="type">char</span>** ans, <span class="type">int</span> *returnSize, <span class="type">int</span>* sta, <span class="type">int</span> top)</span> { <span class="comment">//top可当作sta的栈顶</span></span><br><span class="line">    <span class="keyword">if</span>(root != <span class="literal">NULL</span>) {</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;left==<span class="literal">NULL</span> &amp;&amp; root-&gt;right==<span class="literal">NULL</span>) {</span><br><span class="line">            <span class="type">char</span>* tmp = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="number">101</span>);</span><br><span class="line">            <span class="type">int</span> len = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;top; i++) {</span><br><span class="line">                len += <span class="built_in">sprintf</span>(tmp+len, <span class="string">"%d-&gt;"</span>, sta[i]);  <span class="comment">//记录当前路径字符串的长度</span></span><br><span class="line">                <span class="comment">//sprintf返回的是当前写入数组的元素个数</span></span><br><span class="line"></span><br><span class="line">            }</span><br><span class="line">            <span class="built_in">sprintf</span>(tmp+len, <span class="string">"%d"</span>, root-&gt;val); <span class="comment">//将当前叶结点加入路径</span></span><br><span class="line">            ans[(*returnSize)++] = tmp; <span class="comment">//加入路径数组</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            sta[top++] = root-&gt;val; <span class="comment">//将当前节点值入栈</span></span><br><span class="line">            path(root-&gt;left, ans, returnSize, sta, top);</span><br><span class="line">            path(root-&gt;right, ans, returnSize, sta, top);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="type">char</span>** <span class="title function_">binaryTreePaths</span><span class="params">(<span class="keyword">struct</span> TreeNode* root, <span class="type">int</span>* returnSize)</span> {</span><br><span class="line">    <span class="type">char</span>** ans = (<span class="type">char</span>**)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">char</span>*)*<span class="number">50</span>);</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> sta[<span class="number">101</span>]; <span class="comment">//存放路径（路径上的节点值）</span></span><br><span class="line">    path(root, ans, returnSize, sta, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/27/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1015,156 +1113,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/19/%E7%A7%BB%E5%8A%A8vscode%E6%8F%92%E4%BB%B6%E4%BD%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/19/%E7%A7%BB%E5%8A%A8vscode%E6%8F%92%E4%BB%B6%E4%BD%8D%E7%BD%AE/" class="post-title-link" itemprop="url">移动vscode插件位置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-02-19 17:25:15 / 修改时间：17:41:16" itemprop="dateCreated datePublished" datetime="2024-02-19T17:25:15+08:00">2024-02-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4/" itemprop="url" rel="index"><span itemprop="name">存储空间</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>521</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>先介绍文件共享的知识</p>
-<h2 id="文件共享">文件共享</h2>
-<h4 id="硬链接">硬链接</h4>
-<ul>
-<li>基于索引结点</li>
-<li>不同用户的目录项指向同一个索引结点</li>
-<li><strong>链接计数count</strong></li>
-</ul>
-<h4 id="软链接">软链接</h4>
-<ul>
-<li>创建Link型(快捷方式)文件——记录文件存放路径</li>
-<li>共享文件被删除，Link型文件<strong>依然存在</strong>，但是会查找失败</li>
-<li>软链接索引结点中的<strong>引用计数值</strong>应该<strong>恒为1</strong></li>
-</ul>
-<blockquote>
-<p>建立符号链接时，引用计数<strong>不是复制原文件</strong>而是<strong>必为1</strong></p>
-</blockquote>
-<h2 id="解决方案">解决方案</h2>
-<p>vscode插件文件夹位置一般为<code>C:\Users\{username}\.vscode\extensions</code></p>
-<ul>
-<li><p>先该文件夹<strong>剪切</strong>到其他位置，例如<code>D:\extensions</code></p></li>
-<li><p>管理员权限打开<strong>cmd</strong>，输入下面的命令：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mklink /D "C:\Users\{username}\.vscode\extensions" "D:\extensions"</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>然后回车，搞定</p></li>
-</ul>
-<blockquote>
-<p>mklink用法：<code>MKLINK [[/D] | [/H] | [/J]] Link Target</code></p>
-<table>
-<colgroup>
-<col style="width: 8%">
-<col style="width: 12%">
-<col style="width: 78%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">参数</th>
-<th style="text-align: center;">可选/必须</th>
-<th style="text-align: center;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">/D</td>
-<td style="text-align: center;">可选</td>
-<td style="text-align: center;">创建目录符号链接而不是文件符号链接（默认为文件符号链接）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">/H</td>
-<td style="text-align: center;">可选</td>
-<td style="text-align: center;">创建硬链接而不是符号链接</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">/J</td>
-<td style="text-align: center;">可选</td>
-<td style="text-align: center;">创建目录连接点</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Link</td>
-<td style="text-align: center;">必选</td>
-<td style="text-align: center;">指定新的符号链接名称</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">Target</td>
-<td style="text-align: center;">必选</td>
-<td style="text-align: center;">指定新符号链接引用的路径（绝对路径或相对路径均可）</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1236,7 +1184,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">112</span>
+          <span class="site-state-item-count">113</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1285,12 +1233,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">195k</span>
+    <span title="站点总字数">196k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:58</span>
+    <span title="站点阅读时长">2:59</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
