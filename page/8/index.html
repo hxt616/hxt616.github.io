@@ -164,6 +164,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/14/%E4%BF%AE%E6%94%B9PowerShell%E4%B8%BB%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/14/%E4%BF%AE%E6%94%B9PowerShell%E4%B8%BB%E9%A2%98/" class="post-title-link" itemprop="url">修改PowerShell的主题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-03-14 00:00:00 / 修改时间：11:23:02" itemprop="dateCreated datePublished" datetime="2023-03-14T00:00:00+08:00">2023-03-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%91%BD%E4%BB%A4%E8%A1%8C/" itemprop="url" rel="index"><span itemprop="name">命令行</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>317</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我使用的是<code>oh-my-posh</code>。</p>
+<p><code>oh-my-posh</code> 是一个 <code>PowerShell</code>
+主题框架，用于美化 <code>PowerShell</code>
+提示符（prompt）。它可以让你自定义 <code>PowerShell</code>
+提示符的样式，使其更加易读和美观。可参考官网的主题样式：https://ohmyposh.dev/docs/themes</p>
+<p>通过输入</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-PoshPrompt PowerLine</span><br></pre></td></tr></tbody></table></figure>
+<p>可预览<code>PowerLine</code>主题，这只是暂时性的 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/b5787722d59b4286b340086f0ab1145f.png" alt="在这里插入图片描述"></p>
+<p>想要永久修改可通过执行以下命令用记事本打开配置文件</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">notepad $PROFILE</span><br></pre></td></tr></tbody></table></figure>
+<p>打开后如下： <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/31e8516211044bc2a8bd3b0646a5db98.png" alt="在这里插入图片描述"></p>
+<p>通过修改配置文件中的主题可修改默认打开主题： <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/1648e8d3bcf6411b9d307a5aa18afb37.png" alt="在这里插入图片描述">
+若将上图中的"Sorin"改为“Agnoster”，则下次打开power
+shell便是修改后的主题。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/Passive-Reconnaissance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2651,117 +2746,6 @@ session
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/27/%E5%AD%90%E5%9F%9F%E5%90%8D%E6%9E%9A%E4%B8%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/12/27/%E5%AD%90%E5%9F%9F%E5%90%8D%E6%9E%9A%E4%B8%BE/" class="post-title-link" itemprop="url">Subdomain Enumeration（子域名枚举）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-12-27 23:40:47" itemprop="dateCreated datePublished" datetime="2022-12-27T23:40:47+08:00">2022-12-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-10 15:54:49" itemprop="dateModified" datetime="2023-06-10T15:54:49+08:00">2023-06-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>719</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TryHackMe实验房间：https://tryhackme.com/room/subdomainenumeration</p>
-<h2 id="brute-force蛮力法">Brute Force(蛮力法)</h2>
-<p>基于字典的枚举找到通用名称子域。<strong>DNSRecon</strong>
-是一个功能强大的DNS枚举工具，它的一个功能是使用预定义的字典进行子域枚方法侦查子域。</p>
-<h2 id="osint-open-source-intelligence">OSINT (Open-Source
-Intelligence)</h2>
-<h3 id="ssltls-certificates">SSL/TLS Certificates</h3>
-<p>在证书透明度 (CT) 下，证书颁发机构 (CA)
-必须在公共日志中发布他们颁发的所有 SSL/TLS 证书，任何人都可以查看 CT
-日志并找到为域颁发的证书。</p>
-<p>证书透明度 (CT) 日志按设计包含由参与 CA
-为任何给定域颁发的所有证书。SSL/TLS
-证书一般包含域名、子域名和电子邮件地址。</p>
-<p>查找CT
-logs：https://crt.sh/，https://ui.ctsearch.entrust.com/ui/ctsearchui</p>
-<h3 id="search-engine">Search Engine</h3>
-<p>在谷歌中使用<code>-site:www.domain.com site:*.domain.com</code>，该语法可以查找到相关子域名。</p>
-<h3 id="sublist3r"><a target="_blank" rel="noopener" href="https://github.com/aboul3la/Sublist3r">Sublist3r</a></h3>
-<p>通过搜集子域名信息，找到目标的关联网站。</p>
-<h2 id="virtual-host">Virtual Host</h2>
-<p>有些子域并不总是托管在可公开访问的DNS结果中，例如web应用程序的开发版本或管理门户。相反，DNS记录可以保存在私有DNS服务器上，或记录在开发人员的计算机上的/etc/hosts文件（或windows用户的c:）中，DNS记录将域名映射到IP地址上。</p>
-<p>web服务器可以在一个服务器上托管多个网站，当客户端请求网站时，服务器可以通过
-Host header 得知客户端请求的网站，我们可以通过修改 Host header
-以寻找新的域名。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2833,7 +2817,7 @@ Host header 得知客户端请求的网站，我们可以通过修改 Host heade
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">114</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2882,12 +2866,12 @@ Host header 得知客户端请求的网站，我们可以通过修改 Host heade
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">196k</span>
+    <span title="站点总字数">198k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:59</span>
+    <span title="站点阅读时长">3:01</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
