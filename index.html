@@ -189,7 +189,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-03-01 13:16:24 / 修改时间：13:17:45" itemprop="dateCreated datePublished" datetime="2024-03-01T13:16:24+08:00">2024-03-01</time>
+              <time title="创建时间：2024-03-01 13:16:24 / 修改时间：13:32:13" itemprop="dateCreated datePublished" datetime="2024-03-01T13:16:24+08:00">2024-03-01</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -211,7 +211,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>478</span>
+              <span>482</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -231,7 +231,7 @@
 
       
           <p>题目地址：https://leetcode.cn/problems/convert-bst-to-greater-tree</p>
-<p>根据题目描述可知，累加过程是从右子树开始，按照<strong>右-中-左</strong>的顺序累加</p>
+<p>根据题目描述可知，累加过程是从右子树开始，使用递归按照<strong>右-中-左</strong>的顺序累加</p>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> sum; <span class="comment">//全局变量，方便累加</span></span><br><span class="line"><span class="keyword">struct</span> TreeNode* <span class="title function_">accumulate</span><span class="params">(<span class="keyword">struct</span> TreeNode* root)</span> {</span><br><span class="line">    <span class="keyword">if</span>(!root)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    root-&gt;right = accumulate(root-&gt;right); <span class="comment">//右子树</span></span><br><span class="line">    </span><br><span class="line">    root-&gt;val += sum; <span class="comment">//处理根节点</span></span><br><span class="line">    sum = root-&gt;val;</span><br><span class="line">    </span><br><span class="line">    root-&gt;left = accumulate(root-&gt;left);  <span class="comment">//左子树</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">}</span><br><span class="line"><span class="keyword">struct</span> TreeNode* <span class="title function_">convertBST</span><span class="params">(<span class="keyword">struct</span> TreeNode* root)</span> {</span><br><span class="line">    <span class="keyword">if</span>(!root)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    sum=<span class="number">0</span>; <span class="comment">//初始化为0</span></span><br><span class="line">    <span class="keyword">return</span> accumulate(root);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
       
