@@ -20,20 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="汇编语言（五）——包含多个段的程序 在代码段中使用数据 计算以下8个数据的和，结果存在ax寄存器中：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。 我们希望通过循环的方式进行累加，而在累加前，要将这些数据存储在一组地址连续的内存单元中。具体做法如下： 12345678910111213141516assume cs:codecode segment">
+  <meta name="description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;minimum-operations-to-write-the-letter-y-on-a-grid&#x2F; 这题是第 387 场力扣周赛第三题。我一开始的思路是分开计算“Y”所占方格位置中 0、1、2 的个数和其他格子中 0、1、2 的个数，但是有点繁琐，看了题解后得知一共只有六种情况（0-1，0-2，1-0，1-2，2-0，2-1）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="汇编语言（五）">
-<meta property="og:url" content="http://example.com/2022/08/25/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%94%EF%BC%89/index.html">
+<meta property="og:title" content="在矩阵上写出字母Y所需的最少操作次数">
+<meta property="og:url" content="http://example.com/2024/03/03/%E5%9C%A8%E7%9F%A9%E9%98%B5%E4%B8%8A%E5%86%99%E5%87%BA%E5%AD%97%E6%AF%8DY/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="汇编语言（五）——包含多个段的程序 在代码段中使用数据 计算以下8个数据的和，结果存在ax寄存器中：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。 我们希望通过循环的方式进行累加，而在累加前，要将这些数据存储在一组地址连续的内存单元中。具体做法如下： 12345678910111213141516assume cs:codecode segment">
+<meta property="og:description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;minimum-operations-to-write-the-letter-y-on-a-grid&#x2F; 这题是第 387 场力扣周赛第三题。我一开始的思路是分开计算“Y”所占方格位置中 0、1、2 的个数和其他格子中 0、1、2 的个数，但是有点繁琐，看了题解后得知一共只有六种情况（0-1，0-2，1-0，1-2，2-0，2-1）">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-08-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-05-23T02:12:37.313Z">
+<meta property="article:published_time" content="2024-03-03T07:54:44.909Z">
+<meta property="article:modified_time" content="2024-03-03T08:03:03.494Z">
 <meta property="article:author" content="hxt">
-<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2022/08/25/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%94%EF%BC%89/">
+<link rel="canonical" href="http://example.com/2024/03/03/%E5%9C%A8%E7%9F%A9%E9%98%B5%E4%B8%8A%E5%86%99%E5%87%BA%E5%AD%97%E6%AF%8DY/">
 
 
 <script id="page-configurations">
@@ -46,7 +48,7 @@
   };
 </script>
 
-  <title>汇编语言（五） | hxt's Blog</title>
+  <title>在矩阵上写出字母Y所需的最少操作次数 | hxt's Blog</title>
   
 
 
@@ -168,7 +170,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/25/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%94%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/03/%E5%9C%A8%E7%9F%A9%E9%98%B5%E4%B8%8A%E5%86%99%E5%87%BA%E5%AD%97%E6%AF%8DY/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -181,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          汇编语言（五）
+          在矩阵上写出字母Y所需的最少操作次数
         </h1>
 
         <div class="post-meta">
@@ -190,23 +192,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-08-25 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-25T00:00:00+08:00">2022-08-25</time>
+              <time title="创建时间：2024-03-03 15:54:44 / 修改时间：16:03:03" itemprop="dateCreated datePublished" datetime="2024-03-03T15:54:44+08:00">2024-03-03</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-23 10:12:37" itemprop="dateModified" datetime="2023-05-23T10:12:37+08:00">2023-05-23</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
                 </span>
             </span>
 
@@ -223,14 +219,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -242,30 +238,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="汇编语言五包含多个段的程序">汇编语言（五）——包含多个段的程序</h1>
-<h2 id="在代码段中使用数据">在代码段中使用数据</h2>
-<p>计算以下8个数据的和，结果存在ax寄存器中：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
-<p>我们希望通过循环的方式进行累加，而在累加前，要将这些数据存储在一组地址连续的内存单元中。具体做法如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">assume cs:code</span><br><span class="line">code segment</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">	</span><br><span class="line">	start: mov bx, 0</span><br><span class="line">	       mov ax, 0</span><br><span class="line">	</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	   s:  add ax, cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s</span><br><span class="line">	</span><br><span class="line">	       mov ax, 4c00h</span><br><span class="line">	       int 21h</span><br><span class="line">code ends</span><br><span class="line">end start</span><br></pre></td></tr></tbody></table></figure>
-<p>程序中<code>dw</code>（define
-word）的含义是定义字型数据。上述程序中使用<code>dw</code>定义了8个字型数据，所占内存空间大小为16字节。</p>
-<p>程序在运行时，<code>CS</code>中存放的是代码段的段地址，由于用<code>dw</code>定义的数据处于代码段的在开始，因此偏移地址为0，则这8个数据所在地址为<code>CS:0</code>、<code>CS:2</code>、<code>CS:4</code>、<code>CS:6</code>、<code>CS:8</code>、<code>CS:A</code>、<code>CS:C</code>、<code>CS:E</code>。</p>
-<p><code>end</code>除了通知编译器程序结束外，还可以通知编译器程序的入口在什么位置。上述示例中，<code>end</code>后面的标号
-<strong>start</strong> 指明了程序的入口。</p>
-<h2 id="在代码段中使用栈">在代码段中使用栈</h2>
-<p>利用栈，将给定的数据逆序存放：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
-<p>代码如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg</span><br><span class="line">code segment</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">	dw 0, 0, 0, 0, 0, 0, 0, 0    用dw定义16个字型数据，在程序加载后，取得16个字的内存空间，							    存放这16个数据。在后面的程序中将这段空间当作栈来使用。</span><br><span class="line">	start: mov ax, cs</span><br><span class="line">	       mov ss, ax</span><br><span class="line">	       mov sp, 30h           将设置栈顶ss:sp指向cs:30</span><br><span class="line">	       </span><br><span class="line">	       mov bx, 0</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	    s: push cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s                以上将代码段0~15单元中的8个字型数据依次入栈</span><br><span class="line">	       </span><br><span class="line">	       mov bx, 0</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	   s0: pop cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s0               以上依次出栈8个字型数据到代码段0~15单元中</span><br><span class="line">	       </span><br><span class="line">	       mov ax, 4c00h</span><br><span class="line">	       int 21h</span><br><span class="line">	       </span><br><span class="line">codesg ends</span><br><span class="line">end start                        指明程序的入口在start处</span><br></pre></td></tr></tbody></table></figure>
-<p>由上述代码可知<code>cs:10 ~ cs:2F</code>内存空间用来当作栈使用，初始状态下栈为空，所以<code>ss:sp</code>要指向栈底，则设置<code>ss:sp</code>指向<code>cs:30</code>（入栈
-sp=sp-2）。</p>
-<h2 id="将数据代码栈放入不同的段">将数据、代码、栈放入不同的段</h2>
-<p>当数据、代码和栈需要的空间超过
-64KB，就不能放在一个段中(一个段的容量不能大于
-64KB，这是8086模式的限制，并不是所有处理器都这样)。</p>
-<p>示例代码如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">assume cs:code, ds:data, ss:stack</span><br><span class="line"></span><br><span class="line">data segment                数据段</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">data ends</span><br><span class="line"></span><br><span class="line">stack segment               栈段</span><br><span class="line">	dw 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0</span><br><span class="line">stack ends</span><br><span class="line"></span><br><span class="line">code segment                代码段</span><br><span class="line">start:  mov ax, stack </span><br><span class="line">        mov ss, ax</span><br><span class="line">        mov sp 20h          设置栈顶ss:sp指向stack:20</span><br><span class="line">        </span><br><span class="line">        mov ax, data</span><br><span class="line">        mov ds, ax          ds指向data段</span><br><span class="line">        </span><br><span class="line">        mov bx, 0           ds:bx指向data段中的第一个单元</span><br><span class="line">        </span><br><span class="line">        mov cx, 8</span><br><span class="line">s:      push [bx]</span><br><span class="line">        add bx, 2</span><br><span class="line">        loop s              以上将data段中的0~15单元中的8个字型数据依次入栈</span><br><span class="line">        </span><br><span class="line">        mov bx, 0</span><br><span class="line">        </span><br><span class="line">        mov cx, 8</span><br><span class="line">s0:     pop [bx]</span><br><span class="line">        add bx, 2</span><br><span class="line">        loop s0</span><br><span class="line">        </span><br><span class="line">        mov ax, 4c00h</span><br><span class="line">        int 21h</span><br><span class="line">code ends</span><br><span class="line"></span><br><span class="line">end start</span><br><span class="line">        </span><br></pre></td></tr></tbody></table></figure>
-<p><code>mov ax,data</code>的含义就是将名称<code>data</code>段的段地址送入<code>ax</code>。<code>data</code>段中的数据<code>0abch</code>的地址就是<code>data:6</code>。不能直接将数值直接送入段寄存器中，因此<code>mov ds,data</code>是错误的。正确的语句如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov ax, data</span><br><span class="line">mov ds, ax      利用ax寄存器作为中转</span><br></pre></td></tr></tbody></table></figure>
+        <p>题目地址：https://leetcode.cn/problems/minimum-operations-to-write-the-letter-y-on-a-grid/</p>
+<p>这题是第 387
+场力扣周赛第三题。我一开始的思路是分开计算<strong>“Y”所占方格位置中
+0、1、2 的个数</strong>和<strong>其他格子中 0、1、2
+的个数</strong>，但是有点繁琐，看了题解后得知一共只有六种情况（0-1，0-2，1-0，1-2，2-0，2-1），可以直接枚举所有情况，然后取最小值。</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">isY</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j, <span class="type">int</span> gridSize)</span> { <span class="comment">//判断（i，j）是否处于Y的范围内</span></span><br><span class="line">    <span class="keyword">if</span>(i==j &amp;&amp; i&lt;gridSize/<span class="number">2</span>)    <span class="comment">//Y的左斜分支</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(i+j == gridSize<span class="number">-1</span> &amp;&amp; i&lt;gridSize/<span class="number">2</span>) <span class="comment">//Y的右斜分支</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(i&gt;=gridSize/<span class="number">2</span> &amp;&amp; j==gridSize/<span class="number">2</span>) <span class="comment">//Y的垂直部分</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">}</span><br><span class="line"><span class="type">int</span> <span class="title function_">change</span><span class="params">(<span class="type">int</span>** grid, <span class="type">int</span> gridSize, <span class="type">int</span> x, <span class="type">int</span> y)</span> {</span><br><span class="line">    <span class="type">int</span> count=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;gridSize; i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>; j&lt;gridSize; j++) {</span><br><span class="line">            <span class="keyword">if</span>(isY(i, j, gridSize)==<span class="number">0</span> &amp;&amp; grid[i][j]!=x) {</span><br><span class="line">                count++; <span class="comment">//需要修改，则计数加1</span></span><br><span class="line">     <span class="comment">//注意 grid[i][j]不需要真的修改，因为这样会导致原数组变化，从而导致后面的结果不正确</span></span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(isY(i,j,gridSize)==<span class="number">-1</span> &amp;&amp; grid[i][j]!=y) {</span><br><span class="line">                count++;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">        }</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">minimumOperationsToWriteY</span><span class="params">(<span class="type">int</span>** grid, <span class="type">int</span> gridSize, <span class="type">int</span>* gridColSize)</span> {</span><br><span class="line">    <span class="type">int</span> count[<span class="number">6</span>]; <span class="comment">//保存枚举结果</span></span><br><span class="line">    <span class="type">int</span> top = <span class="number">0</span>; <span class="comment">//count数组下标</span></span><br><span class="line">    <span class="built_in">memset</span>(count, <span class="number">0</span>, <span class="keyword">sizeof</span>(count));</span><br><span class="line">    <span class="type">int</span> min = INT_MAX;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> x=<span class="number">0</span>; x&lt;<span class="number">3</span>; x++) {</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> y = <span class="number">0</span>; y&lt;<span class="number">3</span>; y++) {</span><br><span class="line">            <span class="keyword">if</span>(x!=y)</span><br><span class="line">                count[top++] = change(grid, gridSize, x, y);</span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;top; i++) {</span><br><span class="line">        <span class="keyword">if</span>(min&gt;count[i])</span><br><span class="line">            min = count[i];</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> min;</span><br><span class="line">    </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -275,7 +253,9 @@ sp=sp-2）。</p>
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"># 汇编</a>
+              <a href="/tags/C/" rel="tag"># C</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
           </div>
 
         
@@ -284,13 +264,10 @@ sp=sp-2）。</p>
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/08/24/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E5%9B%9B%EF%BC%89/" rel="prev" title="汇编语言（四）">
-      <i class="fa fa-chevron-left"></i> 汇编语言（四）
+    <a href="/2024/03/03/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/" rel="prev" title="二维前缀和">
+      <i class="fa fa-chevron-left"></i> 二维前缀和
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/08/31/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E5%85%AD%EF%BC%89/" rel="next" title="汇编语言（六）">
-      汇编语言（六） <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -349,7 +326,6 @@ sp=sp-2）。</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%BA%94%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.</span> <span class="nav-text">汇编语言（五）——包含多个段的程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E4%BB%A3%E7%A0%81%E6%AE%B5%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE"><span class="nav-number">1.1.</span> <span class="nav-text">在代码段中使用数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E4%BB%A3%E7%A0%81%E6%AE%B5%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%A0%88"><span class="nav-number">1.2.</span> <span class="nav-text">在代码段中使用栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E4%BB%A3%E7%A0%81%E6%A0%88%E6%94%BE%E5%85%A5%E4%B8%8D%E5%90%8C%E7%9A%84%E6%AE%B5"><span class="nav-number">1.3.</span> <span class="nav-text">将数据、代码、栈放入不同的段</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
