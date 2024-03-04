@@ -164,6 +164,195 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/09/%E8%AE%BE%E8%AE%A1%E9%93%BE%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/09/%E8%AE%BE%E8%AE%A1%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">设计链表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-09 14:00:21 / 修改时间：14:15:01" itemprop="dateCreated datePublished" datetime="2024-01-09T14:00:21+08:00">2024-01-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/design-linked-list/</p>
+<p>这题考察基本功，需要注意的细节不少，使用C语言则只能通过虚拟头节点实现。</p>
+<blockquote>
+<p>因为函数所传递的参数均为<strong>节点指针</strong>，而头插法会改变头节点指针（即头节点地址），若没有虚拟头节点，函数运行结束后，不会改变头节点指针的值（类似两个参数交换数值，改变的只是变量副本，与原变量无关），因此无法实现头插法</p>
+<p>除非参数为为头节点<strong>指针的地址</strong>，即<code>MyLinkedList** obj</code></p>
+</blockquote>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">MyLinkedList</span>{</span></span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">MyLinkedList</span> *<span class="title">next</span>;</span></span><br><span class="line">} MyLinkedList;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MyLinkedList* <span class="title function_">myLinkedListCreate</span><span class="params">()</span> {  <span class="comment">//初始化虚拟头节点（不存储数据），始终不变</span></span><br><span class="line">    MyLinkedList *head = (MyLinkedList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MyLinkedList));</span><br><span class="line">    head-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">myLinkedListGet</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> index)</span> { <span class="comment">//获取下标为index的节点的值</span></span><br><span class="line">    MyLinkedList *p = obj;</span><br><span class="line">    <span class="keyword">while</span>(index--){</span><br><span class="line">        <span class="keyword">if</span>(p-&gt;next==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }   <span class="comment">//循环结束p指向index的前一个节点</span></span><br><span class="line">    <span class="keyword">if</span>(p-&gt;next== <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> p-&gt;next-&gt;val;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListAddAtHead</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> val)</span> {  <span class="comment">//头插法</span></span><br><span class="line">    MyLinkedList *p = (MyLinkedList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MyLinkedList));</span><br><span class="line">    p-&gt;val = val;</span><br><span class="line">    p-&gt;next = obj-&gt;next;</span><br><span class="line">    obj-&gt;next = p;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListAddAtTail</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> val)</span> {  <span class="comment">//尾插法</span></span><br><span class="line">    MyLinkedList *p = obj;</span><br><span class="line">    <span class="keyword">while</span>(p-&gt;next!=<span class="literal">NULL</span>) {</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    p-&gt;next = (MyLinkedList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MyLinkedList));</span><br><span class="line">    p-&gt;next-&gt;val = val;</span><br><span class="line">    p-&gt;next-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListAddAtIndex</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> index, <span class="type">int</span> val)</span> { <span class="comment">//在下标为index的节点前插入节点</span></span><br><span class="line">    MyLinkedList *p = obj;   </span><br><span class="line">    <span class="keyword">while</span>(index--) {</span><br><span class="line">        <span class="keyword">if</span>(p-&gt;next==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    MyLinkedList *tmp = (MyLinkedList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MyLinkedList));</span><br><span class="line">    tmp-&gt;val = val;</span><br><span class="line">    tmp-&gt;next = p-&gt;next;</span><br><span class="line">    p-&gt;next = tmp;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListDeleteAtIndex</span><span class="params">(MyLinkedList* obj, <span class="type">int</span> index)</span> { <span class="comment">//删除下标为index的节点</span></span><br><span class="line">    MyLinkedList *p = obj;</span><br><span class="line">    <span class="keyword">while</span>(index--) {</span><br><span class="line">        <span class="keyword">if</span>(p-&gt;next==<span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(p-&gt;next==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line">        MyLinkedList *del = p-&gt;next;</span><br><span class="line">        p-&gt;next = p-&gt;next-&gt;next;</span><br><span class="line">        <span class="built_in">free</span>(del);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">myLinkedListFree</span><span class="params">(MyLinkedList* obj)</span> {  <span class="comment">//释放链表空间</span></span><br><span class="line">    <span class="keyword">while</span>(obj != <span class="literal">NULL</span>){</span><br><span class="line">        MyLinkedList *tmp = obj;</span><br><span class="line">        obj = obj-&gt;next;</span><br><span class="line">        <span class="built_in">free</span>(tmp);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/09/%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/09/%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">移除链表元素</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-09 11:25:02 / 修改时间：11:38:58" itemprop="dateCreated datePublished" datetime="2024-01-09T11:25:02+08:00">2024-01-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>856</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/remove-linked-list-elements/</p>
+<blockquote>
+<p>注意题目中的头节点就是指首元结点，即指针<code>head</code>指向的节点存储数据；</p>
+<p>而408中的头节点不存储数据</p>
+</blockquote>
+<p>该题有两种解决方案：</p>
+<ol type="1">
+<li>直接从首元节点开始遍历，删除节点（分为：头节点的删除与中间节点的删除）</li>
+<li>定义一个虚拟头节点<code>vhead</code>，不存放数据，<code>vhead-&gt;next</code>指向<code>head</code></li>
+</ol>
+<p>我使用的是第二种方案，不需要考虑两种节点的删除，一步到位</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode {</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * };</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">removeElements</span><span class="params">(<span class="keyword">struct</span> ListNode* head, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> <span class="title">ListNode</span>;</span></span><br><span class="line">    ListNode *vhead;        <span class="comment">//定义虚拟头节点指针</span></span><br><span class="line">    vhead = (ListNode *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(ListNode));  <span class="comment">//分配虚拟头节点空间</span></span><br><span class="line">    vhead-&gt;next = head;     <span class="comment">//将虚拟头节点放在首元结点之前</span></span><br><span class="line">    ListNode *p = vhead;</span><br><span class="line">    <span class="keyword">while</span>(p-&gt;next!=<span class="literal">NULL</span>) {  <span class="comment">//第一次循环 p-&gt;next 即为 head</span></span><br><span class="line">        <span class="keyword">if</span> (p-&gt;next-&gt;val == val) {</span><br><span class="line">            ListNode *del = p-&gt;next;     <span class="comment">//记录要删除的节点</span></span><br><span class="line">            p-&gt;next = p-&gt;next-&gt;next;     </span><br><span class="line">            <span class="built_in">free</span>(del);                   <span class="comment">//释放待删除节点的内存</span></span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        }</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    head = vhead-&gt;next;</span><br><span class="line">    <span class="built_in">free</span>(vhead);            <span class="comment">//注意别忘了删除虚拟头节点</span></span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/05/%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -965,190 +1154,6 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/23/%E7%A3%81%E7%9B%98%E4%BF%AE%E5%A4%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/11/23/%E7%A3%81%E7%9B%98%E4%BF%AE%E5%A4%8D/" class="post-title-link" itemprop="url">移动硬盘修复</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-11-23 00:00:00 / 修改时间：23:10:31" itemprop="dateCreated datePublished" datetime="2023-11-23T00:00:00+08:00">2023-11-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%A1%AC%E7%9B%98/" itemprop="url" rel="index"><span itemprop="name">硬盘</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>21号晚上，考研复习，插上移动硬盘，准备看看英语作文，结果提示音响了两次，文件资源管理器卡死。</p>
-<p>重启后，发现电脑能够识别硬盘，但是只有个盘符，不显示磁盘容量，右键查看相关信息也为空。开始慌了，网上开始查解决方案，清一色使用<strong>DiskGenius</strong>修复。</p>
-<p>回宿舍后开始下载DiskGenius专业版（只有专业版有相关功能），打开软件后，显示硬盘损坏，尝试“恢复文件”，确实扫描出了所有文件，但是电脑还是识别不了硬盘；尝试“扫描坏道”，结果未发现坏道<span class="github-emoji"><span>😓</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f613.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
-<p>重新搜索，突然想到好像Windows有相关的命令可以修复硬盘，参考这个<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/51203528">知乎回答</a></p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chkdsk G:/f    (G为盘符)</span><br></pre></td></tr></tbody></table></figure>
-<p>运行后回显如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">文件系统的类型是 NTFS。</span><br><span class="line">卷标是 hxt616。</span><br><span class="line"></span><br><span class="line">阶段 1: 检查基本文件系统结构...</span><br><span class="line">  已处理 120320 个文件记录。</span><br><span class="line">文件验证完成。</span><br><span class="line"> 阶段持续时间 (文件记录验证): 1.72 秒。</span><br><span class="line">  已处理 119 个大型文件记录。</span><br><span class="line"> 阶段持续时间 (孤立文件记录恢复): 0.00 毫秒。</span><br><span class="line">  已处理 0 个错误的文件记录。</span><br><span class="line"> 阶段持续时间 (文件记录检查错误): 0.22 毫秒。</span><br><span class="line"></span><br><span class="line">阶段 2: 检查文件名链接...</span><br><span class="line">正在更正文件 5 索引 $I30 的错误。</span><br><span class="line">CHKDSK 在文件 5 的索引 $I30 的卷位图中发现标记为已分配的可用空间。</span><br><span class="line">正在对文件 5 中的索引 $I30 进行排序。</span><br><span class="line">  已处理 323 个重新解析记录。</span><br><span class="line">  已处理 133520 个索引项。</span><br><span class="line">索引验证完成。</span><br><span class="line"> 阶段持续时间 (索引验证): 3.95 秒。</span><br><span class="line">CHKDSK 正在扫描未编制索引的文件以便重新连接到其原始目录。</span><br><span class="line">正在将孤立文件 $MFT (0)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $MFTMirr (1)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $LogFile (2)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $Volume (3)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $AttrDef (4)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 . (5)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $Bitmap (6)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $Boot (7)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $BadClus (8)恢复到目录文件 5。</span><br><span class="line">正在将孤立文件 $Secure (9)恢复到目录文件 5。</span><br><span class="line">正在跳过有关恢复孤立项的进一步消息。</span><br><span class="line">  已扫描到 27 个未索引文件。</span><br><span class="line">  已将 27 个未编制索引的文件恢复到原始目录。</span><br><span class="line"> 阶段持续时间 (孤立文件重新连接): 0.00 毫秒。</span><br><span class="line">  已将 0 个未编制索引的文件恢复到回收箱。</span><br><span class="line"> 阶段持续时间 (孤立文件恢复到回收箱): 5.66 毫秒。</span><br><span class="line">  已处理 323 个重新解析记录。</span><br><span class="line"> 阶段持续时间 (重分析点和对象 ID 验证): 5.06 毫秒。</span><br><span class="line"></span><br><span class="line">阶段 3: 检查安全描述符...</span><br><span class="line">安全描述符验证完成。</span><br><span class="line"> 阶段持续时间 (安全描述符验证): 2.66 毫秒。</span><br><span class="line">  已处理 6601 个数据文件。</span><br><span class="line"> 阶段持续时间 (数据属性验证): 0.50 毫秒。</span><br><span class="line">CHKDSK 正在验证 Usn 日志...</span><br><span class="line">Usn 日志验证完成。</span><br><span class="line">正在更正主文件表(MFT)镜像的错误。</span><br><span class="line">正在更正主文件表(MFT) BITMAP 属性的错误。</span><br><span class="line">正在更正卷位图的错误。</span><br><span class="line"></span><br><span class="line">Windows 已更正文件系统。</span><br><span class="line">无需采取进一步操作。</span><br><span class="line"></span><br><span class="line">总共有  500105215 KB 磁盘空间。</span><br><span class="line">113401 个文件中有  396362324 KB。</span><br><span class="line">6602 个索引      49956 KB。</span><br><span class="line">坏扇区          0 KB。</span><br><span class="line">系统正在使用     201563 KB。</span><br><span class="line">日志文件占用了      65536 KB。</span><br><span class="line">磁盘上  103491372 KB 可用。</span><br><span class="line"></span><br><span class="line">每个分配单元中有       4096 字节。</span><br><span class="line">磁盘上共有  125026303 个分配单元。</span><br><span class="line">磁盘上有   25872843 个可用的分配单元。</span><br><span class="line">总持续时间: 5.86 秒 (5862 毫秒)。</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/06/%E9%93%BE%E8%A1%A8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/06/%E9%93%BE%E8%A1%A8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">链表的相关问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-06 13:23:30" itemprop="dateCreated datePublished" datetime="2023-09-06T13:23:30+08:00">2023-09-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-09 13:57:05" itemprop="dateModified" datetime="2024-01-09T13:57:05+08:00">2024-01-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>今天在学习链表时遇到了几个困惑的点（C语言）</p>
-<h2 id="使用malloc函数">使用malloc函数</h2>
-<p>使用结构体时，为了方便，往往会使用指针指向一个结构体，这时候就需要使用<code>malloc</code>为该指针开辟一个结构体大小的空间，如下：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> {</span></span><br><span class="line">    <span class="type">int</span> val;               <span class="comment">// 节点值</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">next</span>;</span> <span class="comment">// 指向下一节点的指针（引用）</span></span><br><span class="line">}Lnode,*LiStack <span class="comment">//LiStack是该结构体类型的指针</span></span><br><span class="line"></span><br><span class="line">LiStack l = (LiStack)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(LiStack));</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="在函数中调用结构体指针">在函数中调用结构体指针</h2>
-<p>网上的文章中有的函数调用中加了'*'号，有的又没加，所以我搜索了一下什么时候需要在函数调用时使用'*'号。下面是示例代码：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;malloc.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> {</span></span><br><span class="line">    <span class="type">int</span> val;               <span class="comment">// 节点值</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">next</span>;</span> <span class="comment">// 指向下一节点的指针（引用）</span></span><br><span class="line">}Lnode,*LiStack;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_List</span><span class="params">(LiStack a)</span></span><br><span class="line">{</span><br><span class="line">    a-&gt;next=<span class="literal">NULL</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">push</span><span class="params">(LiStack a, <span class="type">int</span> ele)</span> <span class="comment">//头插法</span></span><br><span class="line">{</span><br><span class="line">    Lnode * p = (Lnode *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Lnode));</span><br><span class="line">    p-&gt;next = a-&gt;next;</span><br><span class="line">    a-&gt;next = p;</span><br><span class="line">    p-&gt;val = ele;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">pop</span><span class="params">(LiStack a)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> dele;</span><br><span class="line">    <span class="keyword">if</span>(a-&gt;next!=<span class="literal">NULL</span>)</span><br><span class="line">    {</span><br><span class="line">        dele = a-&gt;next-&gt;val;</span><br><span class="line">        a-&gt;next = a-&gt;next-&gt;next;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    LiStack l = (LiStack)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(LiStack));</span><br><span class="line">    init_List(l);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++)</span><br><span class="line">        push(l,i);</span><br><span class="line">   </span><br><span class="line">    pop(l);</span><br><span class="line">    </span><br><span class="line">    Lnode *p = l-&gt;next;</span><br><span class="line">    <span class="keyword">while</span>(p!=<span class="literal">NULL</span>)</span><br><span class="line">    {</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%d "</span>,p-&gt;val);</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<p>注意到上面的代码我在所有的函数调用中都没有在<code>LiStack a</code>的a前加<code>*</code>号，因为我使用的是带有<strong>头结点</strong>的链栈，头结点的地址（指针本身）不发生变化，只改变链栈中的内容，不需要加<code>*</code>号；如果<strong>不带头结点</strong>，且使用头插法，则每次插入/删除一个元素都需要改变第一个结点的指针本身，这时就需要使用<code>*</code>号使得函数调用中能同步修改主函数中的头指针。</p>
-<p>参考：https://www.zhihu.com/tardis/zm/art/421431276?source_id=1005</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1220,7 +1225,7 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1269,12 +1274,12 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">209k</span>
+    <span title="站点总字数">211k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:10</span>
+    <span title="站点阅读时长">3:12</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
