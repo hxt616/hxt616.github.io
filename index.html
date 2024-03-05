@@ -164,6 +164,195 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/05/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/03/05/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/" class="post-title-link" itemprop="url">最大子数组和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-03-05 13:42:43 / 修改时间：13:51:29" itemprop="dateCreated datePublished" datetime="2024-03-05T13:42:43+08:00">2024-03-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>676</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/maximum-subarray</p>
+<p>题干比较好理解，最简单的做法是暴力求解，使用二重for循环计算出所有的情况，然后记录最大值。这种方法的时间复杂度是<strong>O(n<sup>2</sup></strong>)，超时。</p>
+<p>根据代码随想录，使用贪心算法的时间复杂度是<strong>O(n)</strong>，只需一个for循环即可。这里贪心的思想是：若当前遍历到<code>nums[i]</code>元素，通过该元素前面的子数组之和的值，来判断是继续增加子数组元素还是直接截断。</p>
+<ul>
+<li>若子数组之和<code>count</code>大于0，则<code>count+nums[i] &gt; nums[i]</code>，子数组可以增加元素</li>
+<li>若子数组之和<code>count</code>小于等于0，则<code>count+nums[i] &lt;= nums[i]</code>，子数组需要截断，从当前元素<code>nums[i]</code>开始计算子数组之和（注意这个过程中<code>count</code>需要重置为0）</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">maxSubArray</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize)</span> {</span><br><span class="line">    <span class="type">int</span> sum=INT_MIN; <span class="comment">//设置为最小整数，记录最大子数组之和</span></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> count=<span class="number">0</span>; <span class="comment">//计算当前子数组之和</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;numsSize; i++) {</span><br><span class="line">        <span class="keyword">if</span>(count &lt; <span class="number">0</span>) {  <span class="comment">//此时count+nums[i] &lt; nums[i]，需要重置子数组</span></span><br><span class="line">            count = <span class="number">0</span>;</span><br><span class="line">        }</span><br><span class="line">        count+=nums[i];</span><br><span class="line">        <span class="keyword">if</span>(count &gt; sum) {</span><br><span class="line">            sum = count;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span>  </span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/05/%E6%91%86%E5%8A%A8%E5%BA%8F%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/03/05/%E6%91%86%E5%8A%A8%E5%BA%8F%E5%88%97/" class="post-title-link" itemprop="url">摆动序列</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-03-05 12:08:13 / 修改时间：12:33:13" itemprop="dateCreated datePublished" datetime="2024-03-05T12:08:13+08:00">2024-03-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>900</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/wiggle-subsequence/</p>
+<p>这题的思想是贪心算法，一开始我的想法很简单：直接遍历数组，不符合条件的直接删去(跳过)。完成代码后运行前三个测试用例都通过了，然而一提交却显示答案错误，然后我又在VScode中测试代码，输出处理后的数组，然后一个一个手算，还是没发现错误，最后还是放弃了，看了一下<strong>代码随想录</strong>的思路才恍然大悟。例如下面这种情况：</p>
+<p><img src="C:/Users/19594/AppData/Roaming/Typora/typora-user-images/image-20240305122451644.png"></p>
+<p>按照我原本的思路，处理后的序列应该是：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">8</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">9</span>]</span><br></pre></td></tr></tbody></table></figure>
+<p>而<strong>正确的序列</strong>应该是：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">8</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">13</span>, <span class="number">12</span>, <span class="number">14</span>, <span class="number">9</span>]</span><br></pre></td></tr></tbody></table></figure>
+<p>每次应该取<strong>峰值</strong>而不是单调坡度上的元素（不包括两端），如下如所示：</p>
+<p><img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20201124174327597.png"></p>
+<p>代码如下：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">wiggleMaxLength</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize)</span>{</span><br><span class="line">    <span class="keyword">if</span>(numsSize&lt;<span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span> numsSize;</span><br><span class="line">    <span class="type">int</span> flag=<span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> slow, fast;</span><br><span class="line">    <span class="keyword">for</span>(slow=<span class="number">0</span>,fast=<span class="number">0</span>; fast&lt;numsSize;) {</span><br><span class="line">        <span class="keyword">if</span>(fast==<span class="number">0</span>) {</span><br><span class="line">            nums[slow++] = nums[fast++];</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span>(nums[fast]-nums[slow<span class="number">-1</span>] &gt; <span class="number">0</span> &amp;&amp; flag!=<span class="number">1</span>) {</span><br><span class="line">            flag=<span class="number">1</span>;</span><br><span class="line">            nums[slow++] = nums[fast++];</span><br><span class="line">        } <span class="comment">//若满足条件则加入序列中</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nums[fast]-nums[slow<span class="number">-1</span>] &lt; <span class="number">0</span> &amp;&amp; flag!=<span class="number">0</span>) {</span><br><span class="line">            flag=<span class="number">0</span>;</span><br><span class="line">            nums[slow++] = nums[fast++];</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nums[fast]-nums[slow<span class="number">-1</span>] == <span class="number">0</span>) <span class="comment">//若差值为0，则直接舍去</span></span><br><span class="line">            fast++;</span><br><span class="line">        <span class="keyword">else</span>  <span class="comment">//若元素处于单调坡度上，则将当前元素替换为下一个元素，直到峰值</span></span><br><span class="line">            nums[slow<span class="number">-1</span>] = nums[fast++];</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> slow;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/04/%E5%85%A8%E6%8E%92%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -902,198 +1091,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/01/%E7%BB%84%E5%90%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/03/01/%E7%BB%84%E5%90%88/" class="post-title-link" itemprop="url">组合</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-03-01 22:25:24" itemprop="dateCreated datePublished" datetime="2024-03-01T22:25:24+08:00">2024-03-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-03-02 10:19:18" itemprop="dateModified" datetime="2024-03-02T10:19:18+08:00">2024-03-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/combinations/submissions/</p>
-<p>回溯模板：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">backtracking</span><span class="params">(参数)</span> {</span><br><span class="line">    <span class="keyword">if</span> (终止条件) {</span><br><span class="line">        存放结果;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {</span><br><span class="line">        处理节点;(例如将节点值加入数组)</span><br><span class="line">        backtracking(路径，选择列表); <span class="comment">// 递归</span></span><br><span class="line">        回溯，撤销处理结果(例如下标--)</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>将搜索过程细化为如下的树形结构（图片来自<strong>代码随想录</strong>）：</p>
-<p><img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20201123195242899.png"></p>
-<p>因此本题代码是：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> top, res_num;</span><br><span class="line"><span class="type">void</span> <span class="title function_">backtracking</span><span class="params">(<span class="type">int</span>** res, <span class="type">int</span>* path, <span class="type">int</span> start, <span class="type">int</span> n, <span class="type">int</span> k)</span> {</span><br><span class="line">    <span class="keyword">if</span>(top == k) { <span class="comment">//终止条件</span></span><br><span class="line">        <span class="type">int</span>* temp = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * k); </span><br><span class="line">        <span class="type">int</span> i;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; k; i++) {</span><br><span class="line">            temp[i] = path[i]; </span><br><span class="line">        }</span><br><span class="line">        res[res_num++] = temp;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=start; i&lt;=n; i++) {</span><br><span class="line">        path[top++] = i; <span class="comment">//处理节点</span></span><br><span class="line">        backtracking(res, path, i+<span class="number">1</span>, n, k); <span class="comment">//注意参数start的变化</span></span><br><span class="line">        top--; <span class="comment">//回溯</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="type">int</span>** <span class="title function_">combine</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> k, <span class="type">int</span>* returnSize, <span class="type">int</span>** returnColumnSizes)</span> {</span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span>** res = (<span class="type">int</span>**)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>*)*<span class="number">200001</span>); <span class="comment">//为结果数组分配空间，最多20个节点，组合数有限</span></span><br><span class="line">    top = res_num = <span class="number">0</span>; <span class="comment">//top是path的栈顶，res_num是结果数组res的栈顶</span></span><br><span class="line">    <span class="type">int</span>* path = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*k); <span class="comment">//path空间大小为k个int所占大小</span></span><br><span class="line">    backtracking(res, path, <span class="number">1</span>, n, k);</span><br><span class="line">    *returnSize = res_num;</span><br><span class="line">    *returnColumnSizes = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*(*returnSize));</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;res_num; i++) {</span><br><span class="line">        (*returnColumnSizes)[i] = k;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>终止条件处定义了一个临时变量<code>temp</code>暂存<code>path</code>中的值，因为<code>path</code>回溯后内容发生变化，为了防止结果数组<code>res</code>中的结果发生变化，所以设置中间变量存放<code>path</code>数组</p>
-</blockquote>
-<p><strong>剪枝优化</strong>：</p>
-<p>若当前递归的起始位置<code>start</code>到最后一个元素<code>n</code>之间的<strong>元素个数</strong>无法满足<code>path</code>所需要的元素个数（即元素总数为k），用代码表示就是<code>top+n-start+1==k</code>，若元素总个数小于<code>k</code>则直接退出当前分支。所以优化后<code>for</code>循环可改为：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=start; i&lt;=(n-k+top+<span class="number">1</span>); i++)</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/01/%E6%8A%8A%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%B4%AF%E5%8A%A0%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/03/01/%E6%8A%8A%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%B4%AF%E5%8A%A0%E6%A0%91/" class="post-title-link" itemprop="url">把二叉搜索树转换为累加树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-03-01 13:16:24 / 修改时间：13:32:13" itemprop="dateCreated datePublished" datetime="2024-03-01T13:16:24+08:00">2024-03-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>482</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/convert-bst-to-greater-tree</p>
-<p>根据题目描述可知，累加过程是从右子树开始，使用递归按照<strong>右-中-左</strong>的顺序累加</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> sum; <span class="comment">//全局变量，方便累加</span></span><br><span class="line"><span class="keyword">struct</span> TreeNode* <span class="title function_">accumulate</span><span class="params">(<span class="keyword">struct</span> TreeNode* root)</span> {</span><br><span class="line">    <span class="keyword">if</span>(!root)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    root-&gt;right = accumulate(root-&gt;right); <span class="comment">//右子树</span></span><br><span class="line">    </span><br><span class="line">    root-&gt;val += sum; <span class="comment">//处理根节点</span></span><br><span class="line">    sum = root-&gt;val;</span><br><span class="line">    </span><br><span class="line">    root-&gt;left = accumulate(root-&gt;left);  <span class="comment">//左子树</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">}</span><br><span class="line"><span class="keyword">struct</span> TreeNode* <span class="title function_">convertBST</span><span class="params">(<span class="keyword">struct</span> TreeNode* root)</span> {</span><br><span class="line">    <span class="keyword">if</span>(!root)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    sum=<span class="number">0</span>; <span class="comment">//初始化为0</span></span><br><span class="line">    <span class="keyword">return</span> accumulate(root);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1165,7 +1162,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">125</span>
+          <span class="site-state-item-count">127</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1214,12 +1211,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">211k</span>
+    <span title="站点总字数">213k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:12</span>
+    <span title="站点阅读时长">3:14</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
