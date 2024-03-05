@@ -164,6 +164,98 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/12/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/12/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/" class="post-title-link" itemprop="url">删除链表的倒数第N个节点</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-12 14:09:44 / 修改时间：14:15:34" itemprop="dateCreated datePublished" datetime="2024-01-12T14:09:44+08:00">2024-01-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>763</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/remove-nth-node-from-end-of-list/</p>
+<p>408数据结构出现过的原题，使用<strong>双指针法</strong>，同时定义一个虚拟头节点，方便删除操作。</p>
+<ul>
+<li>先移动右指针，指向第N个节点。</li>
+<li>同时移动两个指针直到右指针指向最后一个节点，此时左指针指向倒数第N个节点。</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode {</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * };</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">removeNthFromEnd</span><span class="params">(<span class="keyword">struct</span> ListNode* head, <span class="type">int</span> n)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">l</span>;</span>  <span class="comment">//左指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">r</span>;</span>  <span class="comment">//右指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">vh</span> =</span> (<span class="keyword">struct</span> ListNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> ListNode));</span><br><span class="line">    vh-&gt;val = <span class="number">0</span>;</span><br><span class="line">    vh-&gt;next = head;     <span class="comment">//虚拟头节点的下一个节点为链表首元节点</span></span><br><span class="line">    l = vh;</span><br><span class="line">    r = vh;</span><br><span class="line">    <span class="keyword">while</span>(r-&gt;next != <span class="literal">NULL</span>) {</span><br><span class="line">        <span class="keyword">if</span>(n){</span><br><span class="line">            r = r-&gt;next;   <span class="comment">//先移动右指针</span></span><br><span class="line">            n = n<span class="number">-1</span>;   </span><br><span class="line">        }</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">else</span>{</span><br><span class="line">            l = l-&gt;next;</span><br><span class="line">            r = r-&gt;next;   <span class="comment">//同时移动左指针和右指针</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    l-&gt;next = l-&gt;next-&gt;next; <span class="comment">//删除倒数第N个节点</span></span><br><span class="line">    </span><br><span class="line">    head = vh-&gt;next;</span><br><span class="line">    <span class="built_in">free</span>(vh);</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/10/%E4%B8%A4%E4%B8%A4%E4%BA%A4%E6%8D%A2%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1023,104 +1115,6 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/30/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/12/30/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">移除元素（双指针）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-12-30 11:24:29 / 修改时间：14:45:56" itemprop="dateCreated datePublished" datetime="2023-12-30T11:24:29+08:00">2023-12-30</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>855</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/remove-element/</p>
-<p>本题使用双指针的思想（本题可理解为<strong>数组下标</strong>）</p>
-<ul>
-<li>初始时，快、慢指针均指向数组第一个元素；</li>
-<li>若当前快指针指向的元素<strong>不是</strong>待移除的元素时，两个指针<strong>同时移动</strong>，且将快指针指向的元素赋值给慢指针指向的数组元素(即移动元素)；</li>
-<li>快指针指向的元素<strong>是</strong>待移除的元素时，慢指针不动，快指针移动</li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="type">int</span> fast; <span class="comment">//快指针</span></span><br><span class="line">    <span class="type">int</span> slow = <span class="number">0</span>; <span class="comment">//慢指针</span></span><br><span class="line">    <span class="keyword">for</span>(fast=<span class="number">0</span>; fast&lt;numsSize; fast++){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] != val){ <span class="comment">//不是待移除元素，则同时移动两指针</span></span><br><span class="line">            nums[slow++] = nums[fast];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> slow;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>下面是我自己的做法，比较繁琐<span class="github-emoji"><span>😅</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="type">int</span> slow=<span class="number">0</span>; <span class="comment">//慢指针</span></span><br><span class="line">    <span class="type">int</span> fast;</span><br><span class="line">    <span class="type">int</span> length = numsSize; <span class="comment">//记录新数组长度</span></span><br><span class="line">    <span class="keyword">for</span>(fast=<span class="number">0</span>; fast&lt;numsSize;){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] == val){</span><br><span class="line">            <span class="comment">//若待移除元素不是数组结尾元素，则需要移动元素</span></span><br><span class="line">            <span class="keyword">if</span>((++fast)&lt;numsSize) <span class="comment">//防止溢出，同时移动快指针</span></span><br><span class="line">                nums[slow] = nums[fast];</span><br><span class="line">            length--; <span class="comment">//移除元素，数组长度减小</span></span><br><span class="line">            <span class="keyword">continue</span>; <span class="comment">//不移动慢指针，只移动快指针</span></span><br><span class="line">        }</span><br><span class="line">        nums[slow] = nums[fast];</span><br><span class="line">        fast++;</span><br><span class="line">        slow++;  <span class="comment">//若不是待移除元素，则同时移动两指针</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> length;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>相关题目：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array/">删除排序数组中的重复项</a></p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1192,7 +1186,7 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-count">128</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1241,7 +1235,7 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">213k</span>
+    <span title="站点总字数">214k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
