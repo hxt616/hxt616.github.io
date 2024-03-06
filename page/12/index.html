@@ -164,6 +164,231 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/25/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/25/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%94%EF%BC%89/" class="post-title-link" itemprop="url">汇编语言（五）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-25 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-25T00:00:00+08:00">2022-08-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-23 10:12:37" itemprop="dateModified" datetime="2023-05-23T10:12:37+08:00">2023-05-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="汇编语言五包含多个段的程序">汇编语言（五）——包含多个段的程序</h1>
+<h2 id="在代码段中使用数据">在代码段中使用数据</h2>
+<p>计算以下8个数据的和，结果存在ax寄存器中：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
+<p>我们希望通过循环的方式进行累加，而在累加前，要将这些数据存储在一组地址连续的内存单元中。具体做法如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">assume cs:code</span><br><span class="line">code segment</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">	</span><br><span class="line">	start: mov bx, 0</span><br><span class="line">	       mov ax, 0</span><br><span class="line">	</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	   s:  add ax, cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s</span><br><span class="line">	</span><br><span class="line">	       mov ax, 4c00h</span><br><span class="line">	       int 21h</span><br><span class="line">code ends</span><br><span class="line">end start</span><br></pre></td></tr></tbody></table></figure>
+<p>程序中<code>dw</code>（define
+word）的含义是定义字型数据。上述程序中使用<code>dw</code>定义了8个字型数据，所占内存空间大小为16字节。</p>
+<p>程序在运行时，<code>CS</code>中存放的是代码段的段地址，由于用<code>dw</code>定义的数据处于代码段的在开始，因此偏移地址为0，则这8个数据所在地址为<code>CS:0</code>、<code>CS:2</code>、<code>CS:4</code>、<code>CS:6</code>、<code>CS:8</code>、<code>CS:A</code>、<code>CS:C</code>、<code>CS:E</code>。</p>
+<p><code>end</code>除了通知编译器程序结束外，还可以通知编译器程序的入口在什么位置。上述示例中，<code>end</code>后面的标号
+<strong>start</strong> 指明了程序的入口。</p>
+<h2 id="在代码段中使用栈">在代码段中使用栈</h2>
+<p>利用栈，将给定的数据逆序存放：0123h、0456h、0789h、0abch、0defh、0fedh、0cbah、0987h。</p>
+<p>代码如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg</span><br><span class="line">code segment</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">	dw 0, 0, 0, 0, 0, 0, 0, 0    用dw定义16个字型数据，在程序加载后，取得16个字的内存空间，							    存放这16个数据。在后面的程序中将这段空间当作栈来使用。</span><br><span class="line">	start: mov ax, cs</span><br><span class="line">	       mov ss, ax</span><br><span class="line">	       mov sp, 30h           将设置栈顶ss:sp指向cs:30</span><br><span class="line">	       </span><br><span class="line">	       mov bx, 0</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	    s: push cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s                以上将代码段0~15单元中的8个字型数据依次入栈</span><br><span class="line">	       </span><br><span class="line">	       mov bx, 0</span><br><span class="line">	       mov cx, 8</span><br><span class="line">	   s0: pop cs:[bx]</span><br><span class="line">	       add bx, 2</span><br><span class="line">	       loop s0               以上依次出栈8个字型数据到代码段0~15单元中</span><br><span class="line">	       </span><br><span class="line">	       mov ax, 4c00h</span><br><span class="line">	       int 21h</span><br><span class="line">	       </span><br><span class="line">codesg ends</span><br><span class="line">end start                        指明程序的入口在start处</span><br></pre></td></tr></tbody></table></figure>
+<p>由上述代码可知<code>cs:10 ~ cs:2F</code>内存空间用来当作栈使用，初始状态下栈为空，所以<code>ss:sp</code>要指向栈底，则设置<code>ss:sp</code>指向<code>cs:30</code>（入栈
+sp=sp-2）。</p>
+<h2 id="将数据代码栈放入不同的段">将数据、代码、栈放入不同的段</h2>
+<p>当数据、代码和栈需要的空间超过
+64KB，就不能放在一个段中(一个段的容量不能大于
+64KB，这是8086模式的限制，并不是所有处理器都这样)。</p>
+<p>示例代码如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">assume cs:code, ds:data, ss:stack</span><br><span class="line"></span><br><span class="line">data segment                数据段</span><br><span class="line">	dw 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h</span><br><span class="line">data ends</span><br><span class="line"></span><br><span class="line">stack segment               栈段</span><br><span class="line">	dw 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0</span><br><span class="line">stack ends</span><br><span class="line"></span><br><span class="line">code segment                代码段</span><br><span class="line">start:  mov ax, stack </span><br><span class="line">        mov ss, ax</span><br><span class="line">        mov sp 20h          设置栈顶ss:sp指向stack:20</span><br><span class="line">        </span><br><span class="line">        mov ax, data</span><br><span class="line">        mov ds, ax          ds指向data段</span><br><span class="line">        </span><br><span class="line">        mov bx, 0           ds:bx指向data段中的第一个单元</span><br><span class="line">        </span><br><span class="line">        mov cx, 8</span><br><span class="line">s:      push [bx]</span><br><span class="line">        add bx, 2</span><br><span class="line">        loop s              以上将data段中的0~15单元中的8个字型数据依次入栈</span><br><span class="line">        </span><br><span class="line">        mov bx, 0</span><br><span class="line">        </span><br><span class="line">        mov cx, 8</span><br><span class="line">s0:     pop [bx]</span><br><span class="line">        add bx, 2</span><br><span class="line">        loop s0</span><br><span class="line">        </span><br><span class="line">        mov ax, 4c00h</span><br><span class="line">        int 21h</span><br><span class="line">code ends</span><br><span class="line"></span><br><span class="line">end start</span><br><span class="line">        </span><br></pre></td></tr></tbody></table></figure>
+<p><code>mov ax,data</code>的含义就是将名称<code>data</code>段的段地址送入<code>ax</code>。<code>data</code>段中的数据<code>0abch</code>的地址就是<code>data:6</code>。不能直接将数值直接送入段寄存器中，因此<code>mov ds,data</code>是错误的。正确的语句如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov ax, data</span><br><span class="line">mov ds, ax      利用ax寄存器作为中转</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/24/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E5%9B%9B%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/24/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E5%9B%9B%EF%BC%89/" class="post-title-link" itemprop="url">汇编语言（四）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-24 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-24T00:00:00+08:00">2022-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-04-13 14:07:20" itemprop="dateModified" datetime="2023-04-13T14:07:20+08:00">2023-04-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>653</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="汇编语言四bx和loop指令">汇编语言（四）——[BX]和loop指令</h1>
+<h2 id="bx">[bx]</h2>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [bx]</span><br></pre></td></tr></tbody></table></figure>
+<p>上述指令的功能：bx中存放的数据作为一个偏移地址 EA ，段地址 SA 默认在
+ds 中，将 SA:EA 处的数据送入 ax 中，即：(ax)=((ds)*16+(bx))。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov [bx], ax</span><br></pre></td></tr></tbody></table></figure>
+<p>该指令的功能则是：将 ax 中的数据送入内存 SA:EA
+处，即：((ds)*16+(bx))=(ax)。</p>
+<p>我们可以不写新的指令，<strong>仅通过改变 bx
+中的数值，改变指令访问的内存单元</strong>。</p>
+<h2 id="loop指令">Loop指令</h2>
+<p>CPU执行loop指令时要进行两步操作：</p>
+<ul>
+<li>(cx)=(cx)-1。</li>
+<li>判断 cx 中的值，不为0则转至标号处执行程序，如果为0则向下执行。</li>
+</ul>
+<p>由上述可知 cx 中存放着循环次数。</p>
+<p>下面是一个关于loop的示例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">计算2^12</span><br><span class="line">assume cs:code</span><br><span class="line">code segment</span><br><span class="line">	mov ax, 2</span><br><span class="line">	mov cx, 11</span><br><span class="line">S:  add ax, ax</span><br><span class="line">	loop s</span><br><span class="line">	mov ax, 4c00h</span><br><span class="line">	int 21h</span><br><span class="line">code ends</span><br><span class="line">end</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="段前缀">段前缀</h2>
+<p>可以在访问内存单元的指令中显式地给出内存单元的段地址所在的段寄存器。这些用于访问内存单元的指令中，用于显式地指明内存单元的段地址的
+<code>ds:</code>（数据段寄存器）、<code>cs:</code>（代码段寄存器）、<code>ss:</code>（堆栈段寄存器）、<code>es:</code>（附加段寄存器），在汇编语言中称为段前缀。</p>
+<h2 id="一段安全的空间">一段安全的空间</h2>
+<p>一般的PC机中，DOS方式下，DOS和其他合法的程序一般不会使用0:200 ~
+0:2ff（00200h ~
+002ffh）的256个字节的空间。因此当我们需要直接向一段内存中写入内容时，就使用0:200
+~ 0:2ff这段空间。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/23/Reverse%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1273,233 +1498,10 @@ demo会报错，因为GCC编译器无法识别demo这个没有扩展名的文件
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/02/2022DASCTF%20Apr%20X%20FATE%20%E9%98%B2%E7%96%AB%E6%8C%91%E6%88%98%E8%B5%9B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/02/2022DASCTF%20Apr%20X%20FATE%20%E9%98%B2%E7%96%AB%E6%8C%91%E6%88%98%E8%B5%9B/" class="post-title-link" itemprop="url">2022DASCTF Apr X FATE 防疫挑战赛</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-02 22:46:35" itemprop="dateCreated datePublished" datetime="2022-05-02T22:46:35+08:00">2022-05-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-29 11:55:10" itemprop="dateModified" datetime="2022-08-29T11:55:10+08:00">2022-08-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>760</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="解题思路">解题思路</h1>
-<h2 id="crypto">CRYPTO</h2>
-<h3 id="easy_real"><strong>easy_real</strong></h3>
-<p>将n分解为两个质数，得到<br><code>q = 65267138038038699886916162739434586079731613825212388229424706115289974540917</code></p>
-<p>利用脚本将m求出<br></p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line">e = <span class="number">23</span></span><br><span class="line">p = <span class="number">64310413306776406422334034047152581900365687374336418863191177338901198608319</span></span><br><span class="line">q = <span class="number">65267138038038699886916162739434586079731613825212388229424706115289974540917</span></span><br><span class="line">phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">d = gmpy2.invert(e,phi)</span><br><span class="line">m = gmpy2.powmod(c,d,p*q)</span><br><span class="line"><span class="built_in">print</span>(m)</span><br></pre></td></tr></tbody></table></figure>
-<p><code>m = 2976168736142380455841784134407431434784057911773423743751382131043957</code></p>
-<p>将其转为16进制<code>6e64696f735f3b396b67453b574b38653b573f67576e3c5c3b6b7c6e75</code></p>
-<p>再转为ASCII码<code>ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu</code></p>
-<p>根据异或的运算规律编写脚本</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">"ndios_;9kgE;WK8e;W?gWn&lt;\;k|nu"</span></span><br><span class="line">s = <span class="built_in">list</span>(s)</span><br><span class="line">flag=<span class="string">""</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">11</span>):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">29</span>):</span><br><span class="line">		flag+=<span class="built_in">chr</span>(<span class="built_in">ord</span>(s[i])^x)</span><br><span class="line">	<span class="built_in">print</span>(flag)</span><br></pre></td></tr></tbody></table></figure>
-<p>可知当x=8时，得到flag{W31coM3_C0m3_7o_f4T3ctf}</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/17/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/17/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">汇编语言（二）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-04-17 00:00:00" itemprop="dateCreated datePublished" datetime="2022-04-17T00:00:00+08:00">2022-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-04-13 14:06:03" itemprop="dateModified" datetime="2023-04-13T14:06:03+08:00">2023-04-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>737</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="汇编语言二寄存器">汇编语言（二）——寄存器</h1>
-<h2 id="通用寄存器">通用寄存器</h2>
-<p>8086CPU的所有寄存器都是16位的，可存放两个字节。AX、BX、CX、DX这四个寄存器通常用来存放一般性的数据，被称为通用寄存器。</p>
-<p>上述每个寄存器都可分为两个可独立使用的8位寄存器来用：</p>
-<ul>
-<li>AX可分为AH和AL</li>
-<li>......</li>
-</ul>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220417223837183.png" alt="image-20220417223837183">
-<figcaption aria-hidden="true">image-20220417223837183</figcaption>
-</figure>
-<h2 id="位结构的cpu">16位结构的CPU</h2>
-<ul>
-<li>运算器一次最多可以处理16位的数据</li>
-<li>寄存器的最大宽度位16位</li>
-<li>寄存器和运算器之间的通路为16位</li>
-</ul>
-<p>16位CPU能一次性处理、传输、暂时存储16位的地址。</p>
-<p>8086CPU采用一种在内部用两个16位地址<strong>合成</strong>的方法来形成一个20位的<strong>物理地址</strong>（内存单位构成存储空间，每个内存单元在该空间都有唯一的地址，这个唯一的地址称为物理地址）。</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220417225126237.png" alt="image-20220417225126237">
-<figcaption aria-hidden="true">image-20220417225126237</figcaption>
-</figure>
-<p>上图中地址加法器采用<strong>物理地址 = 段地址 x 16 +
-偏移地址</strong>的方法合成物理地址。</p>
-<h2 id="段的概念">段的概念</h2>
-<p>内存并没有分段，段的分类来自于CPU，由于CPU对物理地址的合成，我们可以用分段的方式来管理内存。同时可知一个段的起始地址一定是16的倍数，偏移地址为16位，16位地址的寻址能力为64KB，因此一个段的长度最大为64KB。</p>
-<h2 id="段寄存器">段寄存器</h2>
-<p>段地址在8086CPU的段寄存器中存放。该CPU有4个寄存器：CS、DS、SS、ES。</p>
-<h2 id="cs和ip">CS和IP</h2>
-<p>CS为<strong>代码</strong>段寄存器，IP为指令指针寄存器。</p>
-<p>任意时刻，设CS中的内容为M，IP中的内容为N，则8086CPU将从内存<strong>Mx16+N</strong>单元开始，读取一条指令并执行。即任意时刻，CPU将CS:IP指向的内容当作指令执行。</p>
-<p>一个最简单的可以修改CS、IP的指令：<strong>jmp</strong>指令<br>
-<strong>jmp
-2AE3:3</strong>，执行后：CS=2AE3H，IP=0003H，CPU将从2AE33H处读取指令。<br><strong>jmp
-ax</strong>相当于<strong>mov IP, ax</strong>。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1567,7 +1569,7 @@ ax</strong>相当于<strong>mov IP, ax</strong>。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-count">131</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1616,12 +1618,12 @@ ax</strong>相当于<strong>mov IP, ax</strong>。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">214k</span>
+    <span title="站点总字数">216k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:15</span>
+    <span title="站点阅读时长">3:16</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
