@@ -164,6 +164,127 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/21/%E5%93%88%E5%B8%8C%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/21/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-title-link" itemprop="url">哈希表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-21 15:00:00 / 修改时间：15:16:47" itemprop="dateCreated datePublished" datetime="2024-01-21T15:00:00+08:00">2024-01-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%93%88%E5%B8%8C%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">哈希表</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>622</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><p>散列函数：将关键字<strong>映射成该关键字对应的地址</strong>的函数（直接映射关系）</p></li>
+<li><p>散列函数构造方法：</p>
+<ol type="1">
+<li><strong>直接定址法</strong>：线性函数 --
+<code>H(key) = a × key + b</code></li>
+<li><strong>除留余数法</strong>：最简单最常用--<code>H(key) = key % p</code>（p为最接近/等于散列表长度的<strong>质数</strong>）</li>
+<li><strong>数字分析法</strong>：选取数码分布较为均匀的若干位作为散列地址（例如手机号后四位）</li>
+<li><strong>平方取中法</strong>：取关键字的平方值的中间几位数字作为散列地址</li>
+</ol></li>
+<li><p>处理冲突的方法：</p>
+<ol type="1">
+<li><p><strong>拉链法</strong>（链接法）</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/202308222004550.png" alt="image-20230822200426453">
+<figcaption aria-hidden="true">image-20230822200426453</figcaption>
+</figure></li>
+<li><p><strong>开放定址法</strong></p>
+<p>H<sub>i</sub> = ( H(key) + d<sub>i</sub> ) % m</p>
+<p><strong>不能随便物理删除表中元素，若要删除元素，可使用删除标记进行逻辑删除</strong>（2023真题）</p>
+<ul>
+<li><strong>线性探测法</strong>：发生冲突时，顺序查看表中的<strong>下一个</strong>位置，缺点--大量元素堆积，降低了查找效率</li>
+<li>平方探测法：又称二次探测法，散列表长度必须为可以表示为（4j+3）的质数，正负平方交替</li>
+<li>伪随机序列法：d<sub>i</sub> 是伪随机数序列</li>
+<li>双散列法：使用两个散列函数</li>
+</ul></li>
+</ol></li>
+<li><p>装填因子 = 表中记录数/散列表长度</p></li>
+<li><p>平均查找长度：</p>
+<p><strong>ASL<sub>成功</sub></strong> = 查找次数/关键字个数</p>
+<p><strong>ASL<sub>失败</sub></strong> = 查找失败次数/p
+（查找失败次数是从哈希函数<strong>计算出的位置</strong>[等概率]到<strong>第一个空地址</strong>(包括)；一共需要计算<strong>p个位置</strong>的查找失败次数，p为哈希函数所能计算出的地址个数，比如
+key%7 的范围是 0~6，所以p为7，不要多算）</p>
+<p>例：https://www.cnblogs.com/47Gamer/p/13160610.html</p></li>
+<li><p><strong>堆积</strong>对存储效率、散列函数和装填因子不会有影响，会影响到平均查找长度</p></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/21/%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1041,99 +1162,6 @@ NULL</li>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/05/%E6%96%87%E7%8C%AE%E4%B8%8B%E8%BD%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/05/%E6%96%87%E7%8C%AE%E4%B8%8B%E8%BD%BD/" class="post-title-link" itemprop="url">文献下载途径</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-01-05 10:22:19 / 修改时间：10:32:44" itemprop="dateCreated datePublished" datetime="2024-01-05T10:22:19+08:00">2024-01-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%96%87%E7%8C%AE/" itemprop="url" rel="index"><span itemprop="name">文献</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>175</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>文献下载：</p>
-<ul>
-<li><p>doi</p>
-<blockquote>
-<p><strong>数字对象（唯一）标识符</strong>（英语：digital object
-identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用于唯一地标识对象（数位资源）的持久标识符或句柄，由国际标准化组织标准化。涵括的对象有影片、报告或书籍等。它既有一套为资源命名的机制，也有一套将识别号解析为具体地址的协议。</p>
-</blockquote></li>
-<li><p>谷歌学术</p></li>
-<li><p>知网</p></li>
-<li><p>sci-hub</p></li>
-<li><p>ResearchGate</p></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1205,7 +1233,7 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">142</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

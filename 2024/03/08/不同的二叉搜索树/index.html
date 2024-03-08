@@ -20,24 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;remove-element&#x2F; 本题使用双指针的思想（本题可理解为数组下标）  初始时，快、慢指针均指向数组第一个元素； 若当前快指针指向的元素不是待移除的元素时，两个指针同时移动，且将快指针指向的元素赋值给慢指针指向的数组元素(即移动元素)； 快指针指向的元素是待移除的元素时，慢指针不动，快指针移动  12345678910in">
+  <meta name="description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;unique-binary-search-trees 这题的难点在于找递推式，一开始我是看能不能通过节点数对应的二叉搜索树的种数找出规律，但是没发现规律。 想了一会准备从二叉搜索树的性质入手，假设给定节点值1, 2, 3, 4, 5, 6，每次取不同的值作为根节点，则每次划分的左右子树包含的节点数不同。 先选定1作为根节点，根据左">
 <meta property="og:type" content="article">
-<meta property="og:title" content="移除元素（双指针）">
-<meta property="og:url" content="http://example.com/2023/12/30/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/index.html">
+<meta property="og:title" content="不同的二叉搜索树">
+<meta property="og:url" content="http://example.com/2024/03/08/%E4%B8%8D%E5%90%8C%E7%9A%84%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;remove-element&#x2F; 本题使用双指针的思想（本题可理解为数组下标）  初始时，快、慢指针均指向数组第一个元素； 若当前快指针指向的元素不是待移除的元素时，两个指针同时移动，且将快指针指向的元素赋值给慢指针指向的数组元素(即移动元素)； 快指针指向的元素是待移除的元素时，慢指针不动，快指针移动  12345678910in">
+<meta property="og:description" content="题目地址：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;unique-binary-search-trees 这题的难点在于找递推式，一开始我是看能不能通过节点数对应的二叉搜索树的种数找出规律，但是没发现规律。 想了一会准备从二叉搜索树的性质入手，假设给定节点值1, 2, 3, 4, 5, 6，每次取不同的值作为根节点，则每次划分的左右子树包含的节点数不同。 先选定1作为根节点，根据左">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8">
-<meta property="article:published_time" content="2023-12-30T03:24:29.806Z">
-<meta property="article:modified_time" content="2023-12-30T06:45:56.312Z">
+<meta property="article:published_time" content="2024-03-08T06:51:08.208Z">
+<meta property="article:modified_time" content="2024-03-08T07:01:17.601Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="LeetCode">
 <meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8">
 
-<link rel="canonical" href="http://example.com/2023/12/30/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/">
+<link rel="canonical" href="http://example.com/2024/03/08/%E4%B8%8D%E5%90%8C%E7%9A%84%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">
 
 
 <script id="page-configurations">
@@ -50,7 +48,7 @@
   };
 </script>
 
-  <title>移除元素（双指针） | hxt's Blog</title>
+  <title>不同的二叉搜索树 | hxt's Blog</title>
   
 
 
@@ -172,7 +170,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/30/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/08/%E4%B8%8D%E5%90%8C%E7%9A%84%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -185,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          移除元素（双指针）
+          不同的二叉搜索树
         </h1>
 
         <div class="post-meta">
@@ -196,7 +194,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-12-30 11:24:29 / 修改时间：14:45:56" itemprop="dateCreated datePublished" datetime="2023-12-30T11:24:29+08:00">2023-12-30</time>
+              <time title="创建时间：2024-03-08 14:51:08 / 修改时间：15:01:17" itemprop="dateCreated datePublished" datetime="2024-03-08T14:51:08+08:00">2024-03-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -225,7 +223,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>855</span>
+              <span>467</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -244,19 +242,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>题目地址：https://leetcode.cn/problems/remove-element/</p>
-<p>本题使用双指针的思想（本题可理解为<strong>数组下标</strong>）</p>
-<ul>
-<li>初始时，快、慢指针均指向数组第一个元素；</li>
-<li>若当前快指针指向的元素<strong>不是</strong>待移除的元素时，两个指针<strong>同时移动</strong>，且将快指针指向的元素赋值给慢指针指向的数组元素(即移动元素)；</li>
-<li>快指针指向的元素<strong>是</strong>待移除的元素时，慢指针不动，快指针移动</li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="type">int</span> fast; <span class="comment">//快指针</span></span><br><span class="line">    <span class="type">int</span> slow = <span class="number">0</span>; <span class="comment">//慢指针</span></span><br><span class="line">    <span class="keyword">for</span>(fast=<span class="number">0</span>; fast&lt;numsSize; fast++){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] != val){ <span class="comment">//不是待移除元素，则同时移动两指针</span></span><br><span class="line">            nums[slow++] = nums[fast];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> slow;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>下面是我自己的做法，比较繁琐<span class="github-emoji"><span>😅</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">removeElement</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="type">int</span> slow=<span class="number">0</span>; <span class="comment">//慢指针</span></span><br><span class="line">    <span class="type">int</span> fast;</span><br><span class="line">    <span class="type">int</span> length = numsSize; <span class="comment">//记录新数组长度</span></span><br><span class="line">    <span class="keyword">for</span>(fast=<span class="number">0</span>; fast&lt;numsSize;){</span><br><span class="line">        <span class="keyword">if</span>(nums[fast] == val){</span><br><span class="line">            <span class="comment">//若待移除元素不是数组结尾元素，则需要移动元素</span></span><br><span class="line">            <span class="keyword">if</span>((++fast)&lt;numsSize) <span class="comment">//防止溢出，同时移动快指针</span></span><br><span class="line">                nums[slow] = nums[fast];</span><br><span class="line">            length--; <span class="comment">//移除元素，数组长度减小</span></span><br><span class="line">            <span class="keyword">continue</span>; <span class="comment">//不移动慢指针，只移动快指针</span></span><br><span class="line">        }</span><br><span class="line">        nums[slow] = nums[fast];</span><br><span class="line">        fast++;</span><br><span class="line">        slow++;  <span class="comment">//若不是待移除元素，则同时移动两指针</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> length;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>相关题目：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array/">删除排序数组中的重复项</a></p>
-</blockquote>
+        <p>题目地址：https://leetcode.cn/problems/unique-binary-search-trees</p>
+<p>这题的难点在于找递推式，一开始我是看能不能通过节点数对应的二叉搜索树的种数找出规律，但是没发现规律。</p>
+<p>想了一会准备从二叉搜索树的性质入手，假设给定节点值<code>1, 2, 3, 4, 5, 6</code>，每次取不同的值作为根节点，则每次划分的左右子树包含的节点数不同。</p>
+<p>先选定<code>1</code>作为根节点，根据左右子树计算二叉搜索树的种数，即将<strong>左子树种类数乘以右子树种类树</strong>；然后以<code>2</code>为根节点计算，以此类推，同时<strong>累加</strong>
+以不同数值为根节点 所计算出的二叉搜索树种数，得到结果。</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">numTrees</span><span class="params">(<span class="type">int</span> n)</span> {</span><br><span class="line">    <span class="type">int</span> dp[n+<span class="number">1</span>];</span><br><span class="line">    dp[<span class="number">0</span>] = <span class="number">1</span>; <span class="comment">//相当于子树为空</span></span><br><span class="line">    dp[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">2</span>; i&lt;=n; i++) {</span><br><span class="line">        dp[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>; j&lt;=i; j++) {</span><br><span class="line">            dp[i] += dp[j<span class="number">-1</span>] * dp[i-j];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> dp[n];</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -277,13 +268,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/12/30/x%E7%9A%84%E5%B9%B3%E6%96%B9%E6%A0%B9/" rel="prev" title="x的平方根">
-      <i class="fa fa-chevron-left"></i> x的平方根
+    <a href="/2024/03/08/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/" rel="prev" title="不同路径">
+      <i class="fa fa-chevron-left"></i> 不同路径
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/12/31/%E7%A7%BB%E5%8A%A8%E9%9B%B6/" rel="next" title="移动零">
-      移动零 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
