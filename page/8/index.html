@@ -164,6 +164,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/19/%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8%E2%85%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/19/%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8%E2%85%A1/" class="post-title-link" itemprop="url">环形链表Ⅱ</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-19 17:06:31" itemprop="dateCreated datePublished" datetime="2024-01-19T17:06:31+08:00">2024-01-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-01-20 11:48:37" itemprop="dateModified" datetime="2024-01-20T11:48:37+08:00">2024-01-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>914</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/linked-list-cycle-ii/</p>
+<p>这题使用<strong>快慢指针法</strong>，慢指针每次移动一个节点，快指针每次移动两个节点。</p>
+<p>分两步解题：</p>
+<ol type="1">
+<li><p>判断是否有环</p>
+<ul>
+<li>若有环，则快慢指针一定相遇，因为快慢指针的相对速度为1，所以快慢指针一定相遇</li>
+</ul></li>
+<li><p>找到环的入口</p>
+<p><img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20220925103433.png"></p>
+<p>慢指针走过的节点数为: <code>x + y</code>，
+快指针走过的节点数：<code>x + y + n (y + z)</code>，因为快指针是一步走两个节点，慢指针一步走一个节点，所以快指针走过的节点数=慢指针走过的节点数
+* 2：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x + y) * 2 = x + y + n (y + z)</span><br></pre></td></tr></tbody></table></figure>
+<p>将 x 移到一边，得到<code>x = n (y + z) - y</code>，下面讨论 n
+的值：</p>
+<ul>
+<li><p>n = 1 时，<code>x = z</code></p>
+<p>（1）移动快慢指针，找到相遇点</p>
+<p>（2）定义两个指针，一个指向头节点，另一个指向相遇点；两个指针每次同时移动一个节点直到相遇，该相遇点则为环形入口点</p></li>
+<li><p>n &gt; 1 时，<code>x = (n-1) (y + z) + z</code></p>
+<p>（1）移动快慢指针，找到相遇点</p>
+<p>（2）定义两个指针
+p、q，一个指向头节点，另一个指向相遇点；两个指针每次同时移动一个节点直到相遇，这里与第一种情况不同，就是第二个指针会多转几圈才会与第一个指针相遇，该相遇点则为环形入口点</p></li>
+</ul></li>
+</ol>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> ListNode *<span class="title function_">detectCycle</span><span class="params">(<span class="keyword">struct</span> ListNode *head)</span> {</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">slow</span> =</span> head;  <span class="comment">//慢指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">fast</span> =</span> head;  <span class="comment">//快指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p</span> =</span> head;     </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">q</span>;</span></span><br><span class="line">    <span class="keyword">while</span>(fast!=<span class="literal">NULL</span> &amp;&amp; fast-&gt;next != <span class="literal">NULL</span>) {</span><br><span class="line">        slow = slow-&gt;next;</span><br><span class="line">        fast = fast-&gt;next-&gt;next;</span><br><span class="line">        <span class="keyword">if</span>(slow == fast) {</span><br><span class="line">            q = slow;   <span class="comment">//q指向相遇点</span></span><br><span class="line">            <span class="keyword">while</span>(slow == fast) {</span><br><span class="line">                <span class="keyword">if</span>(q == p)</span><br><span class="line">                    <span class="keyword">return</span> q;   <span class="comment">//环形入口点</span></span><br><span class="line">                q = q-&gt;next;</span><br><span class="line">                p = p-&gt;next;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/19/%E9%93%BE%E8%A1%A8%E7%9B%B8%E4%BA%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1016,100 +1134,6 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/31/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E5%B9%B3%E6%96%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/12/31/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E5%B9%B3%E6%96%B9/" class="post-title-link" itemprop="url">有序数组的平方</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-12-31 12:41:38 / 修改时间：13:26:37" itemprop="dateCreated datePublished" datetime="2023-12-31T12:41:38+08:00">2023-12-31</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>650</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/squares-of-a-sorted-array/</p>
-<p>这题可直接暴力求解，即将每个元素平方后排序（快速排序），时间复杂度为<strong>O(nlogn)</strong>；</p>
-<p>更好的方法是使用<strong>双指针</strong>的思想，由于数组为非递减有序数组，所以平方后的最大值一定在数组两端：</p>
-<ul>
-<li>初始时，左指针指向数组初始位置，右指针指向末尾元素</li>
-<li>比较两个指针指向元素平方后的大小，将较大的值存入新数组中</li>
-<li>若左指针指向元素较大，左指针右移；若右指针指向元素较大，右指针左移</li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* <span class="title function_">sortedSquares</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span>* returnSize)</span> {</span><br><span class="line">    *returnSize = numsSize;  <span class="comment">//returnSize指向元素的大小和numsSize相同</span></span><br><span class="line">    <span class="type">int</span> *s = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*numsSize);</span><br><span class="line">    <span class="type">int</span> l=<span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> r=numsSize<span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> k=numsSize<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span>(l&lt;=r) {</span><br><span class="line">        <span class="keyword">if</span>(nums[l]*nums[l] &gt; nums[r]*nums[r]) {</span><br><span class="line">            s[k] = nums[l]*nums[l];</span><br><span class="line">            l++;    <span class="comment">//若左指针指向元素较大，左指针右移</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            s[k] = nums[r]*nums[r];</span><br><span class="line">            r--;    <span class="comment">//若右指针指向元素较大，右指针左移</span></span><br><span class="line">        }</span><br><span class="line">        k--;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1181,7 +1205,7 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">139</span>
+          <span class="site-state-item-count">140</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
