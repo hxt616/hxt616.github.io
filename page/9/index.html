@@ -164,6 +164,113 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/05/%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/05/%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5/" class="post-title-link" itemprop="url">螺旋矩阵Ⅱ</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-05 12:37:24 / 修改时间：14:41:15" itemprop="dateCreated datePublished" datetime="2024-01-05T12:37:24+08:00">2024-01-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/spiral-matrix-ii/</p>
+<p>这题需要模拟矩阵的旋转：</p>
+<ul>
+<li>先从左往右</li>
+<li>然后从上往下</li>
+<li>接着从右往左</li>
+<li>最后从下往上</li>
+</ul>
+<blockquote>
+<p>注：这里的步骤其实是n为偶数时的情况，n为奇数时，最后一个数(矩阵中间位置)需要单独赋值</p>
+</blockquote>
+<p>使用<strong>左闭右开</strong>（即包含当前方向上的第一个元素，不包括当前方向上的最后一个元素，如下图所示）比较方便，这样每个方向的代码都是类似的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/202401051359392.png"></p>
+<blockquote>
+<p>这题我是用C语言写的，理解<code>returnSize</code>和<code>returnColumnSizes</code>这两个参数我花了不少时间。（注：这里斜体的<em>一维数组</em>是指<strong>结果数组</strong>中的<em>一维数组</em>）</p>
+<ul>
+<li><code>*returnSize</code>：<strong>结果数组</strong>的大小(即该二维数组中<em>一维数组</em>的个数)——具体的<strong>值</strong></li>
+<li><code>*returnColumnSizes</code>：表示一维数组的<strong>地址</strong>，该一维数组存放的是上述<strong>结果数组</strong>中每个<em>一维数组</em>元素的个数</li>
+<li><code>(*returnColumnSizes)[i]</code>：一维数组的元素，该元素是指<strong>结果数组</strong>中第<strong>i</strong>个<em>一维数组</em>的元素个数</li>
+</ul>
+</blockquote>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Return an array of arrays of size *returnSize.</span></span><br><span class="line"><span class="comment"> * The sizes of the arrays are returned as *returnColumnSizes array.</span></span><br><span class="line"><span class="comment"> * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span>** <span class="title function_">generateMatrix</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span>* returnSize, <span class="type">int</span>** returnColumnSizes)</span> {</span><br><span class="line">    <span class="type">int</span> count = <span class="number">1</span>;         <span class="comment">//记录当前填入矩阵的值</span></span><br><span class="line">    <span class="type">int</span> offset = <span class="number">1</span>;        <span class="comment">//偏移量，控制左闭右开的区间</span></span><br><span class="line">    <span class="type">int</span> circle = <span class="number">0</span>;        <span class="comment">//循环的次数</span></span><br><span class="line">    *returnSize = n;       <span class="comment">//结果数组中的一维数组个数为n</span></span><br><span class="line">    *returnColumnSizes = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * n); <span class="comment">//这里的*returnColumnSizes是一个指向一维数组的指针，需要分配空间</span></span><br><span class="line">    <span class="type">int</span> x=<span class="number">0</span>;               <span class="comment">//记录模拟过程中所在的行</span></span><br><span class="line">    <span class="type">int</span> y=<span class="number">0</span>;               <span class="comment">//记录模拟过程中所在的列</span></span><br><span class="line">    <span class="type">int</span> **ans = (<span class="type">int</span> **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span> *) * n);   <span class="comment">//结果数组</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++){</span><br><span class="line">        ans[i] = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * n);  <span class="comment">//要另外给结果数组的每个元素(一维数组)分配空间</span></span><br><span class="line">        (*returnColumnSizes)[i] = n;     <span class="comment">//结果数组的每个一维数组中的元素个数为n</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">while</span>(circle &lt; n/<span class="number">2</span>) {   <span class="comment">//一次循环少两行，所以n/2为循环次数</span></span><br><span class="line">        x = circle;        </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=offset<span class="number">-1</span>; j &lt; n-offset; j++) {  <span class="comment">//从左往右</span></span><br><span class="line">            ans[x][j] = count++;</span><br><span class="line">        }  <span class="comment">//注意这里的offset，每一次循环后，左边少一列，右边也少一列，下面同理</span></span><br><span class="line"></span><br><span class="line">        y = n-circle<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=offset<span class="number">-1</span>; i&lt;n-offset; i++) {    <span class="comment">//从上往下</span></span><br><span class="line">            ans[i][y] = count++;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        x = n-circle<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=n-offset; j &gt; offset<span class="number">-1</span>; j--) {  <span class="comment">//从右往左</span></span><br><span class="line">            ans[x][j] = count++;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        y = circle;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=n-offset; i &gt; offset<span class="number">-1</span>; i--) {  <span class="comment">//从下往上</span></span><br><span class="line">            ans[i][y] = count++;</span><br><span class="line">        }</span><br><span class="line">        offset++;</span><br><span class="line">        circle++;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(n%<span class="number">2</span>!=<span class="number">0</span>)      <span class="comment">//当n为奇数时，中间位置需要另外单独赋值</span></span><br><span class="line">        ans[n/<span class="number">2</span>][n/<span class="number">2</span>] = count;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/05/%E6%96%87%E7%8C%AE%E4%B8%8B%E8%BD%BD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1042,110 +1149,6 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/17/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/" class="post-title-link" itemprop="url">最长公共前缀</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-07-17 12:59:29" itemprop="dateCreated datePublished" datetime="2023-07-17T12:59:29+08:00">2023-07-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-18 09:20:40" itemprop="dateModified" datetime="2023-07-18T09:20:40+08:00">2023-07-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/longest-common-prefix/</p>
-<blockquote>
-<p>编写一个函数来查找字符串数组中的最长公共前缀。</p>
-<p>如果不存在公共前缀，返回空字符串 <code>""</code>。</p>
-<p><strong>示例 ：</strong></p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：strs = ["flower","flow","flight"]</span><br><span class="line">输出："fl"</span><br></pre></td></tr></tbody></table></figure>
-</blockquote>
-<p>又是因为基础不扎实找了半天bug<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>。</p>
-<p>例如下面这段代码：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> {</span><br><span class="line">    <span class="type">char</span> *str[] = {<span class="string">"Hello"</span>,<span class="string">"world"</span>};</span><br><span class="line">    <span class="type">char</span> *ptr = str[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改字符数组元素</span></span><br><span class="line">    ptr[<span class="number">2</span>] = <span class="string">'J'</span>;  <span class="comment">//报错</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>当声明一个字符指针数组<code>str[]</code>并初始化它为字符串常量时，每个元素都是一个指向字符串常量的指针。这意味着我们不能直接修改字符串常量中的字符。这时应该使用<code>malloc</code>函数开辟一片空间存放该字符串的副本，然后进行修改，可参考下面的完整代码。</p>
-<p>完整代码：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> * <span class="title function_">longestCommonPrefix</span><span class="params">(<span class="type">char</span> ** strs, <span class="type">int</span> strsSize)</span>{</span><br><span class="line">    <span class="type">char</span>* all = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="built_in">strlen</span>(strs[<span class="number">0</span>]) + <span class="number">1</span>); <span class="comment">// 分配空间</span></span><br><span class="line">    <span class="built_in">strcpy</span>(all, strs[<span class="number">0</span>]); <span class="comment">//存放strs[0]的副本</span></span><br><span class="line">    <span class="type">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">char</span> t; <span class="comment">//存放当前比较的字符</span></span><br><span class="line">    <span class="type">int</span> flag = <span class="number">1</span>; <span class="comment">//判断是否不匹配</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="built_in">strlen</span>(strs[<span class="number">0</span>]); j++) {</span><br><span class="line">        t = strs[<span class="number">0</span>][j];</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>; i &lt; strsSize&amp;&amp; j &lt; <span class="built_in">strlen</span>(strs[i]); i++) { <span class="comment">//for的条件语句判断是否溢出</span></span><br><span class="line">            <span class="keyword">if</span> (strs[i][j] != t) {</span><br><span class="line">                flag = <span class="number">0</span>;  <span class="comment">//当字符不匹配时，flag=0</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (i &lt; strsSize&amp;&amp;j &gt;= <span class="built_in">strlen</span>(strs[i])) <span class="comment">//当下标溢出时，flag=0，方便退出循环</span></span><br><span class="line">            flag=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (flag == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    all[j] = <span class="string">'\0'</span>;</span><br><span class="line">    <span class="keyword">return</span> all;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1217,7 +1220,7 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">143</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1266,12 +1269,12 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">223k</span>
+    <span title="站点总字数">225k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:23</span>
+    <span title="站点阅读时长">3:24</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
