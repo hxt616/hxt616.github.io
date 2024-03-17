@@ -187,8 +187,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-03-17 10:21:46" itemprop="dateCreated datePublished" datetime="2024-03-17T10:21:46+08:00">2024-03-17</time>
+              <time title="创建时间：2024-03-17 10:21:46 / 修改时间：10:22:50" itemprop="dateCreated datePublished" datetime="2024-03-17T10:21:46+08:00">2024-03-17</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -206,7 +207,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>658</span>
+              <span>678</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -229,8 +230,8 @@
 <p>根据题意，需要遍历所有可能，然后找出满足条件的路径。</p>
 <p>这里用到了两次递归：</p>
 <ul>
-<li>一次是以当前节点为起始节点向下遍历</li>
-<li>一次是以树的不同节点为起始节点开始遍历</li>
+<li><code>rootSum</code>是以当前节点为起始节点向下遍历，寻找路径</li>
+<li><code>pathSum</code>是以树的不同节点为起始节点调用<code>rootSum</code></li>
 </ul>
 <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">rootSum</span><span class="params">(<span class="keyword">struct</span> TreeNode* root, <span class="type">double</span> targetSum)</span> {  </span><br><span class="line">    <span class="keyword">if</span>(root==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> count=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(root-&gt;val == targetSum)</span><br><span class="line">        count++;</span><br><span class="line"></span><br><span class="line">    count += rootSum(root-&gt;left, targetSum-root-&gt;val); <span class="comment">//遍历左孩子路径</span></span><br><span class="line">    count += rootSum(root-&gt;right, targetSum-root-&gt;val); <span class="comment">//遍历右孩子路径</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">pathSum</span><span class="params">(<span class="keyword">struct</span> TreeNode* root, <span class="type">int</span> targetSum)</span>{</span><br><span class="line">    <span class="keyword">if</span>(root==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> count = rootSum(root, targetSum); <span class="comment">//以当前节点为起始节点</span></span><br><span class="line">    count+=pathSum(root-&gt;left, targetSum); <span class="comment">//以左孩子为起始节点</span></span><br><span class="line">    count+=pathSum(root-&gt;right, targetSum); <span class="comment">//以右孩子为起始节点</span></span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
