@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="TryHackMe实验房间：https:&#x2F;&#x2F;tryhackme.com&#x2F;room&#x2F;oscommandinjection Introduction 命令注入(command injection)是滥用应用程序的行为在操作系统上执行命令，执行命令时使用与设备上运行应用程序相同的权限。例如，在一个名为joe的用户运行的web服务器上实现命令注入，将在这个joe用户下执行命令——从而获得joe拥有的任何权">
+<meta property="og:type" content="article">
+<meta property="og:title" content="命令注入">
+<meta property="og:url" content="http://example.com/2023/06/10/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="hxt&#39;s Blog">
+<meta property="og:description" content="TryHackMe实验房间：https:&#x2F;&#x2F;tryhackme.com&#x2F;room&#x2F;oscommandinjection Introduction 命令注入(command injection)是滥用应用程序的行为在操作系统上执行命令，执行命令时使用与设备上运行应用程序相同的权限。例如，在一个名为joe的用户运行的web服务器上实现命令注入，将在这个joe用户下执行命令——从而获得joe拥有的任何权">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112171437786.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112175932363.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112214000991.png">
+<meta property="article:published_time" content="2023-06-10T07:49:00.000Z">
+<meta property="article:modified_time" content="2023-06-10T07:49:00.000Z">
+<meta property="article:author" content="hxt">
+<meta property="article:tag" content="TryHackMe">
+<meta property="article:tag" content="Command Injection">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112171437786.png">
+
+<link rel="canonical" href="http://example.com/2023/06/10/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>命令注入 | hxt's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">hxt's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/10/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          命令注入
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-10 15:49:00" itemprop="dateCreated datePublished" datetime="2023-06-10T15:49:00+08:00">2023-06-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" >
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>TryHackMe实验房间：https://tryhackme.com/room/oscommandinjection</p>
+<h2 id="introduction">Introduction</h2>
+<p>命令注入(command
+injection)是滥用应用程序的行为在操作系统上执行命令，执行命令时使用与设备上运行应用程序相同的权限。例如，在一个名为joe的用户运行的web服务器上实现命令注入，将在这个joe用户下执行命令——从而获得joe拥有的任何权限。</p>
+<p>命令注入漏洞也被称为 <strong>RCE</strong> (Remote Code
+Execution)，因为攻击者可以诱导应用程序执行他们提供的一些 payload
+，而不需要直接访问机器本身(交互式shell)。Web服务器将处理攻击者传入的代码，并在用户权限和用户可访问的控制权限下执行该代码。</p>
+<p>命令注入之所以又被称为 RCE
+，是因为它能够在应用程序中远程执行代码，攻击者可以直接与目标系统进行交互。例如，攻击者可能会读取系统或用户文件、数据以及类似的内容。</p>
+<p>一个命令注入的例子：滥用应用程序来执行命令<code>whoami</code>，以列出当前的用户。</p>
+<h2 id="discovering-command-injection">Discovering Command
+Injection</h2>
+<p>存在命令注入漏洞是因为应用程序经常使用 PHP 、Python 和 NodeJS
+等编程语言中的函数来向当前机器的操作系统传递数据 并进行系统调用。</p>
+<p>在下面的代码段中，应用程序获取用户的输入，存储在变量<code>$title</code>中，然后应用程序通过该变量在目录中搜索对应的歌曲标题，下面分为四步分析。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112171437786.png" alt="image-20230112171437786">
+<figcaption aria-hidden="true">image-20230112171437786</figcaption>
+</figure>
+<ol type="1">
+<li>应用程序将 MP3文件存储在操作系统的某个目录中。</li>
+<li><code>$title</code>变量存放用户输入的字符串</li>
+<li><code>$title</code>变量中的数据被传递给命令<code>grep</code>，该命令在文件
+<em>songtitle.txt</em> 中查找用户希望的内容。</li>
+<li><em>songtitle.txt</em>文件的搜索结果将决定应用程序通知用户相关歌曲是否存在。</li>
+</ol>
+<p>这种信息通常存放在数据库中。这只是应用程序从用户获取输入然后以此与应用程序的操作系统交互的示例。</p>
+<p>攻击者可以让应用程序执行自己注入的命令来滥用此应用程序。他们可以要求该应用程序从敏感的文件中读取数据，而不是使用<code>grep</code>在
+<em>songtitle.txt</em> 中搜索条目。</p>
+<p>下面是用 Python 编写的代码片段：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112175932363.png" alt="image-20230112175932363">
+<figcaption aria-hidden="true">image-20230112175932363</figcaption>
+</figure>
+<ol type="1">
+<li><code>flask</code>包用于设置web服务器。</li>
+<li>一个使用<code>subprocess</code>包在设备上执行命令的函数。</li>
+<li>我们在web服务器中使用一个路由，它将执行提供的任何代码。例如，要执行<code>whoami</code>，我们需要访问<code>http://flaskapp.thm/whoami</code>。</li>
+</ol>
+<h2 id="exploiting-command-injection">Exploiting Command Injection</h2>
+<p>通常可以通过应用程序的行为来判断是否能够进行命令注入。</p>
+<p>使用用户输入用数据填充系统命令的应用程序通常会出现意外行为。例如，shell
+运算符 <code>;</code>、<code>&amp;</code> 和 <code>&amp;&amp;</code>
+将会组合两个或多个系统命令并执行它们。</p>
+<p>命令注入可以通过以下两种方法进行检测：</p>
+<ol type="1">
+<li>Blind command injection</li>
+<li>Verbose command injection</li>
+</ol>
+<p>下面是对这两种方法的详细介绍：</p>
+<table>
+<colgroup>
+<col style="width: 14%">
+<col style="width: 85%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Method</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Blind</td>
+<td style="text-align: center;">这种类型的注入在测试 payload
+时没有输出的地方（无回显），你必须调查应用程序的行为以确定 payload
+是否有效。</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Verbose</td>
+<td style="text-align: center;">这种注入是有回显的。例如，运行<code>whoami</code>命令可以查看应用程序当前的用户。Web应用程序会直接在页面上输出用户名。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="检测-blind-command-injection">检测 Blind Command Injection</h3>
+<p>发生该命令注入时没有可见的输出，因此不会立即显示出来。例如，执行一个命令，但
+Web 应用程序不输出任何消息。</p>
+<p>对于这种类型的命令注入，我们需要使用能够导致时间延迟的 payload
+。例如，<code>ping</code>和<code>sleep</code>命令是对测试 payload
+很重要。以<code>ping</code>为例，根据你指定的 <em>ping</em>
+次数，该应用程序将挂起 <em>x</em> 秒。</p>
+<p>另一种测试 blind command injection
+的方法是强制输出。这可以通过使用重定向操作符(例如:<code>&gt;</code>)来完成。例如，我们可以告诉web应用程序执行<code>whoami</code>等命令并将其重定向到一个文件中，然后我们可以使用<code>cat</code>等命令读取文件内容。</p>
+<p><code>curl</code>命令是测试命令注入的好方法，因为我们可以在 payload
+中使用<code>curl</code>来向应用程序传递数据或者从应用程序中传递数据。以下面的代码为例，该
+payload 可以向应用程序传递数据。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl http://vulnerable.app/process.php%3Fsearch%3DThe%20Beatles%3B%20whoami</span><br><span class="line">经过url解码后：curl http://vulnerable.app/process.php?search=The Beatles; whoami</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="检测-verbose-command-injection">检测 Verbose Command
+Injection</h3>
+<p>这种命令注入是指应用程序向你提供有关正在发生或正在执行的内容的反馈或输出。例如，<code>ping</code>和<code>whoami</code>等命令的输出直接显示在web应用程序上。</p>
+<h3 id="有用的-payload">有用的 payload</h3>
+<p>Linux：</p>
+<table>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 84%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Payload</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">whoami</td>
+<td style="text-align: center;">See what user the application is running
+under.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ls</td>
+<td style="text-align: center;">List the contents of the current
+directory. You may be able to find files such as configuration files,
+environment files (tokens and application keys), and many more valuable
+things.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ping</td>
+<td style="text-align: center;">This command will invoke the application
+to hang. This will be useful in testing an application for <strong>blind
+command injection</strong>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">sleep</td>
+<td style="text-align: center;">This is another useful payload in
+testing an application for <strong>blind command injection</strong>,
+where the machine does not have <code>ping</code> installed.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">nc</td>
+<td style="text-align: center;">Netcat can be used to spawn a reverse
+shell onto the vulnerable application. You can use this foothold to
+navigate around the target machine for other services, files, or
+potential means of escalating privileges.</td>
+</tr>
+</tbody>
+</table>
+<p>Windows：</p>
+<table>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 84%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Payload</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">whoami</td>
+<td style="text-align: center;">See what user the application is running
+under.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">dir</td>
+<td style="text-align: center;">List the contents of the current
+directory. You may be able to find files such as configuration files,
+environment files (tokens and application keys), and many more valuable
+things.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ping</td>
+<td style="text-align: center;">This command will invoke the application
+to hang. This will be useful in testing an application for <strong>blind
+command injection</strong>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">timeout</td>
+<td style="text-align: center;">This command will also invoke the
+application to hang. It is also useful for testing an application for
+<strong>blind command injection</strong> if the <code>ping</code>
+command is not installed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="remediating-command-injection预防命令注入">Remediating Command
+Injection（预防命令注入）</h2>
+<h3 id="vulnerable-functions易受攻击的函数"><strong>Vulnerable
+Functions</strong>（易受攻击的函数）</h3>
+<p>在 PHP 中，许多函数能够通过 shell
+与操作系统交互并执行命令，例如：</p>
+<ul>
+<li>Exec</li>
+<li>Passthru</li>
+<li>System</li>
+</ul>
+<p>以下面的代码为例，应用程序只接受和处理输入到表单的<strong>数字</strong>，意味着不会处理任何命令。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112214000991.png" alt="image-20230112214000991">
+<figcaption aria-hidden="true">image-20230112214000991</figcaption>
+</figure>
+<ol type="1">
+<li>应用程序只接受特定的字符格式（数字 0 -- 9）。</li>
+<li>应用程序仅执行该格式的数据。</li>
+</ol>
+<p>这些函数接受字符串或用户数据等输入，并执行系统上提供的任何内容。任何未经检查就使用这些函数的应用程序容易受到命令注入攻击。</p>
+<h3 id="input-sanitisation输入检测"><strong>Input
+sanitisation</strong>（输入检测）</h3>
+<p>对用户输入进行检测和过滤是防止命令注入的好方法。这是一个指定用户可以提交的数据格式或类型的过程。例如，只接受数字类型的数据或删除任何特殊字符（如<code>&gt;</code>、<code>&amp;</code>和<code>/</code>）的输入字段。</p>
+<p>在下面的代码中，<code>filter_input</code>函数用于检查用户输入的数据是否是数字，若不是数字，则这是一个无效的输入。</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">filter_input</span>(INPUT_GET, <span class="string">"number"</span>, FILTER_VALIDATE_NUMBER)) {</span><br><span class="line">        </span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="bypassing-filters绕过过滤器">Bypassing
+Filters（绕过过滤器）</h3>
+<p>应用程序将采用多种技术对从用户输入中获取的数据进行过滤和消毒。这些过滤器将限制你使用特定的
+payload
+；然而，我们可以利用应用程序背后的逻辑来绕过这些过滤器。例如，应用程序可以去掉引号，我们可以使用这个值的十六进制来实现相同的结果。</p>
+<p>当执行时，虽然给定的数据将采用与预期不同的格式，但仍可以对其进行解释，并具有相同的结果。</p>
+<h2 id="payload">Payload</h2>
+<p>https://github.com/payloadbox/command-injection-payload-list</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TryHackMe/" rel="tag"># TryHackMe</a>
+              <a href="/tags/Command-Injection/" rel="tag"># Command Injection</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/10/ManyCheck/" rel="prev" title="复现省赛逆向-ManyCheck">
+      <i class="fa fa-chevron-left"></i> 复现省赛逆向-ManyCheck
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/10/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" rel="next" title="File inclusion(文件包含)">
+      File inclusion(文件包含) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#discovering-command-injection"><span class="nav-number">2.</span> <span class="nav-text">Discovering Command
+Injection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exploiting-command-injection"><span class="nav-number">3.</span> <span class="nav-text">Exploiting Command Injection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B-blind-command-injection"><span class="nav-number">3.1.</span> <span class="nav-text">检测 Blind Command Injection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B-verbose-command-injection"><span class="nav-number">3.2.</span> <span class="nav-text">检测 Verbose Command
+Injection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E7%94%A8%E7%9A%84-payload"><span class="nav-number">3.3.</span> <span class="nav-text">有用的 payload</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#remediating-command-injection%E9%A2%84%E9%98%B2%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5"><span class="nav-number">4.</span> <span class="nav-text">Remediating Command
+Injection（预防命令注入）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vulnerable-functions%E6%98%93%E5%8F%97%E6%94%BB%E5%87%BB%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">Vulnerable
+Functions（易受攻击的函数）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#input-sanitisation%E8%BE%93%E5%85%A5%E6%A3%80%E6%B5%8B"><span class="nav-number">4.2.</span> <span class="nav-text">Input
+sanitisation（输入检测）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bypassing-filters%E7%BB%95%E8%BF%87%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">4.3.</span> <span class="nav-text">Bypassing
+Filters（绕过过滤器）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload"><span class="nav-number">5.</span> <span class="nav-text">Payload</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hxt"
+      src="/images/hxt.jpg">
+  <p class="site-author-name" itemprop="name">hxt</p>
+  <div class="site-description" itemprop="description">May the Force be with you.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hxt</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">249k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:47</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

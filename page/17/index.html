@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="May the Force be with you.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="hxt&#39;s Blog">
+<meta property="og:url" content="http://example.com/page/17/index.html">
+<meta property="og:site_name" content="hxt&#39;s Blog">
+<meta property="og:description" content="May the Force be with you.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="hxt">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/page/17/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>hxt's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">hxt's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/22/hello-world/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/22/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-02-22 13:54:50" itemprop="dateCreated datePublished" datetime="2022-02-22T13:54:50+08:00">2022-02-22</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>367</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
+first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
+more info. If you get any problems when using Hexo, you can find the
+answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
+you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/02/22/hello-world/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/22/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B-%E3%80%8A%E4%BB%8E0%E5%88%B01CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF%E3%80%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/22/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B-%E3%80%8A%E4%BB%8E0%E5%88%B01CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF%E3%80%8B/" class="post-title-link" itemprop="url">逆向工程-《从0到1:CTFer成长之路》</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-02-22 00:00:00" itemprop="dateCreated datePublished" datetime="2022-02-22T00:00:00+08:00">2022-02-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-03-21 15:42:16" itemprop="dateModified" datetime="2024-03-21T15:42:16+08:00">2024-03-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">逆向工程</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="静态分析">静态分析</h1>
+<p>逆向工程最基本的方法就是静态分析，即不运行二进制程序，而是直接分析程序文件中的机器指令等各种信息。目前，静态分析最常用的工具是IDA
+Pro，本节以IDA Pro的使用为基础介绍静态分析的一般方法。</p>
+<h2 id="一-ida使用入门">一、 IDA使用入门</h2>
+<p>本节所需代码文件为1-helloworld。（https://book.nu1l.com/tasks/#/pages/reverse/5.2）</p>
+<h3 id="打开文件">打开文件</h3>
+<p>首先在打开文件前需要选择正确的架构版本（32bit/64bit）。可通过Linux中的file命令来查看：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134203478.png"></p>
+<p>或者将文件任意拖进一个架构，然后在加载时即可知道文件的架构信息：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134247988.png"></p>
+<h3 id="加载文件">加载文件</h3>
+<p>使用默认设置，单击“OK”进入IDA。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134336662.png"></p>
+<p>（1）导航栏 （2）反汇编的主窗口
+（3）函数窗口：可通过Ctrl+F组合键进行筛选。 （4）输出窗口
+（5）状态指示器：显示为“AU：idle”即代表IDA已经完成了对程序的自动化分析。
+在反汇编窗口中使用右键菜单或者快捷键空格可以在控制流图和文本界面反汇编间切换。
+### 数据类型操作</p>
+<p>用户可根据地址的颜色来分辨某个位置的数据类型。 代码位置：黑色
+数据位置：灰色 未定义数据类型位置：黄色</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134422946.png"></p>
+<p>下面介绍一部分定义数据类型的快捷键。 *
+U（Undefine）键：取消一个地方已有的数据类型定义，此时会弹出确认的对话框，单击“Yes”按钮即可。
+*
+D（Data）键：让某一个位置变成数据。一直按D键，这个位置的数据类型将会以1字节（byte/db）、2字节（word/dw）、4字节（dword/dd）、8字节（qword/dq）进行循环。
+*
+C（Code）键：让某个位置变为指令。在定义为指令后，IDA会自动以此为起始位置进行递归下降反汇编。
+* A（ASCII）键：会以该位置为起点定义一个以“\0”为结尾的字符串类型。 *
+<em>键：将此处定义为一个数组，此时弹出一个对话框，用来设置数组的属性。
+</em> O（Offset）键：将此处定义为一个地址偏移。 ### 函数操作</p>
+<p>处理函数的操作：</p>
+<ul>
+<li>删除函数：在函数窗口中选中函数后，按Delete键。</li>
+<li>定义函数：在反汇编窗口中选中对应行后，按P键。</li>
+<li>修改函数参数：在函数窗口中选中并按Ctrl+E组合键，或在反汇编窗口的函数内部按Alt+P组合键。</li>
+</ul>
+<h3 id="导航操作">导航操作</h3>
+<ul>
+<li>后退到上一位置：快捷键Esc。</li>
+<li>前进到下一位置：快捷键Ctrl+Enter。</li>
+<li>跳转到某个特定位置：快捷键G，然后可以输入地址/已定义的名称。</li>
+<li>跳转到某一区域：快捷键Ctrl+S，然后选择区域即可。 ### 类型操作</li>
+</ul>
+<p>选中变量、函数后按Y键，弹出“Please enter the type
+declaration”对话框，从中输入正确的C语言类型，IDA就可以解析并自动应用这个类型。
+### IDA操作的模式</p>
+<h3 id="idapython">IDAPython</h3>
+<h3 id="da的其他功能">DA的其他功能</h3>
+<ul>
+<li><strong>String窗口</strong>：按Shift+F12组合键即可打开。</li>
+<li><strong>十六进制窗口</strong>：默认打开，可以按F2键对数据库中的数据进行修改，修改
+后再次按F12键即可应用修改。</li>
+</ul>
+<p>IDA更加详细的使用技巧：https://leeyuxun.github.io/IDA%E5%9F%BA%E7%A1%80%E5%8A%9F%E8%83%BD%E6%80%BB%E7%BB%93.html</p>
+<h2 id="二-hexrays反编译器入门">二、 HexRays反编译器入门</h2>
+<p>HexRays能够充分利用IDA确定的函数局部变量和数据类型，优化后生成类似C语言的伪代码。
+### 生成伪代码</p>
+<p>在反汇编窗口中定位到目标函数，按F5键即可显示反编译后的伪代码。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/5f390dd13ff64704a9f08e2500bcda86.png"></p>
+<h3 id="伪代码构成">伪代码构成</h3>
+<p>HexRays生成的伪代码是有一定的结构的，每个函数反汇编后，第一行都为函数的原型，然后是局部变量的声明区域，最后是函数的语句。</p>
+<h3 id="修改标识符">修改标识符</h3>
+<p>HexRays非常强大，可以自动命名很多变量。但是有些变量的名称没有实际意义。因此HexRays提供了更改标识符名称的功能：将光标移动到标识符上，然后按N键，弹出更改名称的对话框，在输入框中输入一个合法的名称，单击“OK”即可。</p>
+<h3 id="切换数据显示格式">切换数据显示格式</h3>
+<ul>
+<li><p>Hexadecimal：十六进制显示，快捷键为H键。</p></li>
+<li><p>Octal：八进制显示。</p></li>
+<li><p>Char：将常量转化为‘A’的格式，快捷键为R键。</p></li>
+<li><p>Enum：将常量转为枚举中的一个值，快捷键为M键。</p></li>
+<li><p>Invert sign：将常量按照补码解析为负数，快捷键为_键。</p></li>
+<li><p>Bitwise negate：将常量按位取反，形如C语言中的~0xF0，快捷键为
+~键。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134555155.png"></p></li>
+</ul>
+<h3 id="修改变量类型">修改变量类型</h3>
+<p>HexRays充分利用了前面介绍过的IDA的类型分析系统，在要修改类型的标识符上按Y键，即可调出对话框来修改类型。</p>
+<p>注： <strong>byte</strong>——1字节整型，8位，char、__int8;
+<strong>word</strong>——2字节整型，16字节，short、__int16;
+<strong>dword</strong>——4字节整型，32字节，int、__int32;
+<strong>qword</strong>——8字节整型，64字节，__int64、long long。</p>
+<h1 id="动态调试与分析">动态调试与分析</h1>
+<h2 id="一调试的基本原理">一、调试的基本原理</h2>
+<p>与IDE调试器的调试操作大同小异：在感兴趣的地方设置断点，使程序中断；然后一行行跟踪程序的执行，选择进入或略过一个函数；在跟踪的过程中查看程序各变量的值，从而了解程序的内部状态。
+## 二、OllyDBG和x64DBG调试 （注：OD仅支持32位程序） ### 打开文件</p>
+<p>x64DBG和OD的布局相同，左上区域为反汇编结果，左下区域为浏览程序内存数据的区域，右下区域为栈数据，右上区域为寄存器的显示区域。
+### 控制程序运行</p>
+<p>按Ctrl+G组合键，可以跳转到目标地址；在反汇编窗口中，按F2键为切换当前
+地址的断点状态，按F8键为单步步过，按F7键为单步步入，按F4键为运行到光标处位置，按F9键为运行。
+### 简单的脱壳</p>
+<p>“壳”是一种特殊的程序，对另一个程序进行变换后，利用变换的结果重新生成可执行文件。在运行时，它全部或部分还原储存在可执行文件中的变换结果，然后恢复原程序的的执行。
+壳分为两种：压缩壳和加密壳。</p>
+<ul>
+<li>压缩壳
+注重对代码的压缩，从而生成更小的可执行文件。如UPX、ASPack等。</li>
+<li>加密壳
+注重对代码的保护，以阻碍逆向者进行分析。如VMP、ASProtect等。</li>
+</ul>
+<p><strong>未加壳</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134626958.png"></p>
+<p><strong>加壳后</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134653293.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/13c82cdaba7445339895d7b97443f9a1.png"></p>
+<p><strong>静态脱壳</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134746506.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220222134805516.png"></p>
+<p><strong>动态脱壳</strong>：
+原理：大多数壳都有一个共同的特点。在壳准备开始解压时都要执行pushad，当壳解压完时都要调用popad。到底
+pushad和 popad是什么干什么用的呢?其实
+pushad是用来将所有普通寄存器顺序进栈的指令popad是所有普通寄存器顺序出栈指令。popad的出栈顺序和
+pushad相反。壳为了保护寄存器，便在解压前将所有寄存器进栈保护起来，当解压完成后又将寄存器出栈，恢复其原貌，并将IP设置为原程序的OEP（Original
+Entry
+Point，程序的入口点）。这样我们就可以通过这个特点快速脱掉多种软件的壳。
+参考：<br>https://wenku.baidu.com/view/82752bf4ba0d4a7302763a98.html</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/21/affine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/21/affine/" class="post-title-link" itemprop="url">仿射密码</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-02-21 00:00:00" itemprop="dateCreated datePublished" datetime="2022-02-21T00:00:00+08:00">2022-02-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-12 12:40:56" itemprop="dateModified" datetime="2023-05-12T12:40:56+08:00">2023-05-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>801</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="仿射密码">仿射密码</h1>
+<h2 id="简介">1.简介</h2>
+<p>仿射密码是一种单字母替换密码的特例。</p>
+<p>该密码不如简单替换密码安全，因为它不仅容易受到针对替代密码的所有攻击方法，而且还存在其他缺点。其主要缺点来自以下方面：如果密码分析者可以发现（通过频率分析，暴力破解，猜测或其他方式）两个密文字符对应的明文，则可以通过联立方程组来求解密钥。</p>
+<h2 id="数学描述">2.数学描述</h2>
+<p>仿射密码的<strong>密钥</strong>由2个数字组成，我们将其称为a和b。以下讨论假定使用26个字符的字母（m
+=
+26）。a应该选择为相对于m素数（即a应该没有与m相同的公因数&lt;除1以外&gt;）。例如15和26没有公因数(除1以外)，因此15是可以用来加密的值，然而12和26具有相同公因数（例如2），这样12不能被用于加密。加密时，我们首先将所有字母转换为数字（'a'=
+0，'b'= 1，...，'z'= 25）。</p>
+<p>对于密文c，给定任意的p（p是代表字母的数字），有：</p>
+<p>c = ap + b (mod m) 1&lt;=a&lt;=m, 1&lt;=b&lt;=m;</p>
+<p>解密的公式为：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221205948026.png" alt="image-20220221205948026">
+<figcaption aria-hidden="true">image-20220221205948026</figcaption>
+</figure>
+<p>其中a-1是a的乘法逆元，为了找到a的乘法逆元，我们需要假定数字x满足：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210010143.png" alt="image-20220221210010143">
+<figcaption aria-hidden="true">image-20220221210010143</figcaption>
+</figure>
+<p>如果我们发现x使得等式成立，那么X就是a的逆元，我们称之为a-1。</p>
+<p>解决此方程式最简单的方法是遍历1到25个数字，然后看哪个满足该方程式。</p>
+<h2 id="示例">3.示例</h2>
+<blockquote>
+<p>令密钥a=5且b=7，加密defend the east wall of the castle</p>
+</blockquote>
+<p>我们将第一个字母'd'转换为数字3（'a'= 0，'b'= 1，...，'z'=
+25）并将其代入等式中：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220221210037643.png" alt="image-20220221210037643">
+<figcaption aria-hidden="true">image-20220221210037643</figcaption>
+</figure>
+<p>显而易见，我们可以依次得到明文： &gt;
+defendtheeastwallofthecastle</p>
+<p>详见：https://cryptowikis.com/ClassicalCipher/SubstitutionCiphers/AffineCipher/</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/21/little-endian/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/21/little-endian/" class="post-title-link" itemprop="url">小端序与大端序</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-02-21 00:00:00" itemprop="dateCreated datePublished" datetime="2022-02-21T00:00:00+08:00">2022-02-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-09-04 18:33:38" itemprop="dateModified" datetime="2023-09-04T18:33:38+08:00">2023-09-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%97%E8%8A%82%E9%A1%BA%E5%BA%8F/" itemprop="url" rel="index"><span itemprop="name">字节顺序</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>637</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>今天在写逆向题目时遇到的一个知识点。</p>
+<h2 id="字节顺序维基百科">字节顺序（维基百科）</h2>
+<p>字节顺序，又称端序或尾序（英语：Endianness），在计算机科学领域中，指电脑内存中或在数字通信链路中，组成多字节的字的字节的排列顺序。</p>
+<p>在几乎所有的机器上，多字节对象都被存储为连续的字节序列。例如在C语言中，一个类型为int的变量x地址为0x100，那么其对应地址表达式&amp;x的值为0x100。且x的四个字节将被存储在电脑内存的0x100,
+0x101, 0x102, 0x103位置。</p>
+<p>字节的排列方式有两个通用规则。例如，将一个多位数的低位放在较小的地址处，高位放在较大的地址处，则称小端序；反之则称大端序。在网络应用中，字节序是一个必须被考虑的因素，因为不同机器类型可能采用不同标准的字节序，所以均按照网络标准转化。
+<br></p>
+<p>下面以十六进制0x01234567为例其中 0x01 是最高位有效字节，0x67
+是最低位有效字节。</p>
+<h2 id="小端序">小端序</h2>
+<p>指机器选择在内存中按照从<strong>最低</strong>有效字节到<strong>最高</strong>有效字节的顺序存储对象。</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">.....</th>
+<th style="text-align: center;">0x100</th>
+<th style="text-align: center;">0x101</th>
+<th style="text-align: center;">0x102</th>
+<th style="text-align: center;">0x103</th>
+<th style="text-align: center;">...</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">...</td>
+<td style="text-align: center;">67</td>
+<td style="text-align: center;">45</td>
+<td style="text-align: center;">23</td>
+<td style="text-align: center;">01</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="大端序">大端序</h2>
+<p>指机器选择在内存中按照从<strong>最高</strong>有效字节到<strong>最低</strong>有效字节的顺序存储对象。</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">.....</th>
+<th style="text-align: center;">0x100</th>
+<th style="text-align: center;">0x101</th>
+<th style="text-align: center;">0x102</th>
+<th style="text-align: center;">0x103</th>
+<th style="text-align: center;">...</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">...</td>
+<td style="text-align: center;">01</td>
+<td style="text-align: center;">23</td>
+<td style="text-align: center;">45</td>
+<td style="text-align: center;">67</td>
+<td style="text-align: center;">...</td>
+</tr>
+</tbody>
+</table>
+<p>参考https://oi-wiki.org/misc/endianness/</p>
+<p>推荐文章：https://www.ruanyifeng.com/blog/2016/11/byte-order.html</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hxt"
+      src="/images/hxt.jpg">
+  <p class="site-author-name" itemprop="name">hxt</p>
+  <div class="site-description" itemprop="description">May the Force be with you.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hxt</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">249k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:47</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

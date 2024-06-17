@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="今天是3月25日，科软的拟录取名单公布了，终于考上了😃！！！  个人背景 本科就读于浙江的一所双非，专业是计算机科学与技术。大一到大三成绩还行，不过都是靠期末突击，学的也不怎么深。 高数和线代都是大一学的，早忘光了；数据结构期末考了五十几分，还是靠平时分给我拉上来的；计网、操作系统、计组都是大三上学的，学的很浅，期末考试也是靠考前突击过的。 参赛经历：参加过一些大大小小的CTF竞赛，基本只会签到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="考研经验贴">
+<meta property="og:url" content="http://example.com/2024/04/09/%E8%80%83%E7%A0%94%E7%BB%8F%E9%AA%8C%E8%B4%B4/index.html">
+<meta property="og:site_name" content="hxt&#39;s Blog">
+<meta property="og:description" content="今天是3月25日，科软的拟录取名单公布了，终于考上了😃！！！  个人背景 本科就读于浙江的一所双非，专业是计算机科学与技术。大一到大三成绩还行，不过都是靠期末突击，学的也不怎么深。 高数和线代都是大一学的，早忘光了；数据结构期末考了五十几分，还是靠平时分给我拉上来的；计网、操作系统、计组都是大三上学的，学的很浅，期末考试也是靠考前突击过的。 参赛经历：参加过一些大大小小的CTF竞赛，基本只会签到">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f603.png?v8">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/202403261011761.png">
+<meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f613.png?v8">
+<meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8">
+<meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8">
+<meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8">
+<meta property="og:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f613.png?v8">
+<meta property="article:published_time" content="2024-04-09T09:00:12.000Z">
+<meta property="article:modified_time" content="2024-04-09T09:00:12.000Z">
+<meta property="article:author" content="hxt">
+<meta property="article:tag" content="考研">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.githubassets.com/images/icons/emoji/unicode/1f603.png?v8">
+
+<link rel="canonical" href="http://example.com/2024/04/09/%E8%80%83%E7%A0%94%E7%BB%8F%E9%AA%8C%E8%B4%B4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>考研经验贴 | hxt's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">hxt's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/09/%E8%80%83%E7%A0%94%E7%BB%8F%E9%AA%8C%E8%B4%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          考研经验贴
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-09 17:00:12" itemprop="dateCreated datePublished" datetime="2024-04-09T17:00:12+08:00">2024-04-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%80%83%E7%A0%94/" itemprop="url" rel="index"><span itemprop="name">考研</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" >
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>今天是3月25日，科软的拟录取名单公布了，终于考上了<span class="github-emoji"><span>😃</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f603.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>！！！</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/202403261011761.png"></p>
+<h2 id="个人背景">个人背景</h2>
+<p>本科就读于浙江的一所双非，专业是计算机科学与技术。大一到大三成绩还行，不过都是靠期末突击，学的也不怎么深。</p>
+<p>高数和线代都是大一学的，早忘光了；数据结构期末考了五十几分，还是靠平时分给我拉上来的；计网、操作系统、计组都是大三上学的，学的很浅，期末考试也是靠考前突击过的。</p>
+<p>参赛经历：参加过一些大大小小的CTF竞赛，基本只会签到题和一些简单题<span class="github-emoji"><span>😓</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f613.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>，大三下抱到大腿拿了个国奖。我大学期间就获得过这一个奖项。</p>
+<h2 id="择校">择校</h2>
+<p>一开始考虑的是合工大和杭电，后来无意中加了科软群，本来是看热闹的，后面了解到科软是无导师制的，培养方案很适合我。三月底，看着群里的拟录取截图，备受鼓舞，所以我就下定决心了​​。</p>
+<p>初试分数下来一看383，好像还行。后来复试线一出，376分，倒吸一口凉气，我这分数基本就是擦线了，排名也挺靠后，不过好在复试一切顺利。</p>
+<p>还是建议大家<strong>理性选择</strong>，除了考虑地理位置、学校实力、招收人数、培养方案，还要考虑<strong>初试复试占比</strong>，如果觉得复试没有什么优势，我觉得还是选择<code>6:4</code>和<code>7:3</code>的学校。</p>
+<h2 id="复习建议">复习建议</h2>
+<blockquote>
+<p>经验贴并非现成的复习方案，需要根据自身灵活调整，希望大家理性看待，不要盲目模仿。</p>
+</blockquote>
+<p>我是从3月1日开始正式复习的，如果基础不好，还是建议早点开始。</p>
+<p>可以将每天学习进度记录下来，这样第二天可以迅速定位到前一天的进度。不用提前把每天计划得很详细，大致列出需要完成的任务就行。像下面这样就行：</p>
+<blockquote>
+<p>2023-3-10</p>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="">英语单词（主要是复习）</label></li>
+<li><label><input type="checkbox" checked="">高数（1.5基础过关）</label></li>
+<li><label><input type="checkbox" checked="">英语语法（时态，情态）</label></li>
+</ul>
+</blockquote>
+<p>这里在推荐几个经验贴：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://ys8qz1wlia.feishu.cn/docx/BvXIdJQNRoyxpixM4FSckm7Nnlb">同校学长跨考科软上岸</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/618598868">23科软经验贴汇总</a></li>
+</ul>
+<p>下面是我的备考过程</p>
+<h3 id="数学二118分">数学二（118分）</h3>
+<blockquote>
+<p>推荐老师：高数-武忠祥，线代-李永乐/张宇</p>
+<p>推荐教材/习题集：高等数学基础篇、高等数学辅导讲义、线性代数辅导讲义、660、880、高数严选题</p>
+<p>推荐模拟卷/真题卷：李林四套卷、李林六套卷、张宇八套卷、张宇四套卷、李艳芳真题</p>
+</blockquote>
+<p>注：我线代基础跟的是张宇，强化跟的是李永乐。推荐大家多听几个老师的课，找到最适合自己。</p>
+<h4 id="月1日5月20日基础阶段">3月1日~5月20日（基础阶段）</h4>
+<p>主要任务：（每天三到四小时）</p>
+<ul>
+<li><p>跟着武忠祥学习高等数学基础篇</p></li>
+<li><p>跟着张宇学习线代基础课（张宇30讲线代部分）</p></li>
+<li><p>做完对应的书上的例题和习题：高数学习包、张宇30讲线代习题、300题线代部分</p></li>
+<li><p>高数学完开始学习线代，同时每天抽时间写660高数部分（有难度）</p>
+<blockquote>
+<p>660我刷了70题就没刷了，感觉有点难，错题太多，有点浪费题目了，所以我在七月份强化阶段的时候才继续从第70题往后刷的</p>
+</blockquote></li>
+<li><p>线代学完，可以写写660线代部分（很简单，也可以不写）</p></li>
+<li><p>有时间可以看看错题，线代例题可以刷两遍</p></li>
+</ul>
+<p>建议：</p>
+<ul>
+<li><p>前期数学可以适当给多一点时间</p></li>
+<li><p>当老师讲到例题时，可以适当暂停思考一下，再继续。</p></li>
+<li><p>听完一节课将辅导书上的例题自己单独做一遍</p></li>
+<li><p>听完一节课就做对应的学习包里的习题</p></li>
+<li><p>不要赶进度，打牢基础</p></li>
+</ul>
+<h4 id="月2110月6日强化阶段">5月21~10月6日（强化阶段）</h4>
+<p>强化阶段耗时最长，提升最大</p>
+<p>主要任务：（每天四到五小时）</p>
+<ul>
+<li>跟着武忠祥学习高数强化课，同时完成严选题</li>
+<li>跟着李永乐学习线代强化课，完成书上的习题</li>
+<li>在学习高数强化课的时候，最好不要落下线代（可以刷刷之前的错题，或者880中的线代基础题）</li>
+<li>完成660高数部分（抽时间写）</li>
+<li>完成880：高数+线代（高数部分可以在学习线代强化课的时候开始刷）</li>
+</ul>
+<blockquote>
+<p>我在强化阶段结束时，880的线代部分写到了相似矩阵，所以到十月下旬才完成整本880。根据自己学习进度灵活调整</p>
+</blockquote>
+<p>建议：</p>
+<ul>
+<li>听完一节课，将书上的例题再自己写一遍</li>
+<li>听完一章的课程，将对应习题集的题目完成：严选题</li>
+<li>根据自身学习情况随时调整</li>
+<li>有多余时间就二刷错题</li>
+</ul>
+<h4 id="月7日考前冲刺阶段">10月7日~考前（冲刺阶段）</h4>
+<p>主要任务：（不超过4.5小时）</p>
+<ul>
+<li>7号开始做真题，我做的是09~20年真题，<strong>三天两套，第三天订正</strong>，这里可以按自己节奏来（我这里留了三年真题到十二月份写）</li>
+<li>有时间二刷严选题错题</li>
+<li>真题刷完，开始刷模拟卷，我先刷的是23李林四套卷和六套卷（按照考试时间模拟）</li>
+<li>有时间二刷880错题</li>
+<li>23李林模拟卷刷完，开始刷24张宇八套卷</li>
+<li>八套卷刷完，刷24李林六套卷和四套卷</li>
+<li>最后做张宇四套卷（比较难）</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li><p>建议把试卷中的错题记录下来，错误原因、用了什么知识点、什么方法，我是这样记录的：</p>
+<blockquote>
+<ul>
+<li>大题 16：题目要求 y(x) 的区间，而我写成了参数 t 的区间</li>
+<li>大题 20：旋转体积算错（倍数不对），第二问物理应用式子没列对</li>
+</ul>
+</blockquote></li>
+<li><p>模拟卷的讲解，推荐B站UP主<strong>没咋了</strong></p></li>
+<li><p>错题很重要，建议冲刺阶段有时间就二刷错题</p></li>
+</ul>
+<h4 id="考试当日">考试当日</h4>
+<p>我其实没什么感觉，就当平时模拟卷写了，不过前面没进入状态，跳了好几道选填（确实有难度）。大题计算量不小，证明题看完题目就直接跳了，好在线代不难，写完线代就回过头来思考选填，改了两个答案，还有一个填空实在不会。最后写证明题，好像有点思路，硬往泰勒上凑，第一问就胡乱证明了，第二问没思路也没时间了。</p>
+<p>后来对答案，选填错四个（其中一个计算错误，亏死）<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>，大题应该就是证明题扣了12分。</p>
+<h3 id="英语二82分">英语二（82分）</h3>
+<p>英语二比较简单，重点在于单词，单词背的好，分数一定不会低，并且要坚持背。</p>
+<blockquote>
+<p>推荐老师：田静(语法、长难句)、刘琦(新题型)、潘赟(作文)、石雷鹏(作文)</p>
+<p>推荐教材：英语黄皮书（也就是英语真题）</p>
+</blockquote>
+<h4 id="月1日5月1日">3月1日~5月1日</h4>
+<p>主要任务：（1~2小时）</p>
+<ul>
+<li>背单词，每天抽出四五十分钟学习新单词加复习（时间因人而异，自行调整）</li>
+<li>语法课（二倍速刷一遍就行），基础可以不看</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>前期单词花的时间多一点，用实体书或者APP都行，适合自己的最好</li>
+<li>阅读技巧课可看可不看</li>
+</ul>
+<h4 id="月2日8月7日">5月2日~8月7日</h4>
+<p>主要任务：（1.5~2小时）</p>
+<ul>
+<li>背单词，背完就再背一遍</li>
+<li>04年~10年黄皮书真题<strong>阅读</strong></li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>前期阅读做的不好没关系，10年之后的英二跟10年之前的英语差别很大</li>
+<li>建议每一篇阅读做完后都精读一遍，生词弄熟</li>
+</ul>
+<h4 id="月8日9月20日">8月8日~9月20日</h4>
+<p>主要任务：（1.5~2小时）</p>
+<ul>
+<li>背单词</li>
+<li>10年~19年黄皮书<strong>英二阅读</strong></li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>10年开始区分英一英二，考英二的建议只刷英二阅读</li>
+</ul>
+<h4 id="月21日10月12日">9月21日~10月12日</h4>
+<p>主要任务：（1.5~2小时）</p>
+<ul>
+<li>背单词</li>
+<li>10年~19年英二小三门（翻译、完型、新题型）</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>新题型可以看看刘琦的两节课，其他的没必要看课</li>
+<li>背单词不能断</li>
+</ul>
+<h4 id="月13日考前">10月13日~考前</h4>
+<p>主要任务：（1.5~2.5小时）</p>
+<ul>
+<li>背单词</li>
+<li>英语作文（每隔几天练一练，考前可以看看作文模板）</li>
+<li>二刷10~19年英二阅读真题</li>
+<li>20~23年英二真题模拟</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>英语作文一定要动手练习，作文这方面我练得不够多，学的不够好</li>
+</ul>
+<h4 id="考试当日-1">考试当日</h4>
+<p>上午考完政治，去考场安排的休息室休息，太冷了，困但是睡不着。</p>
+<p>下午考试直接先写阅读，第一篇写完，感觉不少生词，头昏昏沉沉的，第二篇就开始犯困了，文章就看懂个大概意思，草草选了几个答案，开始第三篇，困得实在看不下去了，果断放弃。直接开始写新题型，10分钟不到写完，但自己知道正确率不高，接着就转头写作文。结果小作文写了半小时<span class="github-emoji"><span>😅</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>，一看时间，寄。大作文直接不打草稿，十几分钟编完，回过头来重新检查了一遍新题型，找出两个错误，然后重新开始第三篇阅读。最后好在完型比较顺利，没有纠结。最后的分数也是有点惊喜<span class="github-emoji"><span>😄</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+<h3 id="政治72分">政治（72分）</h3>
+<p>不要开始得太早！建议八月底或九月初开始</p>
+<blockquote>
+<p>推荐老师：徐涛、腿姐</p>
+<p>推荐教材：肖秀荣1000题、腿姐背诵手册、肖秀荣八套卷、肖秀荣四套卷</p>
+</blockquote>
+<p>注：肖秀荣1000题可以不用买，直接在微信小程序上刷；腿姐背诵手册和肖秀荣背诵手册二选一</p>
+<h4 id="月12日10月11日">8月12日~10月11日</h4>
+<p>主要任务：（不多于1.5小时）</p>
+<ul>
+<li>观看徐涛政治强化课（过一遍知识点）</li>
+<li>刷1000题</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>九月初开始政治都行，视频看不完的话就只看马原和毛概的视频</li>
+<li>建议<strong>看完一节课就刷对应章节的1000题</strong></li>
+</ul>
+<h4 id="月12日11月12日">10月12日~11月12日</h4>
+<p>主要任务：（不多于2小时）</p>
+<ul>
+<li>腿姐技巧课（我觉得技巧课还是挺有用的）</li>
+<li>每天抽出半小时看背诵手册（不用硬背，过一过知识点）</li>
+<li>二刷1000题</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>没时间也可以不看技巧课，多刷刷选择题</li>
+<li>每天翻一翻背诵手册，最好不要隔几天学一会</li>
+</ul>
+<h4 id="月13日12月9日">11月13日~12月9日</h4>
+<p>主要任务：（不多于2.5小时）</p>
+<ul>
+<li><strong>一刷</strong>+<strong>二刷</strong>
+肖八选择题，把每个知识点搞熟（只刷选择题）</li>
+<li>每天翻一翻背诵手册</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>肖八选择题很重要，可以在规定时间内进行模拟</li>
+<li>尽量把每个知识点弄熟</li>
+</ul>
+<h4 id="月10日考前">12月10日~考前</h4>
+<p>主要任务：（三小时左右）</p>
+<ul>
+<li><strong>一刷</strong>+<strong>二刷</strong> 肖四选择题</li>
+<li>每天抽1~1.5小时背诵肖四大题</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>背诵大题可以参考网上的带背视频或资料</li>
+<li>尽量多背诵几套，实在背不完也<strong>必须把前两套背完</strong></li>
+</ul>
+<h4 id="考试当日-2">考试当日</h4>
+<p>第一门考试，还是挺激动的，其实大题我是没背完的，第四套基本没背，第三套背的不熟。选择题比较顺利，甚至有肖四肖八原题。然后开始大题，我先浏览一遍所有大题，心想这把稳了，全是前两套背过的类似的题目，可以直接套用。然后就是拼手速的阶段，写得越多越好，就算题目可能是你没见过的，但是你已经背过一些语句，很自然而然的就应用上去了。</p>
+<h3 id="分">408（111分）</h3>
+<p>最难的一部分，知识点很多，建议尽早开始</p>
+<blockquote>
+<p>推荐老师：B站-王道计算机教育、B站-湖科大教书匠（计网）</p>
+<p>推荐教材：王道四件套-数据结构、计算机组成原理、操作系统、计算机网络</p>
+</blockquote>
+<h4 id="月1日5月5日">3月1日~5月5日</h4>
+<p><strong>这部分建议大家不要学我，数据结构进度太慢了</strong></p>
+<p>主要任务：</p>
+<ul>
+<li>王道数据结构课程</li>
+<li>王道数据结构教材上的<strong>选择题</strong>（前期只做选择题）</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>建议数据结构不要像我一样拖拉，尽量四月中旬之前结束</li>
+</ul>
+<h4 id="月6日6月2日">5月6日~6月2日</h4>
+<p>主要任务：（3~3.5小时）</p>
+<ul>
+<li>王道计算机组成原理课程</li>
+<li>王道计算机组成原理教材<strong>选择题</strong></li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>计组算是最难的一门课了，第一遍要认真学，每题弄懂，时间不要多于40天</li>
+<li>太难的可以第二遍再学（例如第二章浮点数的乘除法）</li>
+</ul>
+<h4 id="月3日7月1日">6月3日~7月1日</h4>
+<p>主要任务：（3~3.5小时）</p>
+<ul>
+<li>王道操作系统课程</li>
+<li>王道操作系统教材<strong>选择题</strong></li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>操作系统比较抽象，第一遍尽量都弄懂，太难的第二遍再学</li>
+</ul>
+<h4 id="月2日7月23日">7月2日~7月23日</h4>
+<p>主要任务：（3~3.5小时）</p>
+<ul>
+<li>王道计算机网络课程 + 湖科大教书匠计网课程（配合学习）</li>
+<li>王道计算机网络教材<strong>选择题</strong></li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>计网的概念比较多，学起来快一点</li>
+<li>课程方面，如果王道的计网课程有不清楚的地方可以配合着看湖科大教书匠的课程</li>
+</ul>
+<h4 id="月28日8月31日">7月28日~8月31日</h4>
+<p>主要任务：（3~3.5小时）</p>
+<ul>
+<li>观看数据结构强化课程</li>
+<li>二刷数据结构知识点和选择题（有遗忘很正常）</li>
+<li>大题只做<strong>真题</strong></li>
+<li>有时间就做一做思维导图（没时间就用网上现成的也行）</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>如果知识点忘得多，就先过一遍知识点再看强化视频</li>
+<li>大题真题建议留最近的两年最后进行模拟</li>
+<li>这里可以提速，我复习的速度还是慢了一点</li>
+<li>如果大题没做完可以在下一阶段复习计组的时候每天写一两道</li>
+</ul>
+<h4 id="月1日9月26日">9月1日~9月26日</h4>
+<p>主要任务：（3~4小时）</p>
+<ul>
+<li>观看计组强化课程</li>
+<li>二刷计组知识点和选择题</li>
+<li>大题只做真题</li>
+<li>思维导图</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>如果知识点忘得多，就先过一遍知识点再看强化视频</li>
+<li>大题做不完可以在复习操作系统的时候每天抽时间写一两道</li>
+<li>在复习计组时，可以隔一两天就写一两道数据结构算法题</li>
+</ul>
+<h4 id="月27日10月31日">9月27日~10月31日</h4>
+<p>主要任务：（3~4小时）</p>
+<ul>
+<li>观看操作系统强化课程、计网强化课程（计网不看也行）</li>
+<li>二刷操作系统、计网知识点和选择题（可以交叉进行）</li>
+<li>大题只做真题</li>
+<li>思维导图</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>操作系统和计网这两门比较简单，可以同时进行（按自己节奏来）</li>
+<li>大题做不完在下一阶段继续做（灵活调整）</li>
+</ul>
+<h4 id="月1日11月5日">11月1日~11月5日</h4>
+<p>主要任务：（3~4小时）</p>
+<ul>
+<li>把之前没做完的大题全做完（收尾）</li>
+<li>再过一遍大题的错题</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>这个阶段大题至少完成了一刷（这里说的大题只限于真题）</li>
+<li>前面在复习不同课程时，有时间就看看408其他科目大题错题</li>
+</ul>
+<h4 id="月6日11月28日">11月6日~11月28日</h4>
+<p>主要任务：（3~3.5小时）</p>
+<ul>
+<li>开始408真题（09~22年，23年留作模拟）</li>
+<li>三天两张试卷或者四天三张试卷</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>真题按照考研规定时间写</li>
+<li>认真订正，将每次错题相关的知识点记录下来</li>
+</ul>
+<h4 id="月29日考前">11月29日~考前</h4>
+<p>主要任务：（3~3.5小时）</p>
+<ul>
+<li>三刷408知识点+选择题</li>
+<li>二刷真题卷</li>
+<li>考前几天用23年真题卷模拟</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>三刷选择题可以只刷错题</li>
+<li>二刷真题卷有错误很正常，把相关知识点记熟就行了</li>
+</ul>
+<h4 id="考试当日-3">考试当日</h4>
+<p>408作为最后一门果然是不负众望，选择题难度不小，很多小知识点，平时稍微不注意就会忽略，我也确实蒙了几题<span class="github-emoji"><span>😓</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f613.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>，不过大题中规中矩，计算的题目不少。最后的分数也是没有达到预期，估计大题小错误不少。​</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%80%83%E7%A0%94/" rel="tag"># 考研</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/04/05/Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E4%B8%8E%E9%9D%9E%E9%9D%99%E6%80%81/" rel="prev" title="Java中的静态与非静态">
+      <i class="fa fa-chevron-left"></i> Java中的静态与非静态
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/04/10/%E7%A7%BB%E5%8A%A8vscode%E6%8F%92%E4%BB%B6%E4%BD%8D%E7%BD%AE/" rel="next" title="移动vscode插件位置">
+      移动vscode插件位置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">个人背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%A9%E6%A0%A1"><span class="nav-number">2.</span> <span class="nav-text">择校</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E4%B9%A0%E5%BB%BA%E8%AE%AE"><span class="nav-number">3.</span> <span class="nav-text">复习建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E4%BA%8C118%E5%88%86"><span class="nav-number">3.1.</span> <span class="nav-text">数学二（118分）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%881%E6%97%A55%E6%9C%8820%E6%97%A5%E5%9F%BA%E7%A1%80%E9%98%B6%E6%AE%B5"><span class="nav-number">3.1.1.</span> <span class="nav-text">3月1日~5月20日（基础阶段）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%882110%E6%9C%886%E6%97%A5%E5%BC%BA%E5%8C%96%E9%98%B6%E6%AE%B5"><span class="nav-number">3.1.2.</span> <span class="nav-text">5月21~10月6日（强化阶段）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%887%E6%97%A5%E8%80%83%E5%89%8D%E5%86%B2%E5%88%BA%E9%98%B6%E6%AE%B5"><span class="nav-number">3.1.3.</span> <span class="nav-text">10月7日~考前（冲刺阶段）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%80%83%E8%AF%95%E5%BD%93%E6%97%A5"><span class="nav-number">3.1.4.</span> <span class="nav-text">考试当日</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8B%B1%E8%AF%AD%E4%BA%8C82%E5%88%86"><span class="nav-number">3.2.</span> <span class="nav-text">英语二（82分）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%881%E6%97%A55%E6%9C%881%E6%97%A5"><span class="nav-number">3.2.1.</span> <span class="nav-text">3月1日~5月1日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%882%E6%97%A58%E6%9C%887%E6%97%A5"><span class="nav-number">3.2.2.</span> <span class="nav-text">5月2日~8月7日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%888%E6%97%A59%E6%9C%8820%E6%97%A5"><span class="nav-number">3.2.3.</span> <span class="nav-text">8月8日~9月20日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8821%E6%97%A510%E6%9C%8812%E6%97%A5"><span class="nav-number">3.2.4.</span> <span class="nav-text">9月21日~10月12日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8813%E6%97%A5%E8%80%83%E5%89%8D"><span class="nav-number">3.2.5.</span> <span class="nav-text">10月13日~考前</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%80%83%E8%AF%95%E5%BD%93%E6%97%A5-1"><span class="nav-number">3.2.6.</span> <span class="nav-text">考试当日</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BF%E6%B2%BB72%E5%88%86"><span class="nav-number">3.3.</span> <span class="nav-text">政治（72分）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8812%E6%97%A510%E6%9C%8811%E6%97%A5"><span class="nav-number">3.3.1.</span> <span class="nav-text">8月12日~10月11日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8812%E6%97%A511%E6%9C%8812%E6%97%A5"><span class="nav-number">3.3.2.</span> <span class="nav-text">10月12日~11月12日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8813%E6%97%A512%E6%9C%889%E6%97%A5"><span class="nav-number">3.3.3.</span> <span class="nav-text">11月13日~12月9日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8810%E6%97%A5%E8%80%83%E5%89%8D"><span class="nav-number">3.3.4.</span> <span class="nav-text">12月10日~考前</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%80%83%E8%AF%95%E5%BD%93%E6%97%A5-2"><span class="nav-number">3.3.5.</span> <span class="nav-text">考试当日</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86"><span class="nav-number">3.4.</span> <span class="nav-text">408（111分）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%881%E6%97%A55%E6%9C%885%E6%97%A5"><span class="nav-number">3.4.1.</span> <span class="nav-text">3月1日~5月5日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%886%E6%97%A56%E6%9C%882%E6%97%A5"><span class="nav-number">3.4.2.</span> <span class="nav-text">5月6日~6月2日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%883%E6%97%A57%E6%9C%881%E6%97%A5"><span class="nav-number">3.4.3.</span> <span class="nav-text">6月3日~7月1日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%882%E6%97%A57%E6%9C%8823%E6%97%A5"><span class="nav-number">3.4.4.</span> <span class="nav-text">7月2日~7月23日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8828%E6%97%A58%E6%9C%8831%E6%97%A5"><span class="nav-number">3.4.5.</span> <span class="nav-text">7月28日~8月31日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%881%E6%97%A59%E6%9C%8826%E6%97%A5"><span class="nav-number">3.4.6.</span> <span class="nav-text">9月1日~9月26日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8827%E6%97%A510%E6%9C%8831%E6%97%A5"><span class="nav-number">3.4.7.</span> <span class="nav-text">9月27日~10月31日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%881%E6%97%A511%E6%9C%885%E6%97%A5"><span class="nav-number">3.4.8.</span> <span class="nav-text">11月1日~11月5日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%886%E6%97%A511%E6%9C%8828%E6%97%A5"><span class="nav-number">3.4.9.</span> <span class="nav-text">11月6日~11月28日</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8829%E6%97%A5%E8%80%83%E5%89%8D"><span class="nav-number">3.4.10.</span> <span class="nav-text">11月29日~考前</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%80%83%E8%AF%95%E5%BD%93%E6%97%A5-3"><span class="nav-number">3.4.11.</span> <span class="nav-text">考试当日</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hxt"
+      src="/images/hxt.jpg">
+  <p class="site-author-name" itemprop="name">hxt</p>
+  <div class="site-description" itemprop="description">May the Force be with you.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hxt</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">249k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:47</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
