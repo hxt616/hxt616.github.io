@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="CS61B一直学得断断续续的，学起来没啥动力，最近做到了lab4，有点做不下去了，准备先去学习CSE365。下面是学过的知识点。 Lab2 JUnit https:&#x2F;&#x2F;sp21.datastructur.es&#x2F;materials&#x2F;lab&#x2F;lab2&#x2F;lab2 test函数都是非静态的，如下： 1234@Testpublic void testMethod() {    assertEquals(&amp;l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS61B知识点">
+<meta property="og:url" content="http://example.com/2024/07/08/CS61B/index.html">
+<meta property="og:site_name" content="hxt&#39;s Blog">
+<meta property="og:description" content="CS61B一直学得断断续续的，学起来没啥动力，最近做到了lab4，有点做不下去了，准备先去学习CSE365。下面是学过的知识点。 Lab2 JUnit https:&#x2F;&#x2F;sp21.datastructur.es&#x2F;materials&#x2F;lab&#x2F;lab2&#x2F;lab2 test函数都是非静态的，如下： 1234@Testpublic void testMethod() {    assertEquals(&amp;l">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240624093831743.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240624112915630.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240624112938798.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240624113008932.png">
+<meta property="og:image" content="https://joshhug.gitbooks.io/hug61b/content/assets/subclass.png">
+<meta property="og:image" content="https://joshhug.gitbooks.io/hug61b/content/assets/dynamic_selection.png">
+<meta property="article:published_time" content="2024-07-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-07-08T14:01:33.727Z">
+<meta property="article:author" content="hxt">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="CS61B">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240624093831743.png">
+
+<link rel="canonical" href="http://example.com/2024/07/08/CS61B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CS61B知识点 | hxt's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">hxt's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/08/CS61B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CS61B知识点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-07-08 00:00:00 / 修改时间：22:01:33" itemprop="dateCreated datePublished" datetime="2024-07-08T00:00:00+08:00">2024-07-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CS61B/" itemprop="url" rel="index"><span itemprop="name">CS61B</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" >
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>CS61B一直学得断断续续的，学起来没啥动力，最近做到了lab4，有点做不下去了，准备先去学习CSE365。下面是学过的知识点。</p>
+<h2 id="lab2">Lab2</h2>
+<h3 id="junit">JUnit</h3>
+<p>https://sp21.datastructur.es/materials/lab/lab2/lab2</p>
+<p>test函数都是非静态的，如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testMethod</span><span class="params">()</span> {</span><br><span class="line">    assertEquals(&lt;expected&gt;, &lt;actual&gt;);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="嵌套类">嵌套类</h3>
+<p>https://zq99299.github.io/java-tutorial/java/javaoo/nested.html</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OuterClass</span> {</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NestedClass</span> {</span><br><span class="line">        ...</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>嵌套类分为<strong>静态</strong>和<strong>非静态</strong></p>
+<p>嵌套类是其封闭类的成员。非静态嵌套类（内部类）可以访问封闭类的其他成员，即使它们被声明为私有的。静态嵌套类无法访问封闭类的其他成员</p>
+<blockquote>
+<p>外部类只能被声明 public 或包私有</p>
+</blockquote>
+<h3 id="相同类名的函数">相同类名的函数</h3>
+<p>Java中允许出现相同类名的函数，只要参数个数不同就能区分</p>
+<p>属于<strong>重载</strong>（overload）</p>
+<h3 id="泛型">泛型</h3>
+<p>在类的后面使用尖括号，尖括号内为占位符，在定义具体对象时，占位符可替换为具体的类型。如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DLList</span>&lt;BleepBlorp&gt; {</span><br><span class="line">    <span class="keyword">private</span> IntNode sentinel;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntNode</span> {</span><br><span class="line">        <span class="keyword">public</span> IntNode prev;</span><br><span class="line">        <span class="keyword">public</span> BleepBlorp item;</span><br><span class="line">        <span class="keyword">public</span> IntNode next;</span><br><span class="line">        ...</span><br><span class="line">    }</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DLList&lt;String&gt; d2 = <span class="keyword">new</span> <span class="title class_">DLList</span>&lt;&gt;(<span class="string">"hello"</span>); <span class="comment">//第二个尖括号可为空</span></span><br></pre></td></tr></tbody></table></figure>
+<p>由于<strong>泛型</strong>只适用于<strong>引用类型</strong>，我们不能将int或double等基元放在尖括号内，相反，我们使用基元类型的引用版本，在若对象为int类型的情况下，代码应该为:</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DLList&lt;Integer&gt; d = <span class="keyword">new</span> <span class="title class_">DLList</span>&lt;&gt;(<span class="number">2</span>);</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>相关类型还有：<code>Integer</code>, <code>Double</code>,
+<code>Character</code>, <code>Boolean</code>, <code>Long</code>,
+<code>Short</code>, <code>Byte</code>, <code>Float</code></p>
+</blockquote>
+<h3 id="包package">包（Package）</h3>
+<p>包是Java类的集合，所有这些类一起工作以实现某个共同的目标</p>
+<p>同一个包的类，代码顶部会有一行：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> &lt;package_name&gt;;</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="section">2.4</h2>
+<h3 id="数组array">数组（Array）</h3>
+<p>定义数组方式如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>[] x = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>]; <span class="comment">//用默认的int值0填充3个元素</span></span><br><span class="line"><span class="type">int</span>[] y = <span class="keyword">new</span> <span class="title class_">int</span>[]{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};</span><br><span class="line"><span class="type">int</span>[] z = {<span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">13</span>};</span><br></pre></td></tr></tbody></table></figure>
+<p>复制数组的方法如下：</p>
+<ul>
+<li><code>System.arraycopy(a, 0, b, 3, 2)</code>：该函数用于数组复制，5个参数分别是——源数组、开始索引、目标数组、(目标数组的)开始索引、(要复制的)元素个数，类似于Python的<code>b[3:5] = a[0:2]</code></li>
+<li>使用循环，依次赋值</li>
+</ul>
+<h3 id="泛型数组初始化">泛型数组初始化</h3>
+<p>Java中不允许使用泛型数组，即下面的语句是错误的：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Item[] a = <span class="keyword">new</span> <span class="title class_">Item</span>[last*<span class="number">2</span>];</span><br></pre></td></tr></tbody></table></figure>
+<p>应该修改为：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Item[] a = (Item[]) <span class="keyword">new</span> <span class="title class_">Object</span>[last*<span class="number">2</span>];  <span class="comment">//命令行编译的话会有warning，忽略即可</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="lab3">Lab3</h2>
+<p>debug模式下，首先点击<code>step over</code>，然后点击<code>Resume</code>按钮，程序会再次运行到当前断点（相当于多次<code>step over</code>）</p>
+<p>右击断点会弹出窗口，可设置条件，再次点击<code>Resume</code>，程序会运行到满足条件才停下运行</p>
+<h2 id="proj1-part1">Proj1 part1</h2>
+<h4 id="双链表double-linkded-list">双链表（double linkded list）</h4>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240624093831743.png" alt="image-20240624093831743">
+<figcaption aria-hidden="true">image-20240624093831743</figcaption>
+</figure>
+<p>在两端设置<code>first</code>和<code>last</code>节点，方便操作</p>
+<h4 id="数组队列">数组队列</h4>
+<p>这里用到了循环队列的思想，使用<code>first</code>和<code>last</code>表示队头和队尾的数组下标，且这个两个下标对应的数组元素不存放数据。</p>
+<ul>
+<li><p>队空：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240624112915630.png" alt="image-20240624112915630" style="zoom:80%;"></p></li>
+<li><p>插入一个元素</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240624112938798.png" alt="image-20240624112938798" style="zoom:80%;"></p></li>
+<li><p>队满</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240624113008932.png" alt="image-20240624113008932" style="zoom:80%;"></p></li>
+</ul>
+<h2 id="section-1">4.1</h2>
+<h3 id="method-overloading方法重载">method overloading（方法重载）</h3>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">longest</span><span class="params">(SLList&lt;String&gt; list)</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">longest</span><span class="params">(AList&lt;String&gt; list)</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>缺点：代码重复</p>
+</blockquote>
+<h3 id="接口interface">接口（interface）</h3>
+<p>参考：https://blog.csdn.net/Warpar/article/details/72859529</p>
+<p><img src="https://joshhug.gitbooks.io/hug61b/content/assets/subclass.png"></p>
+<p>将<code>List61B</code>定义为一个接口<code>interface</code>，接口中的<strong>方法为空</strong></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List61B</span>&lt;Item&gt; {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(Item y)</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getFirst</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">get</span><span class="params">(<span class="type">int</span> i)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Item x, <span class="type">int</span> position)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<ul>
+<li><p>The interface includes all the method signatures, but not
+implementations. It's up to the subclass to actually provide those
+implementations.</p></li>
+<li><p>接口中不使用 private ，无法调用，无意义</p></li>
+</ul>
+</blockquote>
+<h3 id="method-overriding方法重写">Method Overriding（方法重写）</h3>
+<p><strong>仅适用于继承</strong></p>
+<p>当子类<code>AList</code>或<code>SLList</code>通过<code>implements</code>继承<code>List61B</code>接口，并在这两个<strong>子类中对方法进行重写</strong>，如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AList</span>&lt;Item&gt; <span class="keyword">implements</span> <span class="title class_">List61B</span>&lt;Item&gt;{</span><br><span class="line">    ...</span><br><span class="line">    <span class="meta">@Override</span> <span class="comment">//可省略</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span> {</span><br><span class="line">        ...</span><br><span class="line">    }</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="interface-inheritance接口继承">Interface
+Inheritance（接口继承）</h3>
+<p><code>implements</code>的使用就是所谓的接口继承</p>
+<h3 id="implementation-inheritance实现继承">Implementation
+Inheritance（实现继承）</h3>
+<p>直接在接口中实现方法的主体(可以不用在子类中进行overriding)，使用<code>default</code>字段，实现<code>Implementation Inheritance</code></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">List61B</span>&lt;Item&gt; {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addFirst</span><span class="params">(Item x)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addLast</span><span class="params">(Item y)</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getFirst</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">getLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">removeLast</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> Item <span class="title function_">get</span><span class="params">(<span class="type">int</span> i)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Item x, <span class="type">int</span> position)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">default</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> {</span><br><span class="line">        ...</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p>所有<code>implements</code>该接口的子类均可直接调用<code>print()</code></p>
+<p>上述的<code>List61B</code>是<strong>静态类型</strong>，子类为<strong>动态类型</strong>；<strong>动态方法选择</strong>（若子类重写了<code>print()</code>方法，则根据变量类型判断执行<code>List61B</code>中的<code>print()</code>方法或子类的）只发生在重写的情况下。（注意与重载的区别）</p>
+<blockquote>
+<p>两个继承的区别：</p>
+<ul>
+<li><p>实现继承是子类从基类继承行为实现的关系。</p></li>
+<li><p>接口继承是指子类仅从基类继承行为描述并提供实现本身。</p></li>
+</ul>
+</blockquote>
+<h2 id="section-2">4.2</h2>
+<h3 id="extends">Extends</h3>
+<p><code>implements</code>用于<strong>子类与接口</strong>之间，<code>extends</code>用于<strong>基类与子类</strong>之间。<code>extends</code>使得子类保留了基类的函数，同时还能在子类中修改继承的函数，还可以添加新的函数。</p>
+<ul>
+<li>子类无法访问基类的私有成员</li>
+<li><strong>基类的构造函数无法被继承</strong></li>
+<li>子类可以通过<code>super.method()</code>直接调用父类中<code>public</code>修饰的函数</li>
+</ul>
+<p>在 Java
+中，当子类的构造函数被调用时，会先调用父类的构造函数。如果父类没有<strong>无参数构造函数</strong>，那么必须在子类构造函数中显式调用父类的构造函数，并传递适当的参数。如下所示：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">基类的构造函数有参数</span><br><span class="line"><span class="keyword">public</span> <span class="title function_">VengefulSLList</span><span class="params">(Item d)</span> {</span><br><span class="line">        <span class="built_in">super</span>(d);  <span class="comment">// 基类的构造函数为 SLList(Item d)</span></span><br><span class="line">        deletedItems = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;Item&gt;(); <span class="comment">// 存放被删除的数据</span></span><br><span class="line">}</span><br><span class="line"><span class="comment">// 上面两行代码创建了两个列表</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">基类的构造函数无参数</span><br><span class="line"><span class="keyword">public</span> <span class="title function_">VengefulSLList</span><span class="params">()</span> {</span><br><span class="line">    <span class="comment">// super(); 可省略，java会自动调用基类的无参数构造函数</span></span><br><span class="line">    deletedItems = <span class="keyword">new</span> <span class="title class_">SLList</span>&lt;Item&gt;();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="the-object-class">The Object Class</h3>
+<p>每个Java类都是 Object 类的后代，或者说都是继承于 Object 类</p>
+<h3 id="encapsulation封装">Encapsulation（封装）</h3>
+<p>以<code>ALList</code>类为例，外部的函数只需要通过<code>ALList</code>类调用该类的方法即可，不需要理解该数据结构的细节。</p>
+<p>注意在继承时，在子类中对基类方法进行重写，可能会破坏封装效果，如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">bark</span><span class="params">()</span> {</span><br><span class="line">    barkMany(<span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">barkMany</span><span class="params">(<span class="type">int</span> N)</span> {</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i += <span class="number">1</span>) {</span><br><span class="line">        System.out.println(<span class="string">"bark"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">barkMany</span><span class="params">(<span class="type">int</span> N)</span> {</span><br><span class="line">    System.out.println(<span class="string">"As a dog, I say: "</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i += <span class="number">1</span>) {</span><br><span class="line">        bark();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="comment">// 运行会陷入无限循环，一直相互调用</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="type-checking类型检查">Type Checking（类型检查）</h3>
+<p>如果基类中的某个方法被子类重写，那么在运行时调用的方法是由该变量的运行时类型（或动态类型）决定的。</p>
+<ul>
+<li><p><strong>静态类型</strong>（Static
+Type）：<strong>编译时</strong>类型，指编译器在编译代码时知道的类型。它是由变量声明中的类型决定的。</p></li>
+<li><p><strong>动态类型</strong>（Dynamic
+Type）：<strong>运行时</strong>类型，指变量在运行时实际引用的对象的类型。</p></li>
+</ul>
+<p><img src="https://joshhug.gitbooks.io/hug61b/content/assets/dynamic_selection.png"></p>
+<ol type="1">
+<li>上述代码中<code>sl.printLostItems();</code>在<strong>编译阶段</strong>出错，尽管
+<code>sl</code> 实际上是 <code>VengefulSLList</code>
+类型的对象，但编译器只能看到它的静态类型
+<code>SLList</code>，因此无法调用 <code>VengefulSLList</code>
+中特有的方法。</li>
+<li>上述代码中<code>VengefulSLList&lt;Integer&gt; vsl2 = sl;</code>在<strong>编译阶段</strong>出错，编译器只看到sl的静态类型是SLList，并不能确定它是否可以安全地转换为
+<code>VengefulSLList</code> 类型</li>
+</ol>
+<h3 id="casting类型转换">Casting（类型转换）</h3>
+<p>相当于欺骗编译器，注意若使用不当可能会在运行时发生错误。</p>
+<p>类型转换示例如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">VengefulSLList&lt;Integer&gt; vsl2 = (VengefulSLList&lt;Integer&gt;) sl;  <span class="comment">// 类型转换</span></span><br><span class="line">vsl2.printLostItems();  <span class="comment">// 调用 VengefulSLList 中的方法</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="higher-order-functions高阶函数">Higher Order
+Functions（高阶函数）</h3>
+<p>高阶函数的定义是：可以接受一个或多个函数作为参数。</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IntUnaryFunction</span> {</span><br><span class="line">    <span class="type">int</span> <span class="title function_">apply</span><span class="params">(<span class="type">int</span> x)</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TenX继承接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TenX</span> <span class="keyword">implements</span> <span class="title class_">IntUnaryFunction</span>{</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">apply</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">10</span> * x;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">do_twice</span><span class="params">(IntUnaryFunction f, <span class="type">int</span> x)</span> {</span><br><span class="line">        <span class="keyword">return</span> f.apply(f.apply(x));</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">IntUnaryFunction</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TenX</span>();</span><br><span class="line">        System.out.println(do_twice(f, <span class="number">2</span>));</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="proj1-part2">Proj1 part2</h2>
+<p>Karplus-Strong algorithm（用于合成音乐的算法，弦乐器模拟）</p>
+<h2 id="section-3">4.3</h2>
+<p>Polymorphism（多态性），4.2提到的动态类型选择，对于属于 Subtype
+Polymorphism （子类多态性）。</p>
+<h3 id="comparator">Comparator</h3>
+<p>内置接口，通过<code>import java.util.Comparator;</code>调用</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/CS61B/" rel="tag"># CS61B</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/06/17/%E5%9B%BE%E5%BA%8A%E8%AE%BE%E7%BD%AE/" rel="prev" title="Github图床设置">
+      <i class="fa fa-chevron-left"></i> Github图床设置
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#lab2"><span class="nav-number">1.</span> <span class="nav-text">Lab2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#junit"><span class="nav-number">1.1.</span> <span class="nav-text">JUnit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B5%8C%E5%A5%97%E7%B1%BB"><span class="nav-number">1.2.</span> <span class="nav-text">嵌套类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%90%8C%E7%B1%BB%E5%90%8D%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">相同类名的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.4.</span> <span class="nav-text">泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85package"><span class="nav-number">1.5.</span> <span class="nav-text">包（Package）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section"><span class="nav-number">2.</span> <span class="nav-text">2.4</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84array"><span class="nav-number">2.1.</span> <span class="nav-text">数组（Array）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.2.</span> <span class="nav-text">泛型数组初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lab3"><span class="nav-number">3.</span> <span class="nav-text">Lab3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proj1-part1"><span class="nav-number">4.</span> <span class="nav-text">Proj1 part1</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E9%93%BE%E8%A1%A8double-linkded-list"><span class="nav-number">4.0.1.</span> <span class="nav-text">双链表（double linkded list）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E9%98%9F%E5%88%97"><span class="nav-number">4.0.2.</span> <span class="nav-text">数组队列</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section-1"><span class="nav-number">5.</span> <span class="nav-text">4.1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#method-overloading%E6%96%B9%E6%B3%95%E9%87%8D%E8%BD%BD"><span class="nav-number">5.1.</span> <span class="nav-text">method overloading（方法重载）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3interface"><span class="nav-number">5.2.</span> <span class="nav-text">接口（interface）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#method-overriding%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99"><span class="nav-number">5.3.</span> <span class="nav-text">Method Overriding（方法重写）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interface-inheritance%E6%8E%A5%E5%8F%A3%E7%BB%A7%E6%89%BF"><span class="nav-number">5.4.</span> <span class="nav-text">Interface
+Inheritance（接口继承）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#implementation-inheritance%E5%AE%9E%E7%8E%B0%E7%BB%A7%E6%89%BF"><span class="nav-number">5.5.</span> <span class="nav-text">Implementation
+Inheritance（实现继承）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section-2"><span class="nav-number">6.</span> <span class="nav-text">4.2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#extends"><span class="nav-number">6.1.</span> <span class="nav-text">Extends</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#the-object-class"><span class="nav-number">6.2.</span> <span class="nav-text">The Object Class</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#encapsulation%E5%B0%81%E8%A3%85"><span class="nav-number">6.3.</span> <span class="nav-text">Encapsulation（封装）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type-checking%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5"><span class="nav-number">6.4.</span> <span class="nav-text">Type Checking（类型检查）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#casting%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">6.5.</span> <span class="nav-text">Casting（类型转换）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#higher-order-functions%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0"><span class="nav-number">6.6.</span> <span class="nav-text">Higher Order
+Functions（高阶函数）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proj1-part2"><span class="nav-number">7.</span> <span class="nav-text">Proj1 part2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section-3"><span class="nav-number">8.</span> <span class="nav-text">4.3</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#comparator"><span class="nav-number">8.1.</span> <span class="nav-text">Comparator</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hxt"
+      src="/images/hxt.jpg">
+  <p class="site-author-name" itemprop="name">hxt</p>
+  <div class="site-description" itemprop="description">May the Force be with you.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hxt</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">255k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:52</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
