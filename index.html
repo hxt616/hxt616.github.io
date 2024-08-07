@@ -164,6 +164,209 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/06/%E5%8A%A0%E5%AF%86-%E7%AD%BE%E5%90%8D-%E8%AF%81%E4%B9%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/08/06/%E5%8A%A0%E5%AF%86-%E7%AD%BE%E5%90%8D-%E8%AF%81%E4%B9%A6/" class="post-title-link" itemprop="url">加密-数字签名-数字证书</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-08-06 20:24:23" itemprop="dateCreated datePublished" datetime="2024-08-06T20:24:23+08:00">2024-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-08-07 18:23:52" itemprop="dateModified" datetime="2024-08-07T18:23:52+08:00">2024-08-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">信息安全</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="加密">加密</h2>
+<p>可分为：</p>
+<ul>
+<li>对称加密</li>
+<li>非对称加密</li>
+</ul>
+<h3 id="对称加密">对称加密</h3>
+<p>同一个密钥可以同时用作信息的加密和解密。</p>
+<p>常见的对称加密算法有：</p>
+<ul>
+<li><strong>AES</strong>：https://ctf-wiki.org/crypto/blockcipher/aes/</li>
+<li>DES：分组加密算法，它将数据分成64位的块进行加密。</li>
+<li>RC：RC算法家族包括RC2、RC4、RC5、RC6等</li>
+</ul>
+<h4 id="分组模式">分组模式</h4>
+<p><strong>电子密码本模式（ECB - Electronic Codebook
+Mode）</strong>：</p>
+<ul>
+<li>每个明文分组独立加密为相应的密文分组。</li>
+<li>不推荐用于实际应用，因为相同的明文分组总是加密为相同的密文分组，导致模式泄露。</li>
+</ul>
+<p><strong>密码分组链接模式（CBC - Cipher Block Chaining
+Mode）</strong>：</p>
+<ul>
+<li>每个明文分组在加密前与前一个密文分组进行异或操作。</li>
+<li>需要一个初始向量（IV）来加密第一个分组。</li>
+<li>增强了安全性，避免了相同的明文分组生成相同的密文分组。</li>
+</ul>
+<p><strong>计数器模式（CTR - Counter Mode）</strong>：</p>
+<ul>
+<li>将一个计数器值加密，然后将结果与明文分组进行异或操作。</li>
+<li>计数器值每次加密时递增。</li>
+<li>支持并行处理，提高加密速度。</li>
+<li>也可用于流密码。</li>
+</ul>
+<p><strong>加密反馈模式（CFB - Cipher Feedback Mode）</strong>：</p>
+<ul>
+<li>类似于流密码，每个明文分组通过异或操作与加密的前一个密文分组进行加密。</li>
+<li>需要一个初始向量（IV）。</li>
+<li>适用于逐字节加密或逐位加密。</li>
+</ul>
+<p><strong>输出反馈模式（OFB - Output Feedback Mode）</strong>：</p>
+<ul>
+<li>类似于流密码，每个明文分组通过异或操作与一个加密的种子值进行加密，该种子值从初始向量（IV）开始，然后每次通过加密函数递归生成。</li>
+<li>不同于CFB模式，OFB模式不依赖于前一个密文分组，因此加密过程可以提前进行。</li>
+</ul>
+<p><strong>Galois/Counter Mode（GCM）</strong>：</p>
+<ul>
+<li>结合了计数器模式和一个认证机制。</li>
+<li>提供数据完整性和保密性。</li>
+</ul>
+<h4 id="缺点">缺点</h4>
+<ul>
+<li>在对称加密中，加密和解密使用相同的密钥。因此，如何安全地分发密钥是一个重大挑战。如果密钥在传输过程中被截获或泄露，整个加密系统的安全性将受到严重威胁。</li>
+<li>对称加密无法提供非否认性，即无法证明一条消息确实是由某个特定用户发送的。因为加密和解密使用相同的密钥，任何拥有该密钥的人都可以加密和解密消息，因此无法区分消息的发送者。</li>
+<li>对称加密需要一个安全的初始密钥交换机制。如果没有合适的密钥交换协议，初始密钥交换会成为系统的薄弱环节，容易受到攻击。</li>
+</ul>
+<h3 id="非对称加密">非对称加密</h3>
+<p>使用一对密钥进行加密和解密操作。这对密钥包括一个公钥（Public
+Key）和一个私钥（Private Key）。其中：</p>
+<ul>
+<li><p><strong>公钥</strong>：可以公开分发，用于<strong>加密</strong>数据。</p></li>
+<li><p><strong>私钥</strong>：必须保密，用于<strong>解密</strong>数据。</p></li>
+</ul>
+<p>常见的非对称加密算法：</p>
+<ul>
+<li><strong>RSA</strong>：https://ctf-wiki.org/crypto/asymmetric/rsa/rsa_theory/</li>
+<li>ECC:基于椭圆曲线离散对数问题，提供相同安全级别所需的密钥长度比RSA短，因此效率更高</li>
+<li>DSA：主要用于数字签名，基于离散对数问题。</li>
+</ul>
+<h4 id="问题">问题</h4>
+<p>非对称加密能够一定程度上消除对称加密出现的安全问题，但是假如公钥被中间人拦截并篡改了呢？这就涉及到了数字签名和数字证书。</p>
+<h2 id="数字签名">数字签名</h2>
+<p><strong>数字签名</strong>是一种用于验证数字信息完整性、真实性和不可否认性的技术。它通过使用非对称加密算法，确保数据在传输过程中没有被篡改，并确认数据的发送者身份。数字签名是用<strong>私钥</strong>生成的</p>
+<ol type="1">
+<li><p><strong>生成哈希值</strong>：对要签名的数据进行哈希运算，生成固定长度的哈希值。</p></li>
+<li><p><strong>加密哈希值</strong>：使用发送者的私钥对生成的哈希值进行加密，生成数字签名。</p></li>
+<li><p><strong>附加签名</strong>：将数字签名附加到数据后面，一并发送给接收方。</p></li>
+</ol>
+<h2 id="数字证书">数字证书</h2>
+<p><strong>数字证书</strong>是由权威机构（证书颁发机构，CA）签发的一种电子文档，用来验证公开密钥的真实性。它包含了<strong>公钥</strong>和持有者信息，并且由CA的私钥签名，确保证书的可信性。</p>
+<ol type="1">
+<li><p><strong>生成密钥对</strong>：申请者生成一对公钥和私钥，并向CA提交公钥和身份信息。</p></li>
+<li><p><strong>CA验证信息</strong>：CA验证申请者的身份信息。</p></li>
+<li><p><strong>签发证书</strong>：CA用其私钥对申请者的公钥和身份信息进行签名，生成数字证书，并将证书发给申请者。</p></li>
+<li><p><strong>发布和使用</strong>：申请者将数字证书与公钥一起提供给需要验证其身份的各方。</p></li>
+</ol>
+<h2 id="示例">示例</h2>
+<p>Alice 和 Bob 的安全通信：</p>
+<ol type="1">
+<li>Alice 申请数字证书
+<ul>
+<li>Alice 向证书颁发机构 (CA) 申请数字证书。</li>
+<li>Alice 生成了一对公钥和私钥，并将公钥和个人身份信息发送给 CA。</li>
+<li>CA 验证 Alice 的身份信息。</li>
+<li>CA 用自己的私钥对 Alice 的公钥和身份信息进行签名，生成 Alice
+的<strong>数字证书</strong>，并将证书发送给 Alice。</li>
+</ul></li>
+<li>Alice 发送带签名的消息给 Bob
+<ul>
+<li>Alice
+使用她的私钥对消息进行签名，生成<strong>数字签名</strong>。</li>
+<li>Alice 将消息和数字签名一起发送给 Bob，同时附上她的数字证书。</li>
+</ul></li>
+<li>Bob 验证 Alice 的数字签名和证书
+<ul>
+<li>Bob 收到消息、数字签名和 Alice 的数字证书。</li>
+<li>Bob 使用 CA 的公钥验证 Alice 的数字证书，确认证书是由可信的 CA
+签发的，并且证书中的公钥确实属于 Alice。</li>
+<li>Bob 提取 Alice 的公钥，用它来验证 Alice
+的数字签名，确保消息没有被篡改，并确认消息确实是由 Alice 发送的。</li>
+</ul></li>
+</ol>
+<blockquote>
+<p>在数字签名中，公钥和私钥是成对使用的。私钥用于加密（签名），公钥用于解密（验证）。虽然公钥通常用于解密加密的数据，但在数字签名的场景中，它的作用是验证签名是否有效。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/08/CS61B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -404,7 +607,7 @@ Polymorphism （子类多态性）。</p>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/06/17/%E5%9B%BE%E5%BA%8A%E8%AE%BE%E7%BD%AE/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/06/18/%E5%9B%BE%E5%BA%8A%E8%AE%BE%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -418,7 +621,7 @@ Polymorphism （子类多态性）。</p>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2024/06/17/%E5%9B%BE%E5%BA%8A%E8%AE%BE%E7%BD%AE/" class="post-title-link" itemprop="url">Github图床设置</a>
+            <a href="/2024/06/18/%E5%9B%BE%E5%BA%8A%E8%AE%BE%E7%BD%AE/" class="post-title-link" itemprop="url">Github图床设置</a>
         </h2>
 
         <div class="post-meta">
@@ -428,14 +631,14 @@ Polymorphism （子类多态性）。</p>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2024-06-17 00:00:00" itemprop="dateCreated datePublished" datetime="2024-06-17T00:00:00+08:00">2024-06-17</time>
+              <time title="创建时间：2024-06-18 00:25:44" itemprop="dateCreated datePublished" datetime="2024-06-18T00:25:44+08:00">2024-06-18</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-18 00:48:30" itemprop="dateModified" datetime="2024-06-18T00:48:30+08:00">2024-06-18</time>
+                <time title="修改时间：2024-08-07 18:13:58" itemprop="dateModified" datetime="2024-08-07T18:13:58+08:00">2024-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1635,106 +1838,6 @@ token。 还可以使用 SSH 密钥对提交进行签名。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/05/primitive-type%E5%92%8Creference-type/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/04/05/primitive-type%E5%92%8Creference-type/" class="post-title-link" itemprop="url">primitive type和reference type</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-05 16:55:06" itemprop="dateCreated datePublished" datetime="2024-04-05T16:55:06+08:00">2024-04-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CS61B/" itemprop="url" rel="index"><span itemprop="name">CS61B</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>数据类型可以分为两类：基本数据类型（primitive
-type）和引用数据类型（reference type）。</p>
-<p><strong>基本数据类型</strong>是指整数、浮点数、布尔值等（<code>byte</code>、<code>short</code>、<code>int</code>、<code>long</code>、
-<code>float</code>、 <code>double</code>、
-<code>boolean</code>、<code>char</code>）。这些类型的值是直接存储在内存中的，它们的大小是固定的，因此它们的操作速度非常快。</p>
-<p><strong>引用数据类型</strong>是指<strong>对象</strong>、<strong>数组</strong>、<strong>函数</strong>等类型。这些类型的值是存储在内存中的地址，而不是直接存储在变量中。因此，当我们操作引用类型时，实际上是在操作存储在内存中的地址，而不是实际的值。这使得引用数据类型的操作速度相对较慢。</p>
-<p>一个重要的区别是，基本数据类型的值在传递给函数或赋值给另一个变量时，会被复制一份。而引用数据类型的值在传递给函数或赋值给另一个变量时，只会复制它的地址，而不是它的值。这意味着，如果我们修改了一个引用数据类型的值，它会影响到所有引用该值的变量。</p>
-<h2 id="基本数据类型">基本数据类型</h2>
-<p>例如，在Java中，int是一种基本数据类型，下面是一个示例代码：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> a; <span class="comment">// b的值是10，而不是a的地址</span></span><br><span class="line">b = <span class="number">20</span>; <span class="comment">// a的值仍然是10</span></span><br></pre></td></tr></tbody></table></figure>
-<h2 id="引用数据类型">引用数据类型</h2>
-<p><strong>对象</strong>通常是引用数据类型，例如下面这个例子：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PollQuestions</span> {</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">      <span class="type">Walrus</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Walrus</span>(<span class="number">1000</span>, <span class="number">8.3</span>);</span><br><span class="line">      Walrus b;</span><br><span class="line">      b = a;</span><br><span class="line">      b.weight = <span class="number">5</span>;   <span class="comment">//修改b.weight的值，同时a.weight的值也被改变了</span></span><br><span class="line">      System.out.println(a);</span><br><span class="line">      System.out.println(b);       </span><br><span class="line">   }</span><br><span class="line">   </span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Walrus</span> {</span><br><span class="line">      <span class="keyword">public</span> <span class="type">int</span> weight;</span><br><span class="line">      <span class="keyword">public</span> <span class="type">double</span> tuskSize;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">public</span> <span class="title function_">Walrus</span><span class="params">(<span class="type">int</span> w, <span class="type">double</span> ts)</span> {</span><br><span class="line">         weight = w;</span><br><span class="line">         tuskSize = ts;</span><br><span class="line">      }</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> {</span><br><span class="line">         <span class="keyword">return</span> String.format(<span class="string">"weight: %d, tusk size: %.2f"</span>, weight, tuskSize);</span><br><span class="line">      }</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>输出结果为：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">weight: 5, tusk size: 8.30</span><br><span class="line">weight: 5, tusk size: 8.30</span><br></pre></td></tr></tbody></table></figure>
-<p>总之，这两种数据类型在编程中都非常常见，理解它们之间的区别非常重要。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1806,20 +1909,20 @@ type）和引用数据类型（reference type）。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1855,12 +1958,12 @@ type）和引用数据类型（reference type）。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">255k</span>
+    <span title="站点总字数">258k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:52</span>
+    <span title="站点阅读时长">3:54</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
