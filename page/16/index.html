@@ -164,6 +164,134 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/10/CS61A-frame/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/10/CS61A-frame/" class="post-title-link" itemprop="url">CS61A(sp21)-Lecture2</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-10 13:41:14" itemprop="dateCreated datePublished" datetime="2022-10-10T13:41:14+08:00">2022-10-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>842</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考资料：http://composingprograms.com/pages/13-defining-new-functions.html#calling-user-defined-functions</p>
+<p>最近在学习CS61A，学到了一个新概念：frame</p>
+<h1 id="frame">Frame</h1>
+<h2 id="定义">定义</h2>
+<p>An environment in which an expression is evaluated consists of a
+sequence of <em>frames</em>, depicted as boxes. Each frame contains
+<em>bindings</em>, each of which associates a name with its
+corresponding value.</p>
+<p>当我们对表达式求值时，实际上是在当前环境中求值，而该环境由一系列的“框架”组成。每个框架都包含绑定关系，将名称与其相应值相关联。</p>
+<h2 id="global-frame">global frame</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> pi</span><br><span class="line">tau = <span class="number">2</span> * pi</span><br></pre></td></tr></tbody></table></figure>
+<p>上述示例的环境中就只有 the global frame ，如下图所示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008231614912.png" alt="image-20221008231614912"><br>http://composingprograms.com/tutor.html
+（可通过该链接测试代码）</p>
+<p>import语句导入的函数和用户自定义的函数都被包含在 the global frame
+中，如下图所示：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008232149245.png" alt="image-20221008232149245">
+<figcaption aria-hidden="true">image-20221008232149245</figcaption>
+</figure>
+<h2 id="local-frame">local frame</h2>
+<p>调用用户自己定义的函数时，每个实例都有其自己独立的 local frame 。</p>
+<ul>
+<li><p>执行实例前</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235349096.png" alt="image-20221008235349096">
+<figcaption aria-hidden="true">image-20221008235349096</figcaption>
+</figure></li>
+<li><p>执行实例过程</p>
+<p>使用参数-2调用 square
+函数，因此创建了一个新的框架（frame），形式参数x绑定到值-2。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235439472.png" alt="image-20221008235439472">
+<figcaption aria-hidden="true">image-20221008235439472</figcaption>
+</figure>
+<p>在当前环境中查找名称x，该环境由显示的两个框架组成。在 mul(x,x)
+中的两次出现，且均为-2，因此 square 函数返回 4 。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221008235453861.png" alt="image-20221008235453861">
+<figcaption aria-hidden="true">image-20221008235453861</figcaption>
+</figure></li>
+<li><p>执行完成</p>
+<p>square所在的框架会消失，这里保留只是方便观察。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20221010103200749.png" alt="image-20221010103200749">
+<figcaption aria-hidden="true">image-20221010103200749</figcaption>
+</figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/31/gcc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1532,119 +1660,10 @@ EAX 中的内容（一个64位的整数），除法结果 ( 商 ) 存在 EAX
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/16/AT&T%E5%92%8CIntel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/16/AT&T%E5%92%8CIntel/" class="post-title-link" itemprop="url">AT&T和Intel汇编语法区别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-16 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-16T00:00:00+08:00">2022-08-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-19 22:47:48" itemprop="dateModified" datetime="2023-07-19T22:47:48+08:00">2023-07-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>738</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考： https://zhuanlan.zhihu.com/p/70590839</p>
-<p>​ https://segmentfault.com/a/1190000040633213 （较为详细）</p>
-<p>​
-https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/1.5.2_assembly.html
-AT&amp;T汇编基础</p>
-<h1 id="att与intel">AT&amp;T与Intel</h1>
-<p>AT&amp;T语法多应用于Unix/Linux平台，Intel语法多应用于Windows系统。</p>
-<p>以下是这两种语法的主要区别：</p>
-<ul>
-<li><p>目标操作数和源操作数的顺序不同。</p>
-<p>Intel：目标操作数在源操作数的左边。</p>
-<p>AT&amp;T：目标操作数在源操作数的右边。</p>
-<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">将2送入寄存器eax</span><br><span class="line">寄存器esp的值减去500(0x1f4)</span><br><span class="line"></span><br><span class="line">Intel:</span><br><span class="line">      mov eax, 2</span><br><span class="line">      sub esp, 0x1f4 </span><br><span class="line"></span><br><span class="line">AT&amp;T:</span><br><span class="line">      mov $2, %eax</span><br><span class="line">      sub $0x1f4, %esp</span><br><span class="line">      </span><br><span class="line">#注：sub指令是将目标操作数的值中减去源操作数的值，并将结果存储在目标操作数中</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>AT&amp;T的立即数（立即数通常是指在<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/立即寻址方式/6686429">立即寻址方式</a>指令中给出的数。）前要加<code>$</code>，寄存器前要加<code>%</code>；Intel则不需要。</p></li>
-<li><p>操作数字长的表示方法不同。在AT&amp;T汇编格式中，操作数的字长由操作符的最后一个字母决定，后缀<code>b</code>、<code>w</code>、<code>l</code>分别表示操作数为字节（byte，8bit）、字（word，16bit）和长字（long，32bit）；而在Intel汇编格式中，操作数的字长是用<code>byte ptr</code>和<code>word ptr</code>等前缀来表示的。</p>
-<figure class="highlight x86asm"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">movb val,%al    # <span class="meta">AT</span>&amp;T</span><br><span class="line">movl <span class="built_in">al</span>,<span class="built_in">byte</span> <span class="built_in">ptr</span> val   # Intel</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<p>总结：</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230521161130215.png" alt="image-20230521161130215">
-<figcaption aria-hidden="true">image-20230521161130215</figcaption>
-</figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1712,14 +1731,14 @@ AT&amp;T汇编基础</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">170</span>
+          <span class="site-state-item-count">171</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1761,12 +1780,12 @@ AT&amp;T汇编基础</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">333k</span>
+    <span title="站点总字数">361k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:03</span>
+    <span title="站点阅读时长">5:29</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
