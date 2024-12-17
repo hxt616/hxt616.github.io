@@ -164,6 +164,113 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/10/ManyCheck/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/06/10/ManyCheck/" class="post-title-link" itemprop="url">复现省赛逆向-ManyCheck</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-10 15:47:24" itemprop="dateCreated datePublished" datetime="2023-06-10T15:47:24+08:00">2023-06-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>复现第五届浙江省网络与信息安全竞赛中的第一道逆向题。</p>
+<p>参考：https://blog.csdn.net/fightforyourdream/article/details/15805125</p>
+<h1 id="manycheck">ManyCheck</h1>
+<p>下载附件后，发现压缩包里有一个exe文件，和一个pdb文件（程序数据库文件）。直接用
+Exeinfo PE 打开 exe 文件，查看相关信息</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918122046736.png" alt="image-20220918122046736">
+<figcaption aria-hidden="true">image-20220918122046736</figcaption>
+</figure>
+<p>然后用IDA打开文件，直接按F5查看<code>_main_0</code>函数的伪代码</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main_0</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> savedregs; <span class="comment">// [esp+0h] [ebp+0h]</span></span><br><span class="line"></span><br><span class="line">  sub_4013BC(asc_40CC44, savedregs);</span><br><span class="line">  sub_4013BC(aLetsEnjoyThisE, savedregs);</span><br><span class="line">  sub_4013BC(asc_40CC94, savedregs);</span><br><span class="line">  sub_40100F();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>再按 Shift+F12 查看特殊字符串</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">.data:0040CA30	00000007	C	DASCTF{</span><br><span class="line">.data:0040CA50	00000026	C	*********** First check ***********\n\n</span><br><span class="line">.data:0040CA78	0000001F	C	Guess my lucky number(32~127)\n</span><br><span class="line">.data:0040CA9C	00000008	C	Bingo!\n</span><br><span class="line">.data:0040CAA4	0000000E	C	What a pity!\n</span><br><span class="line">.data:0040CAB4	00000029	C	\n\n*********** Second check ***********\n\n</span><br><span class="line">.data:0040CAE0	00000014	C	Let's do some math\n</span><br><span class="line">.data:0040CAF4	00000018	C	n*n + 57*59 = 6388\nn = </span><br><span class="line">.data:0040CB10	00000019	C	m*m + 98 + 1 = 2500\nm = </span><br><span class="line">.data:0040CB30	0000000C	C	Good Math!\n</span><br><span class="line">.data:0040CB3C	00000007	C	Wrong\n</span><br><span class="line">.data:0040CB44	00000028	C	\n\n*********** Third check ***********\n\n</span><br><span class="line">.data:0040CB6C	0000001B	C	Let's learn rotate shift!\n</span><br><span class="line">.data:0040CB88	0000002C	C	e.g. 0b11001101 rotate right 3 -&gt; 10111001\n</span><br><span class="line">.data:0040CBB4	0000002D	C	Which integer rotate right 16 -&gt; 1718896489\n</span><br><span class="line">.data:0040CBE4	00000017	C	Give me this integer: </span><br><span class="line">.data:0040CC00	00000013	C	You are so smart!\n</span><br><span class="line">.data:0040CC14	0000000D	C	Check over!\n</span><br><span class="line">.data:0040CC24	0000000B	C	Flag is %s</span><br><span class="line">.data:0040CC30	00000014	C	Wrong, learn again\n</span><br><span class="line">.data:0040CC44	00000026	C	************************************\n</span><br><span class="line">.data:0040CC6C	00000026	C	*     Lets' enjoy this easy Re!    *\n</span><br><span class="line">.data:0040CC94	00000026	C	************************************\n</span><br></pre></td></tr></tbody></table></figure>
+<p>发现本题需要三次 check ，正确后给出flag。</p>
+<p>双击查看<code>sub_4013BC</code>函数，看不出什么名堂，再查看<code>sub_40100F()</code>函数，最后发现如下代码</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sub_401050</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> v0; <span class="comment">// ST08_4</span></span><br><span class="line">  <span class="type">char</span> v1; <span class="comment">// ST08_1</span></span><br><span class="line">  <span class="type">int</span> v3; <span class="comment">// [esp+0h] [ebp-8h]</span></span><br><span class="line">  <span class="type">int</span> v4; <span class="comment">// [esp+4h] [ebp-4h]</span></span><br><span class="line"></span><br><span class="line">  v4 = <span class="number">0</span>;</span><br><span class="line">  sub_4013BC((<span class="type">int</span>)aFirstCheck, <span class="number">77</span>);</span><br><span class="line">  sub_4013BC((<span class="type">int</span>)aGuessMyLuckyNu, v0);</span><br><span class="line">  <span class="built_in">scanf</span>(aD, &amp;v4);</span><br><span class="line">  <span class="keyword">if</span> ( v4 != v3 )</span><br><span class="line">    <span class="keyword">return</span> sub_4013BC((<span class="type">int</span>)aWhatAPity, v3);</span><br><span class="line">  sub_4013BC((<span class="type">int</span>)aBingo, v3);</span><br><span class="line">  byte_40CA37 = v1;</span><br><span class="line">  byte_40CA42 = v1 - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> sub_401014();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>分析代码可知第一个 check 的答案是<code>77</code>，再回到 String
+窗口查看第二个 check ，需要计算出 n 和 m ，第三个 check 是关于 rotate
+算法的，编写脚本</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line">n=math.sqrt(<span class="number">6388</span>-<span class="number">57</span>*<span class="number">59</span>)</span><br><span class="line">m=math.sqrt(<span class="number">2500</span>-<span class="number">1</span>-<span class="number">98</span>)</span><br><span class="line"><span class="built_in">print</span>(n,m)        <span class="comment">#n=55, m=49</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#third check</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">self, nums, k</span>):</span><br><span class="line">            <span class="comment"># Write your code here</span></span><br><span class="line">            length = <span class="built_in">len</span>(nums)</span><br><span class="line">            k = k % length</span><br><span class="line">            result = nums[length - k : length] + nums[:length - k]</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">r=Solution()</span><br><span class="line">flag=<span class="built_in">bin</span>(<span class="number">1718896489</span>)    <span class="comment">#flag=0b1100110011101000100011101101001（31位）</span></span><br><span class="line">flag=<span class="string">'0b01100110011101000100011101101001'</span>   <span class="comment">#在最前面加个'0',位数必须为整数个字节大小（8位，16位，32位）</span></span><br><span class="line">flag=<span class="built_in">list</span>(flag[<span class="number">2</span>:])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">''</span>.join(flag))</span><br><span class="line">s=r.rotate(flag,<span class="built_in">len</span>(flag)-<span class="number">16</span>)</span><br><span class="line">s=<span class="string">''</span>.join(s)</span><br><span class="line"><span class="built_in">print</span>(s)                     <span class="comment">#s='01000111011010010110011001110100'</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">int</span>(<span class="number">0b1000111011010010110011001110100</span>))       <span class="comment">#119809844</span></span><br></pre></td></tr></tbody></table></figure>
+<p>用OD打开 exe 文件，按F8运行至 first check
+，按顺序输入：77、55、49、1198089844。得到flag</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220918124817540.png" alt="image-20220918124817540">
+<figcaption aria-hidden="true">image-20220918124817540</figcaption>
+</figure>
+<p><code>DASCTF{M71_Gift_08L}</code></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/04/13/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2153,95 +2260,6 @@ Buckets是亚马逊AWS提供的一项存储服务，允许人们将文件甚至�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/17/Rotate/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/17/Rotate/" class="post-title-link" itemprop="url">Rotate</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-10-17 00:01:32" itemprop="dateCreated datePublished" datetime="2022-10-17T00:01:32+08:00">2022-10-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>636</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考：https://zhuanlan.zhihu.com/p/43568725
-https://www.jiuzhang.com/solutions/rotate-array/</p>
-<h1 id="翻转数组rotate-array">翻转数组（Rotate Array）</h1>
-<p>给定一个数组，将数组向右移动k步，其中k为非负数。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6,7] and k = 3</span><br><span class="line">Output: [5,6,7,1,2,3,4]</span><br><span class="line">Explanation:</span><br><span class="line">rotate 1 steps to the right: [7,1,2,3,4,5,6]</span><br><span class="line">rotate 2 steps to the right: [6,7,1,2,3,4,5]</span><br><span class="line">rotate 3 steps to the right: [5,6,7,1,2,3,4]</span><br></pre></td></tr></tbody></table></figure>
-<p>假设给定一个二进制数<code>a='0b11001101'</code>，（<strong>必须为8位或16位或32位</strong>）求
-rotate right 3 的结果，代码如下：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">self, nums, k</span>):</span><br><span class="line">            <span class="comment"># Write your code here</span></span><br><span class="line">            length = <span class="built_in">len</span>(nums)</span><br><span class="line">            k = k % length</span><br><span class="line">            result = nums[length - k : length] + nums[:length - k]</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">a=<span class="string">'0b11001101'</span></span><br><span class="line">a=<span class="built_in">list</span>(a[<span class="number">2</span>:])</span><br><span class="line">r=Solution()</span><br><span class="line">x=r.rotate(a,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span>(x)</span><br></pre></td></tr></tbody></table></figure>
-<p>运行结果为<code>['1', '0', '1', '1', '1', '0', '0', '1']</code>。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2313,20 +2331,20 @@ rotate right 3 的结果，代码如下：</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">173</span>
+          <span class="site-state-item-count">174</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2362,12 +2380,12 @@ rotate right 3 的结果，代码如下：</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">367k</span>
+    <span title="站点总字数">368k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:34</span>
+    <span title="站点阅读时长">5:35</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
