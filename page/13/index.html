@@ -164,6 +164,106 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/02/LeetCode%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/02/LeetCode%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" class="post-title-link" itemprop="url">长度最小的子数组</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-02 10:32:10" itemprop="dateCreated datePublished" datetime="2024-01-02T10:32:10+08:00">2024-01-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>744</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/minimum-size-subarray-sum/</p>
+<p><strong>滑动窗口</strong>算是<strong>双指针</strong>的一种，可以类比计算机网络里的滑动窗口。</p>
+<p>主要的思想是：从<strong>A[i]</strong>开始，向后遍历找到满足条件的最小长度；若能找到，分析可知以<strong>A[i]</strong>开始的窗口大小只有这一个最小值，然后寻找以<strong>A[i+1]</strong>开始的最小长度。</p>
+<ul>
+<li>初始时，左、右指针指向数组下标为0的元素，窗口大小为最大正整数</li>
+<li>右指针右移，比较当前窗口中元素之和与目标值的大小：
+<ol type="1">
+<li>若大于等于target，且当前窗口小于之前的值，则更新窗口大小，同时左指针右移，直到窗口里元素之和小于target</li>
+<li>否则，右指针继续后移</li>
+</ol></li>
+<li>最后比较窗口大小是否等于最大正整数，若等于，则说明不存在符合条件的子数组，返回0；否则返回窗口大小</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">minSubArrayLen</span><span class="params">(<span class="type">int</span> target, <span class="type">int</span>* nums, <span class="type">int</span> numsSize)</span> {</span><br><span class="line">    <span class="type">int</span> result = INT_MAX;</span><br><span class="line">    <span class="type">int</span> len = <span class="number">0</span>; <span class="comment">//记录当前滑动窗口大小</span></span><br><span class="line">    <span class="type">int</span> l = <span class="number">0</span>; <span class="comment">//左指针</span></span><br><span class="line">    <span class="type">int</span> r = <span class="number">0</span>; <span class="comment">//右指针</span></span><br><span class="line">    <span class="type">int</span> sum = <span class="number">0</span>; <span class="comment">//记录元素相加之和</span></span><br><span class="line">    <span class="keyword">for</span>(r; r &lt; numsSize; r++) {</span><br><span class="line">        sum += nums[r];</span><br><span class="line">        <span class="keyword">while</span>(sum &gt;= target) {</span><br><span class="line">            len = r-l+<span class="number">1</span>;  <span class="comment">//当前窗口大小</span></span><br><span class="line">            result = len &lt; result ? len : result;  <span class="comment">//判断是否更新最小窗口值</span></span><br><span class="line">            sum -= nums[l];</span><br><span class="line">            l++;   <span class="comment">//左指针右移</span></span><br><span class="line">            </span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result == INT_MAX ? <span class="number">0</span> : result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>这里虽然使用了<code>while</code>，但时间复杂度还是O(n)，不是O(n<sup>2</sup>)</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/31/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E5%B9%B3%E6%96%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1052,112 +1152,6 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/11/%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/11/%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/" class="post-title-link" itemprop="url">整数反转</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-07-11 10:07:24" itemprop="dateCreated datePublished" datetime="2023-07-11T10:07:24+08:00">2023-07-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>814</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/reverse-integer/</p>
-<p>这算是一道简单题，我最后还是参考官方题解才做出来<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
-<blockquote>
-<p>给你一个 32 位的有符号整数 <code>x</code> ，返回将 <code>x</code>
-中的数字部分反转后的结果。</p>
-<p>如果反转后整数超过 32 位的有符号整数的范围 <span class="math inline">\([−2^{31},2^{31}−1]\)</span> ，就返回 0。</p>
-<p><strong>假设环境不允许存储 64 位整数（有符号或无符号）。</strong></p>
-<p><strong>示例 ：</strong></p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：x = 123</span><br><span class="line">输出：321</span><br></pre></td></tr></tbody></table></figure>
-</blockquote>
-<p>int类型表示的范围：<strong>-2147483648</strong> ~
-<strong>2147483647</strong></p>
-<p>这里不能在算出结果后再比较结果是否溢出，因为题目要求不允许使用64位整数，即运算过程中的数字必须在32位有符号整数的范围内，所以在计算过程中可能会直接溢出报错。</p>
-<p>这里使用如下思想：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 弹出 x 的末尾数字 digit</span></span><br><span class="line">digit = x % <span class="number">10</span></span><br><span class="line">x /= <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将数字 digit 推入 rev 末尾</span></span><br><span class="line">rev = rev * <span class="number">10</span> + digit</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<p>首先题目要求输入必须是32位int类型，所以不用对输入进行范围判断。假设输入正数<strong>2147483645</strong>，此时反转到最后一个数字前，<code>rev</code>的值为<strong>546384741</strong>，现在还剩最后一个数字，需要执行这句<code>rev = rev * 10 + digit</code>，但在乘以
-10
-时就已经溢出报错了，所以该代码不能执行，因此需要在每次循环执行<code>rev = rev * 10 + digit</code>前判断<code>rev</code>的范围是否满足：
-<span class="math display">\[
-⌈\frac{−2^{31}}{10}⌉≤rev≤⌊\frac{2^{31}−1}{10}⌋
-\]</span> 完整代码：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">reverse</span><span class="params">(<span class="type">int</span> x)</span>{</span><br><span class="line">    <span class="type">int</span> t=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x!=<span class="number">0</span>){</span><br><span class="line">        <span class="keyword">if</span>(t&lt;INT_MIN/<span class="number">10</span> || t&gt;INT_MAX/<span class="number">10</span>){ <span class="comment">//INT_MIN 和 INT_MAX 对应最小值和最大值</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        t = t*<span class="number">10</span> + x%<span class="number">10</span>;</span><br><span class="line">        x/=<span class="number">10</span>;</span><br><span class="line">        </span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1229,20 +1223,20 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">176</span>
+          <span class="site-state-item-count">177</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">68</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1278,12 +1272,12 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">389k</span>
+    <span title="站点总字数">407k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:54</span>
+    <span title="站点阅读时长">6:10</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
