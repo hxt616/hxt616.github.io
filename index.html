@@ -164,6 +164,150 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/05/13/std_thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/13/std_thread/" class="post-title-link" itemprop="url">std::thread</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-05-13 21:52:02 / 修改时间：22:19:28" itemprop="dateCreated datePublished" datetime="2025-05-13T21:52:02+08:00">2025-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CPP/" itemprop="url" rel="index"><span itemprop="name">CPP</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一基本使用方法">一、基本使用方法</h2>
+<h3 id="创建线程">1. 创建线程</h3>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printMessage</span><span class="params">()</span> </span>{</span><br><span class="line">    std::cout &lt;&lt; <span class="string">"Hello from thread!"</span> &lt;&lt; std::endl;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="function">std::thread <span class="title">t</span><span class="params">(printMessage)</span></span>; <span class="comment">// 启动线程</span></span><br><span class="line">    t.<span class="built_in">join</span>(); <span class="comment">// 等待线程结束</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="带参数的线程">2. 带参数的线程</h3>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printSum</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>{</span><br><span class="line">    std::cout &lt;&lt; a + b &lt;&lt; std::endl;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="function">std::thread <span class="title">t</span><span class="params">(printSum, <span class="number">3</span>, <span class="number">4</span>)</span></span>; <span class="comment">// 传值参数</span></span><br><span class="line">    t.<span class="built_in">join</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="使用-lambda-表达式">3. 使用 Lambda 表达式</h3>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::thread <span class="title">t</span><span class="params">([]() {</span></span></span><br><span class="line"><span class="params"><span class="function">    std::cout &lt;&lt; <span class="string">"Lambda thread"</span> &lt;&lt; std::endl;</span></span></span><br><span class="line"><span class="params"><span class="function">})</span></span>;</span><br><span class="line">t.<span class="built_in">join</span>();</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="使用成员函数">4. 使用成员函数</h3>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Worker</span> {</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">doWork</span><span class="params">(<span class="type">int</span> times)</span> </span>{</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; times; ++i)</span><br><span class="line">            std::cout &lt;&lt; <span class="string">"Working..."</span> &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    Worker w;</span><br><span class="line">    <span class="function">std::thread <span class="title">t</span><span class="params">(&amp;Worker::doWork, &amp;w, <span class="number">3</span>)</span></span>;</span><br><span class="line">    t.<span class="built_in">join</span>();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h2 id="二线程控制">二、线程控制</h2>
+<h3 id="detach">1. <code>detach()</code></h3>
+<p><code>std::thread::detach()</code> 的意思是：</p>
+<ul>
+<li>让线程 <strong>后台运行（daemon-like）</strong></li>
+<li>主线程 <strong>不再跟踪这个线程</strong>，你不能再
+<code>join()</code> 它，也无法控制它</li>
+<li>它会在自己工作完成后自动结束</li>
+</ul>
+<h4 id="但如果-main-提前退出">但如果 <code>main()</code> 提前退出？</h4>
+<p>一旦 <code>main()</code>
+返回，程序的所有资源都会被释放，<strong>包括所有线程</strong>（不管他们干完了没有）！</p>
+<ul>
+<li>即使你已经 <code>detach()</code>
+了线程，它也可能<strong>没有时间完成任务</strong>；</li>
+<li>程序就直接退出了，<strong>线程被强制杀死</strong>，<strong>任务中断</strong>；</li>
+<li>所以你可能看不到完整输出，或者文件没下载完。</li>
+</ul>
+<h4 id="示例">示例</h4>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">myfunc</span><span class="params">()</span> </span>{</span><br><span class="line">    std::<span class="built_in">thread</span>([] {</span><br><span class="line">        <span class="built_in">download</span>(<span class="string">"file.zip"</span>); <span class="comment">// 下载需要 4 秒</span></span><br><span class="line">    }).<span class="built_in">detach</span>();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="built_in">myfunc</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// 马上退出！后台线程直接被终止</span></span><br><span class="line">}</span><br><span class="line"><span class="comment">/* 运行结果：可能只打印出 1～2 行“Downloading ...”，甚至什么都不打印。*/</span></span><br></pre></td></tr></tbody></table></figure>
+<p>解决方法：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">myfunc</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="function">std::thread <span class="title">t</span><span class="params">([] {</span></span></span><br><span class="line"><span class="params"><span class="function">        download(<span class="string">"file.zip"</span>);</span></span></span><br><span class="line"><span class="params"><span class="function">    })</span></span>;</span><br><span class="line">    t.<span class="built_in">join</span>(); <span class="comment">// 等它干完</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="join">2. <code>join</code></h3>
+<p><code>std::thread::join()</code>
+的作用是：<strong>阻塞当前线程，直到目标线程执行完成</strong>。</p>
+<ul>
+<li>当你调用
+<code>t.join();</code>，当前线程（比如主线程）会<strong>暂停运行</strong>；</li>
+<li>一直等到 <code>t</code> 所代表的那个子线程跑完；</li>
+<li>然后继续执行后面的语句。</li>
+</ul>
+<p><strong>注意事项</strong>：</p>
+<ol type="1">
+<li><p>一个线程只能 <code>join()</code> 一次</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::thread <span class="title">t</span><span class="params">(work)</span></span>;</span><br><span class="line">t.<span class="built_in">join</span>();</span><br><span class="line">t.<span class="built_in">join</span>(); <span class="comment">// 再次调用会崩溃，线程已经结束</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>线程未启动不能 <code>join()</code></p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::thread t;  <span class="comment">// 默认构造，未绑定函数</span></span><br><span class="line">t.<span class="built_in">join</span>();       <span class="comment">// 崩溃，线程未启动</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>通常在 <code>joinable()</code> 判断后调用</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (t.<span class="built_in">joinable</span>()) {</span><br><span class="line">    t.<span class="built_in">join</span>();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>这是一种<strong>良好的编程习惯</strong>，避免调用非法
+<code>join()</code>。</p></li>
+</ol>
+<hr>
+<h2 id="三常见注意事项">三、常见注意事项</h2>
+<ol type="1">
+<li><p><strong>不要忘记调用 <code>join()</code> 或
+<code>detach()</code></strong>，否则程序会崩溃。</p></li>
+<li><p><strong>传递引用参数时要使用 <code>std::ref</code></strong>：</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">update</span><span class="params">(<span class="type">int</span>&amp; x)</span> </span>{ x++; }</span><br><span class="line"><span class="function">std::thread <span class="title">t</span><span class="params">(update, std::ref(myInt))</span></span>;</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p><strong>避免使用局部变量传给线程（可能悬空）</strong>。</p></li>
+<li><p><strong>多线程共享资源要注意加锁</strong>，使用
+<code>std::mutex</code> 等同步原语。</p></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/04/03/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -4862,210 +5006,6 @@ Wave在1994年发明，用于追踪汽车零部件。</p></li>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/06/%E5%8A%A0%E5%AF%86-%E7%AD%BE%E5%90%8D-%E8%AF%81%E4%B9%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/08/06/%E5%8A%A0%E5%AF%86-%E7%AD%BE%E5%90%8D-%E8%AF%81%E4%B9%A6/" class="post-title-link" itemprop="url">加密-数字签名-数字证书</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-08-06 20:24:23" itemprop="dateCreated datePublished" datetime="2024-08-06T20:24:23+08:00">2024-08-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-08-07 18:38:47" itemprop="dateModified" datetime="2024-08-07T18:38:47+08:00">2024-08-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">信息安全</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="加密">加密</h2>
-<p>可分为：</p>
-<ul>
-<li>对称加密</li>
-<li>非对称加密</li>
-</ul>
-<h3 id="对称加密">对称加密</h3>
-<p>同一个密钥可以同时用作信息的加密和解密。</p>
-<p>常见的对称加密算法有：</p>
-<ul>
-<li><strong>AES</strong>：https://ctf-wiki.org/crypto/blockcipher/aes/</li>
-<li>DES：分组加密算法，它将数据分成64位的块进行加密。</li>
-<li>RC：RC算法家族包括RC2、RC4、RC5、RC6等</li>
-</ul>
-<h4 id="分组模式">分组模式</h4>
-<p><strong>电子密码本模式（ECB - Electronic Codebook
-Mode）</strong>：</p>
-<ul>
-<li>每个明文分组独立加密为相应的密文分组。</li>
-<li>不推荐用于实际应用，因为相同的明文分组总是加密为相同的密文分组，导致模式泄露。</li>
-</ul>
-<p><strong>密码分组链接模式（CBC - Cipher Block Chaining
-Mode）</strong>：</p>
-<ul>
-<li>每个明文分组在加密前与前一个密文分组进行异或操作。</li>
-<li>需要一个初始向量（IV）来加密第一个分组。</li>
-<li>增强了安全性，避免了相同的明文分组生成相同的密文分组。</li>
-</ul>
-<p><strong>计数器模式（CTR - Counter Mode）</strong>：</p>
-<ul>
-<li>将一个计数器值加密，然后将结果与明文分组进行异或操作。</li>
-<li>计数器值每次加密时递增。</li>
-<li>支持并行处理，提高加密速度。</li>
-<li>也可用于流密码。</li>
-</ul>
-<p><strong>加密反馈模式（CFB - Cipher Feedback Mode）</strong>：</p>
-<ul>
-<li>类似于流密码，每个明文分组通过异或操作与加密的前一个密文分组进行加密。</li>
-<li>需要一个初始向量（IV）。</li>
-<li>适用于逐字节加密或逐位加密。</li>
-</ul>
-<p><strong>输出反馈模式（OFB - Output Feedback Mode）</strong>：</p>
-<ul>
-<li>类似于流密码，每个明文分组通过异或操作与一个加密的种子值进行加密，该种子值从初始向量（IV）开始，然后每次通过加密函数递归生成。</li>
-<li>不同于CFB模式，OFB模式不依赖于前一个密文分组，因此加密过程可以提前进行。</li>
-</ul>
-<p><strong>Galois/Counter Mode（GCM）</strong>：</p>
-<ul>
-<li>结合了计数器模式和一个认证机制。</li>
-<li>提供数据完整性和保密性。</li>
-</ul>
-<h4 id="缺点">缺点</h4>
-<ul>
-<li>在对称加密中，加密和解密使用相同的密钥。因此，如何安全地分发密钥是一个重大挑战。如果密钥在传输过程中被截获或泄露，整个加密系统的安全性将受到严重威胁。</li>
-<li>对称加密无法提供非否认性，即无法证明一条消息确实是由某个特定用户发送的。因为加密和解密使用相同的密钥，任何拥有该密钥的人都可以加密和解密消息，因此无法区分消息的发送者。</li>
-<li>对称加密需要一个安全的初始密钥交换机制。如果没有合适的密钥交换协议，初始密钥交换会成为系统的薄弱环节，容易受到攻击。</li>
-</ul>
-<h3 id="非对称加密">非对称加密</h3>
-<p>使用一对密钥进行加密和解密操作。这对密钥包括一个公钥（Public
-Key）和一个私钥（Private Key）。其中：</p>
-<ul>
-<li><p><strong>公钥</strong>：可以公开分发，用于<strong>加密</strong>数据。</p></li>
-<li><p><strong>私钥</strong>：必须保密，用于<strong>解密</strong>数据。</p></li>
-</ul>
-<p>常见的非对称加密算法：</p>
-<ul>
-<li><strong>RSA</strong>：https://ctf-wiki.org/crypto/asymmetric/rsa/rsa_theory/</li>
-<li>ECC:基于椭圆曲线离散对数问题，提供相同安全级别所需的密钥长度比RSA短，因此效率更高</li>
-<li>DSA：主要用于数字签名，基于离散对数问题。</li>
-</ul>
-<h4 id="问题">问题</h4>
-<p>非对称加密能够一定程度上消除对称加密出现的安全问题，但是假如公钥被中间人拦截并篡改了呢？这就涉及到了数字签名和数字证书。</p>
-<h2 id="数字签名">数字签名</h2>
-<p><strong>数字签名</strong>是一种用于验证数字信息完整性、真实性和不可否认性的技术。它通过使用非对称加密算法，确保数据在传输过程中没有被篡改，<strong>并确认数据的发送者身份</strong>。数字签名是用<strong>私钥</strong>生成的</p>
-<ol type="1">
-<li><p><strong>生成哈希值</strong>：对要签名的数据进行哈希运算，生成固定长度的哈希值。</p></li>
-<li><p><strong>加密哈希值</strong>：使用发送者的私钥对生成的哈希值进行加密，生成数字签名。</p></li>
-<li><p><strong>附加签名</strong>：将数字签名附加到数据后面，一并发送给接收方。</p></li>
-</ol>
-<h2 id="数字证书">数字证书</h2>
-<p><strong>数字证书</strong>是由权威机构（证书颁发机构，CA）签发的一种电子文档，用来<strong>验证公开密钥的真实性</strong>。它包含了公钥和持有者信息，并且由CA的<strong>私钥</strong>签名，确保证书的可信性。</p>
-<ol type="1">
-<li><p><strong>生成密钥对</strong>：申请者生成一对公钥和私钥，并向CA提交公钥和身份信息。</p></li>
-<li><p><strong>CA验证信息</strong>：CA验证申请者的身份信息。</p></li>
-<li><p><strong>签发证书</strong>：CA用其<strong>私钥</strong>对申请者的公钥和身份信息进行签名，生成数字证书，并将证书发给申请者。</p></li>
-<li><p><strong>发布和使用</strong>：申请者将数字证书与公钥一起提供给需要验证其身份的各方。</p></li>
-</ol>
-<h2 id="示例">示例</h2>
-<p>Alice 和 Bob 的安全通信：</p>
-<ol type="1">
-<li>Alice 申请数字证书
-<ul>
-<li>Alice 向证书颁发机构 (CA) 申请数字证书。</li>
-<li>Alice 生成了一对公钥和私钥，并将公钥和个人身份信息发送给 CA。</li>
-<li>CA 验证 Alice 的身份信息。</li>
-<li>CA 用自己的私钥对 Alice 的公钥和身份信息进行签名，生成 Alice
-的<strong>数字证书</strong>，并将证书发送给 Alice。</li>
-</ul></li>
-<li>Alice 发送带签名的消息给 Bob
-<ul>
-<li>Alice
-使用她的私钥对消息进行签名，生成<strong>数字签名</strong>。</li>
-<li>Alice 将消息和数字签名一起发送给 Bob，同时附上她的数字证书。</li>
-</ul></li>
-<li>Bob 验证 Alice 的数字签名和证书
-<ul>
-<li>Bob 收到消息、数字签名和 Alice 的数字证书。</li>
-<li>Bob 使用 CA 的公钥验证 Alice 的数字证书，确认证书是由可信的 CA
-签发的，并且证书中的公钥确实属于 Alice。</li>
-<li>Bob 提取 Alice 的公钥，用它来验证 Alice
-的数字签名，确保消息没有被篡改，并确认消息确实是由 Alice 发送的。</li>
-</ul></li>
-</ol>
-<blockquote>
-<p>在数字签名中，公钥和私钥是成对使用的。私钥用于加密（签名），公钥用于解密（验证）。虽然公钥通常用于解密加密的数据，但在数字签名的场景中，它的作用是验证签名是否有效。</p>
-</blockquote>
-<p>参考：https://segmentfault.com/a/1190000024523772</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -5137,7 +5077,7 @@ Key）和一个私钥（Private Key）。其中：</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">177</span>
+          <span class="site-state-item-count">178</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -5186,12 +5126,12 @@ Key）和一个私钥（Private Key）。其中：</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">407k</span>
+    <span title="站点总字数">409k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:10</span>
+    <span title="站点阅读时长">6:12</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
