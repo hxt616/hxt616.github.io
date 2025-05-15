@@ -164,6 +164,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/06/%E5%8A%A0%E6%B2%B9%E7%AB%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/03/06/%E5%8A%A0%E6%B2%B9%E7%AB%99/" class="post-title-link" itemprop="url">加油站</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-03-06 13:06:02" itemprop="dateCreated datePublished" datetime="2024-03-06T13:06:02+08:00">2024-03-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>842</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/gas-station/</p>
+<p>直接暴力求解，通过二重循环，遍历以不同加油站为起点的路径，难点在于如何用循环模拟出数组环路（从当前元素向后遍历直到再次遍历到该元素）</p>
+<ul>
+<li><p>第一重for循环以不同加油站为起点，每更换一个起点，<code>sumGas</code>和<code>sumCost</code>都初始化为0，统计以当前加油站为起点的路径上的<strong>累加的油量</strong>和<strong>消耗的油量</strong></p></li>
+<li><p>第二重循环使用while，<code>i</code>从0开始，<code>(start+i) % gasSize</code>表示路径上的加油站，<code>i</code>的范围是
+0 ~ gasSize-1 ，正好能够形成一个环路</p></li>
+<li><p>若当前路径上累加的油量小于消耗的油量，则<strong>退出当前while循环</strong>，以下一个加油站为起点继续；否则，当前路径成立并判断下一个加油站是否满足条件（<code>i++</code>）</p></li>
+<li><p>退出while循环后，判断当前路径是否包含所有加油站，若包含，则返回<code>start</code>起点加油站；否则以<strong>第一个无法到达的加油站</strong>为起点继续（for循环）</p>
+<p><img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20230117165628.png"></p></li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">canCompleteCircuit</span><span class="params">(<span class="type">int</span>* gas, <span class="type">int</span> gasSize, <span class="type">int</span>* cost, <span class="type">int</span> costSize)</span> {</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> start=<span class="number">0</span>; start&lt;gasSize; ) { <span class="comment">//起点加油站</span></span><br><span class="line">        <span class="type">int</span> sumGas = <span class="number">0</span>, sumCost = <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i&lt;gasSize) {</span><br><span class="line">            <span class="type">int</span> j = (start + i) % gasSize; </span><br><span class="line">            sumGas += gas[j]; <span class="comment">//记录当前路径添加的油量</span></span><br><span class="line">            sumCost += cost[j]; <span class="comment">//记录当前路径消耗的油量</span></span><br><span class="line">            <span class="keyword">if</span>(sumGas &lt; sumCost) <span class="comment">//油量不够，退出while循环</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            i++;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span>(i == gasSize) <span class="comment">//路径包含所有加油站，则返回起点加油站</span></span><br><span class="line">            <span class="keyword">return</span> start;</span><br><span class="line">        <span class="keyword">else</span> <span class="comment">//否则将起点定为第一个无法到达的加油站</span></span><br><span class="line">            start = start+i+<span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/06/K%E6%AC%A1%E5%8F%96%E5%8F%8D%E5%90%8E%E6%9C%80%E5%A4%A7%E5%8C%96%E7%9A%84%E6%95%B0%E7%BB%84%E5%92%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -993,92 +1088,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/03/%E5%9C%A8%E7%9F%A9%E9%98%B5%E4%B8%8A%E5%86%99%E5%87%BA%E5%AD%97%E6%AF%8DY/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/03/03/%E5%9C%A8%E7%9F%A9%E9%98%B5%E4%B8%8A%E5%86%99%E5%87%BA%E5%AD%97%E6%AF%8DY/" class="post-title-link" itemprop="url">在矩阵上写出字母Y所需的最少操作次数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-03-03 16:03:04" itemprop="dateCreated datePublished" datetime="2024-03-03T16:03:04+08:00">2024-03-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/minimum-operations-to-write-the-letter-y-on-a-grid/</p>
-<p>这题是第 387
-场力扣周赛第三题。我一开始的思路是分开计算<strong>“Y”所占方格位置中
-0、1、2 的个数</strong>和<strong>其他格子中 0、1、2
-的个数</strong>，但是有点繁琐，看了题解后得知一共只有六种情况（0-1，0-2，1-0，1-2，2-0，2-1），可以直接枚举所有情况，然后取最小值。</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">isY</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j, <span class="type">int</span> gridSize)</span> { <span class="comment">//判断（i，j）是否处于Y的范围内</span></span><br><span class="line">    <span class="keyword">if</span>(i==j &amp;&amp; i&lt;gridSize/<span class="number">2</span>)    <span class="comment">//Y的左斜分支</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(i+j == gridSize<span class="number">-1</span> &amp;&amp; i&lt;gridSize/<span class="number">2</span>) <span class="comment">//Y的右斜分支</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(i&gt;=gridSize/<span class="number">2</span> &amp;&amp; j==gridSize/<span class="number">2</span>) <span class="comment">//Y的垂直部分</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">}</span><br><span class="line"><span class="type">int</span> <span class="title function_">change</span><span class="params">(<span class="type">int</span>** grid, <span class="type">int</span> gridSize, <span class="type">int</span> x, <span class="type">int</span> y)</span> {</span><br><span class="line">    <span class="type">int</span> count=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;gridSize; i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>; j&lt;gridSize; j++) {</span><br><span class="line">            <span class="keyword">if</span>(isY(i, j, gridSize)==<span class="number">0</span> &amp;&amp; grid[i][j]!=x) {</span><br><span class="line">                count++; <span class="comment">//需要修改，则计数加1</span></span><br><span class="line">     <span class="comment">//注意 grid[i][j]不需要真的修改，因为这样会导致原数组变化，从而导致后面的结果不正确</span></span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(isY(i,j,gridSize)==<span class="number">-1</span> &amp;&amp; grid[i][j]!=y) {</span><br><span class="line">                count++;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">        }</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">minimumOperationsToWriteY</span><span class="params">(<span class="type">int</span>** grid, <span class="type">int</span> gridSize, <span class="type">int</span>* gridColSize)</span> {</span><br><span class="line">    <span class="type">int</span> count[<span class="number">6</span>]; <span class="comment">//保存枚举结果</span></span><br><span class="line">    <span class="type">int</span> top = <span class="number">0</span>; <span class="comment">//count数组下标</span></span><br><span class="line">    <span class="built_in">memset</span>(count, <span class="number">0</span>, <span class="keyword">sizeof</span>(count));</span><br><span class="line">    <span class="type">int</span> min = INT_MAX;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> x=<span class="number">0</span>; x&lt;<span class="number">3</span>; x++) {</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> y = <span class="number">0</span>; y&lt;<span class="number">3</span>; y++) {</span><br><span class="line">            <span class="keyword">if</span>(x!=y)</span><br><span class="line">                count[top++] = change(grid, gridSize, x, y);</span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;top; i++) {</span><br><span class="line">        <span class="keyword">if</span>(min&gt;count[i])</span><br><span class="line">            min = count[i];</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> min;</span><br><span class="line">    </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1150,20 +1159,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-count">179</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-count">70</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1199,12 +1208,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">409k</span>
+    <span title="站点总字数">410k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:12</span>
+    <span title="站点阅读时长">6:13</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
