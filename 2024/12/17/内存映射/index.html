@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="内存映射分为普通文件和匿名文件，这里讨论的是Linux环境 文件映射（File Mapping） 普通文件 将普通磁盘文件的某个区域映射到进程的虚拟内存空间。 工作原理  页面划分：文件内容被划分成页面大小（通常为4KB）的片段，每个片段对应虚拟内存中的一个页面。 按需加载（Demand Paging）：  初始时，文件内容并不会全部加载到物理内存中。 当CPU首次访问某个虚拟页面时，操作系统才将">
+  <meta name="description" content="内存映射mmap分为普通文件和匿名文件，这里讨论的是Linux环境 文件映射（File Mapping）   malloc 是高级抽象，封装了内存分配细节，开发者无需关心底层是 brk 还是 mmap。 mmap 是底层机制，既服务于 malloc 的大内存分配，也用于文件映射等高级功能。   普通文件 将普通磁盘文件的某个区域映射到进程的虚拟内存空间。 工作原理  页面划分：文件内容被划分成页面">
 <meta property="og:type" content="article">
 <meta property="og:title" content="内存映射">
 <meta property="og:url" content="http://example.com/2024/12/17/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="内存映射分为普通文件和匿名文件，这里讨论的是Linux环境 文件映射（File Mapping） 普通文件 将普通磁盘文件的某个区域映射到进程的虚拟内存空间。 工作原理  页面划分：文件内容被划分成页面大小（通常为4KB）的片段，每个片段对应虚拟内存中的一个页面。 按需加载（Demand Paging）：  初始时，文件内容并不会全部加载到物理内存中。 当CPU首次访问某个虚拟页面时，操作系统才将">
+<meta property="og:description" content="内存映射mmap分为普通文件和匿名文件，这里讨论的是Linux环境 文件映射（File Mapping）   malloc 是高级抽象，封装了内存分配细节，开发者无需关心底层是 brk 还是 mmap。 mmap 是底层机制，既服务于 malloc 的大内存分配，也用于文件映射等高级功能。   普通文件 将普通磁盘文件的某个区域映射到进程的虚拟内存空间。 工作原理  页面划分：文件内容被划分成页面">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-03-01T16:52:42.923Z">
+<meta property="article:modified_time" content="2025-05-16T14:40:59.008Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary">
@@ -198,7 +198,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-02 00:52:42" itemprop="dateModified" datetime="2025-03-02T00:52:42+08:00">2025-03-02</time>
+                <time title="修改时间：2025-05-16 22:40:59" itemprop="dateModified" datetime="2025-05-16T22:40:59+08:00">2025-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -223,14 +223,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -242,8 +242,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>内存映射分为普通文件和匿名文件，这里讨论的是Linux环境</p>
+        <p>内存映射<code>mmap</code>分为普通文件和匿名文件，这里讨论的是Linux环境</p>
 <h2 id="文件映射file-mapping">文件映射（File Mapping）</h2>
+<blockquote>
+<ul>
+<li><strong><code>malloc</code>
+是高级抽象</strong>，封装了内存分配细节，开发者无需关心底层是
+<code>brk</code> 还是 <code>mmap</code>。</li>
+<li><strong><code>mmap</code> 是底层机制</strong>，既服务于
+<code>malloc</code> 的大内存分配，也用于文件映射等高级功能。</li>
+</ul>
+</blockquote>
 <h3 id="普通文件">普通文件</h3>
 <p>将<strong>普通磁盘文件</strong>的某个区域映射到进程的虚拟内存空间。</p>
 <h4 id="工作原理">工作原理</h4>
@@ -287,6 +296,25 @@ Page）：从物理内存中找到一个适合被替换的页面。</li>
 <li>由于这种机制不会涉及磁盘和内存之间的数据传输，内核只是在分配物理页面时填充零值，因此这类页面被称为<strong>需求零页面</strong>（Demand-Zero
 Pages）。</li>
 </ul>
+<blockquote>
+<p><code>malloc</code> 的实现（如 glibc 的
+ptmalloc）通常会结合两种方式分配内存：</p>
+<ol type="1">
+<li><strong>小内存块（&lt; 128KB 或阈值）</strong>：
+<ul>
+<li>通过 <code>brk</code>/<code>sbrk</code>
+系统调用扩展堆空间，从堆中分配。</li>
+<li>优点：高效，减少内存碎片（通过内存池管理）。</li>
+</ul></li>
+<li><strong>大内存块（≥ 128KB 或阈值）</strong>：
+<ul>
+<li>直接使用 <code>mmap</code>
+分配匿名内存（<code>MAP_ANONYMOUS</code>）。</li>
+<li>优点：大块内存独立管理，避免堆空间碎片化；释放时直接通过
+<code>munmap</code> 归还给操作系统。</li>
+</ul></li>
+</ol>
+</blockquote>
 <h2 id="fork-函数">fork 函数</h2>
 <p><strong>1. 调用 <code>fork()</code> 时的内存复制：</strong></p>
 <ul>
