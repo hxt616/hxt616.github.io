@@ -164,6 +164,297 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/26/Go%20%E8%AF%AD%E8%A8%80%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E4%B8%8E%E5%8C%85%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/26/Go%20%E8%AF%AD%E8%A8%80%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E4%B8%8E%E5%8C%85%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">Go语言项目管理与包管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-26 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-26T00:00:00+08:00">2025-07-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-27 00:10:36" itemprop="dateModified" datetime="2025-07-27T00:10:36+08:00">2025-07-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文由 ChatGPT 生成</p>
+<h2 id="引言"><strong>引言</strong></h2>
+<p>Go 语言以其简洁的语法和强大的工具链著称，但其独特的项目管理机制（如
+<code>module</code>、<code>package</code> 和
+<code>GOPATH</code>）常让初学者困惑。本文将系统梳理 Go
+的项目结构、包管理规则和最佳实践，帮助你高效组织代码。</p>
+<hr>
+<h2 id="从-gopath-到-go-module演进史"><strong>1. 从 GOPATH 到 Go
+Module：演进史</strong></h2>
+<h3 id="gopath-时代已淘汰"><strong>1.1 GOPATH
+时代（已淘汰）</strong></h3>
+<ul>
+<li><strong>作用</strong>：全局工作区，所有项目必须放在
+<code>$GOPATH/src</code> 下。</li>
+<li><strong>问题</strong>：
+<ul>
+<li>依赖全局共享，易冲突</li>
+<li>项目路径不灵活</li>
+</ul></li>
+<li><strong>目录结构</strong>： <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GOPATH/</span><br><span class="line">├── src/github.com/user/project  # 项目代码</span><br><span class="line">├── pkg/                        # 编译后的库</span><br><span class="line">└── bin/                        # 可执行文件</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h3 id="go-module现代标准"><strong>1.2 Go
+Module（现代标准）</strong></h3>
+<ul>
+<li><strong>核心文件</strong>：<code>go.mod</code>（定义模块路径、依赖项）。</li>
+<li><strong>优势</strong>：
+<ul>
+<li>项目可放在任意路径</li>
+<li>依赖版本锁定（<code>go.sum</code>）</li>
+<li>支持语义化版本（如 <code>v1.2.3</code>）</li>
+</ul></li>
+</ul>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// go.mod 示例</span></span><br><span class="line">module github.com/user/project  <span class="comment">// 全局唯一标识</span></span><br><span class="line"><span class="keyword">go</span> <span class="number">1.21</span>                        <span class="comment">// Go 版本要求</span></span><br><span class="line">require (</span><br><span class="line">    github.com/gin-gonic/gin v1<span class="number">.9</span><span class="number">.1</span>  <span class="comment">// 依赖项，保存的位置：%GOPATH%\pkg\mod\</span></span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h2 id="模块module与包package的关系"><strong>2.
+模块（Module）与包（Package）的关系</strong></h2>
+<h3 id="module项目的集装箱"><strong>2.1
+Module：项目的集装箱</strong></h3>
+<ul>
+<li><strong>一个项目 = 一个模块 = 一个 <code>go.mod</code>
+文件</strong></li>
+<li><strong>模块路径</strong>需全局唯一（如 GitHub 仓库地址）：
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go mod init github.com/yourname/project</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h3 id="package代码的逻辑单元"><strong>2.2
+Package：代码的逻辑单元</strong></h3>
+<ul>
+<li><strong>规则</strong>：
+<ul>
+<li>同一目录下所有文件必须属于<strong>同一个包</strong></li>
+<li>包名通常与目录名一致（非强制）</li>
+<li>大写字母开头的标识符可被其他包访问</li>
+</ul></li>
+<li><strong>示例</strong>： <figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pkg/utils/strings.go</span></span><br><span class="line"><span class="keyword">package</span> utils</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Trim</span><span class="params">(s <span class="type">string</span>)</span></span> <span class="type">string</span> {  <span class="comment">// 可导出的函数</span></span><br><span class="line">    <span class="keyword">return</span> strings.TrimSpace(s)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<p>所以一个项目相当于一个 module，包含多个 package</p>
+<hr>
+<h2 id="关键目录结构设计"><strong>3. 关键目录结构设计</strong></h2>
+<h3 id="标准布局"><strong>3.1 标准布局</strong></h3>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">my-project/</span><br><span class="line">├── go.mod</span><br><span class="line">├── go.sum</span><br><span class="line">├── cmd/</span><br><span class="line">│   └── main.go</span><br><span class="line">├── pkg/</span><br><span class="line">│   └── utils/</span><br><span class="line">│       └── math.go</span><br><span class="line">└── internal/          # 私有代码（仅限当前模块使用）</span><br><span class="line">    └── secret/</span><br><span class="line">        └── secret.go</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="特殊目录说明"><strong>3.2 特殊目录说明</strong></h3>
+<table>
+<thead>
+<tr class="header">
+<th>目录</th>
+<th>用途</th>
+<th>可见性规则</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>cmd/</code></td>
+<td>存放 <code>main</code> 包的可执行程序</td>
+<td>无限制</td>
+</tr>
+<tr class="even">
+<td><code>internal/</code></td>
+<td>内部私有代码</td>
+<td>仅父模块可导入</td>
+</tr>
+<tr class="odd">
+<td><code>pkg/</code></td>
+<td>公共库代码</td>
+<td>可被其他模块导入</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="包package的进阶规则"><strong>4.
+包（Package）的进阶规则</strong></h2>
+<h3 id="main-包的特殊性"><strong>4.1 <code>main</code>
+包的特殊性</strong></h3>
+<ul>
+<li>只有<code>main</code>包才能包含 <code>func main()</code></li>
+<li>编译生成可执行文件： <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go build -o app cmd/app/main.go</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h3 id="go-中-package-的调用逻辑">4.2 Go 中 <code>package</code>
+的调用逻辑</h3>
+<p>在 Go 中：</p>
+<ul>
+<li>每个 <code>.go</code> 文件都属于某个
+<code>package</code>（包）。</li>
+<li>包名决定了文件之间能否互相引用。</li>
+<li><strong>主程序（入口）通常在 <code>package main</code>
+中</strong>，其他功能模块则可以定义为自定义包。</li>
+<li>如果你想在 <code>main.go</code> 中调用其他包的函数，必须：
+<ol type="1">
+<li>在目标文件中将函数名 <strong>大写</strong>（表示导出
+Exported）；</li>
+<li>在 <code>main.go</code> 中使用 <code>import</code> 引入包；</li>
+<li>保证代码在模块结构下能找到包路径。</li>
+</ol></li>
+</ul>
+<hr>
+<h4 id="示例">🔹 示例</h4>
+<h5 id="项目结构">📁 项目结构</h5>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">myproject/</span><br><span class="line">├── go.mod</span><br><span class="line">├── main.go</span><br><span class="line">└── utils/</span><br><span class="line">    └── mathutil.go</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h5 id="go.mod">📄 go.mod</h5>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">module example.com/myproject</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="number">1.21</span></span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h5 id="utilsmathutil.go">📄 utils/mathutil.go</h5>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> utils</span><br><span class="line"></span><br><span class="line"><span class="comment">// Add 是导出的函数（首字母大写），可以被其他包调用</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Add</span><span class="params">(a, b <span class="type">int</span>)</span></span> <span class="type">int</span> {</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h5 id="main.go">📄 main.go</h5>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"example.com/myproject/utils"</span>  <span class="comment">// 引入本模块下的 utils 包</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">    sum := utils.Add(<span class="number">3</span>, <span class="number">5</span>)  <span class="comment">// 调用 utils 包中的 Add 函数</span></span><br><span class="line">    fmt.Println(<span class="string">"Sum:"</span>, sum)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h4 id="总结调用规则">🔹 总结调用规则</h4>
+<table>
+<colgroup>
+<col style="width: 18%">
+<col style="width: 81%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>元素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>package xxx</code></td>
+<td>决定该文件属于哪个包</td>
+</tr>
+<tr class="even">
+<td><code>import</code></td>
+<td>在另一个文件中引用该包，使用的是
+<code>module 路径 + 包相对路径</code></td>
+</tr>
+<tr class="odd">
+<td>导出函数</td>
+<td>被调用的函数必须 <strong>首字母大写</strong>，否则是私有的</td>
+</tr>
+<tr class="even">
+<td>go.mod</td>
+<td>必须正确声明 <code>module</code>，才能让 <code>import</code>
+路径生效</td>
+</tr>
+</tbody>
+</table>
+<h3 id="可见性控制"><strong>4.3 可见性控制</strong></h3>
+<ul>
+<li><strong>大写字母开头</strong>：可被其他包访问（如
+<code>func Public()</code>）。</li>
+<li><strong>小写字母开头</strong>：仅限包内使用（如
+<code>func private()</code>）。</li>
+</ul>
+<h3 id="初始化函数-init"><strong>4.4 初始化函数
+<code>init()</code></strong></h3>
+<ul>
+<li>每个包可定义多个 <code>init()</code>，按依赖顺序自动执行：
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> db</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> {</span><br><span class="line">    <span class="built_in">println</span>(<span class="string">"数据库连接初始化"</span>)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<h2 id="依赖管理实战"><strong>5. 依赖管理实战</strong></h2>
+<h3 id="添加依赖"><strong>5.1 添加依赖</strong></h3>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/gin-gonic/gin@v1.9.1  <span class="comment"># 指定版本</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="常用命令"><strong>5.2 常用命令</strong></h3>
+<table>
+<thead>
+<tr class="header">
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>go mod init</code></td>
+<td>初始化模块</td>
+</tr>
+<tr class="even">
+<td><code>go mod tidy</code></td>
+<td>同步依赖项</td>
+</tr>
+<tr class="odd">
+<td><code>go list -m all</code></td>
+<td>查看所有依赖</td>
+</tr>
+<tr class="even">
+<td><code>go mod vendor</code></td>
+<td>创建本地依赖副本（离线构建）</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/05/13/std_thread/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1596,14 +1887,14 @@ Argument）：线程已经是<strong>分离状态</strong>。</li>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2025-02-04 20:57:26" itemprop="dateCreated datePublished" datetime="2025-02-04T20:57:26+08:00">2025-02-04</time>
+              <time title="创建时间：2025-02-04 00:00:00" itemprop="dateCreated datePublished" datetime="2025-02-04T00:00:00+08:00">2025-02-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-05-11 19:51:54" itemprop="dateModified" datetime="2025-05-11T19:51:54+08:00">2025-05-11</time>
+                <time title="修改时间：2025-07-26 23:51:41" itemprop="dateModified" datetime="2025-07-26T23:51:41+08:00">2025-07-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -2651,7 +2942,7 @@ COW）机制</strong>优化内存使用。</p>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -2665,7 +2956,7 @@ COW）机制</strong>优化内存使用。</p>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2024/11/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">机器学习</a>
+            <a href="/2024/11/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">机器学习</a>
         </h2>
 
         <div class="post-meta">
@@ -2675,14 +2966,14 @@ COW）机制</strong>优化内存使用。</p>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2024-11-21 13:01:51" itemprop="dateCreated datePublished" datetime="2024-11-21T13:01:51+08:00">2024-11-21</time>
+              <time title="创建时间：2024-11-24 00:00:00" itemprop="dateCreated datePublished" datetime="2024-11-24T00:00:00+08:00">2024-11-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-05-15 21:30:11" itemprop="dateModified" datetime="2025-05-15T21:30:11+08:00">2025-05-15</time>
+                <time title="修改时间：2025-07-26 23:50:53" itemprop="dateModified" datetime="2025-07-26T23:50:53+08:00">2025-07-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -2700,7 +2991,7 @@ COW）机制</strong>优化内存使用。</p>
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.9k</span>
+              <span>3.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -2735,20 +3026,6 @@ COW）机制</strong>优化内存使用。</p>
 <ul>
 <li>训练集</li>
 </ul>
-<h4 id="梯度下降">梯度下降</h4>
-<p><strong>「梯度的概念」</strong>：梯度就是函数对它的各个自变量求偏导后，由<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=146213942&amp;content_type=Article&amp;match_order=1&amp;q=偏导数&amp;zhida_source=entity">偏导数</a>组成的一个向量。</p>
-<p>可以用来最小化任意函数</p>
-<ul>
-<li><p>找到代价函数的局部最小值即极小值（在代价函数的图像上，朝不同方向找到极小值）</p></li>
-<li><p>学习率（learning rate）：α，影响梯度下降的快慢</p></li>
-<li><p>用到了偏导，<code>w</code>和<code>b</code>需要同时更新</p>
-<p><code>J</code>对<code>w</code>的偏导表示<code>J</code>和<code>w</code>组成的函数图像的切线斜率</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241123134344175.png" alt="image-20241123134344175">
-<figcaption aria-hidden="true">image-20241123134344175</figcaption>
-</figure></li>
-<li><p>批量（batch）梯度下降：每一步梯度下降使用的是所有的训练示例</p></li>
-</ul>
 <h4 id="多元线性回归">多元线性回归</h4>
 <p>系数向量化</p>
 <ul>
@@ -2768,6 +3045,80 @@ scaling）：不同特征的不同取值范围导致等高线图像细长，需�
 <li><p>包含高次项</p></li>
 <li><p>多项式回归是一种扩展线性回归的方法</p></li>
 </ul>
+<h3 id="梯度下降">梯度下降</h3>
+<p><strong>「梯度的概念」</strong>：梯度就是函数对它的各个自变量求偏导后，由<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=146213942&amp;content_type=Article&amp;match_order=1&amp;q=偏导数&amp;zhida_source=entity">偏导数</a>组成的一个向量。</p>
+<p>可以用来最小化任意函数</p>
+<ul>
+<li><p>找到代价函数的局部最小值即极小值（在代价函数的图像上，朝不同方向找到极小值）</p></li>
+<li><p>学习率（learning rate）：α，影响梯度下降的快慢</p></li>
+<li><p>用到了偏导，<code>w</code>和<code>b</code>需要同时更新</p>
+<p><code>J</code>对<code>w</code>的偏导表示<code>J</code>和<code>w</code>组成的函数图像的切线斜率</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241123134344175.png" alt="image-20241123134344175">
+<figcaption aria-hidden="true">image-20241123134344175</figcaption>
+</figure></li>
+<li><p>批量（batch）梯度下降：每一步梯度下降使用的是所有的训练示例</p>
+<p><strong>small batch 的准确率可能是大于 large batch
+的，这是优化问题（梯度下降找最小值），而不是overfitting</strong></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250624200237130.png" alt="image-20250624200237130">
+<figcaption aria-hidden="true">image-20250624200237130</figcaption>
+</figure></li>
+</ul>
+<blockquote>
+<p>梯度下降寻找最小值可能不准确，因为可能是局部最小值，如果model灵活性较高（多层）但是其loss比灵活性较低的model的loss更高，说明就是优化问题（没找到最小值），但是要注意<strong>鞍点</strong></p>
+</blockquote>
+<h4 id="解决局部最小值">解决局部最小值</h4>
+<h5 id="动量">动量</h5>
+<p>当前进行梯度下降时需要考虑之前下降的方向，叠加在一起</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250624200953949.png" alt="image-20250624200953949">
+<figcaption aria-hidden="true">image-20250624200953949</figcaption>
+</figure>
+<h5 id="自动调整学习率">自动调整学习率</h5>
+<blockquote>
+<p>固定学习率的缺点：</p>
+<ul>
+<li>学习率太小：收敛速度慢。</li>
+<li>学习率太大：可能震荡甚至无法收敛。</li>
+</ul>
+</blockquote>
+<ol type="1">
+<li><p><strong>Adagrad</strong></p>
+<ul>
+<li><p><strong>核心思想</strong>：为每个参数累积历史梯度（偏导数，有方向）的平方，自适应降低频繁更新参数的学习率。</p>
+<blockquote>
+<p><strong>梯度与偏导数的关系</strong></p>
+<ul>
+<li><strong>梯度是偏导数的向量组合</strong>：梯度将所有偏导数打包成一个向量，提供了全局的“变化信息”。</li>
+<li><strong>方向是梯度的内在属性</strong>：梯度本身已经包含了方向（最陡上升方向），不需要额外“加上方向”。</li>
+<li><strong>偏导数是梯度的分量</strong>：每个偏导数是梯度向量在对应坐标轴上的投影。</li>
+</ul>
+</blockquote></li>
+<li><p><strong>更新规则</strong>：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250625171230513.png" alt="image-20250625171230513">
+<figcaption aria-hidden="true">image-20250625171230513</figcaption>
+</figure></li>
+</ul></li>
+<li><p><strong>RMSprop</strong></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250625172119618.png" alt="image-20250625172119618">
+<figcaption aria-hidden="true">image-20250625172119618</figcaption>
+</figure></li>
+<li><p><strong>Adam</strong>（Momentum + RMSprop）</p></li>
+</ol>
+<blockquote>
+<p>learning rate scheduling（两种方法）</p>
+<ul>
+<li>learning rate decay：让 η 随着时间减小，可以防止学习率暴涨</li>
+<li>warm up：η 先变大后减小</li>
+</ul>
+</blockquote>
+<h4 id="优化方法">优化方法</h4>
+<p>feature normalization：使得参数的图像更均匀，更方便梯度下降</p>
+<p>由于GPU内存有限，因此每次对一个batch的数据进行normalization，称为
+batch normalization</p>
 <h3 id="分类classification">分类（classification）</h3>
 <ul>
 <li>分类预测的结果是从有限的可能中选取一个</li>
@@ -2846,6 +3197,7 @@ scaling）：不同特征的不同取值范围导致等高线图像细长，需�
 <p>计算偏导数</p>
 <h3 id="多类">多类</h3>
 <h4 id="softmax">Softmax</h4>
+<p>和 cross-entropy 绑定使用</p>
 <ul>
 <li><p>Softmax是逻辑回归的推广</p>
 <figure>
@@ -2882,6 +3234,20 @@ scaling）：不同特征的不同取值范围导致等高线图像细长，需�
 <figure>
 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241215230834569.png" alt="image-20241215230834569">
 <figcaption aria-hidden="true">image-20241215230834569</figcaption>
+</figure>
+<h4 id="transformer">Transformer</h4>
+<h5 id="自注意力机制">自注意力机制</h5>
+<p>使用 q、k、v 计算</p>
+<p><strong>多头自注意力机制</strong></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250720221746017.png" alt="image-20250720221746017">
+<figcaption aria-hidden="true">image-20250720221746017</figcaption>
+</figure>
+<h5 id="positional-encoding">Positional Encoding</h5>
+<p>添加位置信息 e</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250720222510647.png" alt="image-20250720222510647">
+<figcaption aria-hidden="true">image-20250720222510647</figcaption>
 </figure>
 <h3 id="模型评估">模型评估</h3>
 <h4 id="将数据集分为训练集和测试集">将数据集分为训练集和测试集</h4>
@@ -3211,1165 +3577,10 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/26/CS106B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/26/CS106B/" class="post-title-link" itemprop="url">CS106B-22Winter</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-10-26 19:29:42" itemprop="dateCreated datePublished" datetime="2024-10-26T19:29:42+08:00">2024-10-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-02 00:49:43" itemprop="dateModified" datetime="2025-03-02T00:49:43+08:00">2025-03-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CPP/" itemprop="url" rel="index"><span itemprop="name">CPP</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CS106B/" itemprop="url" rel="index"><span itemprop="name">CS106B</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>28k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>26 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考资料：</p>
-<p>https://www.zhihu.com/column/c_1471256108476461057
-（实验环境配置/实验代码）</p>
-<p>https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1224/schedule.html#
-（教学安排）</p>
-<p><a target="_blank" rel="noopener" href="https://web.stanford.edu/dept/cs_edu/resources/cslib_docs/">Stanford
-C++ Library Documentation</a></p>
-<p>https://web.stanford.edu/class/cs106x/res/reader/CS106BX-Reader.pdf
-（教材）</p>
-<h2 id="chapter-1">Chapter 1</h2>
-<h3 id="library-inclusions">library inclusions</h3>
-<p>通过<code>#include</code>从对应头文件中读取相关定义，<code>&lt;iostream&gt;</code>中的尖括号表示这是一个系统库，也可以使用自己编写的头文件，则不包含尖括号而是以<code>.h</code>结尾。</p>
-<h3 id="namespaces">namespaces</h3>
-<p>不同的库或模块可能会定义相同的名称，举个例子，如果一个第三方库定义了一个函数叫“cout”，而你在代码中也使用了标准库的<code>std::cout</code>，为了避免这种情况，C++的命名空间设计允许你将不同的代码片段放在各自的命名空间中，这样就算名称相同，也不会冲突，例如：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> mylib {</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">cout</span><span class="params">()</span> </span>{</span><br><span class="line">        std::cout &lt;&lt; <span class="string">"This is mylib's cout!"</span> &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    std::cout &lt;&lt; <span class="string">"This is standard cout!"</span> &lt;&lt; std::endl;  <span class="comment">// std 命名空间中的 cout</span></span><br><span class="line">    mylib::<span class="built_in">cout</span>();  <span class="comment">// mylib 命名空间中的 cout</span></span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<p>可以使用<code>using namespace std;</code>将该命令空间中的所有成员加入当前域，因此就不用添加namespace前缀了，但是这个功能在大项目中要慎用。</p>
-<h3 id="constants">Constants</h3>
-<p>常量的值一般不改变，例如 Π 的值，因此可以定义：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">double</span> PI = <span class="number">3.14159265358979323846</span>;  <span class="comment">// 常量一般大写</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="基本数据类型">基本数据类型</h3>
-<ol type="1">
-<li><p>整型</p>
-<blockquote>
-<p><strong>0</strong>42——八进制，<strong>0x</strong>51——十六进制</p>
-<p>整型结尾有<code>U</code>表示无符号数</p>
-</blockquote>
-<ul>
-<li>short</li>
-<li>int</li>
-<li>long：在数字结尾加上<code>L</code>则表示<code>long</code>类型</li>
-</ul></li>
-<li><p>浮点型</p>
-<blockquote>
-<p>用标准计数法表示光速：2.9979E+8</p>
-</blockquote>
-<ul>
-<li>float</li>
-<li>double</li>
-<li>long double</li>
-</ul></li>
-<li><p>字符型</p>
-<ul>
-<li><p>char：单引号内只能是字符而不是字符串</p></li>
-<li><p>string：使用双引号。需要通过<code>#include &lt;string&gt;</code>调用</p>
-<blockquote>
-<p>字符串类型是标准库命名空间的一部分，即命名空间也是
-<strong>std</strong></p>
-</blockquote></li>
-</ul></li>
-<li><p>布尔型</p>
-<ul>
-<li>bool</li>
-</ul></li>
-<li><p>枚举型</p>
-<ul>
-<li><p>enum：语法为<code>enum typename { namelist };</code>（所有类型名称都以大写字母开头，枚举常量的名称完全以大写字母书写），示例如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Direction</span> { NORTH, EAST, SOUTH, WEST };</span><br><span class="line"><span class="comment">//从0开始编号来为常量名称赋值。NORTH被赋予值0，EAST被赋予值1，SOUTH被赋予数值2，WEST被赋予数值3</span></span><br><span class="line"><span class="comment">//也支持用户自定义值的大小，例如：</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">Coin</span> { </span><br><span class="line">   PENNY = <span class="number">1</span>, </span><br><span class="line">   NICKEL = <span class="number">5</span>, </span><br><span class="line">   DIME = <span class="number">10</span>, </span><br><span class="line">   QUARTER = <span class="number">25</span>, </span><br><span class="line">   HALF_DOLLAR = <span class="number">50</span>, </span><br><span class="line">   DOLLAR = <span class="number">100</span> </span><br><span class="line">};</span><br><span class="line"><span class="comment">//若只为第一个常量赋值，则后续的常量是接着第一个常量连续编号的</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul></li>
-</ol>
-<h3 id="运算符">运算符</h3>
-<ul>
-<li><p>单目运算符：一个操作数</p></li>
-<li><p>双目运算符：两个操作数</p></li>
-<li><p>三目运算符：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(condition) ? exp1 : exp2  <span class="comment">//若condition为true，则返回exp1，否则返回exp2</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="类型转换type-cast">类型转换（Type Cast）</h3>
-<p>语法如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quotient = <span class="built_in">double</span>(num) / den; <span class="comment">//在对应变量 num 前添加转换后的类型</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="赋值">赋值</h3>
-<p>下面这个式子的作用是<code>x=6, y=7, z=13</code></p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">z = (x = <span class="number">6</span>) + (y = <span class="number">7</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>赋值表达式的返回值就是待赋的值</p>
-<h3 id="控制语句">控制语句</h3>
-<ul>
-<li>if</li>
-<li>switch</li>
-<li>while：条件测试在循环的每个循环之前进行，包括第一个循环</li>
-<li>for</li>
-</ul>
-<h2 id="chapter-2">Chapter 2</h2>
-<h3 id="libraries-and-function">Libraries and Function</h3>
-<p>当你编写C++程序时，计算机执行的大部分代码不是你自己编写的代码，而是你随应用程序加载的库代码。</p>
-<ul>
-<li>iostream</li>
-<li>cmath：包含多个数学函数</li>
-<li>string</li>
-</ul>
-<h3 id="overloading重载">Overloading（重载）</h3>
-<p>不同函数（函数类型不同或参数不同）可以使用相同命名。例如，<code>&lt;cmath&gt;</code>库包含函数<code>abs</code>（求绝对值）的几个不同的版本，如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">abs</span><span class="params">(<span class="type">int</span> x)</span> </span>{ </span><br><span class="line">   <span class="keyword">return</span> (x &lt; <span class="number">0</span>) ? -x : x; </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">abs</span><span class="params">(<span class="type">double</span> x)</span> </span>{ </span><br><span class="line">   <span class="keyword">return</span> (x &lt; <span class="number">0</span>) ? -x : x; </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="默认参数">默认参数</h3>
-<p>在声明函数时，给参数设定好初始值，在调用时就可以省略该参数，如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">formatInColumns</span><span class="params">(<span class="type">int</span> nColumns = <span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用，此时nColumns的值自动设为2</span></span><br><span class="line">formatInColumns();</span><br></pre></td></tr></tbody></table></figure>
-<p>注意：</p>
-<ul>
-<li>默认值的说明只出现在函数原型（声明）中，而不是在函数定义中。</li>
-<li>任何默认参数都必须出现在参数列表的末尾。</li>
-</ul>
-<h3 id="引用参数">引用参数</h3>
-<p>对于一般的参数，当你将一个简单变量从一个函数传递到另一个函数时，函数都会得到调用值的副本，该副本的修改影响不到原调用变量的值。例如下面的函数：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setToZero</span><span class="params">(<span class="type">int</span> var)</span> </span>{ </span><br><span class="line">   var = <span class="number">0</span>; </span><br><span class="line">}</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">int</span> x = <span class="number">2</span>;</span><br><span class="line">    <span class="built_in">setToZero</span>(x);   <span class="comment">// 不修改x的值</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>若要修改调用的变量的值，需要将一般的参数更改为引用参数，如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setToZero</span><span class="params">(<span class="type">int</span> &amp; var)</span> </span>{ </span><br><span class="line">   var = <span class="number">0</span>; </span><br><span class="line">}</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">int</span> x = <span class="number">2</span>;</span><br><span class="line">    <span class="built_in">setToZero</span>(x);   <span class="comment">// 修改x的值</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="接口与实现">接口与实现</h3>
-<ul>
-<li><strong>接口（Interface）</strong>：接口定义了库的使用方法和约定，它告诉使用者如何与库进行交互。接口包含了库向外部暴露的<strong>函数声明</strong>、<strong>类型定义</strong>和<strong>常量</strong>等内容。这些接口不会包含具体的实现细节，而是只描述了如何调用库中的功能。这些接口通常存放在<strong>头文件（header
-files，.h
-）</strong>中。接口可以定义函数、常量、类以及枚举，其中枚举无需通过CPP进行实现，直接就可以调用</li>
-<li><strong>实现（Implementation）</strong>：实现部分则包含了函数的实际代码、类的具体实现等细节。实现隐藏在库内部，用户无需关心这些细节。实现通常放在<strong>源文件（.cpp）</strong>中，并且编译后生成库文件（静态库或动态库）</li>
-</ul>
-<p>下面是 error 库的接口</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* File: error.h</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//检查是否定义了_error_h符号。若 _error_h 符号将已经定义，编译器这次将跳过接口的内容。</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _error_h</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _error_h</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">error</span><span class="params">(std::string msg)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></tbody></table></figure>
-<p>实现（Implementation）如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">"error.h"</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">error</span><span class="params">(string msg)</span> </span>{</span><br><span class="line">    cerr &lt;&lt; msg &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>在 .h 文件中声明常量或者变量需要使用 <strong>extern</strong>
-关键字</p>
-<p>https://www.runoob.com/w3cnote/extern-head-h-different.html</p>
-</blockquote>
-<h3 id="随机数">随机数</h3>
-<p>计算机内部算法过程生成的“随机”数被称为伪随机数。</p>
-<ul>
-<li><p><code>rand()</code>函数（头文件<code>#include&lt;cstdlib&gt;</code>）根据上一次产生的伪随机数（旧随机数）来生成新的伪随机数，范围是
-[0, RAND_MAX]</p></li>
-<li><p><code>srand(int seed)</code>函数设置随机数种子
-s<sub>0</sub>，然后<code>rand</code>根据该种子生成第一个随机数。相同种子产生的随机数序列是相同的（方便调试）。</p>
-<p>若不手动设置种子，则默认为1。一般将其设置为一些用户难以预测的起始值，这些起始值通常取自系统时钟的值，因为每次运行程序时，这个值都是不同的，所以随机数序列也会发生变化。具体实现方法是通过调用函数
-time 并将结果转换为整数来检索系统时钟的当前值。</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">srand</span>(<span class="built_in">int</span>(<span class="built_in">time</span>(<span class="literal">NULL</span>)));</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240912102359091.png" alt="image-20240912102359091">
-<figcaption aria-hidden="true">image-20240912102359091</figcaption>
-</figure>
-<h3 id="static">static</h3>
-<ol type="1">
-<li>静态局部变量
-<ul>
-<li>静态局部变量在函数第一次调用时初始化。</li>
-<li>变量在后续的函数调用中会保留它之前的值，不会被重新初始化。</li>
-<li>它的作用域依然只限于函数内部，但生命周期持续到程序结束</li>
-</ul></li>
-<li>静态全局变量
-<ul>
-<li>在全局作用域中，如果变量用<code>static</code>修饰，变量的可见性（链接性）被限制在当前文件中。这种用法称为<strong>内部链接</strong>（internal
-linkage）。即该变量无法被其他文件使用，即使它是全局的。</li>
-</ul></li>
-<li>静态函数
-<ul>
-<li>只能在定义的源文件中使用，不能被其他文件访问</li>
-</ul></li>
-<li>类的静态成员变量
-<ul>
-<li>静态成员变量的存储空间是全局的，在程序启动时就分配。</li>
-<li>它不属于任何特定的类实例（对象），所以可以通过类名直接访问。</li>
-<li>静态成员变量必须在类定义外进行初始化。</li>
-</ul></li>
-<li>类的静态成员函数
-<ul>
-<li>静态成员函数只能访问静态成员变量。</li>
-<li>不需要通过类的对象来调用，可以直接通过类名调用。</li>
-</ul></li>
-</ol>
-<h2 id="chapter-3">Chapter 3</h2>
-<h3 id="string">string</h3>
-<p>访问字符串内部的字符有两种方法：</p>
-<ul>
-<li><code>str[index]</code></li>
-<li><code>str.at(index)</code></li>
-</ul>
-<p><code>string</code>类型可以通过<code>=</code>直接赋值，例如<code>str1=str2</code>，用<code>str2</code>中包含的字符串副本覆盖<code>str1</code>的先前内容，赋值过后再修改<code>str2</code>无法影响到<code>str1</code></p>
-<p><code>string</code>类型包含截断函数<code>substr</code>，例如<code>str.substr(2, 3)</code>，意思是从索引2开始截取三个字符，若省略3，则从2截取到字符串结尾。</p>
-<p><code>find</code>函数可以查找子字符串或字符，例如<code>str.find("o")</code></p>
-<h3 id="cctype">&lt;cctype&gt;</h3>
-<p>用于处理字符的库</p>
-<h2 id="chapter-4">Chapter 4</h2>
-<h3 id="streams">Streams</h3>
-<p><code>&lt;iostream&gt;</code>中的三个标准流：<code>cin</code>、<code>cout</code>、<code>cerr</code></p>
-<h3 id="manipulator操纵器">manipulator（操纵器）</h3>
-<p>操纵器通常具有以改变后续输出格式的方式设置输出流属性的效果。</p>
-<p>例如：<code>&lt;iostream&gt;</code>库中的<code>endl</code>，<code>&lt;iomanip&gt;</code>库中的<code>setw(n)</code>（设置输出宽度）、<code>setprecision(digits)</code>、<code>setfill(ch)</code></p>
-<h3 id="file-streamsfstream">File streams（&lt;fstream&gt;）</h3>
-<p>在C++中读取或写入文件需要以下步骤：</p>
-<ol type="1">
-<li><p>声明一个流变量来引用文件。处理文件的程序通常为同时处于活动状态的每个文件声明一个流变量。因此，如果你正在编写一个读取输入文件并使用该数据写入输出文件的程序，你需要声明两个变量，如下所示</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"></span><br><span class="line">ifstream infile;  <span class="comment">// 用于读取文件数据</span></span><br><span class="line">ofstream outfile;  <span class="comment">//向文件写入数据</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>打开文件，在使用流变量之前，您需要在该变量和实际文件之间建立关联。此操作称为打开文件，通过调用流方法open来执行。例如：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">infile.<span class="built_in">open</span>(<span class="string">"Jabberwocky.txt"</span>); </span><br></pre></td></tr></tbody></table></figure>
-<p>或者：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string filename = <span class="string">"Jabberwocky.txt"</span>;</span><br><span class="line">infile.<span class="built_in">open</span>(filename.<span class="built_in">c_str</span>());  <span class="comment">// open方法需要一个C样式的字符串作为文件名</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>传输数据</p>
-<p>打开数据文件之后，就可以使用适当的流操作来执行实际的 I/O
-操作。可以逐字符传输，也可以逐行传输。</p></li>
-<li><p>关闭文件</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">infile.<span class="built_in">close</span>();</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<h3 id="单个字符-io">单个字符 I/O</h3>
-<h4 id="输入流">输入流</h4>
-<p>使用<code>get()</code>方法获取单个字符，如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> ch; </span><br><span class="line">infile.<span class="built_in">get</span>(ch);</span><br></pre></td></tr></tbody></table></figure>
-<p>连续读取字符：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* get将下一个字符读入变量ch并返回流。如果get操作成功，则该流被解释为true，如果失败，则被解释为false</span></span><br><span class="line"><span class="comment">* 实际上 get 的返回值是 int 类型</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="type">char</span> ch; </span><br><span class="line"><span class="keyword">while</span> (infile.<span class="built_in">get</span>(ch)) { </span><br><span class="line">   Perform some operation on the character. </span><br><span class="line">}</span><br><span class="line"><span class="comment">// 下面是另一种写法</span></span><br><span class="line"><span class="keyword">while</span> (<span class="literal">true</span>) { </span><br><span class="line">   <span class="type">int</span> ch = infile.<span class="built_in">get</span>(); </span><br><span class="line">   <span class="keyword">if</span> (ch == EOF) <span class="keyword">break</span>;   <span class="comment">// end-of-file</span></span><br><span class="line">   Perform some operation on the character. </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="输出流">输出流</h4>
-<p>使用<code>put</code>函数，该函数采用char值作为参数，并将该字符写入流中，如下所示：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">outfile.<span class="built_in">put</span>(ch);</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="string-streamssstream">String streams（&lt;sstream&gt;）</h3>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">istringstream  //字符串输入流 类，可用于字符串转整型</span><br><span class="line">ostringstream  //字符串输出流 类，可用于整型转字符串</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="chapter-5">Chapter 5</h2>
-<p>集合类（抽象数据类型）：Vector，Stack，Queue，Map，Set</p>
-<h3 id="vector">Vector</h3>
-<ol type="1">
-<li>头文件 <code>#include &lt;vector&gt;</code></li>
-<li>定义一个整型vector：<code>vector&lt;int&gt; vec;</code>
-（该vector为空）</li>
-<li>向结尾添加新元素：<code>vec.push_back(10);</code></li>
-<li>向vector中间插入元素：<code>vec.insert(index, num);</code></li>
-<li>删除元素：<code>vec.erase(index);</code></li>
-<li>访问元素：类似于数组，通过下标访问例如<code>vec[2]</code>，或者通过<code>vec.at(2)</code>访问</li>
-<li>获取vector大小：<code>vec.size()</code></li>
-<li>二维数组：<code>vector&lt; vector&lt;int&gt; &gt; a;</code>或者指定二维数组的行和列大小<code>vector&lt; vector&lt;int&gt; &gt; a(r, vector&lt;int&gt;(c));</code>（r为行数，c为列数）</li>
-</ol>
-<h3 id="stack">Stack</h3>
-<p>先进后出</p>
-<ul>
-<li>头文件：<code>#include &lt;stack&gt;</code></li>
-<li><code>push()</code>: 在栈顶添加一个元素。</li>
-<li><code>pop()</code>: 移除栈顶元素。</li>
-<li><code>top()</code>: 返回栈顶元素的引用，但不移除它。</li>
-<li><code>empty()</code>: 检查栈是否为空。</li>
-<li><code>size()</code>: 返回栈中元素的数量</li>
-</ul>
-<h3 id="queue">Queue</h3>
-<p>先进先出</p>
-<ul>
-<li>头文件：<code>#include &lt;queue&gt;</code></li>
-<li><code>empty()</code>: 检查队列是否为空。</li>
-<li><code>size()</code>: 返回队列中的元素数量。</li>
-<li><code>front()</code>: 返回队首元素的引用。</li>
-<li><code>back()</code>: 返回队尾元素的引用。</li>
-<li><code>push()</code>: 在队尾添加一个元素。</li>
-<li><code>pop()</code>: 移除队首元素。</li>
-</ul>
-<h3 id="map">Map</h3>
-<p>概念上类似于字典。一个<code>key</code>对应一个<code>value</code>（键值对）</p>
-<ul>
-<li><p>头文件：<code>#include &lt;map&gt;</code></p></li>
-<li><p>声明
-map：<code>map&lt;key_type, value_type&gt; myMap;</code></p></li>
-<li><p>Stanford的<code>map.h</code>库使用<code>put(key, value)</code>将<code>key</code>与<code>value</code>进行关联，使用<code>get(key)</code>获取<code>value</code></p>
-<p>或者直接<code>myMap[key] = value;</code></p></li>
-<li><p><code>find(key)</code>返回指向该元素的迭代器，示例：https://www.cainiaojc.com/cpp/cpp-map-find-function.html</p></li>
-</ul>
-<h3 id="set">Set</h3>
-<p>set中的每个元素都是唯一的</p>
-<ul>
-<li>头文件：<code>#include &lt;set&gt;</code></li>
-</ul>
-<blockquote>
-<p>集合类的for循环简化：Range-based
-for（只读，不能修改variable；若要修改可通过引用实现）</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (type variable : collection) { </span><br><span class="line">   body of the loop </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-</blockquote>
-<h2 id="chapter-6">Chapter 6</h2>
-<p>类</p>
-<h3 id="结构体">结构体</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> {</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">};</span><br><span class="line">Point p;</span><br></pre></td></tr></tbody></table></figure>
-<p>C++中可直接用结构体名称声明变量（<strong>C语言中必须使用</strong><code>struct Point p;</code>进行声明）</p>
-<blockquote>
-<p><strong>1. 使用 <code>struct</code>
-关键字来定义和引用结构体类型</strong></p>
-<p>C 语言的结构体类型必须使用 <code>struct</code> 关键字，直接使用
-<code>struct</code> 名称进行命名和访问。</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point</span> {</span></span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用时必须加上 `struct` 关键字</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point</span> <span class="title">p</span>;</span></span><br></pre></td></tr></tbody></table></figure>
-<p><strong>2. 使用 <code>typedef</code> 为结构体创建别名</strong></p>
-<p>如果你不想每次使用结构体时都加上 <code>struct</code> 关键字，可以用
-<code>typedef</code> 为结构体创建一个简化的别名。</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">} Point;  <span class="comment">// 给结构体类型起别名为 Point</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用时不需要 `struct` 关键字</span></span><br><span class="line">Point p;</span><br></pre></td></tr></tbody></table></figure>
-</blockquote>
-<h3 id="类">类</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span> {</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="type">int</span> x;</span><br><span class="line">    	<span class="type">int</span> y;</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-<ul>
-<li><p>类与结构体的区别在于类中的字段可分为<code>public</code>和<code>private</code>两个部分</p></li>
-<li><p>在现代面向对象编程中，不鼓励声明公共实例变量。常见的做法是将所有实例变量设置为私有，这意味着客户端无法直接访问内部变量。而是通过类中的函数来访问私有变量。</p></li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span> {</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> x;</span><br><span class="line">    	<span class="type">int</span> y;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">getX</span><span class="params">()</span> </span>{  <span class="comment">// 通过公有函数访问私有变量</span></span><br><span class="line">            <span class="keyword">return</span> x;</span><br><span class="line">        }</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">getY</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">return</span> y;</span><br><span class="line">        }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="构造函数constructor">构造函数（Constructor）</h4>
-<ul>
-<li>构造函数始终与类同名，大多数类一般会有一个不带参数的默认构造函数。</li>
-<li>类通常定义多个版本的构造函数，以考虑不同的初始化模式</li>
-<li>构造函数可以进行重载</li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span> {</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="built_in">Point</span>() {  <span class="comment">// 默认构造函数</span></span><br><span class="line">            x = <span class="number">0</span>;</span><br><span class="line">            y = <span class="number">0</span>;</span><br><span class="line">        }</span><br><span class="line">    	</span><br><span class="line">    	<span class="built_in">Point</span>(<span class="type">int</span> xc, <span class="type">int</span> yc) {  <span class="comment">// 含参数的构造函数</span></span><br><span class="line">            x = xc;</span><br><span class="line">            y = yc;</span><br><span class="line">        }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-<ol type="1">
-<li><strong>构造函数体内赋值：</strong></li>
-</ol>
-<ul>
-<li>先调用成员变量的默认构造函数，然后在构造函数体内对它们进行赋值操作。</li>
-<li>对于基础类型没有明显区别，但对于类成员（如对象、容器等），会多一次默认构造和赋值操作。</li>
-</ul>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> {</span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    <span class="type">int</span> b;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>(<span class="type">int</span> x, <span class="type">int</span> y) {</span><br><span class="line">        a = x;  <span class="comment">// 先默认构造，再赋值</span></span><br><span class="line">        b = y;</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-<ol start="2" type="1">
-<li><strong>初始化列表：</strong></li>
-</ol>
-<ul>
-<li>在构造对象时直接调用带参数的构造函数进行<strong>初始化</strong>，<strong>避免了不必要的赋值操作</strong>。</li>
-<li>对于需要初始化的成员变量（如<code>const</code>成员、引用成员，或者没有默认构造函数的对象），必须使用初始化列表。</li>
-</ul>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> {</span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    <span class="type">int</span> b;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>(<span class="type">int</span> x, <span class="type">int</span> y) : <span class="built_in">a</span>(x), <span class="built_in">b</span>(y) {  <span class="comment">// 初始化列表直接初始化</span></span><br><span class="line">        <span class="comment">// 构造函数体</span></span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="拷贝构造函数">拷贝构造函数</h4>
-<blockquote>
-<ol type="1">
-<li><p>如果你没有定义自己的拷贝构造函数，C++
-会为类生成一个<strong>默认</strong>的拷贝构造函数。这个默认拷贝构造函数只是简单地逐成员地复制对象的每个成员变量，称为
-<strong>浅拷贝</strong>。</p>
-<p>浅拷贝在复制对象时，只会复制指针的地址而不会复制其指向的数据，可能会导致多个对象指向同一块内存区域，这会引发
-<strong>双重释放</strong> 或 <strong>悬空指针</strong> 等问题。</p></li>
-<li><p>如果类中有需要特殊管理的资源（例如动态分配的内存、文件句柄等），你通常需要编写自定义的拷贝构造函数来实现
-<strong>深拷贝</strong>，即复制这些资源，而不仅仅是复制指针。</p></li>
-</ol>
-</blockquote>
-<p>默认拷贝构造函数：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ClassName</span>(<span class="type">const</span> ClassName&amp; other);</span><br></pre></td></tr></tbody></table></figure>
-<ul>
-<li><p>拷贝构造函数的参数使用的是<strong>引用</strong>（<code>&amp;</code>），而不是按值传递，这是因为按值传递会调用另一个拷贝构造函数来传递参数，这样就会导致<strong>无限递归调用</strong>。</p></li>
-<li><p>使用 <code>const</code>
-修饰引用是为了防止在拷贝过程中对传入的对象进行修改。</p></li>
-<li><p>使用 <code>const</code>
-还能确保拷贝构造函数可以处理<strong>临时对象</strong>（即右值）。如果不加
-<code>const</code>，则不能对一个临时对象（如
-<code>HeapPQueue()</code>）进行拷贝，因为临时对象无法绑定到非
-<code>const</code> 引用。示例：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HeapPQueue hq1 = <span class="built_in">HeapPQueue</span>();  <span class="comment">// 临时对象可以绑定到 const 引用</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<p>拷贝构造函数会在以下情况下被调用：</p>
-<ol type="1">
-<li><p><strong>对象的按值传递</strong>：当一个对象通过值传递给函数时，C++
-会创建该对象的副本，调用拷贝构造函数。</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(MyClass obj)</span></span>;  <span class="comment">// obj 作为参数，是按值传递的，会调用拷贝构造函数</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><strong>对象作为返回值按值返回</strong>：当一个对象从函数中按值返回时，也会调用拷贝构造函数。</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">MyClass <span class="title">bar</span><span class="params">()</span> </span>{</span><br><span class="line">    MyClass obj;</span><br><span class="line">    <span class="keyword">return</span> obj;  <span class="comment">// 按值返回，调用拷贝构造函数</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><strong>用现有对象初始化新对象</strong>：当用一个现有对象来初始化另一个对象时（例如通过赋值），也会调用拷贝构造函数。</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MyClass obj1;</span><br><span class="line">MyClass obj2 = obj1;  <span class="comment">// obj2 是用 obj1 初始化的，调用拷贝构造函数</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><strong>对象被放入 STL 容器</strong>：当你将对象放入 STL 容器（如
-<code>std::vector</code>、<code>std::map</code>
-等）中时，这些容器可能会通过拷贝构造函数来复制对象。</p></li>
-</ol>
-<h4 id="析构函数">析构函数</h4>
-<blockquote>
-<p><strong>析构函数</strong>的作用是在对象的生命周期结束时执行清理工作，特别是释放对象持有的动态资源（例如内存、文件句柄、网络连接等）。它确保在对象销毁时，相关的资源能够被正确释放，避免内存泄漏等问题。</p>
-<p>如果类中没有显式定义析构函数，编译器会生成一个<strong>默认的析构函数</strong>，但这个默认析构函数只会销毁基本数据类型和自动管理的成员。如果类中包含动态分配的内存或其他需要手动管理的资源，默认析构函数不会释放这些资源，可能会导致<strong>内存泄漏</strong>或<strong>资源泄露</strong>。</p>
-</blockquote>
-<ol type="1">
-<li><p>定义</p>
-<p>析构函数的名字是类名的前面加一个波浪号
-<code>~</code>，并且它没有参数和返回值。</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~<span class="built_in">ClassName</span>() {</span><br><span class="line">    <span class="comment">// 清理工作，如释放动态内存</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>调用：</p>
-<ul>
-<li>当对象离开作用域时，自动调用析构函数。</li>
-<li>如果对象是通过 <code>new</code> 分配的，当对其调用
-<code>delete</code> 时，析构函数会被调用。</li>
-<li>当一个类的对象在程序结束时被销毁，析构函数会自动调用。</li>
-</ul>
-<p>示例：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> {</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> *data;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>() {</span><br><span class="line">        data = <span class="keyword">new</span> <span class="type">int</span>[<span class="number">10</span>];  <span class="comment">// 动态分配内存</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">MyClass</span>() {</span><br><span class="line">        <span class="keyword">delete</span>[] data;  <span class="comment">// 释放内存，防止内存泄漏</span></span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<h4 id="接口与实现分离">接口与实现分离</h4>
-<ul>
-<li><p>将类的定义以及类的函数原型写在<code>.h</code>文件中，如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * File: point.h</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _point_h</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _point_h</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span> {</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Point</span>();</span><br><span class="line">    <span class="built_in">Point</span>(<span class="type">int</span> xc, <span class="type">int</span> yc);</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getX</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getY</span><span class="params">()</span></span>;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">}</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p><code>#ifndef _point_h</code>：如果符号 <code>_point_h</code>
-没有定义，则继续编译。</p>
-<p><code>#define _point_h</code>：定义符号
-<code>_point_h</code>，防止后续重复包含。</p>
-<p><code>#endif</code>：结束条件编译，确保头文件内容只被编译一次。</p>
-<p>上述代码是为了防止“重复定义”错误</p>
-</blockquote></li>
-<li><p>将函数的具体实现写在<code>.cpp</code>文件中（注意函数名前要加类名作为限定符），如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * File: point.cpp</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">"point.h"</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">Point::<span class="built_in">Point</span>() {</span><br><span class="line">    x = <span class="number">0</span>;</span><br><span class="line">    y = <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line">Point::<span class="built_in">Point</span>(<span class="type">int</span> xc，<span class="type">int</span> yc) {</span><br><span class="line">    x = xc;</span><br><span class="line">    y = yc;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Point::getX</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">}</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Point::gety</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="运算符重载">运算符重载</h3>
-<ul>
-<li><p>重载的运算符是带有特殊名称的函数，函数名是由关键字 operator
-和其后要重载的运算符符号构成的，例如：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Point <span class="keyword">operator</span>+(Point p1, Point p2);</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><code>&lt;&lt;</code>运算符也可以参与重载，难点在于该运算符的类型，它通常和
-<code>std::ostream</code> 类型结合使用，示例：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ostream &amp; <span class="keyword">operator</span>&lt;&lt;(ostream &amp; os, Point point) {   <span class="comment">// 这里的 &amp; 是必须要添加的</span></span><br><span class="line">    <span class="comment">// os表示输出流对象，可以是 std::cout 或文件输出流</span></span><br><span class="line">    os &lt;&lt; <span class="string">"("</span> &lt;&lt; point.x &lt;&lt; <span class="string">", "</span> &lt;&lt; point.y &lt;&lt; <span class="string">")"</span>;</span><br><span class="line">    <span class="keyword">return</span> os;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>如果不返回 <code>std::ostream &amp;</code>，而是返回
-<code>std::ostream</code>（即按值返回），则每次 <code>&lt;&lt;</code>
-操作都会创建一个新的 <code>std::ostream</code>
-对象，丢失原始流的上下文信息</p>
-</blockquote></li>
-<li><p><code>==</code>运算符重载，下面以Point类为例，假设该函数属于类的成员，因此可以访问私有变量x和y</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> Point::<span class="keyword">operator</span>==(Point rhs) {   <span class="comment">// 若在类内实现该函数则省略“Point”前缀</span></span><br><span class="line">   <span class="keyword">return</span> x == rhs.x &amp;&amp; y == rhs.y; </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><code>++</code>运算符重载需要注意是前缀还是后缀，后缀情况下（<code>i++</code>），参数里需要添加<code>int</code>，例如：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Direction <span class="keyword">operator</span>++(Direction &amp; dir, <span class="type">int</span>) {  </span><br><span class="line">   Direction old = dir; </span><br><span class="line">   dir = <span class="built_in">Direction</span>(dir + <span class="number">1</span>); </span><br><span class="line">   <span class="keyword">return</span> old;  <span class="comment">// ++ 作为后缀，则操作数先返回原值在自增</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="友元函数">友元函数</h3>
-<p>类的友元函数在类中声明，但不属于类的成员，但有权访问类的所有私有（private）成员和保护（protected）成员。</p>
-<ul>
-<li><p>友元函数在类中声明时需要添加<code>friend</code>前缀</p></li>
-<li><p>示例，若<code>==</code>运算符不是Point类的成员但是想要访问私有成员，则需要在类中声明</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">friend</span> <span class="keyword">operator</span>==(Point rhs);</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>友元类：可以访问另一个类的成员</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span></span><br><span class="line">{</span><br><span class="line">	......</span><br><span class="line">};</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Building</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">Point</span>; <span class="comment">// Point可以访问Building类中的成员</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Building</span>();</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    string str;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="chapter-7">Chapter 7</h2>
-<p>递归</p>
-<h2 id="chapter-8">Chapter 8</h2>
-<h3 id="汉诺塔问题">汉诺塔问题</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">moveTower</span><span class="params">(<span class="type">int</span> n, <span class="type">char</span> start, <span class="type">char</span> finish, <span class="type">char</span> tmp)</span> </span>{ </span><br><span class="line">   <span class="keyword">if</span> (n == <span class="number">1</span>) { </span><br><span class="line">      Move a single disk from start to finish. </span><br><span class="line">   } <span class="keyword">else</span> { </span><br><span class="line">      Move a tower of size n - <span class="number">1</span> from start to tmp. </span><br><span class="line">      Move a single disk from start to finish. </span><br><span class="line">      Move a tower of size n - <span class="number">1</span> from tmp to finish. </span><br><span class="line">   } </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="子集求和">子集求和</h3>
-<p>每个元素有两种可能：在子集内，不在子集内</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">subsetSumExists</span><span class="params">(Set&lt;<span class="type">int</span>&gt; &amp; set, <span class="type">int</span> target)</span> </span>{ </span><br><span class="line">   <span class="keyword">if</span> (set.<span class="built_in">isEmpty</span>()) { </span><br><span class="line">      <span class="keyword">return</span> target == <span class="number">0</span>; </span><br><span class="line">   } <span class="keyword">else</span> { </span><br><span class="line">      <span class="type">int</span> element = set.<span class="built_in">first</span>(); </span><br><span class="line">      Set&lt;<span class="type">int</span>&gt; rest = set - element; </span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">subsetSumExists</span>(rest, target)   <span class="comment">// 在子集内</span></span><br><span class="line">          || <span class="built_in">subsetSumExists</span>(rest, target - element);  <span class="comment">// 不在子集内</span></span><br><span class="line">   } </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="排列">排列</h3>
-<p>例如<code>ABC</code>的排列是<code>{ "ABC", "ACB", "BAC", "BCA", "CAB", "CBA" }</code></p>
-<p>若是对n个字符进行排列，可先选取一个字符，然后对剩余的 n-1
-个字符进行排列</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">set&lt;string&gt; <span class="title">generatePermutations</span><span class="params">(string str)</span> </span>{</span><br><span class="line">    set&lt;string&gt; ans;</span><br><span class="line">    <span class="keyword">if</span>(str == <span class="string">""</span>)</span><br><span class="line">        ans.<span class="built_in">insert</span>(str);</span><br><span class="line">    <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;str.<span class="built_in">length</span>(); i++) {</span><br><span class="line">            <span class="type">char</span> c = str[i];</span><br><span class="line">            string rest = str.<span class="built_in">substr</span>(<span class="number">0</span>, i) + str.<span class="built_in">substr</span>(i+<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span>(string s : <span class="built_in">generatePermutations</span>(rest)) {   <span class="comment">// 递归</span></span><br><span class="line">                ans.<span class="built_in">insert</span>(c+s);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="chapter-9">Chapter 9</h2>
-<p>回溯算法</p>
-<h2 id="chapter-10">Chapter 10</h2>
-<p>算法分析</p>
-<h3 id="big-o">big-O</h3>
-<p>描述算法的时间复杂度</p>
-<h3 id="选择算法">选择算法</h3>
-<ul>
-<li>选取 [i, n-1] 区间内最小/最大的元素与i处的元素交换次序</li>
-<li>排序趟数与序列的原始状态无关</li>
-<li>比较次数也与序列初始状态无关</li>
-<li>时间复杂度：O(n<sup>2</sup>)</li>
-</ul>
-<h3 id="归并排序">归并排序</h3>
-<ul>
-<li><p>先从中间划分两个子序列，对左侧子序列递归排序，对右侧子序列递归排序，归并</p></li>
-<li><p>时间复杂度：O(nlogn)</p></li>
-</ul>
-<h3 id="不同时间复杂度">不同时间复杂度</h3>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20240926125413614.png" alt="image-20240926125413614">
-<figcaption aria-hidden="true">image-20240926125413614</figcaption>
-</figure>
-<h3 id="快速排序">快速排序</h3>
-<p>归并排序在实践中用的不多。快速排序也用到了分治的思想。</p>
-<ul>
-<li>最简单的策略是选择向量中的第一个元素作为枢轴</li>
-<li>两端有low和high指针，一趟排序结束后分为两个子序列。枢轴处于其最终位置</li>
-<li>若是从小到大排序，则枢轴左边的子序列所有值小于枢轴右边的子序列所有值</li>
-<li>详细步骤：
-<ul>
-<li>先移动high指针找到比枢轴小的元素。若找不到则会与low重合</li>
-<li>若找到满足条件的元素，high指针停止移动，开始移动low指针找到比枢轴大的元素，若找不到则会与high重合</li>
-<li>若找到满足条件的元素，且两个指针未重合，交换两个指针指向的元素</li>
-<li>若两个指针重合且low指向的元素小于枢轴元素，则交换两个元素</li>
-</ul></li>
-<li>平均时间复杂度：O(nlogn)</li>
-<li>最坏情况——有序：O(n<sup>2</sup>)</li>
-</ul>
-<h2 id="chapter-11">Chapter 11</h2>
-<p>指针与数组</p>
-<h3 id="二进制和十六进制">二进制和十六进制</h3>
-<ul>
-<li>无符号数</li>
-<li>有符号数（补码）</li>
-<li>内存地址一般用十六进制表示</li>
-</ul>
-<h3 id="内存">内存</h3>
-<ul>
-<li>进程地址空间</li>
-<li>栈帧：<strong>函数调用</strong>期间保存在栈中的数据结构，用于存储参数、局部变量和返回地址等</li>
-</ul>
-<h3 id="指针">指针</h3>
-<p>存放内存地址的数据项被称为指针</p>
-<h4 id="指针声明">指针声明</h4>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> *p; <span class="comment">// 指向int的指针</span></span><br></pre></td></tr></tbody></table></figure>
-<ul>
-<li><p><code>* + 指针名</code>：获取指针指向的值</p></li>
-<li><p><code>&amp; + 变量名</code>：获取该变量所在的内存地址</p></li>
-<li><p>示例：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x, y;</span><br><span class="line"><span class="type">int</span> *p1, *p2;</span><br><span class="line">x = <span class="number">42</span>;</span><br><span class="line">y = <span class="number">163</span>;</span><br><span class="line">p1 = &amp;y;  <span class="comment">// 使p1指向y</span></span><br><span class="line">p2 = &amp;x;  <span class="comment">// 使p2指向x</span></span><br></pre></td></tr></tbody></table></figure>
-<p>经过以上操作后，内存如图所示</p>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241010145846709.png"></p></li>
-<li><p>若要修改<code>y</code>的值，可以使用下面的语句：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*p1 = <span class="number">17</span>;</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>当指针指向一个对象时，可通过<code>-&gt;</code>以及<code>.</code>来访问该对象的成员，例如：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Point <span class="title">pt</span><span class="params">(<span class="number">3</span>, <span class="number">4</span>)</span></span>; </span><br><span class="line">Point *pp = &amp;pt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面两行是等价的</span></span><br><span class="line">(*pp).<span class="built_in">getX</span>();</span><br><span class="line">pp-&gt;<span class="built_in">getX</span>();</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="关键字-this">关键字 <code>this</code></h3>
-<ul>
-<li><p><code>this</code>是指向当前变量的指针</p></li>
-<li><p>使用<code>this</code>可以避免类中构造函数中的变量冲突，同时方便用户理解：</p></li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Point</span>(<span class="type">int</span> x, <span class="type">int</span> y) { </span><br><span class="line">   <span class="keyword">this</span>-&gt;x = x; </span><br><span class="line">   <span class="keyword">this</span>-&gt;y = y; </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="空指针">空指针</h3>
-<ul>
-<li>使用常量<code>NULL</code>表示空指针</li>
-<li>对空指针使用<code>*</code>运算符是违法的</li>
-</ul>
-<h3 id="引用">引用</h3>
-<ul>
-<li><p>将参数通过引用进行传递时，栈帧会存储指针，指针指向该值所在的调用函数中的位置。对该值的任何更改在函数返回后仍然有效</p></li>
-<li><p>不使用引用，而是直接通过指针进行swap操作：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(<span class="type">int</span> *px, <span class="type">int</span> *py)</span> </span>{ </span><br><span class="line">    <span class="type">int</span> tmp = *px; </span><br><span class="line">    *px = *py; </span><br><span class="line">    *py = tmp; </span><br><span class="line">} </span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="built_in">swap</span>(&amp;n1, &amp;n2); </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>指针引用：例如<code>int* &amp; p;</code>表示对指针p的引用</p></li>
-</ul>
-<h3 id="数组">数组</h3>
-<ul>
-<li><p>数组定义：<code>type name[size];</code></p></li>
-<li><p>数组元素访问通过数组下标（索引）</p></li>
-<li><p>通过<code>sizeof</code>获取数组长度以及元素大小</p></li>
-<li><p>数组名称与指向初始元素的指针相同</p></li>
-<li><p>数组作为参数被调用时，与引用的效果相同，例如下面的代码能够对传入的数组进行排序</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">sort</span><span class="params">(<span class="type">int</span> array[], <span class="type">int</span> n)</span> </span>{   <span class="comment">// 或者写成 void sort(int *array, int n) </span></span><br><span class="line">   <span class="keyword">for</span> (<span class="type">int</span> lh = <span class="number">0</span>; lh &lt; n; lh++) { </span><br><span class="line">      <span class="type">int</span> rh = lh; </span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> i = lh + <span class="number">1</span>; i &lt; n; i++) { </span><br><span class="line">         <span class="keyword">if</span> (array[i] &lt; array[rh]) rh = i; </span><br><span class="line">      } </span><br><span class="line">      <span class="built_in">swap</span>(array[lh], array[rh]); </span><br><span class="line">   } </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>字符数组使用<code>strcpy</code>函数时，没有尝试检查目标是否有足够的空间来保存源字符串的副本。如果没有足够的内存来保存完整的字符串，其他特殊用途的内存可能会被覆盖。这种形式的问题称为缓冲区溢出错误</p></li>
-</ul>
-<h2 id="chapter-12">Chapter 12</h2>
-<p>动态内存管理</p>
-<ul>
-<li>动态内存管理是对<strong>堆</strong>进行操作</li>
-<li>vector、map等集合类都是存放在堆上的</li>
-</ul>
-<h3 id="new操作符"><code>new</code>操作符</h3>
-<ul>
-<li><p><code>new</code>操作符从<strong>堆</strong>中分配内存，会返回堆中为保存对象而留出的存储位置的<strong>地址</strong>，例如：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> *ip = <span class="keyword">new</span> <span class="type">int</span>;   <span class="comment">// 等号右边返回的是内存指针</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>动态数组：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> *array = <span class="keyword">new</span> <span class="type">double</span>[<span class="number">3</span>];</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>动态对象：在堆上为 Rational 对象分配空间并调用缺省构造函数</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rational *rp = <span class="keyword">new</span> Rational;</span><br></pre></td></tr></tbody></table></figure>
-<p>若在类型名称后面提供参数，则会调用对应的构造函数</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rational *rp = <span class="keyword">new</span> <span class="built_in">Rational</span>(<span class="number">2</span>, <span class="number">3</span>);</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="chapter-13">Chapter 13</h2>
-<h3 id="文本编辑软件模式">文本编辑软件模式</h3>
-<ul>
-<li><strong>MVC</strong>模式：model-view-controller。以手机文本编辑软件为例，键盘代表控制器，显示器代表视图，底层数据结构代表模型</li>
-<li>大多数编辑器都是使用模型-视图-控制器模式设计的。在模型内部，编辑器维护一个字符序列，通常称为缓冲区。控制器允许您对缓冲区的内容执行各种操作</li>
-</ul>
-<h3 id="数组栈链表">数组、栈、链表</h3>
-<p>三种方法实现文本编辑功能在效率上的区别</p>
-<ul>
-<li>数组：插入和删除操作需要O(n)</li>
-<li>栈：分为光标左右两个栈，光标移动到开头和结尾需要O(n)</li>
-<li>单链表：光标向左移动和移动到结尾需要O(n)</li>
-<li>双链表：解决上述单链表的缺点，上述两个操作只需要 O(1)
-时间复杂度</li>
-</ul>
-<h2 id="chapter-14">Chapter 14</h2>
-<p>模板</p>
-<h3 id="模板函数">模板函数</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ValueType&gt;  <span class="comment">// ValueType是占位符，表示数据类型</span></span><br><span class="line"><span class="function">ValueType <span class="title">max</span><span class="params">(ValueType x, ValueType y)</span> </span>{ </span><br><span class="line">   <span class="keyword">return</span> (x &gt; y) ? x : y; </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>每当编译器遇到一个模板函数应用于它尚未处理过的类型时，它都会生成一个适用于该类型的函数体的全新副本。因此，如果在同一程序中对int、double、char、string使用max函数，编译器将生成四个代码副本，每种类型一个。</p>
-<p>“模板”提供的是一种模式，使得编译器可以在需要时从中生成专门定制的版本。</p>
-<blockquote>
-<p><code>template &lt;class T&gt;</code>：这是早期 C++
-规范中的写法，<code>class</code> 关键字用于定义模板参数的类型。</p>
-<p><code>template &lt;typename T&gt;</code>：这是 C++
-标准化后引入的一种更加语义化的写法，<code>typename</code>
-关键字强调模板参数表示的是一种类型</p>
-</blockquote>
-<h3 id="模板类">模板类</h3>
-<ul>
-<li><p>在类定义前一行添加<code>template &lt;typename ValueType&gt;</code>，那么类中的所有成员函数都会自动使用这个模板参数
-<code>T</code>，因为这个模板参数是与类绑定的。你不需要再为每个成员函数重新声明<code>template &lt;typename ValueType&gt;</code>。</p></li>
-<li><p>在模板类中如果你只是声明了函数，并打算在类的<strong>外部</strong>实现它，那么在实现时需要在函数定义之前<strong>添加</strong>
-<code>template&lt;typename T&gt;</code>。示例：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="type">void</span> MyClass&lt;T&gt;::<span class="built_in">show</span>() { <span class="comment">// 注意指明该函数是属于MyClass的成员函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">"Data: "</span> &lt;&lt; data &lt;&lt; std::endl;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="chapter-15">Chapter 15</h2>
-<h3 id="maps">Maps</h3>
-<ul>
-<li>映射：通过查找map查找元素，时间复杂度为O(n)</li>
-</ul>
-<h3 id="哈希">哈希</h3>
-<p>通过key找到value的位置</p>
-<ul>
-<li><p>选择一个函数将key转换为整数值（哈希码）</p></li>
-<li><p>该策略（利用哈希函数进行映射）可抽象出哈希表</p></li>
-<li><p>链表数组（数组每个元素是链表）：数组的每一个元素（链表）被称为
-<strong>bucket</strong></p></li>
-<li><p>哈希码的取值范围通常远大于桶的数量，可以通过模运算（取余数）将哈希码缩小到桶的范围内</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bucket是桶编号，nBucket是桶的数量</span></span><br><span class="line"><span class="type">int</span> bucket = <span class="built_in">hashCode</span>(key) % nBuckets;</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>将两个或更多不同的键哈希与同一存储桶的键称为<strong>碰撞</strong></p></li>
-<li><p>负载因子α：计算公式为：<span class="math inline">\(\alpha =
-\frac{n}{m}\)</span></p>
-<ul>
-<li>n：当前哈希表中存储的元素数量。</li>
-<li>m：哈希表中桶（槽）的数量。</li>
-<li><strong>较低的负载因子</strong>：表示哈希表中有许多空桶，这通常意味着插入和查找操作的平均时间复杂度较低，因为发生碰撞的概率较小。</li>
-<li><strong>较高的负载因子</strong>：表示哈希表中接近满的状态，可能会导致较多的碰撞，从而增加查找和插入操作的时间复杂度</li>
-</ul></li>
-<li><p><strong>HashMap</strong>：map的查找速度一般是O(n)，而hashMap查找速度是O(1)</p></li>
-</ul>
-<h2 id="chapter-16">Chapter 16</h2>
-<p>树</p>
-<h3 id="二叉搜索树bst">二叉搜索树（BST）</h3>
-<ul>
-<li>二叉搜索树的每个节点的权值都是唯一的</li>
-<li>左子树 &lt; 根节点 &lt; 右子树</li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">BSTNode</span> { </span><br><span class="line">   string key; </span><br><span class="line">   BSTNode *left, *right; </span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="插入节点">插入节点</h4>
-<ul>
-<li><p>使用二分查找的思想</p></li>
-<li><p>从根节点开始递归，小于根节点就进入左子树，否则进入右子树，直到找到插入位置</p>
-<p>注意：插入值不能与二叉排序树中的值重复</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*  </span></span><br><span class="line"><span class="comment"> *注意这里使用的是对指针的引用，因为函数类型是void，无返回值，只在函数内修改值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">insertNode</span><span class="params">(BSTNode * &amp; t, <span class="type">const</span> string &amp; key)</span> </span>{   </span><br><span class="line">   <span class="keyword">if</span> (t == <span class="literal">NULL</span>) { </span><br><span class="line">      t = <span class="keyword">new</span> BSTNode; </span><br><span class="line">      t-&gt;key = key; </span><br><span class="line">      t-&gt;left = t-&gt;right = <span class="literal">NULL</span>; </span><br><span class="line">   } <span class="keyword">else</span> { </span><br><span class="line">      <span class="keyword">if</span> (key != t-&gt;key) { </span><br><span class="line">         <span class="keyword">if</span> (key &lt; t-&gt;key) { </span><br><span class="line">            <span class="built_in">insertNode</span>(t-&gt;left, key); </span><br><span class="line">         } <span class="keyword">else</span> { </span><br><span class="line">            <span class="built_in">insertNode</span>(t-&gt;right, key); </span><br><span class="line">         } </span><br><span class="line">      } </span><br><span class="line">   } </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h4 id="删除节点">删除节点</h4>
-<p>共有三种情况，假设要删除的节点为 z</p>
-<ul>
-<li>叶结点：直接删除</li>
-<li>只有一棵子树：让子树成为 z 的父结点的子树</li>
-<li>有左右两个子树：令<strong>右子树最左下结点/直接后继（或左子树最右下结点/直接前驱）</strong>代替
-z，然后删除直接后继/直接前驱结点</li>
-</ul>
-<p>注意：删除一个结点可能会影响多个结点，因此可能要操作多次</p>
-<h4 id="遍历">遍历</h4>
-<ul>
-<li><strong>中序遍历</strong>（左根右）可以得到有序序列</li>
-<li>先序遍历（根左右）</li>
-<li>后序遍历（左右根）</li>
-</ul>
-<h3 id="平衡二叉树">平衡二叉树</h3>
-<p>二叉搜索树的最坏情况是每个节点只有一个子树，此时查找操作的时间复杂度是O(n).</p>
-<ul>
-<li>平衡二叉树的左右子树高度相差不超过1</li>
-<li>二叉搜索树在平衡时才能保证查找的时间复杂度为O(logn)</li>
-</ul>
-<h4 id="avl算法">AVL算法</h4>
-<p>操作对象是最小不平衡子树</p>
-<ol type="1">
-<li><strong>单旋转操作</strong>
-<ul>
-<li><strong>LL</strong>平衡旋转（右单旋转）：在左孩子的左子树插入结点，需要旋转<strong>左孩子结点</strong></li>
-<li><strong>RR</strong>平衡旋转（左单旋转）：在右孩子的右子树插入结点，需要旋转<strong>右孩子结点</strong></li>
-</ul></li>
-<li><strong>双旋转操作</strong>
-<ul>
-<li><strong>LR</strong>平衡旋转（先左后右）：在左孩子的右子树插入结点，旋转<strong>左孩子</strong>的<strong>右子树的根结点</strong>（先左后右，操作的是同一个节点）</li>
-<li><strong>RL</strong>平衡旋转（先右后左）：在右孩子的左子树插入结点，旋转<strong>右孩子</strong>的<strong>左子树的根结点</strong>（先右后左，操作的是同一个节点）</li>
-</ul></li>
-</ol>
-<p><strong>代码实现</strong>：需要在节点结构中添加平衡因子（左右节点高度差）</p>
-<h2 id="chapter-18">Chapter 18</h2>
-<p>图</p>
-<h3 id="图的结构">图的结构</h3>
-<ul>
-<li>vertex ：顶点</li>
-<li>edge ：边，弧</li>
-<li>有向图</li>
-<li>无向图</li>
-<li>路径：从一个节点到另一个节点经过的弧的集合</li>
-<li>回路：在同一个节点开始和结束</li>
-<li>简单路径：不出现重复的节点</li>
-<li>度：相邻节点数</li>
-<li>入度（进入该节点）、出度（离开该节点）：有向图</li>
-<li>连通图（无向图）：任意两个节点是连通的</li>
-<li>连通分量：极大连通子图</li>
-<li>强连通图（有向图）：任意一对顶点 v、w ，从 v 到 w、从 w 到 v
-均有路径</li>
-</ul>
-<h3 id="图的表示形式">图的表示形式</h3>
-<h4 id="邻接表">邻接表</h4>
-<ul>
-<li>对图的每个顶点建立一个单链表（<strong>边表</strong>），指向单链表的顶点组成顶点表（数组）</li>
-<li>更适合处理稀疏图</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230815093150181.png"></p>
-<h4 id="邻接矩阵">邻接矩阵</h4>
-<ul>
-<li>使用二维数组存放各个节点的度，或者用布尔值表示弧是否存在</li>
-<li>空间复杂度O(n<sup>2</sup>)</li>
-<li>更适合处理稠密图</li>
-</ul>
-<h3 id="图的遍历">图的遍历</h3>
-<h4 id="深度优先搜索">深度优先搜索</h4>
-<ul>
-<li>利用循环遍历节点，在循环中调用递归</li>
-<li>记录访问过的节点</li>
-</ul>
-<h4 id="广度优先搜索">广度优先搜索</h4>
-<ul>
-<li>每一轮访问与当前节点相邻的节点</li>
-<li>使用队列存放当前要访问的节点</li>
-<li>访问出队节点的相邻节点</li>
-<li>队空则循环结束</li>
-</ul>
-<h3 id="最短路径">最短路径</h3>
-<h4 id="dijkstra-算法">Dijkstra 算法</h4>
-<ul>
-<li>使用优先队列存放源点到各点的路径长度</li>
-<li>利用一个集合 S 存放已被访问过的顶点</li>
-<li>步骤：
-<ol type="1">
-<li>优先队列初始化为空</li>
-<li>先将源点添加到 S 中</li>
-<li>然后访问与源点相邻的顶点，并将对应的路径存入优先队列中（从小到大排列）</li>
-<li>弹出优先队列队顶元素（最小），访问该点的相邻顶点并加入优先队列</li>
-<li>重复上述步骤直到目标顶点</li>
-</ol></li>
-</ul>
-<h2 id="chapter-19">Chapter 19</h2>
-<p>继承</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">subclass</span> : <span class="keyword">public</span> superclass {</span><br><span class="line">    <span class="comment">// new entries for subclass</span></span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-<p><code>subclass</code>继承了<code>superclass</code>的所有公共成员，但不能直接访问<code>superclass</code>的私有成员</p>
-<p>派生类对象同时也是基类对象</p>
-<h3 id="公有派生">公有派生</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Parent</span> {</span><br><span class="line">	......  </span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Child</span> : <span class="keyword">public</span> Parent {</span><br><span class="line">	......</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-<ul>
-<li><p>基类的公有成员将成为派生类的公有成员，派生类只能通过基类的<strong>公有方法</strong>或<strong>保护方法</strong>访问基类的私有成员</p></li>
-<li><p>构造函数：派生类不能直接访问基类的私有成员，因此派生类的构造函数需要<strong>调用基类构造函数</strong></p>
-<blockquote>
-<p>子类的构造函数在执行时<strong>一定会</strong>调用父类的构造函数。这是因为子类的对象不仅包含子类自身的数据成员，还包含从父类继承的那些数据成员。</p>
-</blockquote>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> {</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> privateVar;  <span class="comment">// 私有成员，派生类无法直接访问</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 基类的构造函数，用于初始化私有成员</span></span><br><span class="line">    <span class="built_in">Base</span>(<span class="type">int</span> x) : <span class="built_in">privateVar</span>(x) {</span><br><span class="line">        std::cout &lt;&lt; <span class="string">"Base constructor called, privateVar = "</span> &lt;&lt; privateVar &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base {</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 派生类的构造函数，通过调用基类的构造函数初始化基类的私有成员</span></span><br><span class="line">    <span class="built_in">Derived</span>(<span class="type">int</span> x) : <span class="built_in">Base</span>(x) {</span><br><span class="line">        std::cout &lt;&lt; <span class="string">"Derived constructor called."</span> &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="function">Derived <span class="title">d</span><span class="params">(<span class="number">10</span>)</span></span>;  <span class="comment">// 创建派生类对象，间接初始化基类的私有成员</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>访问控制：<strong>protected</strong></p>
-<ul>
-<li>对于外部世界来说，保护成员和私有成员类似，都不能被直接访问</li>
-<li><strong>在派生类中</strong>，可以<strong>直接访问</strong>基类的
-<code>protected</code> 和 <code>public</code>
-成员。这意味着在派生类的成员函数中，可以直接使用 <code>protected</code>
-和 <code>public</code> 成员变量或成员函数。</li>
-<li><strong>在派生类的对象上</strong>，派生类的 <code>public</code>
-成员可以在外部直接访问，而 <code>protected</code>
-成员只能在派生类或其子类的成员函数中访问，<strong>不能通过对象在外部访问</strong>。</li>
-</ul>
-</blockquote></li>
-</ul>
-<h3 id="虚函数">虚函数</h3>
-<p>实现多态</p>
-<ul>
-<li><p>虚函数：子类中的函数覆盖父类函数。（在对应函数前添加<code>virtual</code>）</p>
-<p>函数在基类中被声明为虚的后，它在派生类中将自动成为虚函数，不过在派生类中也使用virtual能更直观</p>
-<blockquote>
-<p><strong>覆盖</strong>：子类提供了一个与父类虚函数具有相同函数签名（函数名、参数类型、参数个数）的实现，称为覆盖。这个新函数将替代父类中的虚函数实现，当通过基类指针或引用调用该函数时，实际执行的是子类的实现（<strong>动态绑定</strong>）</p>
-</blockquote></li>
-<li><p>纯虚函数：对应函数在基类中未被实现（除了添加<code>virtual</code>还需要在函数结尾添加<code>= 0</code>，如下）</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>如果类中至少有一个函数被声明为纯虚函数，则这个类就是<strong>抽象类</strong>，抽象类<strong>不能被用于实例化对象</strong>，它只能作为<strong>接口</strong>使用。</p>
-</blockquote></li>
-</ul>
-<p>注意：构造函数不能是虚函数；友元函数不能是虚函数，因为友元函数不属于类成员</p>
-<h3 id="虚析构函数">虚析构函数</h3>
-<ul>
-<li><p>如果析构函数不是虚的，则将只调用对应于指针类型的析构函数，这意味着即使指针指向的是一个派生类对象，只有基类的析构函数被调用，则会导致派生类中的资源和成员变量不会被正确释放或清理。</p></li>
-<li><p>如果析构函数是虚的，将<strong>调用相应对象类型的析构函数</strong>。因此，如果指针指向的是派生类对象，那么将<strong>先调用派生类的析构函数，然后自动调用基类的析构函数</strong>。因此，使用虚析构函数可以确保正确的析构函数序列被调用。</p></li>
-</ul>
-<h3 id="指向对象的指针">指向对象的指针</h3>
-<ul>
-<li><p>子类与父类在内存中所占空间大小可能不同，因此不能直接将子类对象赋值给父类对象。</p></li>
-<li><p>使用基类指针指向子类对象是为了实现<strong>多态</strong>（polymorphism）和<strong>动态绑定</strong>（dynamic
-binding）</p></li>
-<li><p>当基类指针指向子类对象时，该指针的<strong>静态类型</strong>（compile-time
-type）是基类类型，而指针实际指向对象的<strong>动态类型</strong>（run-time
-type）是子类类型。示例：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Parent</span> {</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">show</span><span class="params">()</span> </span>{</span><br><span class="line">        std::cout &lt;&lt; <span class="string">"Parent's show function"</span> &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">nonVirtualFunc</span><span class="params">()</span> </span>{</span><br><span class="line">        std::cout &lt;&lt; <span class="string">"Parent's non-virtual function"</span> &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Child</span> : <span class="keyword">public</span> Parent {</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">show</span><span class="params">()</span> <span class="keyword">override</span> </span>{  <span class="comment">// 或者写成 `virtual void show()`</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">"Child's show function"</span> &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">nonVirtualFunc</span><span class="params">()</span> </span>{</span><br><span class="line">        std::cout &lt;&lt; <span class="string">"Child's non-virtual function"</span> &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    Parent* ptr = <span class="keyword">new</span> <span class="built_in">Child</span>();</span><br><span class="line"></span><br><span class="line">    ptr-&gt;<span class="built_in">show</span>();           <span class="comment">// 动态绑定，调用子类的虚函数</span></span><br><span class="line">    ptr-&gt;<span class="built_in">nonVirtualFunc</span>();  <span class="comment">// 静态绑定，调用基类的非虚函数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">delete</span> ptr;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>当程序执行到一个函数调用时，系统需要决定调用哪个具体的函数，这个过程就叫做<strong>联编</strong>。联编可以在<strong>编译时</strong>或<strong>运行时</strong>进行，这分别被称为<strong>静态联编</strong>和<strong>动态联编</strong>。</p>
-<blockquote>
-<p>静态联编：在编译过程中进行联编</p>
-<p>动态联编：在程序运行时选择正确的虚函数</p>
-</blockquote></li>
-</ul>
-<h2 id="额外知识">额外知识</h2>
-<h3 id="内联函数">内联函数</h3>
-<p>程序运行时不需要在内存中跳到对应函数的位置执行代码，在编译时，编译器会把该函数的代码副本放置在每个调用该函数的地方。（空间换时间）</p>
-<ul>
-<li>在函数声明或函数定义前添加<code>inline</code>关键字</li>
-<li>在类内定义的函数，它具有隐式的 <code>inline</code> 说明符</li>
-<li>添加<code>inline</code>关键字的函数不一定能被编译器判定为内联函数：
-<ul>
-<li>函数过大</li>
-<li>函数递归</li>
-</ul></li>
-</ul>
-<h3 id="虚表">虚表</h3>
-<p>通常，编译器处理虚函数的方法是：<strong>给每个对象添加一个隐藏成员</strong>。隐藏成员中保存了一个指向函数地址数组的<strong>指针</strong>。这种数组称为<strong>虚函数表</strong>(virtual
-function
-table,vtbl)。虚函数表中存储了为类对象进行声明的<strong>虚函数地址</strong>。</p>
-<p>例如，基类对象包含一个指针，该指针指向基类中包含 所有虚函数地址 的
-表。同样的，派生类对象也将包含一个指向独立地址表的指针。</p>
-<ul>
-<li>如果派生类提供了<strong>虚函数的新定义</strong>，该虚函数表将保存新函数的地址；如果派生类没有重新定义虚函数，该vtbl将保存函数原始版本的地址。</li>
-<li>如果派生类定义了<strong>新的虛函数</strong>（与基类的虚函数无关），则该函数的地址也将被添加到vtbl中。</li>
-</ul>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241020224758096.png" alt="image-20241020224758096">
-<figcaption aria-hidden="true">image-20241020224758096</figcaption>
-</figure>
-<h3 id="虚基类">虚基类</h3>
-<p><strong>虚基类</strong>（Virtual Base
-Class）是C++中的一种机制，主要用于解决<strong>多重继承</strong>中<strong>菱形继承问题</strong>（diamond
-problem）。菱形继承问题会导致基类的成员在派生类中出现<strong>重复拷贝</strong>，从而产生潜在的二义性问题（派生类对象可能包含多个相同的基类部分成员）。虚基类通过确保在菱形继承结构中，派生类只继承第一个基类，从而避免了这个问题。</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> {</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> value;</span><br><span class="line">    <span class="built_in">A</span>() : <span class="built_in">value</span>(<span class="number">0</span>) {}</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> <span class="keyword">virtual</span> A {};</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> : <span class="keyword">public</span> <span class="keyword">virtual</span> A {};</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">D</span> : <span class="keyword">public</span> B, <span class="keyword">public</span> C {};</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    D d;</span><br><span class="line">    d.value = <span class="number">10</span>;  <span class="comment">// 现在 D 中只有一个 A 的成员变量</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">"D::value: "</span> &lt;&lt; d.value &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<p>或者（不使用虚基类）在代码中显式表明作用域来表示子类使用的是哪一个父类的成员：<code>d.B::value</code></p>
-<h3 id="函数隐藏name-hiding">函数隐藏（<strong>name
-hiding</strong>）</h3>
-<p>是指基类中的成员函数被派生类中<strong>同名</strong>但<strong>不同签名</strong>（参数不同或返回不同）的成员函数覆盖，从而导致基类的函数无法在派生类对象中被直接访问。</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> {</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">show</span><span class="params">(<span class="type">int</span> x)</span> </span>{</span><br><span class="line">        std::cout &lt;&lt; <span class="string">"Base class show(int): "</span> &lt;&lt; x &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">show</span><span class="params">(<span class="type">double</span> x)</span> </span>{</span><br><span class="line">        std::cout &lt;&lt; <span class="string">"Base class show(double): "</span> &lt;&lt; x &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base {</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">show</span><span class="params">(<span class="type">int</span> x)</span> </span>{</span><br><span class="line">        std::cout &lt;&lt; <span class="string">"Derived class show(int): "</span> &lt;&lt; x &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    Derived d;</span><br><span class="line">    d.<span class="built_in">show</span>(<span class="number">10</span>);        <span class="comment">// 调用 Derived 的 show(int)</span></span><br><span class="line">    <span class="comment">// d.show(3.14);   // 错误：Derived 中没有 show(double)</span></span><br><span class="line">    d.Base::<span class="built_in">show</span>(<span class="number">3.14</span>); <span class="comment">// 需要明确指定调用基类的 show(double)</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<ul>
-<li>在派生类 <code>Derived</code> 中，定义了 <code>show(int)</code>
-函数，它<strong>隐藏了</strong>基类 <code>Base</code> 中所有同名的
-<code>show()</code> 函数（即 <code>show(int)</code> 和
-<code>show(double)</code>）。</li>
-<li>因此，当调用 <code>d.show(3.14)</code>
-时，会报错，因为编译器只能看到 <code>Derived</code> 中的
-<code>show(int)</code> 函数，而 <code>Base</code> 中的
-<code>show(double)</code> 函数被隐藏。</li>
-<li>如果你仍想调用基类的 <code>show(double)</code> 函数，可以使用
-<code>d.Base::show(3.14)</code> 来明确指明调用基类的函数。</li>
-</ul>
-<h2 id="assignment-0">Assignment 0</h2>
-<h3 id="配置环境">配置环境</h3>
-<p>安装好Qt后，打开 NameHash.pro 文件，构建报错，报错信息如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error: Cannot find version <span class="number">2021.1</span> of CS106 library. Install CS106 package following instructions at https:<span class="comment">//web.stanford.edu/dept/cs_edu/qt.  Stop.</span></span><br></pre></td></tr></tbody></table></figure>
-<p>于是打开 NameHash.pro
-文件查看代码，添加下面代码方便构建时查看对应库的位置：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">message(USER_DATA_DIR = $$USER_DATA_DIR)</span><br><span class="line">message(SPL_DIR = $$SPL_DIR)</span><br><span class="line">message(STATIC_LIB = $$STATIC_LIB)</span><br><span class="line">message(SPL_VERSION_FILE = $$SPL_VERSION_FILE)</span><br></pre></td></tr></tbody></table></figure>
-<p>运行得到：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Project MESSAGE: USER_DATA_DIR = C:/Users/hxt/AppData/Local</span><br><span class="line">Project MESSAGE: SPL_DIR = C:/Users/hxt/AppData/Local/cs106</span><br><span class="line">Project MESSAGE: STATIC_LIB = C:\Users\hxt\AppData\Local\cs106\lib\libcs106.a</span><br><span class="line">Project MESSAGE: SPL_VERSION_FILE = C:\Users\hxt\AppData\Local\cs106\lib\version2023.1</span><br></pre></td></tr></tbody></table></figure>
-<p>找到<code>lib</code>文件夹，打开发现版本是<code>2023.1</code>，于是尝试修改
-NameHash.pro 文件中的版本信息：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SPL_VERSION = 2021.1  ----&gt;  SPL_VERSION = 2023.1</span><br></pre></td></tr></tbody></table></figure>
-<p>再次构建，成功！</p>
-<h2 id="assignment-1">Assignment 1</h2>
-<h3 id="结构体-1">结构体</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">PenStyle</span> {</span><br><span class="line">    <span class="type">double</span> width;</span><br><span class="line">    std::string color;</span><br><span class="line">};</span><br><span class="line">PenStyle style = = { <span class="number">1</span>, <span class="string">"black"</span> };  <span class="comment">// C++中结构体的名字可以直接用作类型名称，前面不需要再加struct了</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="warning">Warning</h3>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Qt internal warning: UpdateLayeredWindowIndirect failed for ptDst=(0, 0), size=(3x3), dirty=(3x3 0, 0) (参数错误。)</span><br><span class="line">  - pid: 13244</span><br><span class="line">  - thread: 28992</span><br><span class="line"></span><br><span class="line">Qt internal warning: UpdateLayeredWindowIndirect failed for ptDst=(0, 0), size=(3x3), dirty=(3x3 0, 0) (参数错误。)</span><br><span class="line">  - pid: 13244</span><br><span class="line">  - thread: 28992</span><br><span class="line"></span><br><span class="line">Qt internal warning: UpdateLayeredWindowIndirect failed for ptDst=(0, 0), size=(3x3), dirty=(12x12 0, 0) (参数错误。)</span><br><span class="line">  - pid: 13244</span><br><span class="line">  - thread: 28992</span><br><span class="line"></span><br><span class="line">Qt internal warning: QObject::killTimer: Timers cannot be stopped from another thread</span><br><span class="line">  - pid: 13244</span><br><span class="line">  - thread: 20204</span><br><span class="line"></span><br><span class="line">Qt internal warning: QObject::~QObject: Timers cannot be stopped from another thread</span><br><span class="line">  - pid: 13244</span><br><span class="line">  - thread: 20204</span><br></pre></td></tr></tbody></table></figure>
-<p>Qt运行Plot时报错，不知道怎么解决</p>
-<h2 id="assignment-2">Assignment 2</h2>
-<h3 id="part-one">Part One</h3>
-<h4 id="milestone-one">Milestone One</h4>
-<ul>
-<li>将文本中出现的字符串分为不同子字符串（三元组，可能用UTF-8表示），并统计其出现次数</li>
-</ul>
-<h4 id="milestone-two">Milestone Two</h4>
-<ul>
-<li><p>归一化：假设每个子字符串出现次数的平方和为s，然后将每个子字符串出现的次数除以<span class="math inline">\(\sqrt{s}\)</span>，得到对应的频率，例如下面的示例：</p>
-<blockquote>
-<p>"aaa": 3 "baa": 1 "aab": 1</p>
-<p>计算平方和：3<sup>2</sup> + 1<sup>2</sup> + 1<sup>2</sup> = 11</p>
-<p>计算频率：3/<span class="math inline">\(\sqrt{11}\)</span> =
-0.904534，1/<span class="math inline">\(\sqrt{11}\)</span> =
-0.301511</p>
-</blockquote></li>
-<li><p>难点在于如何遍历map，这里我使用的是 range-based for</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用auto遍历键值对</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span>&amp; pair : myMap) {</span><br><span class="line">        std::cout &lt;&lt; pair.first &lt;&lt; <span class="string">": "</span> &lt;&lt; pair.second &lt;&lt; std::endl;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//C++17标准</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span>&amp; [key, value] : myMap) {</span><br><span class="line">        std::cout &lt;&lt; key &lt;&lt; <span class="string">": "</span> &lt;&lt; value &lt;&lt; std::endl;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 我使用的方法，通过key来遍历map&lt;string, double&gt;</span></span><br><span class="line"><span class="keyword">for</span>(string str1 : input) {  <span class="comment">// 计算频率</span></span><br><span class="line">        frequency[str1] = input[str1] / <span class="built_in">sqrt</span>(sum);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h4 id="milestone-three">Milestone Three</h4>
-<ul>
-<li>要求：保留频率是前k大的元组</li>
-<li>优先队列：插入元素后会自动排序，每次出队的是当前队列中权重最小的元素</li>
-</ul>
-<h4 id="milestone-four">Milestone Four</h4>
-<ul>
-<li><p>余弦相似度计算方法：https://blog.csdn.net/zz_dd_yy/article/details/51926305</p>
-<p>示例：</p>
-<blockquote>
-<p>Profile 1</p>
-<ul>
-<li>"aaa": 0.333</li>
-<li>"bbb": 0.667</li>
-<li>"ccc": 0.667</li>
-</ul>
-<p>Profile 2</p>
-<ul>
-<li>"bbb": 0.333</li>
-<li>"ccc": 0.667</li>
-<li>"ddd": 0.667</li>
-</ul>
-<p>"ccc"和"bbb"在两个集合中均出现了，因此计算为："ccc"在两个集合的频率之积
-+ "bbb"在两个集合的频率之积</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(0.667 × 0.333) + (0.667 × 0.667) = 0.667</span><br></pre></td></tr></tbody></table></figure>
-</blockquote></li>
-</ul>
-<h4 id="milestone-five">Milestone Five</h4>
-<ul>
-<li><p>给定待识别文本和语料库，找到最匹配的语言</p></li>
-<li><p>这里我利用<code>int i</code>进行for循环遍历Set，然后使用<code>corpora[i].profile</code>会报错，因此还是使用range-based
-for 循环进行遍历，如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Corpus c : corpora) {</span><br><span class="line">        <span class="type">double</span> tmp = <span class="built_in">cosineSimilarityOf</span>(textProfile, c.profile);</span><br><span class="line">        <span class="keyword">if</span> (res &lt; tmp) {</span><br><span class="line">            res = tmp;</span><br><span class="line">            ans = c.name;</span><br><span class="line">        }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h4 id="milestone-six">Milestone Six</h4>
-<ul>
-<li>测试语言识别功能</li>
-<li>运行程序，点击“Rosetta Stone”，输入字符进行测试</li>
-</ul>
-<h3 id="part-two">Part Two</h3>
-<ul>
-<li><p>广度优先搜索</p></li>
-<li><p>这题注意数组下标不要超过范围</p></li>
-</ul>
-<h2 id="assignment-3">Assignment 3</h2>
-<h3 id="part-one-1">Part One</h3>
-<p>递归画三角形，注意三个顶点的坐标</p>
-<h3 id="part-two-1">Part Two</h3>
-<p>递归然后利用数组保存递归中间结果从而优化递归</p>
-<h3 id="part-three">Part Three</h3>
-<p>递归，两个分支，当前字符串大写或小写</p>
-<h3 id="part-four">Part Four</h3>
-<h4 id="milestone-1">Milestone 1</h4>
-<p>递归，需要借助辅助函数实现（两个分支，选择当前时间安排或不选择）</p>
-<h2 id="assignment-4">Assignment 4</h2>
-<h3 id="part-one-2">Part One</h3>
-<p>找到 Permutations.cpp 中的bug，发现多了一个等号</p>
-<h3 id="part-two-2">Part Two</h3>
-<h4 id="milestone-1-1">Milestone 1</h4>
-<p>找到完美匹配（每一个节点都有一个对应节点），示例如下：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"A"</span>: { <span class="string">"B"</span> },                    </span><br><span class="line"><span class="string">"B"</span>: { <span class="string">"A"</span>, <span class="string">"C"</span>, <span class="string">"E"</span>, <span class="string">"G"</span> },     </span><br><span class="line"><span class="string">"C"</span>: { <span class="string">"B"</span>, <span class="string">"D"</span>, <span class="string">"G"</span> },          </span><br><span class="line"><span class="string">"D"</span>: { <span class="string">"C"</span>, <span class="string">"G"</span>, <span class="string">"H"</span> },          </span><br><span class="line"><span class="string">"E"</span>: { <span class="string">"B"</span>, <span class="string">"F"</span> },               </span><br><span class="line"><span class="string">"F"</span>: { <span class="string">"E"</span>, <span class="string">"G"</span> },               </span><br><span class="line"><span class="string">"G"</span>: { <span class="string">"B"</span>, <span class="string">"C"</span>, <span class="string">"D"</span>, <span class="string">"F"</span>, <span class="string">"H"</span> },</span><br><span class="line"><span class="string">"H"</span>: { <span class="string">"D"</span>, <span class="string">"G"</span> }</span><br><span class="line"></span><br><span class="line">完美匹配：{&lt;A, B&gt;, &lt;C, D&gt;, &lt;E, F&gt;, &lt;G, H&gt;}</span><br></pre></td></tr></tbody></table></figure>
-<p>首先第一层for循环遍历map中的key，第二层for循环遍历value中的值（set集合）：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (string name : possibleLinks) {  <span class="comment">// 第一层循环</span></span><br><span class="line">        ......</span><br><span class="line">        <span class="comment">/* 第一层循环需要判断当前字符串是否已经匹配过</span></span><br><span class="line"><span class="comment">           若当前key未出现在matching中，则进入第二层循环 */</span></span><br><span class="line">        <span class="keyword">for</span>(string s : possibleLinks[name]) {</span><br><span class="line">            Set&lt;Pair&gt; not_chosen = matching;  <span class="comment">// 记录未添加pair的matching</span></span><br><span class="line">            ......</span><br><span class="line">            <span class="comment">// 判断当前字符串是否已经匹配过</span></span><br><span class="line">               </span><br><span class="line">            <span class="comment">/* 若当前value中的字符串未出现在matching中</span></span><br><span class="line"><span class="comment">			  将当前的pair添加到matching中，然后进入递归 */</span></span><br><span class="line">            <span class="type">bool</span> a = <span class="built_in">hasPerfectMatching</span>(possibleLinks-tmp1-tmp2, matching);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//当前pair未添加到matching中，进入递归</span></span><br><span class="line">            <span class="type">bool</span> b = <span class="built_in">hasPerfectMatching</span>(p, not_chosen);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> a || b;</span><br><span class="line"></span><br><span class="line">        }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="milestone-2">Milestone 2</h4>
-<p>找到权值最大的匹配（不要求完美匹配），具体思路与上面类似</p>
-<p>通过编写辅助函数，传入参数v（当前匹配的权值），在递归后进行比较，返回权值较大的那个匹配。</p>
-<h3 id="part-three-1">Part Three</h3>
-<p>若节点只能访问其相邻节点，需要哪几个节点能够访问整个图</p>
-<ul>
-<li>第一层循环访问未被覆盖的节点，第二层循环访问该节点的相邻节点</li>
-<li>递归的思路：
-<ol type="1">
-<li>当前节点不加入集合，而是将相邻节点加入集合<br>
-</li>
-<li>当前节点加入集合，而相邻节点不加入集合</li>
-</ol></li>
-<li>回溯：当每个递归分支返回时，且返回值为false，则将该分支的参数变量回溯到之前的状态</li>
-</ul>
-<h2 id="assignment-5">Assignment 5</h2>
-<h3 id="part-one-3">Part One</h3>
-<p>运行项目，点击<code>Time Tests</code>，选择对应函数，然后点击<code>Time</code>绘制函数运行时间与n的关系。</p>
-<h3 id="part-two-3">Part Two</h3>
-<p>同上</p>
-<h3 id="part-three-2">Part Three</h3>
-<p>给一段材料回答问题（没咋看明白）</p>
-<h3 id="part-four-1">Part Four</h3>
-<ul>
-<li><p>归并排序，先通过递归将二维vector分成一个一个vector，然后合并。</p></li>
-<li><p>这里主要注意的是两个长度不等的vector的合并，这里定义一个结果vector保存合并后的元素。当短的vector合并完成，则将长的vector剩下的元素添加到结果vector中</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(; i&lt;l1 &amp;&amp; j&lt;l2; k++) {</span><br><span class="line">        <span class="keyword">if</span>(a[i].weight &lt; b[j].weight) {</span><br><span class="line">            c.<span class="built_in">add</span>(a[i++]);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            c.<span class="built_in">add</span>(b[j++]);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(i &lt; l1) {</span><br><span class="line">        <span class="keyword">for</span>(; i &lt; l1; k++)</span><br><span class="line">            c.<span class="built_in">add</span>(a[i++]);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(j &lt; l2) {</span><br><span class="line">        <span class="keyword">for</span>(; j &lt; l2; k++)</span><br><span class="line">            c.<span class="built_in">add</span>(b[j++]);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="assignment-6">Assignment 6</h2>
-<h3 id="part-one-4">Part One</h3>
-<p>根据注释一步一步运行</p>
-<h3 id="part-two-4">Part Two</h3>
-<p>小根堆</p>
-<ul>
-<li>enque：直接将元素插到二叉树的末尾，然后向上调整</li>
-<li>deque：弹出最小元素（堆顶元素），先将堆顶元素与堆底元素交换位置，然后向下调整堆</li>
-</ul>
-<h4 id="milestone-one-1">Milestone one</h4>
-<p>实现构造函数、析构函数、size 函数以及 isEmpty 函数</p>
-<h4 id="milestone-two-1">Milestone two</h4>
-<p>实现 enque 函数，注意数组存储元素的下标是从1开始</p>
-<h4 id="milestone-three-1">Milestone three</h4>
-<p>实现 peek 、deque 函数。</p>
-<p>注意条件判断，所有情况要考虑全</p>
-<h3 id="part-three-3">Part Three</h3>
-<p>利用题目给定的算法计算每个州的席位，这里不能更改 PartTwo
-中的函数，所以这里我乘了一个
-<strong>-1</strong>，使得最大的数成为了最小的数，这样就能正确了</p>
-<h2 id="assignment-7">Assignment 7</h2>
-<h3 id="part-one-5">Part One</h3>
-<p>枚举</p>
-<ul>
-<li><p>enum
-type：枚举中的每个常量对应一个整数值，默认从0开始递增，除非显式赋值。</p>
-<p>示例</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">Color</span> {</span><br><span class="line">    Red,    <span class="comment">// 默认为0</span></span><br><span class="line">    Green,  <span class="comment">// 默认为1</span></span><br><span class="line">    Blue    <span class="comment">// 默认为2</span></span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    Color color = Red;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">"Color: "</span> &lt;&lt; color &lt;&lt; std::endl;  <span class="comment">// 输出 0</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>enum
-class：枚举类中的常量具有自己的作用域，避免了与其他枚举常量的冲突。枚举类是强类型的，不能隐式转换为整数，需要显式转换，或者指定底层的整数类型（即定义枚举类时初始化元素）。</p>
-<p>示例</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">enum class</span> <span class="title class_">Color</span> {</span><br><span class="line">    Red,    <span class="comment">// 默认从0开始</span></span><br><span class="line">    Green,  <span class="comment">// 默认为1</span></span><br><span class="line">    Blue    <span class="comment">// 默认为2</span></span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    Color color = Color::Red;</span><br><span class="line">    <span class="comment">// std::cout &lt;&lt; color &lt;&lt; std::endl;  // 错误，不能直接输出</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">"Color: "</span> &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(color) &lt;&lt; std::endl;  <span class="comment">// 需要显式转换为int</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="part-two-5">Part Two</h3>
-<p>线性探测表（哈希表），发生冲突时元素会存储到其他空位中（向后寻找）</p>
-<h3 id="part-three-4">Part Three</h3>
-<p>实现线性探测表。</p>
-<p>注意：查找操作会根据哈希函数确定第一个查找位置，假如该位置已有元素（不是目标元素），由于是线性探测表，所以目标元素可能存放在其他空位中，需要继续查找。但是若在查找操作之前哈希函数确定的第一个位置清空了，那么我们查找到该空位时不能判定目标元素不存在，而是假装空位不空，继续向后查找</p>
-<h3 id="part-four-2">Part Four</h3>
-<p>线性探测表的变体：</p>
-<ul>
-<li>记录每个元素与主槽（哈希函数确定的初始位置）的距离</li>
-<li>插入：两种情况
-<ul>
-<li>主槽为空，则直接插入</li>
-<li>当前槽内元素距其主槽的距离 小于
-待插入元素距主槽元素的距离，则将待插入元素替换当前槽内元素</li>
-</ul></li>
-<li>删除：将当前删除元素位置之后的元素（<strong>不能是处于主槽的元素</strong>）向前移动，直到：
-<ul>
-<li>找到一个空槽或</li>
-<li>在找到一个正好位于主槽的元素。</li>
-</ul></li>
-<li>查找：如果当前遍历到的元素的距离大于待查找元素，则可以直接停止查找</li>
-</ul>
-<h2 id="assignment-8">Assignment 8</h2>
-<h3 id="part-one-6">Part One</h3>
-<p>迷宫，找到三件物品</p>
-<h4 id="milestone-1-2">Milestone 1</h4>
-<p>根据提供的字符串进行路径合法性判断，每次取第一个字符判断方向，然后进入递归</p>
-<p>走出迷宫的条件是收集齐三件物品</p>
-<h4 id="milestone-2-1">Milestone 2</h4>
-<p>利用debug查看指针内容，画出迷宫，然后找到走出迷宫的路（收集三件物品）</p>
-<h4 id="milestone-3">Milestone 3</h4>
-<p>利用debug查看指针内存地址以及对应的方向，画出迷宫，找到对应序列</p>
-<h3 id="part-two-6">Part Two</h3>
-<h4 id="milestone-1-3">Milestone 1</h4>
-<ul>
-<li>删除链表（按照指针进行遍历）</li>
-<li>通过指针读取每个节点的数据</li>
-</ul>
-<h4 id="milestone-2-2">Milestone 2</h4>
-<ul>
-<li>将输入的字符串存入链表（链表需要创建）</li>
-<li>每个节点的创建需要使用<code>new</code></li>
-</ul>
-<h4 id="milestone-3-1">Milestone 3</h4>
-<ul>
-<li>我使用的是暴力求解，最好使用KMP算法</li>
-<li>查找给出的子序列在DNA序列中出现的位置</li>
-<li>双指针进行比较，右边指针同时移动</li>
-<li>需要考虑的情况很多，根据测试结果进行修改</li>
-</ul>
-<h4 id="milestone-4">Milestone 4</h4>
-<ul>
-<li>删除DNA子序列</li>
-</ul>
-<h2 id="assignment-9">Assignment 9</h2>
-<p>哈夫曼编码</p>
-<ul>
-<li>没有哪个字符的编码是另一个字符的前缀，防止歧义性</li>
-</ul>
-<h3 id="part-one-7">Part One</h3>
-<p>创建哈夫曼树</p>
-<ul>
-<li>定义一个结构体<code>Node</code>存放树节点和权值</li>
-<li>先定义一个map，存放字符串中出现的字符和出现次数，然后将不同字符存入不同节点<code>Node</code>中，并入队</li>
-<li>每次出队两个节点，合并之后入队，直到队列中只剩一个节点</li>
-</ul>
-<h3 id="part-two-7">Part Two</h3>
-<p>编码和解码</p>
-<ul>
-<li>解码：根据给的01编码对树进行遍历，直到叶子节点，记录该叶子节点的字符，然后从头开始遍历树重复前面步骤</li>
-<li>编码：先遍历树，将所有字符对应的编码记录下来，然后根据给定的字符串进行编码</li>
-</ul>
-<h3 id="part-three-5">Part Three</h3>
-<ul>
-<li><p>新的编码方式，叶子节点表示‘0’，不是叶子节点则为‘1’。</p></li>
-<li><p>使用先序遍历（根左右）解决。</p></li>
-</ul>
-<h3 id="part-four-3">Part Four</h3>
-<ul>
-<li>压缩</li>
-<li>解压</li>
-</ul>
-<p>调用上面出现过的函数，别忘记释放内存（<code>deleteTree</code>）</p>
-<h2 id="总结">总结</h2>
-<p>9个assignment写完，CS106B这门课也就基本完成了</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -4437,20 +3648,20 @@ class：枚举类中的常量具有自己的作用域，避免了与其他枚举
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">180</span>
+          <span class="site-state-item-count">181</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-count">72</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -4486,12 +3697,12 @@ class：枚举类中的常量具有自己的作用域，避免了与其他枚举
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">413k</span>
+    <span title="站点总字数">416k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:15</span>
+    <span title="站点阅读时长">6:18</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

@@ -164,6 +164,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/28/%E6%89%BE%E6%A0%91%E5%B7%A6%E4%B8%8B%E8%A7%92%E7%9A%84%E5%80%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/28/%E6%89%BE%E6%A0%91%E5%B7%A6%E4%B8%8B%E8%A7%92%E7%9A%84%E5%80%BC/" class="post-title-link" itemprop="url">找树左下角的值</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-02-28 14:10:40" itemprop="dateCreated datePublished" datetime="2024-02-28T14:10:40+08:00">2024-02-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>885</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/find-bottom-left-tree-value</p>
+<p>这题用迭代法更方便，迭代法思路：每次记录当前层的第一个节点，直到最后一层。</p>
+<p>我使用的是递归法，思路如下：</p>
+<ul>
+<li><p>先定义一个全局变量（结构体）用于存放最深的层数和该层最左边节点的值</p></li>
+<li><p>使用前序遍历，按照“根-左-右”顺序遍历二叉树</p></li>
+<li><p>按照该顺序遍历，若当前节点为叶节点，则比较深度大小判断是否需要记录当前节点值</p>
+<blockquote>
+<p>这里<strong>不需要</strong>判断是左叶子节点还是右叶子节点，因为同一层的叶子节点会先记录左节点，然后再遍历右节点，此时深度值已经更新，所以同一层的右节点<strong>不会记录</strong>下来</p>
+</blockquote></li>
+<li><p>若当前节点有孩子节点，则继续遍历</p></li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">Node</span> {</span></span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    <span class="type">int</span> depth;</span><br><span class="line">}Node;</span><br><span class="line">Node res; <span class="comment">//全局变量，存放结果</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">preOrder</span><span class="params">(<span class="keyword">struct</span> TreeNode* root, <span class="type">int</span> depth)</span> {</span><br><span class="line">    <span class="keyword">if</span>(!root) </span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(!root-&gt;left &amp;&amp; !root-&gt;right) {</span><br><span class="line">        depth++; <span class="comment">//注意深度值的更新</span></span><br><span class="line">        <span class="keyword">if</span>(depth &gt; res.depth) {</span><br><span class="line">            res.depth = depth;</span><br><span class="line">            res.val = root-&gt;val;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(root-&gt;left)</span><br><span class="line">        preOrder(root-&gt;left, depth+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(root-&gt;right)</span><br><span class="line">        preOrder(root-&gt;right, depth+<span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">}</span><br><span class="line"><span class="type">int</span> <span class="title function_">findBottomLeftValue</span><span class="params">(<span class="keyword">struct</span> TreeNode* root)</span> {</span><br><span class="line">    <span class="keyword">if</span>(!root)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    res.depth = <span class="number">1</span>;</span><br><span class="line">    res.val = root-&gt;val; <span class="comment">//初始化全局变量</span></span><br><span class="line">    preOrder(root, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> res.val;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/28/%E5%B7%A6%E5%8F%B6%E5%AD%90%E4%B9%8B%E5%92%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -992,99 +1089,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/23/%E5%A1%AB%E5%85%85%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E4%B8%8B%E4%B8%80%E4%B8%AA%E5%8F%B3%E4%BE%A7%E8%8A%82%E7%82%B9%E6%8C%87%E9%92%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/23/%E5%A1%AB%E5%85%85%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E4%B8%8B%E4%B8%80%E4%B8%AA%E5%8F%B3%E4%BE%A7%E8%8A%82%E7%82%B9%E6%8C%87%E9%92%88/" class="post-title-link" itemprop="url">填充每个节点的下一个右侧节点指针</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-02-23 16:08:30" itemprop="dateCreated datePublished" datetime="2024-02-23T16:08:30+08:00">2024-02-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>764</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/</p>
-<p>一开始看到题目条件中有“树中节点的数量在<strong>[0,
-2<sup>12</sup>-1]</strong>范围内”，我一时没反应过来，觉得不能直接一次性分配这么大的空间，后面算了算发现节点数量不到<strong>5000</strong>，可以直接一次性分配。</p>
-<p>这题跟之前的二叉树层序遍历是一样的思路，直接套模板：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> Node* <span class="title function_">connect</span><span class="params">(<span class="keyword">struct</span> Node* root)</span> {</span><br><span class="line">    <span class="keyword">if</span>(root==<span class="literal">NULL</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span>* <span class="title">que</span>[5000];</span> <span class="comment">//队列</span></span><br><span class="line">    <span class="type">int</span> head=<span class="number">0</span>, rear=<span class="number">0</span>; <span class="comment">//队头/尾</span></span><br><span class="line">    que[rear++] = root;<span class="comment">//根结点入队</span></span><br><span class="line">    <span class="type">int</span> level=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(rear!=head) { <span class="comment">//队列不为空</span></span><br><span class="line">        <span class="type">int</span> start = head; <span class="comment">//记录当前队头位置</span></span><br><span class="line">        head = rear; <span class="comment">//出队</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = start; i&lt;head; i++) { <span class="comment">//注意这里的边界值start和head</span></span><br><span class="line">            <span class="keyword">if</span>(i+<span class="number">1</span>==head)</span><br><span class="line">                que[i]-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                que[i]-&gt;next = que[i+<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">if</span>(que[i]-&gt;left) { <span class="comment">//由于是完全二叉树，所以有左子树一定有右子树</span></span><br><span class="line">                que[rear++] = que[i]-&gt;left; <span class="comment">//左子树入队</span></span><br><span class="line">                que[rear++] = que[i]-&gt;right; <span class="comment">//右子树入队</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        (level)++; <span class="comment">//当前层遍历结束，准备进入下一层</span></span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1152,20 +1160,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">180</span>
+          <span class="site-state-item-count">181</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-count">72</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1201,12 +1209,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">413k</span>
+    <span title="站点总字数">416k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:15</span>
+    <span title="站点阅读时长">6:18</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

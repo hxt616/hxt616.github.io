@@ -20,16 +20,20 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="监督学习 应用最多 回归（regression）  给定输入和输出，得到映射函数，再根据不同输入进行预测，得到输出（无限的可能）  代价函数   image-20241121191024821  线性回归的代价函数J与变量w和b的图像是三维的，类似于碗状 线性回归  训练集  梯度下降 「梯度的概念」：梯度就是函数对它的各个自变量求偏导后，由偏导数组成的一个向量。 可以用来最小化任意函数  找到代">
+  <meta name="description" content="监督学习 应用最多 回归（regression）  给定输入和输出，得到映射函数，再根据不同输入进行预测，得到输出（无限的可能）  代价函数   image-20241121191024821  线性回归的代价函数J与变量w和b的图像是三维的，类似于碗状 线性回归  训练集  多元线性回归 系数向量化  特征缩放（features scaling）：不同特征的不同取值范围导致等高线图像细长，需要缩">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习">
-<meta property="og:url" content="http://example.com/2024/11/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:url" content="http://example.com/2024/11/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="监督学习 应用最多 回归（regression）  给定输入和输出，得到映射函数，再根据不同输入进行预测，得到输出（无限的可能）  代价函数   image-20241121191024821  线性回归的代价函数J与变量w和b的图像是三维的，类似于碗状 线性回归  训练集  梯度下降 「梯度的概念」：梯度就是函数对它的各个自变量求偏导后，由偏导数组成的一个向量。 可以用来最小化任意函数  找到代">
+<meta property="og:description" content="监督学习 应用最多 回归（regression）  给定输入和输出，得到映射函数，再根据不同输入进行预测，得到输出（无限的可能）  代价函数   image-20241121191024821  线性回归的代价函数J与变量w和b的图像是三维的，类似于碗状 线性回归  训练集  多元线性回归 系数向量化  特征缩放（features scaling）：不同特征的不同取值范围导致等高线图像细长，需要缩">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241121191024821.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241123134344175.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241126134526107.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241123134344175.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250624200237130.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250624200953949.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250625171230513.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250625172119618.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241202234353128.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241203141912797.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241203142006274.png">
@@ -39,6 +43,8 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241214232510217.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241215204101106.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241215230834569.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250720221746017.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250720222510647.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241216140940862.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241216141510260.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241216141734150.png">
@@ -56,14 +62,14 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241218201602616.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241221141609541.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241221144408684.png">
-<meta property="article:published_time" content="2024-11-21T05:01:51.882Z">
-<meta property="article:modified_time" content="2025-05-15T13:30:11.962Z">
+<meta property="article:published_time" content="2024-11-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-26T15:50:53.993Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="机器学习">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241121191024821.png">
 
-<link rel="canonical" href="http://example.com/2024/11/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+<link rel="canonical" href="http://example.com/2024/11/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
 
 
 <script id="page-configurations">
@@ -198,7 +204,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -221,14 +227,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2024-11-21 13:01:51" itemprop="dateCreated datePublished" datetime="2024-11-21T13:01:51+08:00">2024-11-21</time>
+              <time title="创建时间：2024-11-24 00:00:00" itemprop="dateCreated datePublished" datetime="2024-11-24T00:00:00+08:00">2024-11-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-05-15 21:30:11" itemprop="dateModified" datetime="2025-05-15T21:30:11+08:00">2025-05-15</time>
+                <time title="修改时间：2025-07-26 23:50:53" itemprop="dateModified" datetime="2025-07-26T23:50:53+08:00">2025-07-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -253,7 +259,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.9k</span>
+              <span>3.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -288,20 +294,6 @@
 <ul>
 <li>训练集</li>
 </ul>
-<h4 id="梯度下降">梯度下降</h4>
-<p><strong>「梯度的概念」</strong>：梯度就是函数对它的各个自变量求偏导后，由<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=146213942&amp;content_type=Article&amp;match_order=1&amp;q=偏导数&amp;zhida_source=entity">偏导数</a>组成的一个向量。</p>
-<p>可以用来最小化任意函数</p>
-<ul>
-<li><p>找到代价函数的局部最小值即极小值（在代价函数的图像上，朝不同方向找到极小值）</p></li>
-<li><p>学习率（learning rate）：α，影响梯度下降的快慢</p></li>
-<li><p>用到了偏导，<code>w</code>和<code>b</code>需要同时更新</p>
-<p><code>J</code>对<code>w</code>的偏导表示<code>J</code>和<code>w</code>组成的函数图像的切线斜率</p>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241123134344175.png" alt="image-20241123134344175">
-<figcaption aria-hidden="true">image-20241123134344175</figcaption>
-</figure></li>
-<li><p>批量（batch）梯度下降：每一步梯度下降使用的是所有的训练示例</p></li>
-</ul>
 <h4 id="多元线性回归">多元线性回归</h4>
 <p>系数向量化</p>
 <ul>
@@ -321,6 +313,80 @@ scaling）：不同特征的不同取值范围导致等高线图像细长，需�
 <li><p>包含高次项</p></li>
 <li><p>多项式回归是一种扩展线性回归的方法</p></li>
 </ul>
+<h3 id="梯度下降">梯度下降</h3>
+<p><strong>「梯度的概念」</strong>：梯度就是函数对它的各个自变量求偏导后，由<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=146213942&amp;content_type=Article&amp;match_order=1&amp;q=偏导数&amp;zhida_source=entity">偏导数</a>组成的一个向量。</p>
+<p>可以用来最小化任意函数</p>
+<ul>
+<li><p>找到代价函数的局部最小值即极小值（在代价函数的图像上，朝不同方向找到极小值）</p></li>
+<li><p>学习率（learning rate）：α，影响梯度下降的快慢</p></li>
+<li><p>用到了偏导，<code>w</code>和<code>b</code>需要同时更新</p>
+<p><code>J</code>对<code>w</code>的偏导表示<code>J</code>和<code>w</code>组成的函数图像的切线斜率</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241123134344175.png" alt="image-20241123134344175">
+<figcaption aria-hidden="true">image-20241123134344175</figcaption>
+</figure></li>
+<li><p>批量（batch）梯度下降：每一步梯度下降使用的是所有的训练示例</p>
+<p><strong>small batch 的准确率可能是大于 large batch
+的，这是优化问题（梯度下降找最小值），而不是overfitting</strong></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250624200237130.png" alt="image-20250624200237130">
+<figcaption aria-hidden="true">image-20250624200237130</figcaption>
+</figure></li>
+</ul>
+<blockquote>
+<p>梯度下降寻找最小值可能不准确，因为可能是局部最小值，如果model灵活性较高（多层）但是其loss比灵活性较低的model的loss更高，说明就是优化问题（没找到最小值），但是要注意<strong>鞍点</strong></p>
+</blockquote>
+<h4 id="解决局部最小值">解决局部最小值</h4>
+<h5 id="动量">动量</h5>
+<p>当前进行梯度下降时需要考虑之前下降的方向，叠加在一起</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250624200953949.png" alt="image-20250624200953949">
+<figcaption aria-hidden="true">image-20250624200953949</figcaption>
+</figure>
+<h5 id="自动调整学习率">自动调整学习率</h5>
+<blockquote>
+<p>固定学习率的缺点：</p>
+<ul>
+<li>学习率太小：收敛速度慢。</li>
+<li>学习率太大：可能震荡甚至无法收敛。</li>
+</ul>
+</blockquote>
+<ol type="1">
+<li><p><strong>Adagrad</strong></p>
+<ul>
+<li><p><strong>核心思想</strong>：为每个参数累积历史梯度（偏导数，有方向）的平方，自适应降低频繁更新参数的学习率。</p>
+<blockquote>
+<p><strong>梯度与偏导数的关系</strong></p>
+<ul>
+<li><strong>梯度是偏导数的向量组合</strong>：梯度将所有偏导数打包成一个向量，提供了全局的“变化信息”。</li>
+<li><strong>方向是梯度的内在属性</strong>：梯度本身已经包含了方向（最陡上升方向），不需要额外“加上方向”。</li>
+<li><strong>偏导数是梯度的分量</strong>：每个偏导数是梯度向量在对应坐标轴上的投影。</li>
+</ul>
+</blockquote></li>
+<li><p><strong>更新规则</strong>：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250625171230513.png" alt="image-20250625171230513">
+<figcaption aria-hidden="true">image-20250625171230513</figcaption>
+</figure></li>
+</ul></li>
+<li><p><strong>RMSprop</strong></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250625172119618.png" alt="image-20250625172119618">
+<figcaption aria-hidden="true">image-20250625172119618</figcaption>
+</figure></li>
+<li><p><strong>Adam</strong>（Momentum + RMSprop）</p></li>
+</ol>
+<blockquote>
+<p>learning rate scheduling（两种方法）</p>
+<ul>
+<li>learning rate decay：让 η 随着时间减小，可以防止学习率暴涨</li>
+<li>warm up：η 先变大后减小</li>
+</ul>
+</blockquote>
+<h4 id="优化方法">优化方法</h4>
+<p>feature normalization：使得参数的图像更均匀，更方便梯度下降</p>
+<p>由于GPU内存有限，因此每次对一个batch的数据进行normalization，称为
+batch normalization</p>
 <h3 id="分类classification">分类（classification）</h3>
 <ul>
 <li>分类预测的结果是从有限的可能中选取一个</li>
@@ -399,6 +465,7 @@ scaling）：不同特征的不同取值范围导致等高线图像细长，需�
 <p>计算偏导数</p>
 <h3 id="多类">多类</h3>
 <h4 id="softmax">Softmax</h4>
+<p>和 cross-entropy 绑定使用</p>
 <ul>
 <li><p>Softmax是逻辑回归的推广</p>
 <figure>
@@ -435,6 +502,20 @@ scaling）：不同特征的不同取值范围导致等高线图像细长，需�
 <figure>
 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241215230834569.png" alt="image-20241215230834569">
 <figcaption aria-hidden="true">image-20241215230834569</figcaption>
+</figure>
+<h4 id="transformer">Transformer</h4>
+<h5 id="自注意力机制">自注意力机制</h5>
+<p>使用 q、k、v 计算</p>
+<p><strong>多头自注意力机制</strong></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250720221746017.png" alt="image-20250720221746017">
+<figcaption aria-hidden="true">image-20250720221746017</figcaption>
+</figure>
+<h5 id="positional-encoding">Positional Encoding</h5>
+<p>添加位置信息 e</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250720222510647.png" alt="image-20250720222510647">
+<figcaption aria-hidden="true">image-20250720222510647</figcaption>
 </figure>
 <h3 id="模型评估">模型评估</h3>
 <h4 id="将数据集分为训练集和测试集">将数据集分为训练集和测试集</h4>
@@ -659,7 +740,7 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-text">监督学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92regression"><span class="nav-text">回归（regression）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="nav-text">代价函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-text">多元线性回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="nav-text">特征工程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%9B%9E%E5%BD%92"><span class="nav-text">多项式回归</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BBclassification"><span class="nav-text">分类（classification）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-text">逻辑回归</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-text">过拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-text">解决过拟合</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-text">非监督学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="nav-text">深度学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E5%85%83"><span class="nav-text">神经元</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%82"><span class="nav-text">层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-text">前向传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-text">激活函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A2%E9%87%8F%E5%8C%96"><span class="nav-text">矢量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-text">反向传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%B1%BB"><span class="nav-text">多类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#softmax"><span class="nav-text">Softmax</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB"><span class="nav-text">多标签分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-text">高级优化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#adam-algorithm"><span class="nav-text">Adam Algorithm</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-text">卷积神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E5%B1%82"><span class="nav-text">卷积层</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="nav-text">模型评估</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%86%E4%B8%BA%E8%AE%AD%E7%BB%83%E9%9B%86%E5%92%8C%E6%B5%8B%E8%AF%95%E9%9B%86"><span class="nav-text">将数据集分为训练集和测试集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%8A%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%86%E6%88%90%E8%AE%AD%E7%BB%83%E9%9B%86%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81%E9%9B%86%E6%B5%8B%E8%AF%95%E9%9B%86"><span class="nav-text">把数据集分成训练集、交叉验证集、测试集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE"><span class="nav-text">偏差与方差</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-text">正则化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E5%87%86"><span class="nav-text">基准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E6%9B%B2%E7%BA%BF"><span class="nav-text">学习曲线</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%BF%AD%E4%BB%A3"><span class="nav-text">机器学习的迭代</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-text">误差分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0"><span class="nav-text">迁移学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B2%BE%E7%A1%AE%E7%8E%87%E5%92%8C%E5%8F%AC%E5%9B%9E%E7%8E%87"><span class="nav-text">精确率和召回率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E6%A8%A1%E5%9E%8B"><span class="nav-text">决策树模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92%E6%A0%91"><span class="nav-text">回归树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E5%86%B3%E7%AD%96%E6%A0%91"><span class="nav-text">多个决策树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E7%AE%97%E6%B3%95"><span class="nav-text">随机森林算法</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-text">监督学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92regression"><span class="nav-text">回归（regression）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="nav-text">代价函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-text">多元线性回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="nav-text">特征工程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%9B%9E%E5%BD%92"><span class="nav-text">多项式回归</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">梯度下降</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%B1%80%E9%83%A8%E6%9C%80%E5%B0%8F%E5%80%BC"><span class="nav-text">解决局部最小值</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A8%E9%87%8F"><span class="nav-text">动量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%B0%83%E6%95%B4%E5%AD%A6%E4%B9%A0%E7%8E%87"><span class="nav-text">自动调整学习率</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-text">优化方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BBclassification"><span class="nav-text">分类（classification）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-text">逻辑回归</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-text">过拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-text">解决过拟合</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-text">非监督学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="nav-text">深度学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E5%85%83"><span class="nav-text">神经元</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%82"><span class="nav-text">层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-text">前向传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-text">激活函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A2%E9%87%8F%E5%8C%96"><span class="nav-text">矢量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-text">反向传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%B1%BB"><span class="nav-text">多类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#softmax"><span class="nav-text">Softmax</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB"><span class="nav-text">多标签分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-text">高级优化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#adam-algorithm"><span class="nav-text">Adam Algorithm</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-text">卷积神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E5%B1%82"><span class="nav-text">卷积层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#transformer"><span class="nav-text">Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-text">自注意力机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#positional-encoding"><span class="nav-text">Positional Encoding</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="nav-text">模型评估</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%86%E4%B8%BA%E8%AE%AD%E7%BB%83%E9%9B%86%E5%92%8C%E6%B5%8B%E8%AF%95%E9%9B%86"><span class="nav-text">将数据集分为训练集和测试集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%8A%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%86%E6%88%90%E8%AE%AD%E7%BB%83%E9%9B%86%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81%E9%9B%86%E6%B5%8B%E8%AF%95%E9%9B%86"><span class="nav-text">把数据集分成训练集、交叉验证集、测试集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE"><span class="nav-text">偏差与方差</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-text">正则化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E5%87%86"><span class="nav-text">基准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E6%9B%B2%E7%BA%BF"><span class="nav-text">学习曲线</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%BF%AD%E4%BB%A3"><span class="nav-text">机器学习的迭代</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-text">误差分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0"><span class="nav-text">迁移学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B2%BE%E7%A1%AE%E7%8E%87%E5%92%8C%E5%8F%AC%E5%9B%9E%E7%8E%87"><span class="nav-text">精确率和召回率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E6%A8%A1%E5%9E%8B"><span class="nav-text">决策树模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92%E6%A0%91"><span class="nav-text">回归树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E5%86%B3%E7%AD%96%E6%A0%91"><span class="nav-text">多个决策树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E7%AE%97%E6%B3%95"><span class="nav-text">随机森林算法</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -675,20 +756,20 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">180</span>
+          <span class="site-state-item-count">181</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-count">72</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -724,12 +805,12 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">413k</span>
+    <span title="站点总字数">416k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:15</span>
+    <span title="站点阅读时长">6:18</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
