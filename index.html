@@ -164,6 +164,154 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/27/Transformer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/27/Transformer/" class="post-title-link" itemprop="url">Transformer</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-07-27 23:07:02 / 修改时间：23:06:34" itemprop="dateCreated datePublished" datetime="2025-07-27T23:07:02+08:00">2025-07-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Transformer/" itemprop="url" rel="index"><span itemprop="name">Transformer</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考李宏毅深度学习教程[https://github.com/datawhalechina/leedl-tutorial/releases/tag/v1.2.4]</p>
+<p>总结构如下，被框住的部分一般都有N个</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221346536.png" alt="image-20250727221346536">
+<figcaption aria-hidden="true">image-20250727221346536</figcaption>
+</figure>
+<h2 id="自注意力机制">自注意力机制</h2>
+<p>自注意力模型会“吃”整个序列的数据，输入几个向量，它就输出几个向量</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727225641856.png" alt="image-20250727225641856" style="zoom:67%;"></p>
+<p>对于输入序列中的每个
+token（向量），我们会计算出三个矩阵：（X为输入矩阵即多个向量的组合，乘以对应的矩阵得到
+Q、K、V）</p>
+<ul>
+<li><strong>Query (Q)</strong>：查询向量，<span class="math inline">\(Q
+= XW^Q\)</span></li>
+<li><strong>Key (K)</strong>：键向量，<span class="math inline">\(K =
+XW^K\)</span></li>
+<li><strong>Value (V)</strong>：值向量，<span class="math inline">\(V =
+XW^V\)</span></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727230428672.png" alt="image-20250727230428672" style="zoom:80%;"></p>
+<p>计算注意力权重（softmax 后）： <span class="math display">\[
+\text{Attention}(Q, K, V) =
+\text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\]</span> <span class="math inline">\(d_k\)</span> 是 Key
+向量的维度（用于缩放避免梯度过大）</p>
+<blockquote>
+<p><strong>多头注意力机制</strong>：</p>
+<p>Transformer 实际使用的是 <strong>多头自注意力</strong>：</p>
+<ul>
+<li>将 Q、K、V 拆成多个子空间，分别计算注意力；</li>
+<li>然后将多个“头”的结果拼接再线性变换。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727230452594.png" alt="image-20250727230452594" style="zoom:80%;"></p>
+</blockquote>
+<h2 id="编码器">编码器</h2>
+<p>编码器输入一排向量，输出另外一排向量</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727220019098.png" alt="image-20250727220019098" style="zoom:50%;"></p>
+<p>编码器内部可以分为多个块，如下图所示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727220057077.png" alt="image-20250727220057077" style="zoom:67%;"></p>
+<p>接下来就是每个块的细节</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221138994.png" alt="image-20250727221138994">
+<figcaption aria-hidden="true">image-20250727221138994</figcaption>
+</figure>
+<p>这里使用层归一化而不是用批归一化，是因为只需要归一化一个向量</p>
+<h2 id="解码器">解码器</h2>
+<h3 id="自回归解码器">自回归解码器</h3>
+<p>在生成序列时，每一步仅基于<strong>当前及之前的token</strong>预测下一个token，这就要用到掩蔽自注意力（masked
+self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻止每个位置选择其后面的输入信息。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221042825.png" alt="image-20250727221042825">
+<figcaption aria-hidden="true">image-20250727221042825</figcaption>
+</figure>
+<h3 id="非自回归解码器">非自回归解码器</h3>
+<p>是一种并行生成序列的模型，与自回归（AR）解码器逐步生成的方式不同，它一次性输出整个序列，显著提升了推理速度，但可能牺牲生成质量。</p>
+<p>例如：给编码器一堆 <code>&lt;BOS&gt;</code>
+的词元。假设输出的句子的长度有上限，绝对不会超过 300 个字。给编码器 300
+个 <code>&lt;BOS&gt;</code>，就会输出 300 个字，输出
+<code>&lt;EOS&gt;</code> 右边的的输出就当它没有输出。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221617793.png" alt="image-20250727221617793">
+<figcaption aria-hidden="true">image-20250727221617793</figcaption>
+</figure>
+<h2 id="编码器-解码器注意力">编码器-解码器注意力</h2>
+<p>编码器的最终输出（即最后一层的隐藏状态）会作为<strong>Key和Value</strong>输入到解码器的<strong>每一层</strong>的交叉注意力（Cross-Attention）模块中。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727224644292.png" alt="image-20250727224644292" style="zoom:80%;"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/26/Go%20%E8%AF%AD%E8%A8%80%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E4%B8%8E%E5%8C%85%E7%AE%A1%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -478,10 +626,16 @@ Exported）；</li>
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-05-13 21:52:02 / 修改时间：22:22:05" itemprop="dateCreated datePublished" datetime="2025-05-13T21:52:02+08:00">2025-05-13</time>
+              <time title="创建时间：2025-05-13 00:00:00" itemprop="dateCreated datePublished" datetime="2025-05-13T00:00:00+08:00">2025-05-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-27 00:13:08" itemprop="dateModified" datetime="2025-07-27T00:13:08+08:00">2025-07-27</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -3404,179 +3558,6 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/20/%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/20/%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8/" class="post-title-link" itemprop="url">顺序容器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-11-20 00:00:00" itemprop="dateCreated datePublished" datetime="2024-11-20T00:00:00+08:00">2024-11-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-01-01 11:17:58" itemprop="dateModified" datetime="2025-01-01T11:17:58+08:00">2025-01-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CPP/" itemprop="url" rel="index"><span itemprop="name">CPP</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>内容参考《C++ primer》</p>
-<p>遇到具体的容器操作可以查看https://zh.cppreference.com/w/cpp</p>
-<h2 id="顺序容器类型">顺序容器类型</h2>
-<p><code>vector</code>、<code>deque</code>、<code>list</code>、<code>forward_list</code>、<code>array</code>、<code>string</code></p>
-<ul>
-<li><code>string</code>和<code>vector</code>将元素保存在连续的内存空间中。在这两种容器的中间位置添加或删除元素就会非常耗时——需要移动插入/删除位置之后的所有元素</li>
-<li><code>list</code>和<code>forward_list</code>两个容器的设计目的是令容器任何位置的添加和删除操作都很快速。但是这两个容器不支持元素的随机访问。</li>
-<li><code>deque</code>（双端队列）支持随机访问，在其两端添加或删除元素都是很快的</li>
-<li><code>array</code>对象的大小是固定的。因此，<code>array</code>不支持添加和删除元素以及改变容器大小的操作</li>
-<li>顺序容器是可以嵌套的，例如：<code>vector&lt;vector&lt;string&gt;&gt; lines;</code></li>
-</ul>
-<h2 id="定义和初始化">定义和初始化</h2>
-<h3 id="拷贝初始化">拷贝初始化</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="type">int</span>&gt; ivec; <span class="comment">//初始状态为空</span></span><br><span class="line"><span class="comment">//在此处给ivec添加一些值</span></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ivec2</span><span class="params">(ivec)</span></span>; <span class="comment">//把ivec的元素拷贝给ivec2</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; ivec3 = ivec; <span class="comment">//把ivec的元素拷贝给ivec3</span></span><br><span class="line"></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">it</span><span class="params">(b, e)</span></span>; <span class="comment">//it初始化为迭代器b和e指定范围中的元素的拷贝。</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="列表初始化">列表初始化</h3>
-<p>使用花括号初始化元素值</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;string&gt; <span class="title">vl</span><span class="params">(<span class="string">"a"</span>,<span class="string">"an"</span>,<span class="string">"the"</span>};<span class="comment">//列表初始化</span></span></span></span><br><span class="line"><span class="params"><span class="function">vector&lt;string&gt; v1 = {<span class="string">"a"</span>, <span class="string">"an"</span>, <span class="string">"the"</span>}; </span></span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="创建指定数量的元素">创建指定数量的元素</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ivec</span><span class="params">(<span class="number">10</span>,<span class="number">-1</span>)</span></span>; <span class="comment">//10个int类型的元素，每个都被初始化为-1</span></span><br><span class="line"><span class="function">vector&lt;string&gt; <span class="title">svec</span><span class="params">(<span class="number">10</span>,<span class="string">"hi!"</span>)</span></span>;<span class="comment">// 10个string类型的元素，每个都被初始化为"hi!"</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="值初始化">值初始化</h3>
-<p>只提供容器容纳的元素数量</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ivec</span><span class="params">(<span class="number">10</span>)</span></span>; <span class="comment">// 10个元素，每个都初始化为0</span></span><br><span class="line"><span class="function">vector&lt;string&gt; <span class="title">svec</span><span class="params">(<span class="number">10</span>)</span></span>; <span class="comment">// 10个元素，每个都是空string对象</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="array">array</h3>
-<ul>
-<li><p>使用该类型时，<strong>必须</strong>指明元素类型和<strong>大小</strong></p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array&lt;<span class="type">int</span>, 10&gt; a1;</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>数组类型不能进行拷贝或对象赋值操作，但是<code>array</code>类型可以</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> digs[<span class="number">10</span>]=(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>};</span><br><span class="line"><span class="type">int</span> cpy[<span class="number">10</span>] = digs;<span class="comment">//错误：内置数组不支持拷贝或赋值</span></span><br><span class="line">              </span><br><span class="line">array&lt;<span class="type">int</span>,<span class="number">10</span>&gt; digits-(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>};</span><br><span class="line">array&lt;<span class="type">int</span>,<span class="number">10</span>&gt; copy = digits;<span class="comment">//正确：只要数组类型和大小匹配即合法</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<blockquote>
-<p>注意区别</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">v1</span><span class="params">(<span class="number">10</span>)</span></span>; <span class="comment">// v1有10个元素，每个的值都是0</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; v2{<span class="number">10</span>}; <span class="comment">// v2有1个元素，该元素的值是10</span></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">v3</span><span class="params">(<span class="number">10</span>,<span class="number">1</span>)</span></span>; <span class="comment">// v3有10个元素，每个的值都是1</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; v4{<span class="number">10</span>,<span class="number">1</span>); <span class="comment">// v4有2个元素，值分别是10和1</span></span><br><span class="line"><span class="function">vector&lt;string&gt; <span class="title">v5</span><span class="params">(<span class="string">"hi"</span>};<span class="comment">//列表初始化：v5有一个元素</span></span></span></span><br><span class="line"><span class="params"><span class="function"><span class="comment">// vector&lt;string&gt; v6("hi"); 错误：不能使用字符串字面值构建vector对象</span></span></span></span><br><span class="line"><span class="params"><span class="function">vector&lt;string&gt; v7(<span class="number">10</span>}; <span class="comment">// v7有10个默认初始化的元素</span></span></span></span><br><span class="line"><span class="params"><span class="function">vector&lt;string&gt; v8(<span class="number">10</span>,<span class="string">"hi"</span>}; <span class="comment">// v8有10个值为"hi"的元素</span></span></span></span><br></pre></td></tr></tbody></table></figure>
-</blockquote>
-<h2 id="赋值">赋值</h2>
-<h3 id="直接赋值">直接赋值</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v1 = v2;</span><br><span class="line">v = {a, b, c ...}; <span class="comment">// 初始化列表赋值，不适用于array</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="swap">swap</h3>
-<ul>
-<li>两个容器的大小不同也可以使用</li>
-<li>例如，假定iter在swap之前指向svec1[3]的元素，那么在swap之后它指向svec2[3]的元素。与其他容器不同，对一个string调用swap会导致迭代器、引用和指针失效。</li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">swap</span>(v1, v2); </span><br><span class="line">v1.<span class="built_in">swap</span>(v2);<span class="comment">// 交换v1和v2的值，速度比直接赋值快</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="assign">assign</h3>
-<p><code>assign</code>操作不适用于关联容器和<code>array</code></p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">seq.<span class="built_in">assign</span>(b, e); <span class="comment">// 将seq中的元素替换为迭代器b和e所表示的范围中的元素。迭代器b和e不能指向seq中的元素</span></span><br><span class="line">seq.<span class="built_in">assign</span>(il); <span class="comment">// 将seq中的元素替换为初始化列表il中的元素</span></span><br><span class="line">seq.<span class="built_in">assign</span>(n, t); <span class="comment">// 将seq中的元素替换为n个值为t的元素</span></span><br></pre></td></tr></tbody></table></figure>
-<h2 id="关系运算">关系运算</h2>
-<p><code>==</code>、<code>!=</code>、<code>&lt;</code>、<code>&gt;</code>、<code>&gt;=</code>、<code>&lt;=</code></p>
-<ul>
-<li>如果两个容器具有相同大小且所有元素都两两对应相等，则这两个容器相等；否则两个容器不等。</li>
-<li>如果两个容器大小不同，但较小容器中每个元素都等于较大容器中的对应元素，则较小容器小于较大容器。</li>
-<li>如果两个容器都不是另一个容器的前缀子序列，则它们的比较结果取决于第一个不相等的元素的比较结果。</li>
-</ul>
-<h2 id="迭代器">迭代器</h2>
-<p>迭代器范围由一对迭代器组成，分别是<code>begin</code>和<code>end</code>，<code>begin</code>指向第一个元素，<code>end</code>指向最后一个元素之后的位置，所以元素所在的区间范围是左闭右开的<code>[begin, end)</code></p>
-<h3 id="迭代器运算">迭代器运算</h3>
-<ul>
-<li><code>*iter</code> ：返回迭代器所指元素的引用</li>
-<li><code>++iter</code>：令迭代器指向下一个元素</li>
-<li><code>--iter</code>：令迭代器指向上一个元素</li>
-<li><code>iter1 == iter2</code>或<code>iter1 != iter2</code>：判断两个迭代器是否相等</li>
-</ul>
-<h3 id="迭代器类型">迭代器类型</h3>
-<p>分为<code>iterator</code>和<code>const_iterator</code>来表示。</p>
-<ul>
-<li><code>const_iterator</code>和常量指针差不多，能读取但<strong>不能修改</strong>它所指的元素值。</li>
-<li><code>iterator</code>的对象可读可写。</li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="type">int</span>&gt;::iterator it;    <span class="comment">// it能读写vector&lt;int&gt;的元素</span></span><br><span class="line">string::iterator it2; <span class="comment">// it2能读写string对象中的字符</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt;::const_iterator it3;<span class="comment">// it3只能读元素，不能写元素</span></span><br><span class="line">string::const_iterator it4; <span class="comment">// it4只能读字符，不能写字符</span></span><br></pre></td></tr></tbody></table></figure>
-<p>一般使用<code>auto</code>声明迭代器，例如<code>auto it = a.begin()</code></p>
-<h2 id="下标访问元素">下标访问元素</h2>
-<p>我们希望确保下标是合法的，可以使用<code>at</code>成员函数。如果下标越界，<code>at</code>会抛出一个<code>out_of_range</code>异常</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;string&gt; svec;<span class="comment">//空vector</span></span><br><span class="line">cout &lt;&lt; svec[<span class="number">0</span>];<span class="comment">//运行时错误：svec中没有元素!</span></span><br><span class="line">cout &lt;&lt; svec.<span class="built_in">at</span>(<span class="number">0</span>);<span class="comment">//抛出一个out_of_range异常</span></span><br></pre></td></tr></tbody></table></figure>
-<h2 id="改变容器大小">改变容器大小</h2>
-<ul>
-<li>使用<code>resize(new_size)</code>修改容器大小</li>
-<li>注意<code>array</code>不支持修改容器大小</li>
-<li>若要增大容器，则会在容器末尾添加</li>
-<li>若要缩小容器，则会删去末尾元素</li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">list&lt;<span class="type">int</span>&gt; <span class="title">ilist</span><span class="params">(<span class="number">10</span>,<span class="number">42</span>)</span></span>;<span class="comment">// 10个int:每个的值都是42</span></span><br><span class="line">ilist.<span class="built_in">resize</span>(<span class="number">15</span>);<span class="comment">//将5个值为0的元素添加到ilist的末尾</span></span><br><span class="line">ilist.<span class="built_in">resize</span>(<span class="number">25</span>,<span class="number">-1</span>);<span class="comment">//将10个值为-1的元素添加到ilist的末尾</span></span><br><span class="line">ilist.<span class="built_in">resize</span>(<span class="number">5</span>);<span class="comment">//从ilist末尾删除20个元素</span></span><br></pre></td></tr></tbody></table></figure>
-<h2 id="适配器">适配器</h2>
-<p>这里介绍顺序容器适配器：<code>stack</code>、<code>queue</code>和<code>priority_queue</code>。适配器(adaptor)是标准库中的一个通用概念。容器、迭代器和函数都有适配器。本质上，一个适配器是一种机制。</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stack&lt;string, vector&lt;string&gt;&gt; str_stk; </span><br><span class="line"><span class="comment">//此声明的作用是创建一个以 vector&lt;string&gt; 为底层存储容器的堆栈，堆栈中的每个元素都是一个 string</span></span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>注意要<strong>根据不同适配器的特性重载其默认容器类型</strong>，例如，<code>stack</code>只要求<code>push_back</code>、<code>pop_back</code>和<code>back</code>操作，因此可以使用除<code>array</code>和<code>forward_list</code>之外的任何容器类型来构造<code>stack</code>。<code>queue</code>适配器要求<code>back</code>、<code>push_back</code>、<code>front</code>和<code>push_front</code>，因此它可以构造于<code>list</code>或<code>deque</code>之上，但不能基于<code>vector</code>构造。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3648,20 +3629,20 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">72</span>
+        <span class="site-state-item-count">74</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -3697,12 +3678,12 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">416k</span>
+    <span title="站点总字数">417k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:18</span>
+    <span title="站点阅读时长">6:19</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
