@@ -164,7 +164,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/27/Transformer/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/30/Transformer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hxt.jpg">
@@ -178,7 +178,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/07/27/Transformer/" class="post-title-link" itemprop="url">Transformer</a>
+            <a href="/2025/07/30/Transformer/" class="post-title-link" itemprop="url">Transformer</a>
         </h2>
 
         <div class="post-meta">
@@ -187,16 +187,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2025-07-27 23:07:02" itemprop="dateCreated datePublished" datetime="2025-07-27T23:07:02+08:00">2025-07-27</time>
+              <time title="创建时间：2025-07-30 23:28:31 / 修改时间：23:30:36" itemprop="dateCreated datePublished" datetime="2025-07-30T23:28:31+08:00">2025-07-30</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-07-30 23:22:09" itemprop="dateModified" datetime="2025-07-30T23:22:09+08:00">2025-07-30</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -318,7 +312,7 @@ self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻�
 <blockquote>
 <p><strong>位置编码的区别</strong></p>
 <ul>
-<li><p><strong>Transformer</strong>：</p>
+<li><p><strong>Transformer（原始模型）</strong>：</p>
 <ul>
 <li><p>使用
 <strong>固定的数学函数</strong>（正弦和余弦函数）生成位置编码，与输入嵌入（token
@@ -426,8 +420,7 @@ Pre-Norm（主流变体设计）</strong></h3>
 <ul>
 <li><p><strong>结构顺序</strong>：</p>
 <p><code>LayerNorm → 残差连接</code></p>
-<p>即：<br>
-<span class="math display">\[
+<p>即： <span class="math display">\[
 \text{Output} = x + \text{Sublayer}(\text{LayerNorm}(x))
 \]</span></p>
 <ul>
@@ -484,7 +477,7 @@ FFN），最后与原始输入残差连接。</li>
 </tr>
 </tbody>
 </table>
-<h3 id="其他变体与改进"><strong>5. 其他变体与改进</strong></h3>
+<h3 id="其他变体与改进"><strong>4. 其他变体与改进</strong></h3>
 <ul>
 <li><strong>ReZero Norm</strong>：将残差连接乘以可学习的标量（初始为
 0），逐步增加非线性强度，结合两者优点。</li>
