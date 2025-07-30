@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="参考李宏毅深度学习教程[https:&#x2F;&#x2F;github.com&#x2F;datawhalechina&#x2F;leedl-tutorial&#x2F;releases&#x2F;tag&#x2F;v1.2.4] 总结构如下，被框住的部分一般都有N个   image-20250727221346536  自注意力机制 自注意力模型会“吃”整个序列的数据，输入几个向量，它就输出几个向量  对于输入序列中的每个 token（向量），我们会计算出三个矩">
+  <meta name="description" content="参考：  李宏毅深度学习教程 Happy-LLM  总结构如下，被框住的部分一般都有N个   image-20250727221346536  自注意力机制 自注意力模型会“吃”整个序列的数据，输入几个向量，它就输出几个向量  对于输入序列中的每个 token（向量），我们会计算出三个矩阵：（X为输入矩阵即多个向量的组合，乘以对应的矩阵得到 Q、K、V）  Query (Q)：查询向量，\(Q &#x3D;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Transformer">
 <meta property="og:url" content="http://example.com/2025/07/27/Transformer/index.html">
 <meta property="og:site_name" content="hxt&#39;s Blog">
-<meta property="og:description" content="参考李宏毅深度学习教程[https:&#x2F;&#x2F;github.com&#x2F;datawhalechina&#x2F;leedl-tutorial&#x2F;releases&#x2F;tag&#x2F;v1.2.4] 总结构如下，被框住的部分一般都有N个   image-20250727221346536  自注意力机制 自注意力模型会“吃”整个序列的数据，输入几个向量，它就输出几个向量  对于输入序列中的每个 token（向量），我们会计算出三个矩">
+<meta property="og:description" content="参考：  李宏毅深度学习教程 Happy-LLM  总结构如下，被框住的部分一般都有N个   image-20250727221346536  自注意力机制 自注意力模型会“吃”整个序列的数据，输入几个向量，它就输出几个向量  对于输入序列中的每个 token（向量），我们会计算出三个矩阵：（X为输入矩阵即多个向量的组合，乘以对应的矩阵得到 Q、K、V）  Query (Q)：查询向量，\(Q &#x3D;">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221346536.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727225641856.png">
@@ -36,9 +36,10 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221138994.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221042825.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221617793.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/images/2-figures/2-0.jpg">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727224644292.png">
 <meta property="article:published_time" content="2025-07-27T15:07:02.437Z">
-<meta property="article:modified_time" content="2025-07-27T15:06:34.617Z">
+<meta property="article:modified_time" content="2025-07-30T15:17:07.101Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="Transformer">
@@ -202,10 +203,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-07-27 23:07:02 / 修改时间：23:06:34" itemprop="dateCreated datePublished" datetime="2025-07-27T23:07:02+08:00">2025-07-27</time>
+              <time title="创建时间：2025-07-27 23:07:02" itemprop="dateCreated datePublished" datetime="2025-07-27T23:07:02+08:00">2025-07-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-30 23:17:07" itemprop="dateModified" datetime="2025-07-30T23:17:07+08:00">2025-07-30</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -229,14 +236,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
+              <span>3.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -248,7 +255,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>参考李宏毅深度学习教程[https://github.com/datawhalechina/leedl-tutorial/releases/tag/v1.2.4]</p>
+        <p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/datawhalechina/leedl-tutorial/releases/tag/v1.2.4">李宏毅深度学习教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://datawhalechina.github.io/happy-llm/#/">Happy-LLM</a></li>
+</ul>
 <p>总结构如下，被框住的部分一般都有N个</p>
 <figure>
 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221346536.png" alt="image-20250727221346536">
@@ -293,7 +304,7 @@ XW^V\)</span></li>
 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221138994.png" alt="image-20250727221138994">
 <figcaption aria-hidden="true">image-20250727221138994</figcaption>
 </figure>
-<p>这里使用层归一化而不是用批归一化，是因为只需要归一化一个向量</p>
+<p>这里使用层归一化，因为层归一化会在每个样本上计算其所有层的均值和方差，从而使每个样本的分布达到稳定。</p>
 <h2 id="解码器">解码器</h2>
 <h3 id="自回归解码器">自回归解码器</h3>
 <p>在生成序列时，每一步仅基于<strong>当前及之前的token</strong>预测下一个token，这就要用到掩蔽自注意力（masked
@@ -314,7 +325,197 @@ self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻�
 </figure>
 <h2 id="编码器-解码器注意力">编码器-解码器注意力</h2>
 <p>编码器的最终输出（即最后一层的隐藏状态）会作为<strong>Key和Value</strong>输入到解码器的<strong>每一层</strong>的交叉注意力（Cross-Attention）模块中。</p>
+<p><img src="https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/images/2-figures/2-0.jpg" style="zoom: 67%;"></p>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727224644292.png" alt="image-20250727224644292" style="zoom:80%;"></p>
+<h2 id="流程总结">流程总结</h2>
+<ol type="1">
+<li><p><strong>输入预处理</strong></p>
+<ul>
+<li><p><strong>Tokenization</strong>：文本 → Token IDs（如
+<code>[I, love, NLP]</code> →
+<code>[1045, 2293, 4263]</code>）。</p></li>
+<li><p><strong>Embedding</strong>：Token IDs →
+词向量（<code>d_model</code> 维，如 512 维）。</p></li>
+<li><p><strong>Positional Encoding</strong>：加入位置信息 → 最终输入向量
+<code>X = WordEmbedding + PositionalEncoding</code>。</p>
+<blockquote>
+<h4 id="位置编码的区别">位置编码的区别</h4>
+<ul>
+<li><p><strong>Transformer（原始模型）</strong>：</p>
+<ul>
+<li><p>使用
+<strong>固定的数学函数</strong>（正弦和余弦函数）生成位置编码，与输入嵌入（token
+embeddings）<strong>相加</strong>。</p></li>
+<li><p>公式： <span class="math display">\[
+PE_{(pos, 2i)} =
+\sin\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right), \quad
+PE_{(pos, 2i+1)} =
+\cos\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right)
+\]</span></p>
+<p>其中 pos 是位置，i 是维度索引，d<sub>model</sub>
+是模型维度。</p></li>
+<li><p>这种编码是确定性的，无需学习，能捕捉绝对位置和相对位置关系。</p></li>
+</ul></li>
+<li><p><strong>BERT</strong>：</p>
+<ul>
+<li>使用 <strong>可学习的位置嵌入（Learned Positional
+Embeddings）</strong>，即每个位置（如最大长度512）对应一个随机初始化的向量，通过训练更新。</li>
+<li>位置嵌入与 token embeddings <strong>相加</strong>，类似
+Transformer，但嵌入值是模型学到的，而非预设的数学函数</li>
+</ul></li>
+</ul>
+</blockquote></li>
+</ul></li>
+<li><p><strong>Encoder 阶段（N 一般是 6 层）</strong></p>
+<ul>
+<li>每层执行：
+<ul>
+<li><strong>多头自注意力</strong>（计算全局依赖）</li>
+<li><strong>前馈网络 FFN</strong>（非线性变换）</li>
+<li><strong>残差连接 + LayerNorm</strong>（稳定训练）</li>
+</ul></li>
+<li>输出：上下文感知的编码表示 <code>Z</code>（供 Decoder 使用）。</li>
+</ul></li>
+<li><p><strong>Decoder 阶段（N 一般是 6 层）</strong></p>
+<ul>
+<li>每层执行：
+<ul>
+<li><strong>掩码自注意力</strong>（防止未来信息泄漏）</li>
+<li><strong>残差连接 + LayerNorm</strong></li>
+<li><strong>Encoder-Decoder 注意力</strong>（关注 <code>Z</code>）</li>
+<li><strong>残差连接 + LayerNorm</strong></li>
+<li><strong>前馈网络 FFN</strong></li>
+<li><strong>残差连接 + LayerNorm</strong></li>
+</ul></li>
+<li>输出：解码后的隐藏状态 <code>H</code>。</li>
+</ul></li>
+<li><p><strong>输出生成</strong></p>
+<ul>
+<li><strong>线性层</strong>：将 <code>H</code> 投影到词表大小维度（如
+50,000 维）。</li>
+<li><strong>Softmax</strong>：生成概率分布 → 选择概率最高的 Token
+作为输出（或采样）。</li>
+</ul></li>
+<li><p><strong>自回归（Autoregressive）</strong></p>
+<ul>
+<li>若为生成任务（如
+GPT），将当前输出作为下一步输入，循环直至结束。</li>
+</ul></li>
+</ol>
+<h2 id="bert和gpt">BERT和GPT</h2>
+<ul>
+<li><strong>BERT</strong>（Bidirectional Encoder Representations from
+Transformers）——填空
+<ul>
+<li><strong>双向编码器</strong>：使用Transformer的<strong>Encoder</strong>部分，能同时利用上下文信息（左右双向上下文）。</li>
+<li>适合理解型任务（如文本分类、实体识别、问答）。</li>
+</ul></li>
+<li><strong>GPT</strong>（Generative Pre-trained
+Transformer）——预测下一个词
+<ul>
+<li><strong>单向解码器</strong>：使用Transformer的<strong>Decoder</strong>部分（掩码自注意力），没有交叉注意力（因为没有编码器的输出作为输入），仅依赖左侧上下文生成文本。</li>
+<li>适合生成型任务（如文本生成、对话、续写）。</li>
+</ul></li>
+</ul>
+<h2 id="post-norm-和-pre-norm">Post-Norm 和 Pre-Norm</h2>
+<p>在 Transformer 及其变体模型中，<strong>Pre-Norm</strong> 和
+<strong>Post-Norm</strong> 是两种不同的层归一化（Layer Normalization,
+LayerNorm）放置方式，直接影响模型的训练稳定性、收敛速度和性能。以下是它们的详细对比：</p>
+<h3 id="post-norm原始-transformer-设计"><strong>1. Post-Norm（原始
+Transformer 设计）</strong></h3>
+<ul>
+<li><p><strong>结构顺序</strong>：</p>
+<p><code>残差连接 → LayerNorm</code></p>
+<p>即：<br>
+<span class="math display">\[
+\text{Output} = \text{LayerNorm}(x + \text{Sublayer}(x))
+\]</span></p>
+<ul>
+<li>例如：多头注意力或前馈网络（FFN）的输出先与输入残差连接，再进行归一化。</li>
+</ul></li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li><strong>原始 Transformer</strong>（论文中的编码器/解码器）和
+<strong>GLM</strong>（由智谱开发的主流中文 LLM 之一）使用
+Post-Norm。</li>
+<li>训练初期可能不稳定（梯度方差大），需要配合 <strong>warm-up</strong>
+学习率调度。</li>
+<li>更深的模型容易因梯度消失/爆炸而难以训练。</li>
+<li>理论上有更强的表达能力（因归一化在非线性变换后），但实际需要精细调参。</li>
+</ul></li>
+</ul>
+<h3 id="pre-norm主流变体设计"><strong>2.
+Pre-Norm（主流变体设计）</strong></h3>
+<ul>
+<li><p><strong>结构顺序</strong>：</p>
+<p><code>LayerNorm → 残差连接</code></p>
+<p>即：<br>
+<span class="math display">\[
+\text{Output} = x + \text{Sublayer}(\text{LayerNorm}(x))
+\]</span></p>
+<ul>
+<li>先对输入归一化，再通过子层（如注意力或
+FFN），最后与原始输入残差连接。</li>
+</ul></li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li><strong>BERT、GPT 等现代模型普遍采用 Pre-Norm</strong>。</li>
+<li>训练更稳定，无需 warm-up 也能快速收敛。</li>
+<li>支持更深的网络（如 100+ 层），梯度传播更顺畅。</li>
+<li>牺牲少量理论表达能力，换取实际训练的鲁棒性。</li>
+</ul></li>
+</ul>
+<h3 id="核心区别对比"><strong>3. 核心区别对比</strong></h3>
+<table>
+<colgroup>
+<col style="width: 21%">
+<col style="width: 42%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>Post-Norm</th>
+<th>Pre-Norm</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>归一化位置</strong></td>
+<td>残差连接后</td>
+<td>残差连接前（子层输入）</td>
+</tr>
+<tr class="even">
+<td><strong>训练稳定性</strong></td>
+<td>依赖 warm-up，易不稳定</td>
+<td>更稳定，适合深层模型</td>
+</tr>
+<tr class="odd">
+<td><strong>梯度传播</strong></td>
+<td>可能梯度消失/爆炸（深模型）</td>
+<td>梯度更平缓，易于优化</td>
+</tr>
+<tr class="even">
+<td><strong>表达能力</strong></td>
+<td>理论上更强（非线性后归一化）</td>
+<td>稍弱，但实际差距小</td>
+</tr>
+<tr class="odd">
+<td><strong>典型应用</strong></td>
+<td>原始 Transformer</td>
+<td>BERT、GPT、T5 等现代模型</td>
+</tr>
+</tbody>
+</table>
+<h3 id="其他变体与改进"><strong>5. 其他变体与改进</strong></h3>
+<ul>
+<li><strong>ReZero Norm</strong>：将残差连接乘以可学习的标量（初始为
+0），逐步增加非线性强度，结合两者优点。</li>
+<li><strong>Sandwich Norm</strong>：在子层前后都加入 LayerNorm（如
+<code>Norm → Sublayer → Norm → 残差</code>），进一步提升稳定性。</li>
+<li><strong>DeepNorm</strong>（微软）：在 Post-Norm
+基础上调整残差权重，用于极深模型（如 1000 层）。</li>
+</ul>
 
     </div>
 
@@ -396,7 +597,9 @@ self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻�
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-text">自注意力机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-text">编码器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">解码器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">自回归解码器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">非自回归解码器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8-%E8%A7%A3%E7%A0%81%E5%99%A8%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">编码器-解码器注意力</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-text">自注意力机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-text">编码器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">解码器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">自回归解码器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">非自回归解码器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8-%E8%A7%A3%E7%A0%81%E5%99%A8%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">编码器-解码器注意力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="nav-text">流程总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">位置编码的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bert%E5%92%8Cgpt"><span class="nav-text">BERT和GPT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#post-norm-%E5%92%8C-pre-norm"><span class="nav-text">Post-Norm 和 Pre-Norm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#post-norm%E5%8E%9F%E5%A7%8B-transformer-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. Post-Norm（原始
+Transformer 设计）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pre-norm%E4%B8%BB%E6%B5%81%E5%8F%98%E4%BD%93%E8%AE%BE%E8%AE%A1"><span class="nav-text">2.
+Pre-Norm（主流变体设计）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB%E5%AF%B9%E6%AF%94"><span class="nav-text">3. 核心区别对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%98%E4%BD%93%E4%B8%8E%E6%94%B9%E8%BF%9B"><span class="nav-text">5. 其他变体与改进</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -461,12 +664,12 @@ self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">417k</span>
+    <span title="站点总字数">419k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:19</span>
+    <span title="站点阅读时长">6:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
