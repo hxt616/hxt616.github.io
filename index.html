@@ -189,7 +189,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2025-07-30 23:28:31 / 修改时间：23:30:36" itemprop="dateCreated datePublished" datetime="2025-07-30T23:28:31+08:00">2025-07-30</time>
+              <time title="创建时间：2025-07-30 23:28:31 / 修改时间：23:33:39" itemprop="dateCreated datePublished" datetime="2025-07-30T23:28:31+08:00">2025-07-30</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -244,11 +244,11 @@ token（向量），我们会计算出三个矩阵：（X为输入矩阵即多�
 Q、K、V）</p>
 <ul>
 <li><strong>Query (Q)</strong>：查询向量，<span class="math inline">\(Q
-= XW^Q\)</span></li>
+= W^QX\)</span></li>
 <li><strong>Key (K)</strong>：键向量，<span class="math inline">\(K =
-XW^K\)</span></li>
+W^KX\)</span></li>
 <li><strong>Value (V)</strong>：值向量，<span class="math inline">\(V =
-XW^V\)</span></li>
+W^VX\)</span></li>
 </ul>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727230428672.png" alt="image-20250727230428672" style="zoom:80%;"></p>
 <p>计算注意力权重（softmax 后）： <span class="math display">\[
