@@ -39,7 +39,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/images/2-figures/2-0.jpg">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727224644292.png">
 <meta property="article:published_time" content="2025-07-30T15:28:31.726Z">
-<meta property="article:modified_time" content="2025-07-30T15:33:39.744Z">
+<meta property="article:modified_time" content="2025-07-31T11:23:35.609Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="Transformer">
@@ -203,10 +203,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-07-30 23:28:31 / 修改时间：23:33:39" itemprop="dateCreated datePublished" datetime="2025-07-30T23:28:31+08:00">2025-07-30</time>
+              <time title="创建时间：2025-07-30 23:28:31" itemprop="dateCreated datePublished" datetime="2025-07-30T23:28:31+08:00">2025-07-30</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 19:23:35" itemprop="dateModified" datetime="2025-07-31T19:23:35+08:00">2025-07-31</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -230,14 +236,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.2k</span>
+              <span>4.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -281,11 +287,19 @@ W^VX\)</span></li>
 向量的维度（用于缩放避免梯度过大）</p>
 <blockquote>
 <p><strong>多头注意力机制</strong>：</p>
-<p>Transformer 实际使用的是 <strong>多头自注意力</strong>：</p>
-<ul>
-<li>将 Q、K、V 拆成多个子空间，分别计算注意力；</li>
-<li>然后将多个“头”的结果拼接再线性变换。</li>
-</ul>
+<p>Transformer 实际使用的是
+<strong>多头自注意力</strong>，先计算整个向量的
+Q、K、V，再进行拆分，下面是完整步骤</p>
+<p><strong>Step 1: 线性变换</strong></p>
+<p>先通过三组权重矩阵，计算整个序列的 Q、K、V：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑Q = X @ W_Q  # [batch, seq_len, d_model] @ [d_model, d_model] -&gt; [batch, seq_len, d_model]</span><br><span class="line">K = X @ W_K</span><br><span class="line">V = X @ W_V</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>Step 2: 拆分成多头</strong></p>
+<p>再把 Q/K/V 拆成多个头（通常是 reshape + transpose）：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拆成多头，每一头的维度是 d_head</span></span><br><span class="line">Q = Q.reshape(batch_size, seq_len, num_heads, d_head).transpose(<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line"><span class="comment"># Q 形状变为 [batch, num_heads, seq_len, d_head]</span></span><br></pre></td></tr></tbody></table></figure>
+<p><strong>Step 3: 每个头独立进行注意力计算</strong></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">attention_scores = softmax(Q @ K.transpose(-<span class="number">1</span>, -<span class="number">2</span>) / sqrt(d_head))  <span class="comment"># shape: [batch, num_heads, seq_len, seq_len]</span></span><br><span class="line">output_heads = attention_scores @ V  <span class="comment"># shape: [batch, num_heads, seq_len, d_head]</span></span><br></pre></td></tr></tbody></table></figure>
+<p><strong>Step 4: 拼接所有头 &amp; 最终线性变换</strong></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拼接所有头</span></span><br><span class="line">output = output_heads.transpose(<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>).reshape(batch_size, seq_len, d_model)</span><br><span class="line">output = output @ W_O  <span class="comment"># 最终线性变换</span></span><br></pre></td></tr></tbody></table></figure>
 <p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727230452594.png" alt="image-20250727230452594" style="zoom:80%;"></p>
 </blockquote>
 <h2 id="编码器">编码器</h2>
@@ -509,6 +523,122 @@ FFN），最后与原始输入残差连接。</li>
 <li><strong>DeepNorm</strong>（微软）：在 Post-Norm
 基础上调整残差权重，用于极深模型（如 1000 层）。</li>
 </ul>
+<h2 id="llm">LLM</h2>
+<p>三个阶段——Pretrain、SFT 和 RLHF</p>
+<p>大语言模型（LLM）的训练通常分为三个关键阶段，每个阶段有不同的目标和方法：</p>
+<h3 id="pretraining">1. Pretraining</h3>
+<p>预训练</p>
+<blockquote>
+<p><strong>目标：</strong>
+学习语言的通用知识（语法、语义、世界常识等）</p>
+</blockquote>
+<h4 id="过程">过程：</h4>
+<ul>
+<li>利用大规模通用语料（如网页、书籍、百科等）进行<strong>自监督学习</strong>。</li>
+<li>训练任务通常是：
+<ul>
+<li><strong>因果语言建模（Causal LM）</strong>：预测下一个词（GPT
+风格）</li>
+<li><strong>掩码语言建模（Masked LM）</strong>：预测被遮盖的词（BERT
+风格）</li>
+</ul></li>
+</ul>
+<h4 id="特点">特点：</h4>
+<ul>
+<li>模型尚未特定任务对齐，仅有通用语言能力</li>
+<li>参数量巨大（几十亿到千亿级别）</li>
+<li>训练耗费算力与数据</li>
+</ul>
+<h3 id="sft">2. SFT</h3>
+<p>Supervised Fine-Tuning，监督微调</p>
+<blockquote>
+<p><strong>目标：</strong>
+将模型调整为能按照人类期望完成具体任务（如问答、摘要）</p>
+</blockquote>
+<h4 id="过程-1">过程：</h4>
+<ul>
+<li><p>使用<strong>人工标注的高质量指令-响应对</strong>进行监督微调（如
+Alpaca、OpenAI InstructGPT 数据）</p></li>
+<li><p>输入是类似：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">指令（Instruction）：请写一首关于春天的诗</span><br><span class="line">输出（Response）：春风吹绿柳，暖日照花枝……</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h4 id="特点-1">特点：</h4>
+<ul>
+<li>显著提升对“任务”或“指令”的响应能力</li>
+<li>强化了与人类沟通的能力，但输出可能仍存在幻觉或不可靠性</li>
+</ul>
+<blockquote>
+<p>注意指令微调和 Prompt 工程的区别</p>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 37%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>项目</th>
+<th>指令微调（Instruction Tuning）</th>
+<th>Prompt 工程（Prompt Engineering）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>是否训练模型</td>
+<td>✅ 需要重新训练或微调模型</td>
+<td>❌ 不训练，直接用</td>
+</tr>
+<tr class="even">
+<td>成本</td>
+<td>高：需要 GPU、数据、训练资源</td>
+<td>低：只需要会写 prompt</td>
+</tr>
+<tr class="odd">
+<td>是否修改模型参数</td>
+<td>✅ 修改参数</td>
+<td>❌ 不修改</td>
+</tr>
+<tr class="even">
+<td>应用阶段</td>
+<td>训练阶段（Finetune）</td>
+<td>推理阶段（Inference）</td>
+</tr>
+<tr class="odd">
+<td>优点</td>
+<td>长期效果好、可扩展</td>
+<td>灵活、快速试验</td>
+</tr>
+<tr class="even">
+<td>缺点</td>
+<td>昂贵、不易调试</td>
+<td>不稳定、易受上下文影响</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h3 id="rlhf">3. RLHF</h3>
+<p>Reinforcement Learning with Human Feedback</p>
+<blockquote>
+<p><strong>目标：</strong>
+利用人类偏好优化模型行为，提升对齐程度（alignment）</p>
+</blockquote>
+<h4 id="过程-2">过程：</h4>
+<ol type="1">
+<li><strong>收集人类偏好数据：</strong>
+给出同一个输入，模型生成多个回答，由人类标注哪个更好。</li>
+<li><strong>训练奖励模型（RM）：</strong>
+学习如何从输入和输出中打分。</li>
+<li><strong>强化学习（PPO 等）：</strong>
+使用奖励模型对主模型进行强化学习优化。</li>
+</ol>
+<h4 id="特点-2">特点：</h4>
+<ul>
+<li>对齐人类偏好（例如：更礼貌、更安全、更有逻辑）</li>
+<li>可以显著改善模型的对话体验和安全性（ChatGPT、Claude
+等都采用该方式）</li>
+</ul>
+<h3 id="总结流程图">总结流程图</h3>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">原始语料（大规模网络文本等）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">    Pretraining（自监督）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">SFT（有标注任务数据，提升任务能力）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">RLHF（通过人类偏好进一步优化）</span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -592,7 +722,7 @@ FFN），最后与原始输入残差连接。</li>
       <div class="post-toc-wrap sidebar-panel">
           <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-text">自注意力机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-text">编码器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">解码器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">自回归解码器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">非自回归解码器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8-%E8%A7%A3%E7%A0%81%E5%99%A8%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">编码器-解码器注意力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="nav-text">流程总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bert%E5%92%8Cgpt"><span class="nav-text">BERT和GPT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#post-norm-%E5%92%8C-pre-norm"><span class="nav-text">Post-Norm 和 Pre-Norm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#post-norm%E5%8E%9F%E5%A7%8B-transformer-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. Post-Norm（原始
 Transformer 设计）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pre-norm%E4%B8%BB%E6%B5%81%E5%8F%98%E4%BD%93%E8%AE%BE%E8%AE%A1"><span class="nav-text">2.
-Pre-Norm（主流变体设计）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB%E5%AF%B9%E6%AF%94"><span class="nav-text">3. 核心区别对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%98%E4%BD%93%E4%B8%8E%E6%94%B9%E8%BF%9B"><span class="nav-text">4. 其他变体与改进</span></a></li></ol></li></ol></div>
+Pre-Norm（主流变体设计）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB%E5%AF%B9%E6%AF%94"><span class="nav-text">3. 核心区别对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%98%E4%BD%93%E4%B8%8E%E6%94%B9%E8%BF%9B"><span class="nav-text">4. 其他变体与改进</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#llm"><span class="nav-text">LLM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pretraining"><span class="nav-text">1. Pretraining</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B"><span class="nav-text">过程：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-text">特点：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sft"><span class="nav-text">2. SFT</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B-1"><span class="nav-text">过程：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-1"><span class="nav-text">特点：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rlhf"><span class="nav-text">3. RLHF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B-2"><span class="nav-text">过程：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-2"><span class="nav-text">特点：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">总结流程图</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -657,12 +787,12 @@ Pre-Norm（主流变体设计）</span></a></li><li class="nav-item nav-level-3"
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">419k</span>
+    <span title="站点总字数">421k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:21</span>
+    <span title="站点阅读时长">6:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
