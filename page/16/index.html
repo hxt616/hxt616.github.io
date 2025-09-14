@@ -164,6 +164,180 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/04/13/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/04/13/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%88%E4%B8%83%EF%BC%89/" class="post-title-link" itemprop="url">汇编语言（七）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-04-13 14:08:06" itemprop="dateCreated datePublished" datetime="2023-04-13T14:08:06+08:00">2023-04-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="汇编语言七数据处理">汇编语言（七）——数据处理</h1>
+<p>reg（寄存器）：ax、bx、cx、dx、ah、al、bh、bl、ch、cl、dh、dl、sp、bp、si、di；</p>
+<p>sreg（段寄存器）：ds、ss、cs、es。</p>
+<h2 id="bxsidi-和-bp">bx、si、di 和 bp</h2>
+<p>在8086CPU中，只有标题中这四个寄存器可以用在 <code>[...]</code>
+中来进行内存单元的寻址。</p>
+<ul>
+<li><p>下面的指令是错误的：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [cx]</span><br><span class="line">mov ax, [ax]</span><br><span class="line">mov ax, [dx]</span><br><span class="line">mov ax, [ds]</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>这四个寄存器可以单个出现，也可以这四种组合出现：bx 和 si 、bx 和
+di 、bp 和 si 、bp 和 di 。</p>
+<p>注：<strong>[bx + bp]</strong> 、<strong>[si + di]</strong>
+，这两个组合是错误的。</p></li>
+<li><p>只要在 <code>[...]</code> 中使用了寄存器 <strong>bp</strong>
+，而指令中没有显性地给出段地址，段地址就默认在 <code>ss</code> 中。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [bp]                      含义：(ax) = ((ss)*16+(bp))</span><br><span class="line">mov ax, [bp+idata]                含义：(ax) = ((ss)*16+(bp)+idata)</span><br><span class="line">mov ax, [bp+si]                   含义：(ax) = ((ss)*16+(bp)+(si))</span><br><span class="line">mov ax, [bp+si+idata]             含义：(ax) = ((ss)*16+(bp)+(si)+idata)</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h2 id="数据所在位置">数据所在位置</h2>
+<p>指令在执行前，所要处理的数据可以在三个位置：<strong>CPU内部</strong>、<strong>内存</strong>、<strong>端口</strong>。</p>
+<h2 id="数据位置的表达">数据位置的表达</h2>
+<ol type="1">
+<li><p>立即数（idata）</p>
+<p>对于直接包含在机器指令中的数据（执行前在CPU指令缓存器中），被称为立即数。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">add bx,2000h</span><br><span class="line">or bx,00010000b</span><br><span class="line">mov al,'a'</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>寄存器</p>
+<p>指令要处理的数据在寄存器中，在汇编指令中给出相应的寄存器名。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov ax,bx</span><br><span class="line">mov ds,ax</span><br><span class="line">push bx</span><br><span class="line">mov ds:[0],bx</span><br><span class="line">push ds</span><br><span class="line">mov ss,ax</span><br><span class="line">mov sp,ax</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>段地址（SA）和偏移地址（EA）</p>
+<p>指令要处理的数据在内存中，在汇编指令中可用 [X] 的格式给出 EA，SA
+在某个段寄存器中。</p>
+<p>存放段地址的寄存器可以是默认的，比如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[0]</span><br><span class="line">mov ax,[di]</span><br><span class="line">mov ax,[bx+8]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+si+8]</span><br></pre></td></tr></tbody></table></figure>
+<p>等指令，段地址默认在 <strong>ds</strong> 中。</p>
+<p>存放段地址的寄存器也可以显性给出，比如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,ds:[bp]             含义：(ax)=((ds)*16)+(bp)</span><br><span class="line">mov ax,es:[bx]</span><br><span class="line">mov ax,ss:[bx+si]</span><br><span class="line">mov ax,cs:[bx+si+8]</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h2 id="寻址方式">寻址方式</h2>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20220924122435330.png" alt="image-20220924122435330">
+<figcaption aria-hidden="true">image-20220924122435330</figcaption>
+</figure>
+<h2 id="指令要处理的数据所占的字长">指令要处理的数据所占的字长</h2>
+<ol type="1">
+<li><p>通过寄存器指明要处理的数据的字长</p>
+<p>字操作：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1</span><br><span class="line">mov bx,ds:[0]</span><br><span class="line">mov ds,ax</span><br><span class="line">mov ds:[0],ax</span><br><span class="line">inc ax</span><br><span class="line">add ax,1000</span><br></pre></td></tr></tbody></table></figure>
+<p>字节操作：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov al,1</span><br><span class="line">mov al,bl</span><br><span class="line">mov al,ds:[0]</span><br><span class="line">mov ds:[0],al</span><br><span class="line">inc al</span><br><span class="line">add al,100</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>在没有寄存器名存在的情况下，用操作符<code>X ptr</code>指明内存单元的长度，X
+在汇编指令中可以为 word 或 byte 。</p>
+<p>下面的指令中用了 word ptr
+指明了指令访问的内存单元是一个<strong>字单元</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov word ptr ds:[0],1</span><br><span class="line">inc word ptr [bx]</span><br><span class="line">inc word ptr ds:[0]</span><br><span class="line">add word ptr [bx],2</span><br></pre></td></tr></tbody></table></figure>
+<p>下面的指令中，用 byte ptr
+指明了指令访问的内存单元是一个<strong>字节单元</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov byte ptr ds:[0],1</span><br><span class="line">inc byte ptr [bx]</span><br><span class="line">inc byte ptr ds:[0]</span><br><span class="line">add byte ptr [bx],2</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>其他方法</p>
+<p>有些指令默认了访问的是字单元还是字节单元，比如：push [1000H]
+就不用指明访问的是字单元还是字节单元，因为 push
+指令只进行<strong>字操作</strong>。</p></li>
+</ol>
+<h2 id="div指令">div指令</h2>
+<p>div是除法指令。</p>
+<ul>
+<li>除数：有8位和16位两种，在一个寄存器或内存单元中。</li>
+<li>被除数：默认放在 <strong>AX</strong> 或 <strong>DX
+和AX</strong>中，如果除数为8位，被除数则为16位，默认在 AX
+中存放；如果输出为16位，被除数则为32位，在 DX 和 AX 中存放，DX
+存放高16位，AX 存放低16位。</li>
+<li>结果：如果除数为8位，则 AL 存储商，AH 存储余数；如果除数为16位，则
+AX 存储除法操作的商，DX 存储除法操作的余数。</li>
+</ul>
+<p>格式如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div reg</span><br><span class="line">div 内存单元</span><br></pre></td></tr></tbody></table></figure>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div byte ptr ds:[0]   含义：(al)=(ax)/((ds)*16+0)的商；</span><br><span class="line">						 (ah)=(ax)/((ds)*16+0)的余数</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div word ptr es:[0]   含义：(ax)=[(dx)*10000H+(ax)]/((es)*16+0)的商</span><br><span class="line">                           (dx)=[(dx)*10000H+(ax)]/((es)*16+0)的余数</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="伪指令-dd">伪指令 dd</h2>
+<p><strong>dd</strong> 是用来定义 dword（double
+word）双字型数据的。比如</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data segment</span><br><span class="line">  db 1</span><br><span class="line">  dw 1</span><br><span class="line">  dd 1</span><br><span class="line">data ends</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>第一个数据为 01H，在<code>data:0</code>处，占1个字节；</li>
+<li>第二个数据为 0001H，在<code>data:1</code>处，占1个字；</li>
+<li>第三个数据为 00000001H，在<code>data:3</code>处，占2个字。</li>
+</ul>
+<h2 id="dup">dup</h2>
+<p>dup是一个操作符，在汇编语言中同 db、dw、dd
+等一样，也是由编译器识别处理的符号。它是和 db、dw、dd
+等数据定义伪指令配合使用的，用来进行数据的重复。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db 3 dup (0)             ;定义了3个字节，值都为 0，相当于 db 0,0,0</span><br><span class="line">db 3 dup (0,1,2)         ;定义了9个字节，相当于 db 0,1,2,0,1,2,0,1,2</span><br><span class="line">db 3 dup('abc','ABC')    ;定义了18个字节，相当于 db 'abcABCabcABCabcABC'</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/04/02/Java%E4%B8%AD%E7%9A%84%E6%95%B0%E7%BB%84%E7%9B%B8%E7%AD%89%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2068,101 +2242,6 @@ rotate right 3 的结果，代码如下：</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/16/%E5%85%B3%E4%BA%8Egit%E7%9A%84%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/16/%E5%85%B3%E4%BA%8Egit%E7%9A%84%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">关于git的远程仓库问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-10-16 23:49:52" itemprop="dateCreated datePublished" datetime="2022-10-16T23:49:52+08:00">2022-10-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>835</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近一直断断续续地学习git的使用方法，今天在学习的时候遇到了一个关于远程仓库的问题：<strong>如何在克隆远程仓库后，将其关联到自己的远程仓库。</strong></p>
-<p>当使用 git clone
-时，就会将远程仓库克隆到本地。利用命令<code>git remote -v</code>查看克隆的远程仓库的信息，例如：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/user/repo.git (fetch)</span><br><span class="line">origin  https://github.com/user/repo.git (push)</span><br></pre></td></tr></tbody></table></figure>
-<p>origin 为默认的远程仓库的别名。此时， origin 默认的 url
-是原始仓库的地址。想要关联到新的远程仓库主要有两种方法：</p>
-<h3 id="添加远程仓库">添加远程仓库</h3>
-<p>使用<code>git remote add</code>命令添加。</p>
-<p>该命令采用两个参数：远程名称（例如<code>new</code> ）、远程 URL（例如
-<code>https://github.com/user_1/repo.git</code>）。</p>
-<p>例如：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add new https://github.com/user_1/repo.git <span class="comment"># Set a new remote</span></span><br><span class="line"></span><br><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/user/repo.git (fetch) <span class="comment"># 原始仓库</span></span><br><span class="line">origin  https://github.com/user/repo.git (push)  <span class="comment"># 原始仓库</span></span><br><span class="line">new  https://github.com/user_1/repo.git (fetch) <span class="comment"># 新添加的远程仓库</span></span><br><span class="line">new  https://github.com/user_1/repo.git (push) <span class="comment"># 新添加的远程仓库</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="更改远程仓库的-url">更改远程仓库的 URL</h3>
-<p>使用<code>git remote set-url</code>命令更改 URL。</p>
-<p>参考：https://docs.github.com/cn/get-started/getting-started-with-git/managing-remote-repositories#changing-a-remote-repositorys-url</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2234,7 +2313,7 @@ rotate right 3 的结果，代码如下：</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">182</span>
+          <span class="site-state-item-count">183</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2247,7 +2326,7 @@ rotate right 3 的结果，代码如下：</p>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">74</span>
+        <span class="site-state-item-count">75</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2283,12 +2362,12 @@ rotate right 3 的结果，代码如下：</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">421k</span>
+    <span title="站点总字数">423k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:23</span>
+    <span title="站点阅读时长">6:24</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

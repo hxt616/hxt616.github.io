@@ -164,6 +164,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/10/%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/10/%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">翻转链表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-10 13:31:34" itemprop="dateCreated datePublished" datetime="2024-01-10T13:31:34+08:00">2024-01-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>438</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/reverse-linked-list/</p>
+<p>这题有两种思路，一种是<strong>双指针法</strong>，另一种是<strong>递归法</strong>。我使用的是双指针法，因为其空间复杂度更低，下面是《代码随想录》中的动图：</p>
+<p><img src="https://code-thinking.cdn.bcebos.com/gifs/206.%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8.gif"></p>
+<p>由上图易得：当<code>cur</code>指向<code>NULL</code>时，翻转结束</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">reverseList</span><span class="params">(<span class="keyword">struct</span> ListNode* head)</span>{</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">cur</span> =</span> head;  <span class="comment">//指向待翻转的链表头节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">pre</span> =</span> <span class="literal">NULL</span>;  <span class="comment">//指向翻转过程中形成的新链表的头节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">tmp</span>;</span>         <span class="comment">//暂存指针</span></span><br><span class="line">    <span class="keyword">while</span>(cur) {</span><br><span class="line">        tmp = cur-&gt;next;          <span class="comment">//暂存待翻转的结点</span></span><br><span class="line">        cur-&gt;next = pre;          <span class="comment">//翻转</span></span><br><span class="line">        pre = cur;                <span class="comment">//pre指向新链表的头节点</span></span><br><span class="line">        cur = tmp;                <span class="comment">//cur指向待翻转的结点</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> pre;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/09/%E8%AE%BE%E8%AE%A1%E9%93%BE%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1024,111 +1113,6 @@ identifier，简称DOI）又称<strong>数字对象识别符</strong>，是用�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/30/x%E7%9A%84%E5%B9%B3%E6%96%B9%E6%A0%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/12/30/x%E7%9A%84%E5%B9%B3%E6%96%B9%E6%A0%B9/" class="post-title-link" itemprop="url">x的平方根</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-12-30 09:56:08" itemprop="dateCreated datePublished" datetime="2023-12-30T09:56:08+08:00">2023-12-30</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>558</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/sqrtx/</p>
-<p>这道题也是二分查找相关题目</p>
-<p>由题目可知 <em>x</em> 平方根的<strong>整数部分</strong> <em>ans</em>
-是<strong>满足 ans<sup>2</sup> ≤ x </strong>。下面分析用二分法求解
-<em>k</em> 值。</p>
-<p>根据 <em>x</em> 开方后是否是整数分为两种情况：</p>
-<ul>
-<li><p>能找到一个整数 <strong>k</strong> 使得 <strong>k<sup>2</sup>
-&lt;= x</strong>，使用二分法一定能找到该整数</p></li>
-<li><p><em>x</em> 平方根 <strong>k</strong> 为浮点数，且<strong>k ∈ (n,
-n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的整数部分<strong>ans</strong>即为<strong>n</strong></p>
-<blockquote>
-<p>因此需要在<code>if</code>判断语句中不断更新<strong>ans</strong>的值，使其取得更大的值；若是在<code>while</code>循环结束时才给<strong>ans</strong>赋值，则可能会导致<strong>ans</strong>等于<strong>n+1</strong></p>
-<p>注意：<code>mid</code>的数据类型应为<strong>long</strong>，防溢出（x
-的范围是 0 ~ 2<sup>31</sup>-1）</p>
-</blockquote></li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">mySqrt</span><span class="params">(<span class="type">int</span> x)</span> {</span><br><span class="line">    <span class="type">int</span> left = <span class="number">0</span>;  <span class="comment">//左边界</span></span><br><span class="line">    <span class="type">int</span> right = x; <span class="comment">//右边界</span></span><br><span class="line">    <span class="type">long</span> mid = <span class="number">0</span>;  <span class="comment">//中间值</span></span><br><span class="line">    <span class="type">int</span> ans=<span class="number">-1</span>;    <span class="comment">//平方根整数部分</span></span><br><span class="line">    <span class="keyword">while</span>(left &lt;= right){</span><br><span class="line">        mid = left + (right - left) / <span class="number">2</span>; <span class="comment">//防止溢出</span></span><br><span class="line">        <span class="keyword">if</span>(mid * mid &lt;= x){</span><br><span class="line">            ans = mid;   <span class="comment">//更新ans的值</span></span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> right = mid - <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>类似题目：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/valid-perfect-square/">有效的完全平方数</a></p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1200,7 +1184,7 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">182</span>
+          <span class="site-state-item-count">183</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1213,7 +1197,7 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">74</span>
+        <span class="site-state-item-count">75</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1249,12 +1233,12 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">421k</span>
+    <span title="站点总字数">423k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:23</span>
+    <span title="站点阅读时长">6:24</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
