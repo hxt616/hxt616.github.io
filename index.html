@@ -307,7 +307,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-09-14 19:56:13" itemprop="dateModified" datetime="2025-09-14T19:56:13+08:00">2025-09-14</time>
+                <time title="修改时间：2025-09-14 23:50:50" itemprop="dateModified" datetime="2025-09-14T23:50:50+08:00">2025-09-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -381,7 +381,7 @@ W^VX\)</span></li>
 Q、K、V，再进行拆分，下面是完整步骤</p>
 <p><strong>Step 1: 线性变换</strong></p>
 <p>先通过三组权重矩阵，计算整个序列的 Q、K、V：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑Q = X @ W_Q  # [batch, seq_len, d_model] @ [d_model, d_model] -&gt; [batch, seq_len, d_model]</span><br><span class="line">K = X @ W_K</span><br><span class="line">V = X @ W_V</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Q = X @ W_Q  <span class="comment"># [batch, seq_len, d_model] @ [d_model, d_model] -&gt; [batch, seq_len, d_model]</span></span><br><span class="line">K = X @ W_K</span><br><span class="line">V = X @ W_V</span><br></pre></td></tr></tbody></table></figure>
 <p><strong>Step 2: 拆分成多头</strong></p>
 <p>再把 Q/K/V 拆成多个头（通常是 reshape + transpose）：</p>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拆成多头，每一头的维度是 d_head</span></span><br><span class="line">Q = Q.reshape(batch_size, seq_len, num_heads, d_head).transpose(<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line"><span class="comment"># Q 形状变为 [batch, num_heads, seq_len, d_head]</span></span><br></pre></td></tr></tbody></table></figure>
