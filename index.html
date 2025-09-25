@@ -307,7 +307,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-09-14 23:50:50" itemprop="dateModified" datetime="2025-09-14T23:50:50+08:00">2025-09-14</time>
+                <time title="修改时间：2025-09-25 22:55:25" itemprop="dateModified" datetime="2025-09-25T22:55:25+08:00">2025-09-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -405,7 +405,7 @@ Q、K、V，再进行拆分，下面是完整步骤</p>
 <h2 id="解码器">解码器</h2>
 <h3 id="自回归解码器">自回归解码器</h3>
 <p>在生成序列时，每一步仅基于<strong>当前及之前的token</strong>预测下一个token，这就要用到掩蔽自注意力（masked
-self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻止每个位置选择其后面的输入信息。</p>
+self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻止每个位置选择其后面的输入信息（在训练阶段非常重要）。</p>
 <figure>
 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221042825.png" alt="image-20250727221042825">
 <figcaption aria-hidden="true">image-20250727221042825</figcaption>
