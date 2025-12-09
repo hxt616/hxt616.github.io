@@ -164,6 +164,151 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/02/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/02/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-title-link" itemprop="url">lambda表达式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-12-02 00:00:00" itemprop="dateCreated datePublished" datetime="2024-12-02T00:00:00+08:00">2024-12-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-01-23 00:31:45" itemprop="dateModified" datetime="2025-01-23T00:31:45+08:00">2025-01-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CPP/" itemprop="url" rel="index"><span itemprop="name">CPP</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>内容参考《C++ primer》</p>
+<h2 id="定义">定义</h2>
+<ul>
+<li><p>一个lambda表达式表示一个可调用的代码单元。我们可以将其理解为一个未命名的
+内联函数。</p></li>
+<li><p>表达式形式</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[capture list](parameter list) -&gt; return type { function body }</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>lambda表达式必须使用尾置返回，尾置返回示例如下：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// func接受一个int类型的实参，返回一个指针，该指针指向含有10个整数的数组</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">func</span><span class="params">(<span class="type">int</span> i)</span> -&gt; <span class="title">int</span><span class="params">(*)</span>[10]</span>;</span><br></pre></td></tr></tbody></table></figure>
+</blockquote></li>
+<li><p>若忽略括号和参数列表，则等价于指定一个空参数列表</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> f = [] { <span class="keyword">return</span> <span class="number">42</span>; };</span><br><span class="line">cout &lt;&lt; <span class="built_in">f</span>() &lt;&lt; endl; <span class="comment">//打印42</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h3 id="向lambda传递参数">向lambda传递参数</h3>
+<ul>
+<li><p>包含参数的lambda表达式，可作为<code>find_if</code>函数的一个参数</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[](<span class="type">const</span> string &amp;a, <span class="type">const</span> string &amp;b) { <span class="keyword">return</span> a.<span class="built_in">size</span>() &lt; b.<span class="built_in">size</span>(); }</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h3 id="使用捕获列表">使用捕获列表</h3>
+<ul>
+<li><p>lambda表达式通过将局部变量包含在其捕获列表中来指出将会使用这些变量。</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[sz](<span class="type">const</span> string &amp;a) { <span class="keyword">return</span> a.<span class="built_in">size</span>() &gt;= sz; };</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h2 id="变量的捕获方式">变量的捕获方式</h2>
+<h3 id="值捕获">值捕获</h3>
+<ul>
+<li>lambda采用值捕获的方式。与传值参数类似，采用值捕获的前提是变量可以拷贝。</li>
+<li>与参数不同，被捕获的变量的值是在lambda创建时拷贝，而不是调用时拷贝</li>
+</ul>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">fcn1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">	<span class="type">size_t</span> v1 = <span class="number">42</span>; <span class="comment">//局部变量</span></span><br><span class="line">	<span class="comment">//将v1拷贝到名为f的可调用对象</span></span><br><span class="line">	<span class="keyword">auto</span> f = [v1]{ <span class="keyword">return</span> v1; };</span><br><span class="line">	v1 = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">auto</span> j = <span class="built_in">f</span>(); <span class="comment">// j 为 42，f保存了我们创建它时v1的拷贝</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="引用捕获">引用捕获</h3>
+<ul>
+<li>v1之前的<code>&amp;</code>指出v1应该以引用方式捕获。</li>
+<li>当我们在lambda函数体内使用此变量时，实际上使用的是引用所绑定的对象。</li>
+<li>在本例中，当lambda返回v1时，它返回的是v1指向的对象的值。</li>
+</ul>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">fcn1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">	<span class="type">size_t</span> v1 = <span class="number">42</span>; <span class="comment">//局部变量</span></span><br><span class="line">	<span class="comment">// f包含对v1的引用</span></span><br><span class="line">	<span class="keyword">auto</span> f = [&amp;v1]{ <span class="keyword">return</span> v1; };</span><br><span class="line">	v1 = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">auto</span> j = <span class="built_in">f</span>(); <span class="comment">// j 为 0，f保存了v1的引用</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="隐式捕获">隐式捕获</h3>
+<ul>
+<li>让编译器根据lambda体中的代码来推断我们要使用哪些变量</li>
+<li><code>&amp;</code>告诉编译器采用捕获引用方式，<code>=</code>则表示采用值捕获方式</li>
+<li>混合使用隐式捕获和显式捕获时，显式捕获的变量必须使用与隐式捕获不同的方式。</li>
+</ul>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sz为隐式捕获，值捕获方式，这里的lambda表达式是find_if的第三个参数</span></span><br><span class="line">wc = <span class="built_in">find_if</span>(words.<span class="built_in">begin</span>(),words.<span class="built_in">end</span>(), </span><br><span class="line">             [=](<span class="type">const</span> string &amp;s)</span><br><span class="line">                { <span class="keyword">return</span> s.<span class="built_in">size</span>() &gt;= sz; });</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="可变lambda">可变lambda</h2>
+<ul>
+<li><p>对于一个值被拷贝的变量，若要改变一个被捕获的变量的值，就必须在参数列表首加上关键字mutable</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">fen3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="type">size_t</span> v1 = <span class="number">42</span>;<span class="comment">//局部变量</span></span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="comment">// f可以改变它所捕获的变量的值</span></span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="keyword">auto</span> f = [v1] ()  <span class="keyword">mutable</span> { <span class="keyword">return</span> ++v1;};</span></span></span><br><span class="line"><span class="params"><span class="function">	v1 =<span class="number">0</span>;</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="keyword">auto</span> j = f();<span class="comment">//j为43</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>对于引用捕获的变量可以直接修改，不用添加mutable关键字</p></li>
+</ul>
+<h2 id="指定返回类型">指定返回类型</h2>
+<ul>
+<li><p>默认情况下，如果一个lambda体包含<code>return</code>之外的任何语句，则编译器假定此lambda返回void。例如下面的代码就是错误的</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//错误：不能推断lambda的返回类型</span></span><br><span class="line"><span class="built_in">transform</span>(vi.<span class="built_in">begin</span>(), vi.<span class="built_in">end</span>(), vi.<span class="built_in">begin</span>(),</span><br><span class="line">          [](<span class="type">int</span> i)</span><br><span class="line">            { <span class="keyword">if</span>(i&lt;<span class="number">0</span>) <span class="keyword">return</span> -i; <span class="keyword">else</span> <span class="keyword">return</span> i;};</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>若lambda表达式包含其他语句，且返回值其实不是void，则使用尾置返回类型</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">transform</span>(vi.<span class="built_in">begin</span>(), vi.<span class="built_in">end</span>(), vi.<span class="built_in">begin</span>(),</span><br><span class="line">          [](<span class="type">int</span> i) -&gt; <span class="type">int</span>  <span class="comment">// 这里指定了返回类型</span></span><br><span class="line">            { <span class="keyword">if</span>(i&lt;<span class="number">0</span>) <span class="keyword">return</span> -i; <span class="keyword">else</span> <span class="keyword">return</span> i; });</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3806,125 +3951,6 @@ Pages了</p></li>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/06/09/%E5%88%A9%E7%94%A8SSH%E8%BF%9E%E6%8E%A5Github/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/06/09/%E5%88%A9%E7%94%A8SSH%E8%BF%9E%E6%8E%A5Github/" class="post-title-link" itemprop="url">使用SSH连接Github</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-06-09 00:00:00" itemprop="dateCreated datePublished" datetime="2024-06-09T00:00:00+08:00">2024-06-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-17 23:03:27" itemprop="dateModified" datetime="2024-06-17T23:03:27+08:00">2024-06-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Github/" itemprop="url" rel="index"><span itemprop="name">Github</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>换了新电脑，环境需要重新配置</p>
-</blockquote>
-<p>参考：https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent</p>
-<p>使用 SSH 协议可以连接远程服务器和服务并向它们验证。 利用 SSH
-密钥可以连接到 GitHub，而无需在每次访问时都提供用户名和 personal access
-token。 还可以使用 SSH 密钥对提交进行签名。</p>
-<h3 id="第一步">第一步</h3>
-<p>首先生成一个ssh密钥：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ssh-keygen -t ed25519 -C <span class="string">"your_email@example.com"</span></span></span><br></pre></td></tr></tbody></table></figure>
-<p>接着系统会提示你输入文件保存位置。按Enter键接受默认位置（通常是<code>~/.ssh/id_ed25519</code>或<code>~/.ssh/id_rsa</code>）。</p>
-<p>然后系统会提示你输入一个密码（passphrase）。虽然这一步是可选的，但强烈建议你输入一个密码来增加安全性。</p>
-<h3 id="第二步">第二步</h3>
-<p>首先复制ssh公钥：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span></span><br></pre></td></tr></tbody></table></figure>
-<p>打开GitHub，前往 <strong>Settings &gt; SSH and GPG keys</strong>
-，点击 <strong>New SSH key</strong>。在 <strong>Title</strong>
-栏输入一个描述性的名称，然后在 <strong>Key</strong>
-栏粘贴之前复制的公钥，最后点击 <strong>Add SSH key</strong>。</p>
-<h3 id="第三步">第三步</h3>
-<p>添加SSH密钥到ssh-agen，当你生成SSH密钥时，通常会设置一个密码短语（passphrase，第一步）来保护你的私钥。每次使用私钥进行身份验证时，例如执行<code>git push</code>、<code>git pull</code>或连接到远程服务器，你都需要输入这个密码短语。通过将SSH密钥添加到<code>ssh-agent</code>，<code>ssh-agent</code>会在内存中缓存解密后的私钥。这样，你只需在将密钥添加到<code>ssh-agent</code>时输入一次密码短语，之后就不需要频繁输入了。</p>
-<p>首先以管理员身份打开Terminal，启动<code>ssh-agent</code></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">Get-Service -Name ssh-agent | Set-Service -StartupType Manual(可改为Automatic)</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">Start-Service ssh-agent</span></span><br></pre></td></tr></tbody></table></figure>
-<p>然后将ssh私钥添加到<code>ssh-agent</code>中：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ssh-add c:/Users/YOU/.ssh/id_ed25519</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="第四步">第四步</h3>
-<p>测试是否成功连接Github：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ssh -T git@github.com</span></span><br></pre></td></tr></tbody></table></figure>
-<p>若成功，则能看见：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">Hi username! You<span class="string">'ve successfully authenticated, but GitHub does not provide shell access.</span></span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="第五步">第五步</h3>
-<p>接下来就可以通过使用<code>git@github.com:username/repository.git</code>对远程仓库进行相关操作</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3996,20 +4022,20 @@ token。 还可以使用 SSH 密钥对提交进行签名。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">183</span>
+          <span class="site-state-item-count">184</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-count">77</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -4045,12 +4071,12 @@ token。 还可以使用 SSH 密钥对提交进行签名。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">423k</span>
+    <span title="站点总字数">425k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:25</span>
+    <span title="站点阅读时长">6:26</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
