@@ -164,6 +164,172 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/01/07/MHA-GQA-MQA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/01/07/MHA-GQA-MQA/" class="post-title-link" itemprop="url">MHA/MQA/GQA</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-01-07 00:00:00 / 修改时间：22:39:15" itemprop="dateCreated datePublished" datetime="2026-01-07T00:00:00+08:00">2026-01-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">大模型</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在大型语言模型的推理部署中，<strong>KV缓存（Key-Value
+Cache）</strong>
+是内存消耗的主要来源。为了优化这一瓶颈，业界经历了从<strong>多头注意力（MHA）</strong>
+到<strong>分组查询注意力（GQA）</strong>
+再到<strong>多查询注意力（MQA）</strong> 的技术演进。目前
+<strong>GQA</strong> 在主流大模型中更为常用，兼具性能与效率优势。</p>
+<p>在标准的Transformer架构中，每个输入token会生成三组向量：</p>
+<ul>
+<li><strong>Q（Query）</strong>：查询向量，决定“关注什么”</li>
+<li><strong>K（Key）</strong>：键向量，提供“被比较的内容”</li>
+<li><strong>V（Value）</strong>：值向量，提供“被提取的信息”</li>
+</ul>
+<h2 id="多头注意力mha">多头注意力（MHA）</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">num_attention_heads = <span class="number">32</span></span><br><span class="line">num_key_value_heads = <span class="number">32</span>  <span class="comment"># 每个Q有独立的K/V</span></span><br><span class="line">n_rep = <span class="number">1</span></span><br></pre></td></tr></tbody></table></figure>
+<p>MHA的核心特点是：<strong>每个注意力头都有自己独立的Q、K、V投影矩阵</strong>。这意味着：
+- 若有32个注意力头，就需要32套不同的K/V投影 -
+每个token在每个头上都会产生不同的K/V向量 -
+每个头的Q只与该头自己的K/V进行计算</p>
+<p>这种设计虽然表达能力最强，但<strong>KV缓存开销巨大</strong>。对于h个头、d维度的模型，处理长度为L的序列时，KV缓存需要存储2×h×d×L个参数。</p>
+<h2 id="多查询注意力mqa">多查询注意力（MQA）</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">num_attention_heads = <span class="number">32</span>  <span class="comment"># Q头数</span></span><br><span class="line">num_key_value_heads = <span class="number">1</span>   <span class="comment"># 所有Q共享一套K/V</span></span><br><span class="line">n_rep = <span class="number">32</span>  <span class="comment"># 32/1=32</span></span><br></pre></td></tr></tbody></table></figure>
+<p>MQA是GQA的极端形式：<strong>所有Q头共享同一套K/V投影</strong>。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">32个Q头 → 共享 1个KV头</span><br></pre></td></tr></tbody></table></figure>
+<p>关键在于：<strong>注意力机制的多样性主要来自Q，而非K/V</strong>。</p>
+<p>虽然所有Q头看到相同的K和V，但：</p>
+<ul>
+<li>每个Q头有不同的查询向量</li>
+<li>相同的K与不同的Q计算会产生不同的注意力分数</li>
+<li>相同的V用不同的权重组合会产生不同的输出</li>
+</ul>
+<p><strong>类比理解</strong>：多个分析师使用同一份数据集（K/V），但带着不同的问题（Q）进行分析，最终得到不同的报告。</p>
+<h2 id="分组查询注意力gqa">分组查询注意力（GQA）</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">num_attention_heads = <span class="number">32</span>  <span class="comment"># Q头数</span></span><br><span class="line">num_key_value_heads = <span class="number">8</span>   <span class="comment"># KV头数（分组）</span></span><br><span class="line">n_rep = <span class="number">4</span>  <span class="comment"># 32/8=4，每个KV头被4个Q头共享</span></span><br></pre></td></tr></tbody></table></figure>
+<p>研究发现，不同注意力头学习的关注模式存在<strong>高度相关性</strong>。例如：
+- 某些头专门关注语法结构 - 某些头专门关注语义相似性<br>
+- 某些头专门关注位置关系</p>
+<p>这些相关头所需的K/V信息存在大量重叠。GQA基于这一洞察，提出了分组共享的策略。</p>
+<p><strong>GQA的工作原理</strong>：</p>
+<p>GQA将Q头分组，<strong>每组内的Q头共享同一套K/V投影</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">假设有32个Q头，分为8组：</span><br><span class="line">组1: Q头1-4 → 共享 KV头1</span><br><span class="line">组2: Q头5-8 → 共享 KV头2</span><br><span class="line">...</span><br><span class="line">组8: Q头29-32 → 共享 KV头8</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="代码示例">代码示例</h3>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟MQA：4个Q头共享1个KV头</span></span><br><span class="line">head_dim = <span class="number">64</span></span><br><span class="line">num_q_heads = <span class="number">4</span></span><br><span class="line">num_kv_heads = <span class="number">1</span></span><br><span class="line">seq_len = <span class="number">3</span></span><br><span class="line">batch_size = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建可学习的投影层，第一个参数是输入维度，第二个参数是输出维度</span></span><br><span class="line">q_proj = nn.Linear(head_dim, head_dim * num_q_heads)</span><br><span class="line">k_proj = nn.Linear(head_dim, head_dim * num_kv_heads)  <span class="comment"># 输出维度较小！</span></span><br><span class="line">v_proj = nn.Linear(head_dim, head_dim * num_kv_heads)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟输入</span></span><br><span class="line">x = torch.randn(batch_size, seq_len, head_dim)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成Q、K、V</span></span><br><span class="line">Q = q_proj(x).view(batch_size, seq_len, num_q_heads, head_dim)</span><br><span class="line">K = k_proj(x).view(batch_size, seq_len, num_kv_heads, head_dim)  <span class="comment"># 只有1个头！</span></span><br><span class="line">V = v_proj(x).view(batch_size, seq_len, num_kv_heads, head_dim)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"Q形状:"</span>, Q.shape)  <span class="comment"># [1, 3, 4, 64] - 4个不同的Q头</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"K形状:"</span>, K.shape)  <span class="comment"># [1, 3, 1, 64] - 只有1个KV头！</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"V形状:"</span>, V.shape)  <span class="comment"># [1, 3, 1, 64] - 只有1个KV头！</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制KV以匹配Q头数量，也就是扩展KV矩阵与Q头形状相同</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">repeat_kv</span>(<span class="params">x, n_rep</span>):</span><br><span class="line">    bs, slen, n_kv, hd = x.shape</span><br><span class="line">    <span class="keyword">return</span> x[:, :, :, <span class="literal">None</span>, :].expand(bs, slen, n_kv, n_rep, hd).reshape(bs, slen, n_kv * n_rep, hd)</span><br><span class="line"></span><br><span class="line">K_expanded = repeat_kv(K, num_q_heads // num_kv_heads)  <span class="comment"># 复制4次</span></span><br><span class="line">V_expanded = repeat_kv(V, num_q_heads // num_kv_heads)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"\n扩展后K形状:"</span>, K_expanded.shape)  <span class="comment"># [1, 3, 4, 64]</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"扩展后V形状:"</span>, V_expanded.shape)  <span class="comment"># [1, 3, 4, 64]</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="对比">对比</h2>
+<table>
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>MHA</th>
+<th>GQA</th>
+<th>MQA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KV头数</strong></td>
+<td>= Q头数</td>
+<td>= Q头数/分组数</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td><strong>投影矩阵</strong></td>
+<td>Q、K、V尺寸相同</td>
+<td>K/V尺寸小于Q</td>
+<td>K/V尺寸远小于Q</td>
+</tr>
+<tr class="odd">
+<td><strong>内存效率</strong></td>
+<td>低</td>
+<td>中</td>
+<td>高</td>
+</tr>
+<tr class="even">
+<td><strong>表达能力</strong></td>
+<td>高</td>
+<td>中高</td>
+<td>中</td>
+</tr>
+<tr class="odd">
+<td><strong>适用场景</strong></td>
+<td>训练/小模型</td>
+<td>中大模型推理</td>
+<td>大规模部署</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/08/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -195,7 +361,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-12-09 22:58:52" itemprop="dateModified" datetime="2025-12-09T22:58:52+08:00">2025-12-09</time>
+                <time title="修改时间：2026-01-07 22:40:05" itemprop="dateModified" datetime="2026-01-07T22:40:05+08:00">2026-01-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -204,10 +370,6 @@
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">大模型</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
                 </span>
             </span>
 
@@ -3437,209 +3599,6 @@ ptrace，而新版本的GDB则禁用了这种机制。这里是<a target="_blank
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/17/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/17/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84/" class="post-title-link" itemprop="url">内存映射</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-12-17 00:00:00" itemprop="dateCreated datePublished" datetime="2024-12-17T00:00:00+08:00">2024-12-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-05-16 22:40:59" itemprop="dateModified" datetime="2025-05-16T22:40:59+08:00">2025-05-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>内存映射<code>mmap</code>分为普通文件和匿名文件，这里讨论的是Linux环境</p>
-<h2 id="文件映射file-mapping">文件映射（File Mapping）</h2>
-<blockquote>
-<ul>
-<li><strong><code>malloc</code>
-是高级抽象</strong>，封装了内存分配细节，开发者无需关心底层是
-<code>brk</code> 还是 <code>mmap</code>。</li>
-<li><strong><code>mmap</code> 是底层机制</strong>，既服务于
-<code>malloc</code> 的大内存分配，也用于文件映射等高级功能。</li>
-</ul>
-</blockquote>
-<h3 id="普通文件">普通文件</h3>
-<p>将<strong>普通磁盘文件</strong>的某个区域映射到进程的虚拟内存空间。</p>
-<h4 id="工作原理">工作原理</h4>
-<ul>
-<li><strong>页面划分</strong>：文件内容被划分成页面大小（通常为4KB）的片段，每个片段对应虚拟内存中的一个页面。</li>
-<li>按需加载（Demand Paging）：
-<ul>
-<li>初始时，文件内容并不会全部加载到物理内存中。</li>
-<li>当CPU<strong>首次</strong>访问某个虚拟页面时，操作系统才将文件对应的页面<strong>从磁盘加载到物理内存</strong>。</li>
-</ul></li>
-<li><strong>超出文件区域</strong>：若映射区域大于文件大小，超出部分会被<strong>零填充</strong>（Padding
-with zeros）。</li>
-</ul>
-<h4 id="特点">特点</h4>
-<ul>
-<li>文件的内容直接与虚拟内存对应，可进行高效的文件I/O操作。</li>
-<li>用于<strong>程序执行</strong>（如加载可执行文件）或实现<strong>文件共享</strong>。</li>
-</ul>
-<h3 id="匿名文件">匿名文件</h3>
-<p>将一片<strong>不关联磁盘文件</strong>的内存区域映射到进程的虚拟地址空间。这种区域内容初始化为<strong>全零</strong>，由内核创建的<strong>匿名文件</strong>管理。匿名文件的内容全部由<strong>二进制零</strong>组成，因此它是<strong>空白的</strong>、未初始化的。</p>
-<h4 id="工作原理-1">工作原理</h4>
-<ul>
-<li>按需分配：
-<ul>
-<li>初始时，匿名映射区域并不占用物理内存。</li>
-<li>当CPU首次访问某个虚拟页面时，内核会分配一个<strong>物理页面</strong>，并将其内容填充为<strong>二进制零</strong>。</li>
-</ul></li>
-<li>只有当CPU第一次访问某个虚拟页面时（即“触摸”该页面），内核才会进行以下操作：
-<ol type="1">
-<li><strong>选择一个牺牲页面</strong>（Victim
-Page）：从物理内存中找到一个适合被替换的页面。</li>
-<li><strong>交换脏页面</strong>（如有必要）：如果选中的页面是<strong>脏页面</strong>（内容被修改过但尚未写回磁盘），内核会先将其内容写回磁盘。</li>
-<li><strong>填充零值</strong>：内核将物理页面的内容全部填充为<strong>二进制零</strong>。</li>
-<li><strong>更新页表</strong>：内核将虚拟页面与新分配的物理页面关联起来，并将页面标记为<strong>已驻留</strong>（Resident）。</li>
-</ol></li>
-</ul>
-<h4 id="特点-1">特点</h4>
-<ul>
-<li>适用于分配需要初始化为零的内存区域，例如堆内存、栈内存。</li>
-<li>不涉及磁盘文件，因此无需磁盘I/O。</li>
-<li>由于这种机制不会涉及磁盘和内存之间的数据传输，内核只是在分配物理页面时填充零值，因此这类页面被称为<strong>需求零页面</strong>（Demand-Zero
-Pages）。</li>
-</ul>
-<blockquote>
-<p><code>malloc</code> 的实现（如 glibc 的
-ptmalloc）通常会结合两种方式分配内存：</p>
-<ol type="1">
-<li><strong>小内存块（&lt; 128KB 或阈值）</strong>：
-<ul>
-<li>通过 <code>brk</code>/<code>sbrk</code>
-系统调用扩展堆空间，从堆中分配。</li>
-<li>优点：高效，减少内存碎片（通过内存池管理）。</li>
-</ul></li>
-<li><strong>大内存块（≥ 128KB 或阈值）</strong>：
-<ul>
-<li>直接使用 <code>mmap</code>
-分配匿名内存（<code>MAP_ANONYMOUS</code>）。</li>
-<li>优点：大块内存独立管理，避免堆空间碎片化；释放时直接通过
-<code>munmap</code> 归还给操作系统。</li>
-</ul></li>
-</ol>
-</blockquote>
-<h2 id="fork-函数">fork 函数</h2>
-<p><strong>1. 调用 <code>fork()</code> 时的内存复制：</strong></p>
-<ul>
-<li><p>在调用 <code>fork()</code>
-时，操作系统并不会立即复制整个父进程的内存空间，而是通过<strong>写时复制（Copy-On-Write,
-COW）机制</strong>优化内存使用。</p>
-<blockquote>
-<p><strong>写时复制</strong>只有在任⼀进程（⽗进程或⼦进程）对数据执⾏了写操作时，复制才会发⽣（先是缺⻚中断，然后操作系统给⼦进程分配内存并复制⽗进程的数据）</p>
-</blockquote></li>
-<li><p>父子进程会<strong>共享同一块物理内存页面</strong>（只读）。</p></li>
-<li><p>只有当父进程或子进程尝试修改内存时，写时复制机制会为对应的进程创建一个新页面，从而为每个进程保持了私有地址空间的抽象概念。</p></li>
-</ul>
-<p><strong>2. 创建子进程：</strong></p>
-<ul>
-<li>内核会为子进程分配一个新的<strong>进程控制块（PCB）</strong>，用于存储子进程的状态信息。</li>
-<li>子进程获得与父进程相同的内存空间（通过 COW 实现共享）。</li>
-<li>子进程会继承父进程的大部分资源，例如：
-<ul>
-<li>程序代码（代码段）</li>
-<li>堆、栈（通过 COW 共享）</li>
-<li>打开的文件描述符</li>
-<li>环境变量等</li>
-</ul></li>
-</ul>
-<p><strong>3. 返回值不同：</strong></p>
-<ul>
-<li><code>fork()</code>在父进程和子进程中都会返回：
-<ul>
-<li>在<strong>父进程</strong>中，<code>fork()</code>
-返回<strong>子进程的PID</strong>。</li>
-<li>在<strong>子进程</strong>中，<code>fork()</code>
-返回<strong>0</strong>。</li>
-<li>如果 <code>fork()</code> 失败，返回
-<strong>-1</strong>，表示子进程创建失败。</li>
-</ul></li>
-</ul>
-<p>通过返回值的不同，程序可以判断当前正在运行的是父进程还是子进程。</p>
-<p><strong>4. 进程调度：</strong></p>
-<ul>
-<li>父进程和子进程会被操作系统调度器视为两个独立的进程，独立运行。</li>
-<li>由于父子进程共享同一个代码段，它们可以执行不同的代码路径（如通过
-<code>if</code> 判断 <code>fork()</code> 返回值）。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3711,20 +3670,20 @@ COW）机制</strong>优化内存使用。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">184</span>
+          <span class="site-state-item-count">185</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-count">76</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -3751,7 +3710,7 @@ COW）机制</strong>优化内存使用。</p>
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -3760,12 +3719,12 @@ COW）机制</strong>优化内存使用。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">425k</span>
+    <span title="站点总字数">427k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:26</span>
+    <span title="站点阅读时长">6:29</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

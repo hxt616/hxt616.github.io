@@ -164,6 +164,297 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/10/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/06/10/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/" class="post-title-link" itemprop="url">命令注入</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-10 15:49:00" itemprop="dateCreated datePublished" datetime="2023-06-10T15:49:00+08:00">2023-06-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>TryHackMe实验房间：https://tryhackme.com/room/oscommandinjection</p>
+<h2 id="introduction">Introduction</h2>
+<p>命令注入(command
+injection)是滥用应用程序的行为在操作系统上执行命令，执行命令时使用与设备上运行应用程序相同的权限。例如，在一个名为joe的用户运行的web服务器上实现命令注入，将在这个joe用户下执行命令——从而获得joe拥有的任何权限。</p>
+<p>命令注入漏洞也被称为 <strong>RCE</strong> (Remote Code
+Execution)，因为攻击者可以诱导应用程序执行他们提供的一些 payload
+，而不需要直接访问机器本身(交互式shell)。Web服务器将处理攻击者传入的代码，并在用户权限和用户可访问的控制权限下执行该代码。</p>
+<p>命令注入之所以又被称为 RCE
+，是因为它能够在应用程序中远程执行代码，攻击者可以直接与目标系统进行交互。例如，攻击者可能会读取系统或用户文件、数据以及类似的内容。</p>
+<p>一个命令注入的例子：滥用应用程序来执行命令<code>whoami</code>，以列出当前的用户。</p>
+<h2 id="discovering-command-injection">Discovering Command
+Injection</h2>
+<p>存在命令注入漏洞是因为应用程序经常使用 PHP 、Python 和 NodeJS
+等编程语言中的函数来向当前机器的操作系统传递数据 并进行系统调用。</p>
+<p>在下面的代码段中，应用程序获取用户的输入，存储在变量<code>$title</code>中，然后应用程序通过该变量在目录中搜索对应的歌曲标题，下面分为四步分析。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112171437786.png" alt="image-20230112171437786">
+<figcaption aria-hidden="true">image-20230112171437786</figcaption>
+</figure>
+<ol type="1">
+<li>应用程序将 MP3文件存储在操作系统的某个目录中。</li>
+<li><code>$title</code>变量存放用户输入的字符串</li>
+<li><code>$title</code>变量中的数据被传递给命令<code>grep</code>，该命令在文件
+<em>songtitle.txt</em> 中查找用户希望的内容。</li>
+<li><em>songtitle.txt</em>文件的搜索结果将决定应用程序通知用户相关歌曲是否存在。</li>
+</ol>
+<p>这种信息通常存放在数据库中。这只是应用程序从用户获取输入然后以此与应用程序的操作系统交互的示例。</p>
+<p>攻击者可以让应用程序执行自己注入的命令来滥用此应用程序。他们可以要求该应用程序从敏感的文件中读取数据，而不是使用<code>grep</code>在
+<em>songtitle.txt</em> 中搜索条目。</p>
+<p>下面是用 Python 编写的代码片段：</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112175932363.png" alt="image-20230112175932363">
+<figcaption aria-hidden="true">image-20230112175932363</figcaption>
+</figure>
+<ol type="1">
+<li><code>flask</code>包用于设置web服务器。</li>
+<li>一个使用<code>subprocess</code>包在设备上执行命令的函数。</li>
+<li>我们在web服务器中使用一个路由，它将执行提供的任何代码。例如，要执行<code>whoami</code>，我们需要访问<code>http://flaskapp.thm/whoami</code>。</li>
+</ol>
+<h2 id="exploiting-command-injection">Exploiting Command Injection</h2>
+<p>通常可以通过应用程序的行为来判断是否能够进行命令注入。</p>
+<p>使用用户输入用数据填充系统命令的应用程序通常会出现意外行为。例如，shell
+运算符 <code>;</code>、<code>&amp;</code> 和 <code>&amp;&amp;</code>
+将会组合两个或多个系统命令并执行它们。</p>
+<p>命令注入可以通过以下两种方法进行检测：</p>
+<ol type="1">
+<li>Blind command injection</li>
+<li>Verbose command injection</li>
+</ol>
+<p>下面是对这两种方法的详细介绍：</p>
+<table>
+<colgroup>
+<col style="width: 14%">
+<col style="width: 85%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Method</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Blind</td>
+<td style="text-align: center;">这种类型的注入在测试 payload
+时没有输出的地方（无回显），你必须调查应用程序的行为以确定 payload
+是否有效。</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Verbose</td>
+<td style="text-align: center;">这种注入是有回显的。例如，运行<code>whoami</code>命令可以查看应用程序当前的用户。Web应用程序会直接在页面上输出用户名。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="检测-blind-command-injection">检测 Blind Command Injection</h3>
+<p>发生该命令注入时没有可见的输出，因此不会立即显示出来。例如，执行一个命令，但
+Web 应用程序不输出任何消息。</p>
+<p>对于这种类型的命令注入，我们需要使用能够导致时间延迟的 payload
+。例如，<code>ping</code>和<code>sleep</code>命令是对测试 payload
+很重要。以<code>ping</code>为例，根据你指定的 <em>ping</em>
+次数，该应用程序将挂起 <em>x</em> 秒。</p>
+<p>另一种测试 blind command injection
+的方法是强制输出。这可以通过使用重定向操作符(例如:<code>&gt;</code>)来完成。例如，我们可以告诉web应用程序执行<code>whoami</code>等命令并将其重定向到一个文件中，然后我们可以使用<code>cat</code>等命令读取文件内容。</p>
+<p><code>curl</code>命令是测试命令注入的好方法，因为我们可以在 payload
+中使用<code>curl</code>来向应用程序传递数据或者从应用程序中传递数据。以下面的代码为例，该
+payload 可以向应用程序传递数据。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl http://vulnerable.app/process.php%3Fsearch%3DThe%20Beatles%3B%20whoami</span><br><span class="line">经过url解码后：curl http://vulnerable.app/process.php?search=The Beatles; whoami</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="检测-verbose-command-injection">检测 Verbose Command
+Injection</h3>
+<p>这种命令注入是指应用程序向你提供有关正在发生或正在执行的内容的反馈或输出。例如，<code>ping</code>和<code>whoami</code>等命令的输出直接显示在web应用程序上。</p>
+<h3 id="有用的-payload">有用的 payload</h3>
+<p>Linux：</p>
+<table>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 84%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Payload</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">whoami</td>
+<td style="text-align: center;">See what user the application is running
+under.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ls</td>
+<td style="text-align: center;">List the contents of the current
+directory. You may be able to find files such as configuration files,
+environment files (tokens and application keys), and many more valuable
+things.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ping</td>
+<td style="text-align: center;">This command will invoke the application
+to hang. This will be useful in testing an application for <strong>blind
+command injection</strong>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">sleep</td>
+<td style="text-align: center;">This is another useful payload in
+testing an application for <strong>blind command injection</strong>,
+where the machine does not have <code>ping</code> installed.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">nc</td>
+<td style="text-align: center;">Netcat can be used to spawn a reverse
+shell onto the vulnerable application. You can use this foothold to
+navigate around the target machine for other services, files, or
+potential means of escalating privileges.</td>
+</tr>
+</tbody>
+</table>
+<p>Windows：</p>
+<table>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 84%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>Payload</strong></th>
+<th style="text-align: center;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">whoami</td>
+<td style="text-align: center;">See what user the application is running
+under.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">dir</td>
+<td style="text-align: center;">List the contents of the current
+directory. You may be able to find files such as configuration files,
+environment files (tokens and application keys), and many more valuable
+things.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ping</td>
+<td style="text-align: center;">This command will invoke the application
+to hang. This will be useful in testing an application for <strong>blind
+command injection</strong>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">timeout</td>
+<td style="text-align: center;">This command will also invoke the
+application to hang. It is also useful for testing an application for
+<strong>blind command injection</strong> if the <code>ping</code>
+command is not installed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="remediating-command-injection预防命令注入">Remediating Command
+Injection（预防命令注入）</h2>
+<h3 id="vulnerable-functions易受攻击的函数"><strong>Vulnerable
+Functions</strong>（易受攻击的函数）</h3>
+<p>在 PHP 中，许多函数能够通过 shell
+与操作系统交互并执行命令，例如：</p>
+<ul>
+<li>Exec</li>
+<li>Passthru</li>
+<li>System</li>
+</ul>
+<p>以下面的代码为例，应用程序只接受和处理输入到表单的<strong>数字</strong>，意味着不会处理任何命令。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20230112214000991.png" alt="image-20230112214000991">
+<figcaption aria-hidden="true">image-20230112214000991</figcaption>
+</figure>
+<ol type="1">
+<li>应用程序只接受特定的字符格式（数字 0 -- 9）。</li>
+<li>应用程序仅执行该格式的数据。</li>
+</ol>
+<p>这些函数接受字符串或用户数据等输入，并执行系统上提供的任何内容。任何未经检查就使用这些函数的应用程序容易受到命令注入攻击。</p>
+<h3 id="input-sanitisation输入检测"><strong>Input
+sanitisation</strong>（输入检测）</h3>
+<p>对用户输入进行检测和过滤是防止命令注入的好方法。这是一个指定用户可以提交的数据格式或类型的过程。例如，只接受数字类型的数据或删除任何特殊字符（如<code>&gt;</code>、<code>&amp;</code>和<code>/</code>）的输入字段。</p>
+<p>在下面的代码中，<code>filter_input</code>函数用于检查用户输入的数据是否是数字，若不是数字，则这是一个无效的输入。</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">filter_input</span>(INPUT_GET, <span class="string">"number"</span>, FILTER_VALIDATE_NUMBER)) {</span><br><span class="line">        </span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="bypassing-filters绕过过滤器">Bypassing
+Filters（绕过过滤器）</h3>
+<p>应用程序将采用多种技术对从用户输入中获取的数据进行过滤和消毒。这些过滤器将限制你使用特定的
+payload
+；然而，我们可以利用应用程序背后的逻辑来绕过这些过滤器。例如，应用程序可以去掉引号，我们可以使用这个值的十六进制来实现相同的结果。</p>
+<p>当执行时，虽然给定的数据将采用与预期不同的格式，但仍可以对其进行解释，并具有相同的结果。</p>
+<h2 id="payload">Payload</h2>
+<p>https://github.com/payloadbox/command-injection-payload-list</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/10/ManyCheck/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2095,171 +2386,6 @@ tryhackme.com 服务器的保存记录。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/04/ContentDiscovery/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/01/04/ContentDiscovery/" class="post-title-link" itemprop="url">Content Discovery（搜集网站信息）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-01-04 10:00:10" itemprop="dateCreated datePublished" datetime="2023-01-04T10:00:10+08:00">2023-01-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TryHackMe/" itemprop="url" rel="index"><span itemprop="name">TryHackMe</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Learn the various ways of discovering hidden or private content on a
-webserver that could lead to new vulnerabilities.</p>
-<p>TryHackMe实验房间： https://tryhackme.com/room/contentdiscovery</p>
-<h2 id="manually手动">Manually（手动）</h2>
-<h3 id="robots.txt">Robots.txt</h3>
-<p>该文件是个文档，它告诉搜索引擎哪些页面可以抓取，哪些页面不能抓取，而搜索引擎则通过读取robots.txt文件来识别这个页面是否允许被抓取；或者禁止特定的搜索引擎爬取网站。</p>
-<p>通常的做法是限制某些网站区域，使其不显示在搜索引擎结果中。这些页面可能是为网站客户提供的管理门户或文件，而<code>robots.txt</code>文件为我们提供了网站上大量（网站拥有者不希望我们访问的）网址。</p>
-<h3 id="favicon网页图标">Favicon（网页图标）</h3>
-<p>有时，当框架用于构建网站时，作为安装一部分的网页图标会被遗留下来，如果网站开发人员没有用自定义的图标替换它，这可以为我们提供关于框架的线索。OWASP托管一个公共框架图标数据库，您可以使用该数据库对照目标
-<strong>favicon</strong>
-进行检查（https://wiki.owasp.org/index.php/OWASP_favicon_database），一旦我们了解了框架堆栈，我们就可以使用外部资源来了解更多关于它的信息。</p>
-<p>注：上述网站中是使用 md5 哈希值来表示对应的图标。</p>
-<h3 id="sitemap.xml">Sitemap.xml</h3>
-<p>与限制搜索引擎爬虫的 robots.txt 文件不同，sitemap.xml
-文件提供了网站所有者希望在搜索引擎上列出的每个文件的列表。这些有时可能包含网站中难以导航的区域，甚至列出当前网站不再使用但仍在幕后工作的一些旧网页。</p>
-<h3 id="http-headers">HTTP Headers</h3>
-<p>当客户端向Web服务器发出请求时，服务器会返回各种 HTTP headers，这些
-headers 通常包含一些有用的信息，例如 webserver
-软件使用的编程/脚本语言，软件版本等。</p>
-<p>可以使用<code>curl</code>工具对服务器发起请求。</p>
-<h3 id="framework-stack框架">Framework Stack（框架）</h3>
-<p>找到网站的框架信息，并通过框架网站找到漏洞。</p>
-<h2 id="automated自动">Automated（自动）</h2>
-<p><strong>Automated Discovery</strong>
-是指使用工具发现内容而不是手动进行的过程。此过程是自动化的，因为它通常包含向Web服务器的数百，数千甚至数百万个请求。这些请求检查网站上是否存在文件或目录，使我们可以访问我们以前不知道的资源。使用称为
-<strong>Wordlists</strong> 的资源使此过程成为可能。</p>
-<p><strong>Wordlists</strong>
-只是包含一长串常用单词的文本文件；它们可以涵盖许多不同的用例。例如，密码表将包含最常用的密码。</p>
-<h3 id="ffuf">ffuf</h3>
-<p>ffuf 是一款Go语言编写的高速Web
-Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。使用 wordlists
-进行扫描。</p>
-<h3 id="dirb">dirb</h3>
-<p>基于字典的 web 目录扫描工具。</p>
-<h3 id="gobuster">Gobuster</h3>
-<p>主要用于网站目录扫描和子域名收集，对目录、文件、DNS和VHost等对象进行暴力破解攻击。</p>
-<h2 id="osintopen-source-intelligence">OSINT（Open-Source
-Intelligence）</h2>
-<h3 id="google-hacking-dorking">Google Hacking / Dorking</h3>
-<p>利用Google高级搜索获取信息，例如下面的表格：</p>
-<table>
-<colgroup>
-<col style="width: 11%">
-<col style="width: 20%">
-<col style="width: 68%">
-</colgroup>
-<thead>
-<tr class="header">
-<th><strong>Filter</strong></th>
-<th><strong>Example</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>site</td>
-<td>site:tryhackme.com</td>
-<td>returns results only from the specified website address</td>
-</tr>
-<tr class="even">
-<td>inurl</td>
-<td>inurl:admin</td>
-<td>returns results that have the specified word in the URL</td>
-</tr>
-<tr class="odd">
-<td>filetype</td>
-<td>filetype:pdf</td>
-<td>returns results which are a particular file extension</td>
-</tr>
-<tr class="even">
-<td>intitle</td>
-<td>intitle:admin</td>
-<td>returns results that contain the specified word in the title</td>
-</tr>
-</tbody>
-</table>
-<h3 id="wappalyzer">Wappalyzer</h3>
-<p>Wappalyzer（https://www.wappalyzer.com/）是一种在线工具，可以帮助识别网站使用的技术，例如框架、内容管理系统（CMS）、支付处理器等，甚至可以找到对应的版本号。</p>
-<h3 id="wayback-machine网站时光机">Wayback Machine（网站时光机）</h3>
-<p>网站时光机是万维网的数字档案馆，由位于美国加利福尼亚州旧金山的非营利组织互联网档案馆创建，亦为该组织最重要的服务之一。它允许用户“回到过去”，查看过去的网站的样子。通过该网站可以获取网站的一些依旧在使用的旧页面。</p>
-<h3 id="github">Github</h3>
-<p>可以使用GitHub的搜索功能来查找公司名称或网站名称，以尝试找到属于目标的存储库。一旦发现，或许可以访问尚未找到的源代码，密码或其他内容。</p>
-<h3 id="s3-buckets">S3 Buckets</h3>
-<p>S3
-Buckets是亚马逊AWS提供的一项存储服务，允许人们将文件甚至静态网站内容保存在通过HTTP和HTTPS访问的云中。文件的所有者可以设置访问权限，以使文件公开、私有甚至可写。有时，这些访问权限设置不正确，无意中允许访问公众无法访问的文件。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2331,20 +2457,20 @@ Buckets是亚马逊AWS提供的一项存储服务，允许人们将文件甚至�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">184</span>
+          <span class="site-state-item-count">185</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-count">76</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2371,7 +2497,7 @@ Buckets是亚马逊AWS提供的一项存储服务，允许人们将文件甚至�
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -2380,12 +2506,12 @@ Buckets是亚马逊AWS提供的一项存储服务，允许人们将文件甚至�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">425k</span>
+    <span title="站点总字数">427k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:26</span>
+    <span title="站点阅读时长">6:29</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
