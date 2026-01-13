@@ -164,6 +164,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/13/%E7%8B%AC%E7%89%B9%E7%9A%84%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E5%9C%B0%E5%9D%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/13/%E7%8B%AC%E7%89%B9%E7%9A%84%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E5%9C%B0%E5%9D%80/" class="post-title-link" itemprop="url">独特的电子邮件地址</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-02-13 17:12:00" itemprop="dateCreated datePublished" datetime="2024-02-13T17:12:00+08:00">2024-02-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/unique-email-addresses</p>
+<p>这题在字符串的处理上不难，需要注意细节，例如<code>.</code>字符之后就是<code>@</code>字符，处理过程中注意数组下标的变化。通过这题我了解到了二重指针与二维数组的关系：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *emails[<span class="number">4</span>] = {<span class="string">"a@leetcode.com"</span>,<span class="string">"b@leetcode.com"</span>,<span class="string">"c@leetcode.com"</span>,<span class="string">"c.@leetcode.com"</span>};</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">emails[0] == "a@leetcode.com"，以此类推。</span></span><br><span class="line"><span class="comment">当 emails 作为参数时，如下：</span></span><br><span class="line"><span class="comment">int numUniqueEmails(char** emails, int emailsSize) </span></span><br><span class="line"><span class="comment">**/</span></span><br></pre></td></tr></tbody></table></figure>
+<p>下面是我的解题思路：</p>
+<ul>
+<li>首先定义一个函数对特殊字符进行处理（注意数组下标的处理）</li>
+<li>在<code>numUniqueEmails</code>函数中定义一个新的数组<code>processedEmails</code>存放处理后的邮箱地址</li>
+<li>定义一个中间变量(字符串)<code>tmp</code>存放新处理的字符串，<code>count</code>为数组下标</li>
+<li>将<code>tmp</code>与<code>processedEmails</code>中的字符串进行比较，若无相同的，则加入该数组，接着释放<code>tmp</code></li>
+<li>最后返回<code>count</code>，然后释放<code>processedEmails</code>空间</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">remove_ele</span><span class="params">(<span class="type">char</span> *s, <span class="type">int</span> length, <span class="type">char</span> *result)</span> {</span><br><span class="line">    <span class="type">int</span> flag=<span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> x=<span class="number">0</span>; <span class="comment">// 位置指针</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;length; ) {</span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">'@'</span>)</span><br><span class="line">            flag=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'.'</span> &amp;&amp; flag==<span class="number">0</span>) {</span><br><span class="line">            i++;</span><br><span class="line">            <span class="keyword">continue</span>; <span class="comment">//若在'@'前遇到'.'，则需要忽略该字符</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'+'</span> &amp;&amp; flag==<span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">while</span>(s[i]!=<span class="string">'@'</span>)</span><br><span class="line">                i++; <span class="comment">//若在'@'前遇到'+'，则需要忽略该字符到'@'之前的字符</span></span><br><span class="line">            <span class="keyword">if</span>(s[i]==<span class="string">'@'</span>)</span><br><span class="line">                flag=<span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">        result[x++] = s[i++];</span><br><span class="line">    }</span><br><span class="line">    result[x] = <span class="string">'\0'</span>; <span class="comment">// 添加字符串结尾的 null 字符</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">numUniqueEmails</span><span class="params">(<span class="type">char</span>** emails, <span class="type">int</span> emailsSize)</span> {</span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="type">char</span> *processedEmails[emailsSize]; <span class="comment">// 用于存储经过处理的邮箱地址</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; emailsSize; i++) {</span><br><span class="line">        <span class="comment">// 分配足够的内存来存储处理后的字符串</span></span><br><span class="line">        <span class="type">char</span> *tmp = <span class="built_in">malloc</span>(<span class="built_in">strlen</span>(emails[i]) + <span class="number">1</span>); </span><br><span class="line">        remove_ele(emails[i], <span class="built_in">strlen</span>(emails[i]), tmp);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, tmp);</span><br><span class="line">        <span class="type">int</span> found = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; count; j++) {</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">strcmp</span>(tmp, processedEmails[j]) == <span class="number">0</span>) {</span><br><span class="line">                found = <span class="number">1</span>;  <span class="comment">//若有相同的字符串，则found=1，且退出循环</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span>(!found) {</span><br><span class="line">            processedEmails[count++] = tmp; <span class="comment">// 将处理后的字符串存储在数组中</span></span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            <span class="built_in">free</span>(tmp); <span class="comment">// 释放重复的邮箱地址的内存</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 释放所有未重复的邮箱地址的内存</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; count; i++) {</span><br><span class="line">        <span class="built_in">free</span>(processedEmails[i]);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/C%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%95%B4%E6%95%B0%E9%99%A4%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1060,100 +1156,6 @@ address]转换成本地管理的地址。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/02/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E2%85%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/02/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E2%85%A1/" class="post-title-link" itemprop="url">反转字符串Ⅱ</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-02-02 13:34:10" itemprop="dateCreated datePublished" datetime="2024-02-02T13:34:10+08:00">2024-02-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>553</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/reverse-string-ii/</p>
-<p>原本的思路：用双指针法分别找到第k个元素和第2k个元素，也没想到用<code>strlen()</code>计算数组长度，耗了半天写不出来<span class="github-emoji"><span>😓</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f613.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
-<p>正确思路：</p>
-<ul>
-<li>先计算数组长度</li>
-<li>for循环遍历数组，使用<code>i+=k*2</code>可以直接跳过不需要倒序的数组元素</li>
-<li>给左右指针(数组下标)赋值，若剩余字符小于等于k个，则<code>right=len-1</code>（即指向最后一个元素）；否则<code>right=i+k-1</code>，即指向当前下标往后k个元素</li>
-<li>while循环将元素倒序</li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>* <span class="title function_">reverseStr</span><span class="params">(<span class="type">char</span>* s, <span class="type">int</span> k)</span> {</span><br><span class="line">    <span class="type">int</span> len = <span class="built_in">strlen</span>(s); <span class="comment">//不包括'\0'</span></span><br><span class="line">    <span class="type">int</span> left, right;  <span class="comment">//左右指针</span></span><br><span class="line">    <span class="type">char</span> tmp;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;len; i+=k*<span class="number">2</span>) {</span><br><span class="line">        right = i+k&gt;len ? len<span class="number">-1</span> : i+k<span class="number">-1</span>;</span><br><span class="line">        left=i;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(left&lt;right) {</span><br><span class="line">            tmp = s[left];</span><br><span class="line">            s[left] = s[right];</span><br><span class="line">            s[right] = tmp;</span><br><span class="line">            left++;</span><br><span class="line">            right--;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1225,7 +1227,7 @@ address]转换成本地管理的地址。</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">185</span>
+          <span class="site-state-item-count">186</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1238,7 +1240,7 @@ address]转换成本地管理的地址。</p>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">77</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1274,7 +1276,7 @@ address]转换成本地管理的地址。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">427k</span>
+    <span title="站点总字数">428k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>

@@ -164,6 +164,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/29/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E4%BC%97%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/29/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E4%BC%97%E6%95%B0/" class="post-title-link" itemprop="url">二叉搜索树中的众数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-02-29 15:06:44" itemprop="dateCreated datePublished" datetime="2024-02-29T15:06:44+08:00">2024-02-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/find-mode-in-binary-search-tree/submissions</p>
+<p>思路：</p>
+<ul>
+<li>先通过中序遍历得到该二叉树的有序序列</li>
+<li>创建一个结构体数组保存不同节点值以及该节点值出现的频率</li>
+<li>遍历有序序列填充结构体数组</li>
+<li>遍历结构体数组，记录当前频率最大值，若出现更大值则将结果数组清空，填入新的节点值；若相等则将节点值加入结果数组；若小于则continue</li>
+</ul>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">Node</span> {</span></span><br><span class="line">    <span class="type">int</span> f; <span class="comment">//频率</span></span><br><span class="line">    <span class="type">int</span> val; <span class="comment">//节点值</span></span><br><span class="line">}Node;</span><br><span class="line"><span class="type">void</span> <span class="title function_">inOrder</span><span class="params">(<span class="keyword">struct</span> TreeNode* root, <span class="type">int</span>* res, <span class="type">int</span>* top)</span> { <span class="comment">//中序遍历</span></span><br><span class="line">    <span class="keyword">if</span>(!root)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    inOrder(root-&gt;left, res, top);</span><br><span class="line">    res[(*top)++] = root-&gt;val;</span><br><span class="line">    inOrder(root-&gt;right, res, top);</span><br><span class="line">}</span><br><span class="line"><span class="type">int</span>* <span class="title function_">findMode</span><span class="params">(<span class="keyword">struct</span> TreeNode* root, <span class="type">int</span>* returnSize)</span> {</span><br><span class="line">    <span class="keyword">if</span>(!root)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="type">int</span> res[<span class="number">10000</span>]; <span class="comment">//中序遍历的有序序列</span></span><br><span class="line">    <span class="type">int</span>* top = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">    *top = <span class="number">0</span>; <span class="comment">//记录节点数</span></span><br><span class="line">    inOrder(root, res, top);</span><br><span class="line">    Node num[*top];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;*top; i++)</span><br><span class="line">        num[i].f = <span class="number">1</span>; <span class="comment">//初始化每个节点的频率为1</span></span><br><span class="line">    <span class="type">int</span> count=<span class="number">0</span>; <span class="comment">//num数组的下标</span></span><br><span class="line">    num[count].val = res[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;*top; i++) {</span><br><span class="line">        <span class="keyword">if</span>(num[count].val==res[i]) <span class="comment">//若相等，则频率加1</span></span><br><span class="line">            num[count].f++;</span><br><span class="line">        <span class="keyword">else</span> {  <span class="comment">//若不等，则count加1</span></span><br><span class="line">            count++;</span><br><span class="line">            num[count].val = res[i];</span><br><span class="line">        }</span><br><span class="line">    }  </span><br><span class="line">    <span class="type">int</span> max = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span>* ans = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*(count+<span class="number">1</span>));  <span class="comment">//结果数组</span></span><br><span class="line">    *returnSize=<span class="number">0</span>;  <span class="comment">//结果数组大小</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;=count; i++) {</span><br><span class="line">        <span class="keyword">if</span>(max &gt; num[i].f)  <span class="comment">//若当前节点频率小于max，则继续</span></span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(max &lt; num[i].f) {  <span class="comment">//若大于max，则清空结果数组，并记录新值</span></span><br><span class="line">            *returnSize=<span class="number">0</span>;</span><br><span class="line">            ans[(*returnSize)++] = num[i].val;</span><br><span class="line">            max = num[i].f;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span>  <span class="comment">//若相等，则加入结果数组中</span></span><br><span class="line">            ans[(*returnSize)++] = num[i].val;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/29/%E9%AA%8C%E8%AF%81%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1011,104 +1104,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/27/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B1%82%E5%92%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/27/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B1%82%E5%92%8C/" class="post-title-link" itemprop="url">二进制求和</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-02-27 08:58:40" itemprop="dateCreated datePublished" datetime="2024-02-27T08:58:40+08:00">2024-02-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/add-binary/</p>
-<p>这题可以通过模拟二进制求和的步骤来实现：</p>
-<ul>
-<li><p>先为结果数组分配空间，注意分配的空间要比最大数组还多<strong>两个字节</strong>，因为两个数相加可能有进位，同时<code>max_length</code>不包括'0'，所以要预留一个字节。</p></li>
-<li><p>定义<code>flag</code>用于判断是否有<strong>进位</strong></p></li>
-<li><p>使用for循环从后往前遍历两个数组，将对应字符转为整数，然后将两个数字和<code>flag</code>进行相加，得到<code>sum</code></p></li>
-<li><p>若<code>sum%2 == 1</code>，则当前位置为'1'；若<code>sum/2 &gt; 0</code>，则有进位</p></li>
-<li><p>循环结束后，将数组最后一位置为'\0'，表示数组结束</p></li>
-<li><p><code>reverse()</code>函数用于将上述结果数组进行倒序，得到正确答案</p>
-<blockquote>
-<p><code>big[l1 - i - 1] - '0'</code>表示<code>big[l1-i-1]</code>字符对应的整数</p>
-</blockquote></li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>* <span class="title function_">sum</span><span class="params">(<span class="type">char</span>* big, <span class="type">char</span>* small)</span> {</span><br><span class="line">    <span class="type">int</span> l1 = <span class="built_in">strlen</span>(big);</span><br><span class="line">    <span class="type">int</span> l2 = <span class="built_in">strlen</span>(small);</span><br><span class="line">    <span class="type">int</span> max_length = l1 &gt; l2 ? l1 : l2;</span><br><span class="line">    <span class="type">char</span>* res = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">char</span>) * (max_length + <span class="number">2</span>)); <span class="comment">//给结果数组分配空间，多余的2个单位：一个给进位，一个给'\0'</span></span><br><span class="line">    <span class="keyword">if</span> (res == <span class="literal">NULL</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">// Failed to allocate memory</span></span><br><span class="line">    }</span><br><span class="line">    <span class="type">int</span> flag = <span class="number">0</span>; <span class="comment">//判断是否有进位</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; max_length; i++) {</span><br><span class="line">        <span class="type">int</span> digit1 = (i &lt; l1) ? (big[l1 - i - <span class="number">1</span>] - <span class="string">'0'</span>) : <span class="number">0</span>; <span class="comment">//若位数不够，则为0（高位补0）</span></span><br><span class="line">        <span class="type">int</span> digit2 = (i &lt; l2) ? (small[l2 - i - <span class="number">1</span>] - <span class="string">'0'</span>) : <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> sum = digit1 + digit2 + flag; <span class="comment">//计算当前 位 相加的结果</span></span><br><span class="line">        res[i] = (sum % <span class="number">2</span>) + <span class="string">'0'</span>; <span class="comment">//根据sum值判断当前 位 的值</span></span><br><span class="line">        flag = sum / <span class="number">2</span>;  <span class="comment">//若sum&gt;2，则有进位</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (flag == <span class="number">1</span>) {</span><br><span class="line">        res[i] = <span class="string">'1'</span>;</span><br><span class="line">        i++;</span><br><span class="line">    }</span><br><span class="line">    res[i] = <span class="string">'\0'</span>;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">reverse</span><span class="params">(<span class="type">char</span>* res)</span> {</span><br><span class="line">    <span class="type">int</span> len = <span class="built_in">strlen</span>(res);</span><br><span class="line">    <span class="type">char</span> tmp;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;len/<span class="number">2</span>; i++) {</span><br><span class="line">        tmp = res[i];</span><br><span class="line">        res[i] = res[len<span class="number">-1</span>-i];</span><br><span class="line">        res[len<span class="number">-1</span>-i] = tmp;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">char</span>* <span class="title function_">addBinary</span><span class="params">(<span class="type">char</span>* a, <span class="type">char</span>* b)</span> {</span><br><span class="line">    <span class="type">char</span>* res;</span><br><span class="line">    res = sum(a, b);</span><br><span class="line">    <span class="keyword">if</span> (res == <span class="literal">NULL</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">// Memory allocation failure</span></span><br><span class="line">    }</span><br><span class="line">    reverse(res);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1180,7 +1175,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">185</span>
+          <span class="site-state-item-count">186</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1193,7 +1188,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">77</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1229,7 +1224,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">427k</span>
+    <span title="站点总字数">428k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
