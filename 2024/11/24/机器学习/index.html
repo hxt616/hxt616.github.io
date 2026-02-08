@@ -63,7 +63,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241221141609541.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20241221144408684.png">
 <meta property="article:published_time" content="2024-11-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-07-29T15:34:20.873Z">
+<meta property="article:modified_time" content="2026-02-08T15:06:29.411Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="机器学习">
 <meta name="twitter:card" content="summary">
@@ -234,7 +234,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-07-29 23:34:20" itemprop="dateModified" datetime="2025-07-29T23:34:20+08:00">2025-07-29</time>
+                <time title="修改时间：2026-02-08 23:06:29" itemprop="dateModified" datetime="2026-02-08T23:06:29+08:00">2026-02-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,7 +259,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4k</span>
+              <span>4.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -373,7 +373,7 @@ Batch 跑完）。
 <ol type="1">
 <li><p><strong>Adagrad</strong></p>
 <ul>
-<li><p><strong>核心思想</strong>：为每个参数累积历史梯度（偏导数，有方向）的平方，自适应降低频繁更新参数的学习率。</p>
+<li><p><strong>核心思想</strong>：为每个参数累积历史<strong>梯度</strong>（偏导数，有方向）的<strong>平方</strong>，自适应降低频繁更新参数的学习率。</p>
 <blockquote>
 <p><strong>梯度与偏导数的关系</strong></p>
 <ul>
@@ -389,6 +389,13 @@ Batch 跑完）。
 </figure></li>
 </ul></li>
 <li><p><strong>RMSprop</strong></p>
+<p><strong>Adagrad的问题</strong>：累积<strong>全部历史梯度平方</strong>
+→ 分母不断增大 → 学习率单调下降至零</p>
+<p><strong>RMSprop的解决方案</strong>：</p>
+<ul>
+<li><strong>引入指数衰减平均</strong>，只关注<strong>最近一段时间的梯度平方</strong>，让旧梯度的影响逐渐衰减。</li>
+<li>这使得分母不再无限增长，学习率可以<strong>动态调整</strong>，而非单调递减。</li>
+</ul>
 <figure>
 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250625172119618.png" alt="image-20250625172119618">
 <figcaption aria-hidden="true">image-20250625172119618</figcaption>
@@ -829,7 +836,7 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:29</span>
+    <span title="站点阅读时长">6:30</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
