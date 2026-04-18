@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="参考： https:&#x2F;&#x2F;qychen2001.github.io&#x2F;blog&#x2F;p&#x2F;%E8%AF%A6%E8%A7%A3ppo%E4%B8%8Egrpo&#x2F; https:&#x2F;&#x2F;blog.csdn.net&#x2F;xzs1210652636&#x2F;article&#x2F;details&#x2F;145425523 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;1907351009581307585 PPO 近端策略优化，其实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="强化学习">
+<meta property="og:url" content="http://example.com/2025/12/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="hxt&#39;s Blog">
+<meta property="og:description" content="参考： https:&#x2F;&#x2F;qychen2001.github.io&#x2F;blog&#x2F;p&#x2F;%E8%AF%A6%E8%A7%A3ppo%E4%B8%8Egrpo&#x2F; https:&#x2F;&#x2F;blog.csdn.net&#x2F;xzs1210652636&#x2F;article&#x2F;details&#x2F;145425523 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;1907351009581307585 PPO 近端策略优化，其实">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20260128235419151.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20251228220110183.png">
+<meta property="article:published_time" content="2025-12-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-18T16:14:03.355Z">
+<meta property="article:author" content="hxt">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20260128235419151.png">
+
+<link rel="canonical" href="http://example.com/2025/12/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>强化学习 | hxt's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">hxt's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/12/21/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          强化学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-12-21 00:00:00" itemprop="dateCreated datePublished" datetime="2025-12-21T00:00:00+08:00">2025-12-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-04-19 00:14:03" itemprop="dateModified" datetime="2026-04-19T00:14:03+08:00">2026-04-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/RL/" itemprop="url" rel="index"><span itemprop="name">RL</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" >
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考：</p>
+<p>https://qychen2001.github.io/blog/p/%E8%AF%A6%E8%A7%A3ppo%E4%B8%8Egrpo/</p>
+<p>https://blog.csdn.net/xzs1210652636/article/details/145425523</p>
+<p>https://zhuanlan.zhihu.com/p/1907351009581307585</p>
+<h2 id="ppo">PPO</h2>
+<p>近端策略优化，其实就是利用奖励模型的结果更新策略模型参数，既希望语言模型的输出能够尽可能地获得奖励模型的高评价，又不希望语言模型的变化过于“激进”</p>
+<blockquote>
+<p><strong>策略 →（生成）→ 响应 →（输入）→ 奖励模型 →（输出）→ 奖励
+→（反馈）→ 策略</strong></p>
+</blockquote>
+<h3 id="组件">组件</h3>
+<h4 id="策略模型actor">策略模型（Actor）</h4>
+<p>通常是大型语言模型（如 LLaMA、GPT
+等），也就是经过预训练或SFT的LLM，负责生成内容，后续是可以更新参数的</p>
+<h4 id="参考模型reference">参考模型（Reference）</h4>
+<p>经过预训练或SFT的模型，与初始的策略模型一致，但是参数冻结，无法更新，目的是为了约束策略模型的更新</p>
+<h4 id="奖励模型reward">奖励模型（Reward）</h4>
+<p>奖励模型是由人类标注的偏好数据集训练得到的模型，作用是对模型输出进行排序，预测人类偏好，用来代替人类对语言模型的输出进行评价。</p>
+<p>提供的是智能体在某一状态下执行某个动作后的<strong>即时反馈信号</strong></p>
+<h4 id="价值函数critic">价值函数（Critic）</h4>
+<p>用于评估智能体处于某个状态或执行某个 动作-状态对
+时的“好坏”，即能够获得的长期回报（<strong>累积奖励</strong>）</p>
+<table>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 44%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">特性</th>
+<th style="text-align: left;">奖励模型</th>
+<th style="text-align: left;">价值函数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>是什么</strong></td>
+<td style="text-align: left;">一个函数
+<code>R(s, a, s')</code>，表示在状态 <code>s</code> 采取动作
+<code>a</code> 到达状态 <code>s’</code>
+后，<strong>立即</strong>获得的反馈信号。</td>
+<td style="text-align: left;">一个函数 <code>V(s)</code> 或
+<code>Q(s, a)</code>，表示从<strong>当前状态（或状态-动作对）出发，所能获得的长期、累积回报的期望</strong>。</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>时间视角</strong></td>
+<td style="text-align: left;"><strong>短视的、瞬时的</strong>。只关心“这一步”的直接结果。</td>
+<td style="text-align: left;"><strong>远见的、长期的</strong>。关心“从今往后”的所有可能结果。</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>核心问题</strong></td>
+<td style="text-align: left;">“这个动作<strong>现在</strong>有多好？”</td>
+<td style="text-align: left;">“处于这个状态/采取这个动作，<strong>未来</strong>能有多好？”</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>人类类比</strong></td>
+<td style="text-align: left;"><strong>感官愉悦/痛苦</strong>：吃糖的甜味（+奖励），摸火炉的灼痛（-奖励）。</td>
+<td style="text-align: left;"><strong>战略判断</strong>：选择读大学（现在辛苦，但长期价值高），选择打游戏（现在快乐，但可能损害长期价值）。</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>在RL中的角色</strong></td>
+<td style="text-align: left;"><strong>环境的反馈机制</strong>，定义了任务的<strong>终极目标</strong>。是价值函数计算的<strong>原始输入</strong>。</td>
+<td style="text-align: left;"><strong>智能体的内部认知模型</strong>，是进行<strong>决策和规划</strong>的核心依据。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="广义优势估计-gae">广义优势估计 (GAE)</h3>
+<p>它定义了在状态 s<sub>t</sub>（提示 +
+到目前为止生成的词）下，<strong>特定动作</strong>
+a<sub>t</sub>（词）相对于策略将采取的<strong>平均动作</strong>的优越程度</p>
+<p>两种计算优势的方法：</p>
+<ul>
+<li>蒙特卡洛 (MC)：使用完整轨迹的奖励，高方差低偏差</li>
+<li>时序差分 (TD)：每一步都会得到一个即时奖励，低方差高偏差</li>
+</ul>
+<p>GAE
+的目标就是：<strong>在这两者之间取得一个可调节的平衡</strong>。通过<strong>指数加权平均多个
+n-step TD（多步TD）
+误差</strong>，构造一个<strong>偏差与方差可控的优势估计量</strong>。</p>
+<h4 id="计算方法">计算方法</h4>
+<p><strong>这一步的优势 = 这一步的即时奖励 + 新预测的最终成绩 -
+旧预测的最终成绩</strong></p>
+<ul>
+<li><code>R_t</code>：在状态 <code>s_t</code>
+采取行动后<strong>立即获得的奖励</strong></li>
+<li><code>V(s_t)</code>：在状态 <code>s_t</code>
+<strong>预测从此刻到结束能获得的总奖励</strong></li>
+<li><code>γ</code>：折现因子（0≤γ≤1），通常接近1</li>
+<li><code>V(s_{t+1})</code>：进入新状态后的总奖励预测</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>λ 取值</th>
+<th>含义</th>
+<th>等价于</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>λ = 0</td>
+<td>只看当前一步 TD error</td>
+<td><strong>TD(0)</strong></td>
+</tr>
+<tr class="even">
+<td>0 &lt; λ &lt; 1</td>
+<td>TD 与 MC 的折中</td>
+<td><strong>GAE</strong></td>
+</tr>
+<tr class="odd">
+<td>λ = 1</td>
+<td>看完整轨迹</td>
+<td><strong>MC Advantage</strong></td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20260128235419151.png" alt="image-20260128235419151">
+<figcaption aria-hidden="true">image-20260128235419151</figcaption>
+</figure>
+<p><strong>A &gt; 0</strong>： 👉 这次回答 <strong>比 critic
+预期的好</strong> 👉 <strong>应该鼓励 actor 更常这么写</strong></p>
+<p><strong>A &lt; 0</strong>： 👉 这次回答 <strong>比预期的差</strong>
+👉 <strong>应该抑制 actor 再这么写</strong></p>
+<p><strong>A ≈ 0</strong>： 👉 和预期差不多 👉
+<strong>别怎么动参数</strong></p>
+<h4 id="示例">示例</h4>
+<p><strong>场景</strong>：AI生成句子“我喜欢吃苹果。”</p>
+<ul>
+<li><strong>第1步</strong>：生成“我”
+<ul>
+<li>价值函数（预言家）预测最终奖励：<code>预测分数 = 0.5</code></li>
+</ul></li>
+<li><strong>第2步</strong>：生成“喜欢”
+<ul>
+<li>即时奖励（TD）：<code>+0.3</code>（因为“我喜欢”是常见搭配）</li>
+<li>价值函数重新预测：<code>预测分数 = 0.8</code>（因为开头不错，提高了最终预期）</li>
+<li><strong>GAE计算的这一步的优势</strong>：<code>0.3（即时奖励）+ 0.8（新预测）- 0.5（旧预测）= +0.6</code></li>
+<li><strong>解读</strong>：生成“喜欢”这个词很棒！不仅本身得分高（+0.3），还让预言家对最终结果的预测提升了0.3分，总优势为+0.6。</li>
+</ul></li>
+<li><strong>第3步</strong>：生成“吃”
+<ul>
+<li>即时奖励：<code>+0.2</code></li>
+<li>价值函数重新预测：<code>预测分数 = 0.9</code></li>
+<li><strong>优势</strong>：<code>0.2 + 0.9 - 0.8 = +0.3</code></li>
+</ul></li>
+<li><strong>第4步</strong>：生成“苹果”
+<ul>
+<li>即时奖励：<code>+0.1</code></li>
+<li>价值函数重新预测：<code>预测分数 = 1.0</code>（句子完整且合理）</li>
+<li><strong>优势</strong>：<code>0.1 + 1.0 - 0.9 = +0.2</code></li>
+</ul></li>
+</ul>
+<h3 id="裁剪">裁剪</h3>
+<p>防止策略修正过头，例如“限定这次更新里，每个 token 的概率最多只能改
+±20%”</p>
+<p>概率比的计算中，只有response参与 <span class="math display">\[
+r_t(\theta)
+= \frac{\pi_\theta(y_t \mid s_t)}
+{\pi_{\theta_{\text{old}}}(y_t \mid s_t)}
+= \exp(\log p_t^{\text{new}} - \log p_t^{\text{old}})
+\]</span></p>
+<h3 id="kl散度">KL散度</h3>
+<p>防止当前策略 <em>θ</em> 与我们在微调时所基于的原始模型
+<em>θ<sub>orig</sub></em> 偏离太远</p>
+<h3 id="熵奖励">熵奖励</h3>
+<p>鼓励LLM生成结果具有多样性</p>
+<h3 id="总体流程">总体流程</h3>
+<ol type="1">
+<li><p>用当前 policy 生成完整 response（rollout）</p></li>
+<li><p>用 Reward Model 给整段 response 打分（一个标量）</p></li>
+<li><p>用 value head 给每个 token 计算 V(s_t)</p>
+<blockquote>
+<p>“PPO 只看我选了的这个 token，那没选的那些 token
+怎么知道是好是坏？”</p>
+<p>结论：PPO / policy gradient 根本“不试图知道”没选的 token 好不好。
+它只做一件事： 👉 如果你选了这个 token，结果好，就提高它； 👉
+结果不好，就压低它。</p>
+</blockquote></li>
+<li><p>用 GAE 计算每个 token 的 advantage A_t</p></li>
+<li><p>用所有 token 的 (logprob, A_t) 计算 PPO loss</p></li>
+<li><p>对 policy / value 网络做反向传播（梯度下降）</p></li>
+</ol>
+<h3 id="计算流程代码">计算流程代码</h3>
+<ul>
+<li><p>首先计算最终奖励</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rm_score = reward_model(prompt, response)          <span class="comment"># 奖励模型打分</span></span><br><span class="line">kl_penalty = beta * kl_divergence(pi_theta, pi_ref) <span class="comment"># KL惩罚</span></span><br><span class="line">final_reward = rm_score - kl_penalty                <span class="comment"># 最终奖励</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>计算累积回报</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将最终奖励R分配给每个时间步（考虑折扣）</span></span><br><span class="line"><span class="comment"># 假设只有序列结束时有奖励</span></span><br><span class="line">T = <span class="built_in">len</span>(response_tokens)</span><br><span class="line">discount_factor = gamma  <span class="comment"># 如0.99</span></span><br><span class="line"></span><br><span class="line">returns = []  <span class="comment"># 每个时间步的折扣累积回报 G_t</span></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(T):</span><br><span class="line">    <span class="comment"># 从时间步t到结束的折扣累积奖励</span></span><br><span class="line">    <span class="comment"># 因为只有最终奖励R，所以是 γ^(T-t-1) * R</span></span><br><span class="line">    G_t = (discount_factor ** (T - t - <span class="number">1</span>)) * final_reward</span><br><span class="line">    returns.append(G_t)</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>计算优势 A</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 方法1：简单时序差分（不推荐）</span></span><br><span class="line"><span class="comment"># A_t ≈ G_t - V(s_t)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法2：广义优势估计GAE（推荐，标准做法）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compute_gae</span>(<span class="params">values, rewards, gamma=<span class="number">0.99</span>, lambda_=<span class="number">0.95</span></span>):</span><br><span class="line">    <span class="string">"""计算广义优势估计"""</span></span><br><span class="line">    T = <span class="built_in">len</span>(rewards)</span><br><span class="line">    advantages = torch.zeros(T)</span><br><span class="line">    gae = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(T)):</span><br><span class="line">        <span class="keyword">if</span> t == T - <span class="number">1</span>:  <span class="comment"># 最后一步</span></span><br><span class="line">            delta_t = rewards[t] - values[t]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            delta_t = rewards[t] + gamma * values[t+<span class="number">1</span>] - values[t]</span><br><span class="line">        </span><br><span class="line">        gae = delta_t + gamma * lambda_ * gae</span><br><span class="line">        advantages[t] = gae</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> advantages</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在只有最终奖励R的情况下，rewards[t]通常为0（t&lt;T-1时）</span></span><br><span class="line">rewards = [<span class="number">0</span>, <span class="number">0</span>, ..., <span class="number">0</span>, final_reward]  <span class="comment"># 前T-1步奖励为0</span></span><br><span class="line">advantages = compute_gae(values, rewards, gamma, lambda_)</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>优势归一化</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重要技巧：归一化优势</span></span><br><span class="line">advantages = (advantages - advantages.mean()) / (advantages.std() + <span class="number">1e-8</span>)</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>PPO loss 计算 <span class="math display">\[
+L^{PPO}(θ, φ) = \underbrace{𝔼̂_t[L^{CLIP}_t(θ)]}_{\text{策略损失}} - c_1
+\underbrace{𝔼̂_t[L^{VF}_t(φ)]}_{\text{价值损失}} + c_2
+\underbrace{𝔼̂_t[S(π_θ(·|s_t))]}_{\text{熵奖励}}
+\]</span></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_ppo_loss_full</span>(<span class="params">prompts, responses, actor, critic, reward_model, ref_model</span>):</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    完整的PPO损失计算流程</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># 1. 采样阶段已获得：current_logprobs, old_logprobs, values_old</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 计算奖励（含KL惩罚）</span></span><br><span class="line">    rm_scores = reward_model(prompts, responses)  <span class="comment"># [batch_size]</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 计算KL散度</span></span><br><span class="line">    kl_divs = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(prompts)):</span><br><span class="line">        <span class="comment"># 获取参考策略的logprobs</span></span><br><span class="line">        ref_logprobs = ref_model.get_logprobs(prompts[i], responses[i])</span><br><span class="line">        current_logprobs = current_logprobs_list[i]</span><br><span class="line">        kl = (current_logprobs - ref_logprobs).<span class="built_in">sum</span>()</span><br><span class="line">        kl_divs.append(kl)</span><br><span class="line">    </span><br><span class="line">    kl_divs = torch.stack(kl_divs)</span><br><span class="line">    beta = <span class="number">0.05</span></span><br><span class="line">    final_rewards = rm_scores - beta * kl_divs  <span class="comment"># [batch_size]</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 3. 为每个时间步计算折扣回报G_t</span></span><br><span class="line">    T = responses.shape[<span class="number">1</span>]  <span class="comment"># 序列长度</span></span><br><span class="line">    all_returns = []</span><br><span class="line">    all_values = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(prompts)):</span><br><span class="line">        returns = []</span><br><span class="line">        <span class="comment"># 为这个样本的每个时间步计算G_t</span></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(T):</span><br><span class="line">            G_t = (gamma ** (T - t - <span class="number">1</span>)) * final_rewards[i]</span><br><span class="line">            returns.append(G_t)</span><br><span class="line">        all_returns.append(torch.tensor(returns))</span><br><span class="line">        all_values.append(values_old[i])  <span class="comment"># Critic的预测值</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 4. 计算优势A_t（使用GAE）</span></span><br><span class="line">    all_advantages = []</span><br><span class="line">    <span class="keyword">for</span> returns, values <span class="keyword">in</span> <span class="built_in">zip</span>(all_returns, all_values):</span><br><span class="line">        <span class="comment"># 简化的GAE计算（实际中rewards[t]可能为0）</span></span><br><span class="line">        advantages = compute_gae(values, returns, gamma, lambda_)</span><br><span class="line">        all_advantages.append(advantages)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 5. 计算PPO损失</span></span><br><span class="line">    <span class="comment"># 5.1 策略损失</span></span><br><span class="line">    ratios = torch.exp(current_logprobs - old_logprobs)  <span class="comment"># r_t(θ)</span></span><br><span class="line">    advantages_tensor = torch.stack(all_advantages)</span><br><span class="line">    </span><br><span class="line">    surr1 = ratios * advantages_tensor</span><br><span class="line">    surr2 = torch.clamp(ratios, <span class="number">1</span> - epsilon, <span class="number">1</span> + epsilon) * advantages_tensor</span><br><span class="line">    policy_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 5.2 价值损失</span></span><br><span class="line">    returns_tensor = torch.stack(all_returns)</span><br><span class="line">    values_new = critic(prompts, responses)  <span class="comment"># 重新预测价值</span></span><br><span class="line">    value_loss = F.mse_loss(values_new, returns_tensor)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 5.3 总损失</span></span><br><span class="line">    c1, c2 = <span class="number">0.5</span>, <span class="number">0.01</span>  <span class="comment"># 系数</span></span><br><span class="line">    entropy_bonus = c2 * compute_entropy(current_logprobs)  <span class="comment"># 可选</span></span><br><span class="line">    </span><br><span class="line">    total_loss = policy_loss + c1 * value_loss - entropy_bonus</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> total_loss, {</span><br><span class="line">        <span class="string">'policy_loss'</span>: policy_loss.item(),</span><br><span class="line">        <span class="string">'value_loss'</span>: value_loss.item(),</span><br><span class="line">        <span class="string">'mean_advantage'</span>: advantages_tensor.mean().item(),</span><br><span class="line">        <span class="string">'mean_return'</span>: returns_tensor.mean().item(),</span><br><span class="line">        <span class="string">'kl_divergence'</span>: kl_divs.mean().item(),</span><br><span class="line">        <span class="string">'final_reward'</span>: final_rewards.mean().item()</span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h3 id="tensor计算流程">tensor计算流程</h3>
+<p>对上述代码里每个关键 tensor <strong>数值 + 形状 +
+含义</strong>对齐。</p>
+<p>我们假设：</p>
+<ul>
+<li><strong>batch_size = 2</strong></li>
+<li>每个 response 有 <strong>T = 3 个 token</strong></li>
+<li>γ = 0.99，λ = 0.95（不影响直觉）</li>
+</ul>
+<p>为了简单，直接给出数值</p>
+<hr>
+<h4 id="你已经有的东西rollout-阶段"><strong>0️⃣ 你已经有的东西（rollout
+阶段）</strong></h4>
+<p><strong>🔹 current_logprobs（新策略的 log prob）</strong></p>
+<p>形状 <strong>[2, 3]</strong></p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">current_logprobs =</span><br><span class="line">[[ -1.0, -0.5, -0.2 ],</span><br><span class="line"> [ -0.8, -0.6, -0.4 ]]</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>🔹 old_logprobs（旧策略的 log prob）</strong></p>
+<p>形状 <strong>[2, 3]</strong></p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">old_logprobs =</span><br><span class="line">[[ -1.1, -0.6, -0.3 ],</span><br><span class="line"> [ -0.9, -0.7, -0.5 ]]</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>🔹 values_old（critic 旧预测）</strong></p>
+<p>形状 <strong>[2, 3]</strong>（逐时间步价值）</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">values_old =</span><br><span class="line">[[ 0.2,  0.3,  0.4 ],</span><br><span class="line"> [ 0.1,  0.2,  0.3 ]]</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h4 id="奖励模型-kl"><strong>1️⃣ 奖励模型 + KL</strong></h4>
+<p><strong>(1) reward model 输出</strong></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm_scores = reward_model(prompts, responses)</span><br></pre></td></tr></tbody></table></figure>
+<p>假设：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm_scores = [1.0, 0.6]   # shape = [2]</span><br></pre></td></tr></tbody></table></figure>
+<p>含义：</p>
+<ul>
+<li>第 1 条回复整体得分 1.0</li>
+<li>第 2 条回复整体得分 0.6</li>
+</ul>
+<hr>
+<p><strong>(2) 计算 KL</strong></p>
+<p>对<strong>每条样本</strong>把<strong>所有 token 的 logprob
+差求和</strong>：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kl = (current_logprobs - ref_logprobs).<span class="built_in">sum</span>()</span><br></pre></td></tr></tbody></table></figure>
+<p>假设算出来：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kl_divs = [0.30, 0.20]   # shape = [2]</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<p><strong>(3) final_rewards</strong></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">beta = <span class="number">0.05</span></span><br><span class="line">final_rewards = rm_scores - beta * kl_divs</span><br></pre></td></tr></tbody></table></figure>
+<p>逐元素计算：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample 1: 1.0 - 0.05 * 0.30 = 0.985</span><br><span class="line">sample 2: 0.6 - 0.05 * 0.20 = 0.590</span><br></pre></td></tr></tbody></table></figure>
+<p>所以：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">final_rewards = [0.985, 0.590]   # shape = [2]</span><br></pre></td></tr></tbody></table></figure>
+<p>👉 <strong>注意：这是“整条序列的单一奖励”</strong></p>
+<hr>
+<h4 id="计算折扣回报-gₜ"><strong>2️⃣ 计算折扣回报 Gₜ</strong></h4>
+<p>你代码里是（简化版）：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">G_t = (gamma ** (T - t - <span class="number">1</span>)) * final_rewards[i]</span><br></pre></td></tr></tbody></table></figure>
+<p>T = 3，所以对第 1 条样本：</p>
+<table>
+<thead>
+<tr class="header">
+<th>t</th>
+<th>γ^(T-t-1)</th>
+<th>G_t</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>γ² ≈ 0.98</td>
+<td>0.985 * 0.98 ≈ <strong>0.965</strong></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>γ¹ ≈ 0.99</td>
+<td>0.985 * 0.99 ≈ <strong>0.975</strong></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>γ⁰ = 1</td>
+<td>0.985 * 1 = <strong>0.985</strong></td>
+</tr>
+</tbody>
+</table>
+<p>所以：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">returns[0] = [0.965, 0.975, 0.985]   # shape = [3]</span><br></pre></td></tr></tbody></table></figure>
+<p>同理第 2 条：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">returns[1] = [0.577, 0.584, 0.590]</span><br></pre></td></tr></tbody></table></figure>
+<p>最终：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">returns_tensor =</span><br><span class="line">[[0.965, 0.975, 0.985],</span><br><span class="line"> [0.577, 0.584, 0.590]]   # shape = [2,3]</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h4 id="gae-计算优势-aₜ"><strong>3️⃣ GAE 计算优势 Aₜ</strong></h4>
+<p>调用：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">advantages = compute_gae(values, returns, gamma, lambda_)</span><br></pre></td></tr></tbody></table></figure>
+<p>假设算出来（我直接给结果，结构对齐最重要）：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">advantages =</span><br><span class="line">[[ 0.10,  0.05,  0.02],</span><br><span class="line"> [ 0.08,  0.04,  0.01]]</span><br></pre></td></tr></tbody></table></figure>
+<p>所以：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">advantages_tensor =</span><br><span class="line">[[0.10, 0.05, 0.02],</span><br><span class="line"> [0.08, 0.04, 0.01]]   # shape = [2,3]</span><br></pre></td></tr></tbody></table></figure>
+<p>👉 <strong>每个 token 都有一个优势值</strong></p>
+<hr>
+<h4 id="计算-ppo-ratio"><strong>4️⃣ 计算 PPO ratio</strong></h4>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ratios = torch.exp(current_logprobs - old_logprobs)</span><br></pre></td></tr></tbody></table></figure>
+<p>逐元素相减：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">current - old =</span><br><span class="line">[[ 0.10, 0.10, 0.10],</span><br><span class="line"> [ 0.10, 0.10, 0.10]]</span><br></pre></td></tr></tbody></table></figure>
+<p>取 exp：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ratios ≈</span><br><span class="line">[[1.105, 1.105, 1.105],</span><br><span class="line"> [1.105, 1.105, 1.105]]   # shape = [2,3]</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h4 id="策略损失ppo-clip"><strong>5️⃣ 策略损失（PPO clip）</strong></h4>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">surr1 = ratios * advantages_tensor</span><br><span class="line">surr2 = clamp(ratios, <span class="number">0.8</span>, <span class="number">1.2</span>) * advantages_tensor</span><br><span class="line">policy_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>先算 surr1：</strong></p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">surr1 =</span><br><span class="line">[[0.1105, 0.0553, 0.0221],</span><br><span class="line"> [0.0884, 0.0442, 0.0111]]</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>clamp 后 surr2（这里 ratio=1.105，在 [0.8,1.2] 内，所以 surr2
+= surr1）</strong></p>
+<p>于是：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">min(surr1, surr2) = surr1</span><br></pre></td></tr></tbody></table></figure>
+<p>取均值（6 个元素的平均）：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mean ≈ 0.055</span><br></pre></td></tr></tbody></table></figure>
+<p>所以：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">policy_loss = -0.055</span><br></pre></td></tr></tbody></table></figure>
+<p>👉 <strong>负号表示：我们在最大化这个目标</strong></p>
+<hr>
+<h4 id="价值损失"><strong>6️⃣ 价值损失</strong></h4>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">values_new = critic(prompts, responses)</span><br></pre></td></tr></tbody></table></figure>
+<p>假设新预测为：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">values_new =</span><br><span class="line">[[0.25, 0.28, 0.35],</span><br><span class="line"> [0.12, 0.18, 0.29]]</span><br></pre></td></tr></tbody></table></figure>
+<p>MSE：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">value_loss = MSE(values_new, returns_tensor)</span><br></pre></td></tr></tbody></table></figure>
+<p>假设算出来：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">value_loss = 0.02</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h4 id="总损失"><strong>7️⃣ 总损失</strong></h4>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">total_loss = policy_loss + c1 * value_loss - entropy_bonus</span><br></pre></td></tr></tbody></table></figure>
+<p>假设 entropy_bonus = 0.005：</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">total_loss = (-0.055) + 0.5 * 0.02 - 0.005</span><br><span class="line">            = -0.055 + 0.01 - 0.005</span><br><span class="line">            = -0.050</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<table>
+<colgroup>
+<col style="width: 27%">
+<col style="width: 7%">
+<col style="width: 64%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>变量</th>
+<th>形状</th>
+<th>直观含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>final_rewards</code></td>
+<td>[2]</td>
+<td><strong>每条回复的整体得分</strong></td>
+</tr>
+<tr class="even">
+<td><code>returns_tensor</code></td>
+<td>[2,3]</td>
+<td><strong>把整体奖励“摊到每个 token”</strong></td>
+</tr>
+<tr class="odd">
+<td><code>values_old</code></td>
+<td>[2,3]</td>
+<td><strong>critic 旧估计：每个 token 未来能拿多少分</strong></td>
+</tr>
+<tr class="even">
+<td><code>advantages_tensor</code></td>
+<td>[2,3]</td>
+<td><strong>每个 token：比预期好/坏多少</strong></td>
+</tr>
+<tr class="odd">
+<td><code>ratios</code></td>
+<td>[2,3]</td>
+<td><strong>新策略 vs 旧策略概率比（逐 token）</strong></td>
+</tr>
+<tr class="even">
+<td><code>policy_loss</code></td>
+<td>标量</td>
+<td><strong>PPO clip 目标的平均（想最大化）</strong></td>
+</tr>
+<tr class="odd">
+<td><code>value_loss</code></td>
+<td>标量</td>
+<td><strong>critic 拟合 returns 的误差</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="dpo">DPO</h2>
+<p>待完善</p>
+<h2 id="grpo">GRPO</h2>
+<p>与PPO通过价值函数估计优势不同，GRPO通过使用相同的提示从LLM中采样多个响应来实现这一点。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20251228220110183.png" alt="image-20251228220110183">
+<figcaption aria-hidden="true">image-20251228220110183</figcaption>
+</figure>
+<h2 id="dapo">DAPO</h2>
+<p>在GRPO的基础上进行了调整</p>
+<h2 id="on-policy-rl">on-policy RL</h2>
+<p>RL在工程上的流程，这里以PPO为例</p>
+<h3 id="阶段-1rollout-generation关键路径">阶段 1：Rollout /
+Generation（关键路径）</h3>
+<blockquote>
+<p><strong>这是 on-policy RLHF 的起点，不能并行跳过</strong></p>
+</blockquote>
+<h4 id="模型actorgenerator">模型：<strong>Actor（Generator）</strong></h4>
+<p><strong>输入</strong></p>
+<ul>
+<li>prompt</li>
+</ul>
+<p><strong>输出（在生成时同步得到）</strong></p>
+<ul>
+<li>response</li>
+<li><strong>old_log_prob（token 级）</strong>：旧策略对该 token 的 log
+概率，在采样时计算</li>
+</ul>
+<hr>
+<h3 id="阶段-2并行评估模型-forward-层">阶段 2：并行评估（模型 forward
+层）</h3>
+<blockquote>
+<p><strong>response 已存在，下面这些模型之间无数据依赖</strong></p>
+</blockquote>
+<h4 id="criticvalue-model">2.1 Critic（Value Model）</h4>
+<p><strong>输入</strong></p>
+<ul>
+<li>prompt + response</li>
+</ul>
+<p><strong>输出</strong></p>
+<ul>
+<li>value（通常 token 级）</li>
+</ul>
+<h4 id="reference-model参考模型参数冻结">2.2 Reference
+Model（参考模型，参数冻结）</h4>
+<p><strong>输入</strong></p>
+<ul>
+<li>prompt + response</li>
+</ul>
+<p><strong>输出</strong></p>
+<ul>
+<li>ref_log_prob（token 级）：用于防止actor偏离太多</li>
+</ul>
+<h4 id="reward-model">2.3 Reward Model</h4>
+<p><strong>输入</strong></p>
+<ul>
+<li>prompt + response</li>
+</ul>
+<p><strong>输出</strong></p>
+<ul>
+<li>rm_score（标量或 token 级）</li>
+</ul>
+<hr>
+<p>📌 这三者：</p>
+<ul>
+<li><strong>可以并行</strong></li>
+<li>是系统优化重点</li>
+<li>不影响 on-policy 正确性</li>
+</ul>
+<hr>
+<h3 id="阶段-3reward-shaping-advantage轻量计算">阶段 3：Reward shaping
+&amp; Advantage（轻量计算）</h3>
+<p><span class="math display">\[
+L^{PPO}(θ, φ) = \underbrace{𝔼̂_t[L^{CLIP}_t(θ)]}_{\text{策略损失}} - c_1
+\underbrace{𝔼̂_t[L^{VF}_t(φ)]}_{\text{价值损失}} + c_2
+\underbrace{𝔼̂_t[S(π_θ(·|s_t))]}_{\text{熵奖励}}
+\]</span></p>
+<h4 id="kl-惩罚">3.1 KL 惩罚</h4>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KL ≈ log_prob - ref_log_prob</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="最终-reward">3.2 最终 reward</h4>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reward = rm_score - β · KL</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="advantage">3.3 Advantage</h4>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">advantage = reward - value</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h3 id="阶段-4policy-value-更新训练阶段">阶段 4：Policy / Value
+更新（训练阶段）</h3>
+<blockquote>
+<p><strong>这一步会再次用 actor forward</strong></p>
+</blockquote>
+<h4 id="actor-更新ppo">4.1 Actor 更新（PPO）</h4>
+<p><strong>输入</strong></p>
+<ul>
+<li>prompt + response</li>
+<li>old_log_prob</li>
+<li>advantage</li>
+</ul>
+<p><strong>计算</strong></p>
+<ul>
+<li>new_log_prob</li>
+<li>PPO clipped loss</li>
+</ul>
+<blockquote>
+<p>old_log_prob 和 new_log_prob
+作用：防止策略一步走太远，下面代码用了截断的方式</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ratio = exp(new_log_prob - old_log_prob)</span><br><span class="line"></span><br><span class="line">L = <span class="built_in">min</span>(</span><br><span class="line">    ratio * advantage,</span><br><span class="line">    clip(ratio, <span class="number">1</span>-ε, <span class="number">1</span>+ε) * advantage</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+</blockquote>
+<hr>
+<h4 id="critic-更新">4.2 Critic 更新</h4>
+<p><strong>输入</strong></p>
+<ul>
+<li>prompt + response</li>
+<li>reward</li>
+</ul>
+<p><strong>计算</strong></p>
+<ul>
+<li>value loss（MSE / Huber）</li>
+</ul>
+<hr>
+<p>📌 actor / critic：</p>
+<ul>
+<li><strong>参数在此阶段更新</strong></li>
+<li>与 rollout actor 语义上是同一个策略，但实现上可能是不同进程</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RL/" rel="tag"># RL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/12/08/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/" rel="prev" title="模型量化">
+      <i class="fa fa-chevron-left"></i> 模型量化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/01/07/MHA-GQA-MQA/" rel="next" title="MHA/MQA/GQA">
+      MHA/MQA/GQA <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ppo"><span class="nav-text">PPO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6"><span class="nav-text">组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%9E%8Bactor"><span class="nav-text">策略模型（Actor）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8Breference"><span class="nav-text">参考模型（Reference）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8Breward"><span class="nav-text">奖励模型（Reward）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0critic"><span class="nav-text">价值函数（Critic）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E4%B9%89%E4%BC%98%E5%8A%BF%E4%BC%B0%E8%AE%A1-gae"><span class="nav-text">广义优势估计 (GAE)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95"><span class="nav-text">计算方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A3%81%E5%89%AA"><span class="nav-text">裁剪</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kl%E6%95%A3%E5%BA%A6"><span class="nav-text">KL散度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%86%B5%E5%A5%96%E5%8A%B1"><span class="nav-text">熵奖励</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-text">总体流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%B5%81%E7%A8%8B%E4%BB%A3%E7%A0%81"><span class="nav-text">计算流程代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tensor%E8%AE%A1%E7%AE%97%E6%B5%81%E7%A8%8B"><span class="nav-text">tensor计算流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%A0%E5%B7%B2%E7%BB%8F%E6%9C%89%E7%9A%84%E4%B8%9C%E8%A5%BFrollout-%E9%98%B6%E6%AE%B5"><span class="nav-text">0️⃣ 你已经有的东西（rollout
+阶段）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B-kl"><span class="nav-text">1️⃣ 奖励模型 + KL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%8A%98%E6%89%A3%E5%9B%9E%E6%8A%A5-g%E2%82%9C"><span class="nav-text">2️⃣ 计算折扣回报 Gₜ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gae-%E8%AE%A1%E7%AE%97%E4%BC%98%E5%8A%BF-a%E2%82%9C"><span class="nav-text">3️⃣ GAE 计算优势 Aₜ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-ppo-ratio"><span class="nav-text">4️⃣ 计算 PPO ratio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%8D%9F%E5%A4%B1ppo-clip"><span class="nav-text">5️⃣ 策略损失（PPO clip）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E6%8D%9F%E5%A4%B1"><span class="nav-text">6️⃣ 价值损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E6%8D%9F%E5%A4%B1"><span class="nav-text">7️⃣ 总损失</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dpo"><span class="nav-text">DPO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grpo"><span class="nav-text">GRPO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dapo"><span class="nav-text">DAPO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#on-policy-rl"><span class="nav-text">on-policy RL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-1rollout-generation%E5%85%B3%E9%94%AE%E8%B7%AF%E5%BE%84"><span class="nav-text">阶段 1：Rollout &#x2F;
+Generation（关键路径）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8Bactorgenerator"><span class="nav-text">模型：Actor（Generator）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-2%E5%B9%B6%E8%A1%8C%E8%AF%84%E4%BC%B0%E6%A8%A1%E5%9E%8B-forward-%E5%B1%82"><span class="nav-text">阶段 2：并行评估（模型 forward
+层）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#criticvalue-model"><span class="nav-text">2.1 Critic（Value Model）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reference-model%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B%E5%8F%82%E6%95%B0%E5%86%BB%E7%BB%93"><span class="nav-text">2.2 Reference
+Model（参考模型，参数冻结）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reward-model"><span class="nav-text">2.3 Reward Model</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-3reward-shaping-advantage%E8%BD%BB%E9%87%8F%E8%AE%A1%E7%AE%97"><span class="nav-text">阶段 3：Reward shaping
+&amp; Advantage（轻量计算）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#kl-%E6%83%A9%E7%BD%9A"><span class="nav-text">3.1 KL 惩罚</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E7%BB%88-reward"><span class="nav-text">3.2 最终 reward</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#advantage"><span class="nav-text">3.3 Advantage</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-4policy-value-%E6%9B%B4%E6%96%B0%E8%AE%AD%E7%BB%83%E9%98%B6%E6%AE%B5"><span class="nav-text">阶段 4：Policy &#x2F; Value
+更新（训练阶段）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#actor-%E6%9B%B4%E6%96%B0ppo"><span class="nav-text">4.1 Actor 更新（PPO）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#critic-%E6%9B%B4%E6%96%B0"><span class="nav-text">4.2 Critic 更新</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hxt"
+      src="/images/hxt.jpg">
+  <p class="site-author-name" itemprop="name">hxt</p>
+  <div class="site-description" itemprop="description">May the Force be with you.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">188</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">80</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hxt</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">502k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">7:36</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
