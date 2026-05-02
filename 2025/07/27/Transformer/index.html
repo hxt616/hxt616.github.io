@@ -35,11 +35,12 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727220057077.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221138994.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221042825.png">
+<meta property="og:image" content="https://github.com/jingyaogong/minimind/raw/master/images/LLM-structure.jpg">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221617793.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/images/2-figures/2-0.jpg">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727224644292.png">
 <meta property="article:published_time" content="2025-07-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-12-09T14:58:39.292Z">
+<meta property="article:modified_time" content="2026-05-02T07:01:20.436Z">
 <meta property="article:author" content="hxt">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="Transformer">
@@ -211,7 +212,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-12-09 22:58:39" itemprop="dateModified" datetime="2025-12-09T22:58:39+08:00">2025-12-09</time>
+                <time title="修改时间：2026-05-02 15:01:20" itemprop="dateModified" datetime="2026-05-02T15:01:20+08:00">2026-05-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -318,13 +319,15 @@ Q、K、V，再进行拆分，下面是完整步骤</p>
 </figure>
 <p>这里使用层归一化，因为层归一化会在每个样本上计算其所有层的均值和方差，从而使每个样本的分布达到稳定。</p>
 <h2 id="解码器">解码器</h2>
-<h3 id="自回归解码器">自回归解码器</h3>
+<h3 id="自回归解码器最常用">自回归解码器（最常用）</h3>
 <p>在生成序列时，每一步仅基于<strong>当前及之前的token</strong>预测下一个token，这就要用到掩蔽自注意力（masked
 self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻止每个位置选择其后面的输入信息（在训练阶段非常重要）。</p>
 <figure>
 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221042825.png" alt="image-20250727221042825">
 <figcaption aria-hidden="true">image-20250727221042825</figcaption>
 </figure>
+<p>详细的流程或代码参考 <a target="_blank" rel="noopener" href="https://github.com/jingyaogong/minimind">MiniMind</a></p>
+<p><img src="https://github.com/jingyaogong/minimind/raw/master/images/LLM-structure.jpg"></p>
 <h3 id="非自回归解码器">非自回归解码器</h3>
 <p>是一种并行生成序列的模型，与自回归（AR）解码器逐步生成的方式不同，它一次性输出整个序列，显著提升了推理速度，但可能牺牲生成质量。</p>
 <p>例如：给编码器一堆 <code>&lt;BOS&gt;</code>
@@ -396,7 +399,8 @@ Transformer，但嵌入值是模型学到的，而非预设的数学函数</li>
 <li><strong>残差连接 + LayerNorm</strong></li>
 <li><strong>Encoder-Decoder 注意力</strong>（关注 <code>Z</code>）</li>
 <li><strong>残差连接 + LayerNorm</strong></li>
-<li><strong>前馈网络 FFN</strong></li>
+<li><strong>前馈网络 FFN</strong>：先升维再降维（可以理解为
+让相关特征更突出，参考<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oyoEBWEsn/?spm_id_from=333.1391.0.0">视频</a>）</li>
 <li><strong>残差连接 + LayerNorm</strong></li>
 </ul></li>
 <li>输出：解码后的隐藏状态 <code>H</code>。</li>
@@ -749,7 +753,7 @@ Alpaca、OpenAI InstructGPT 数据）</p></li>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-text">自注意力机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-text">编码器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">解码器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">自回归解码器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">非自回归解码器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8-%E8%A7%A3%E7%A0%81%E5%99%A8%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">编码器-解码器注意力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="nav-text">流程总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bert%E5%92%8Cgpt"><span class="nav-text">BERT和GPT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#post-norm-%E5%92%8C-pre-norm"><span class="nav-text">Post-Norm 和 Pre-Norm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#post-norm%E5%8E%9F%E5%A7%8B-transformer-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. Post-Norm（原始
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-text">自注意力机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-text">编码器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">解码器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8%E6%9C%80%E5%B8%B8%E7%94%A8"><span class="nav-text">自回归解码器（最常用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">非自回归解码器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8-%E8%A7%A3%E7%A0%81%E5%99%A8%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">编码器-解码器注意力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="nav-text">流程总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bert%E5%92%8Cgpt"><span class="nav-text">BERT和GPT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#post-norm-%E5%92%8C-pre-norm"><span class="nav-text">Post-Norm 和 Pre-Norm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#post-norm%E5%8E%9F%E5%A7%8B-transformer-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. Post-Norm（原始
 Transformer 设计）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pre-norm%E4%B8%BB%E6%B5%81%E5%8F%98%E4%BD%93%E8%AE%BE%E8%AE%A1"><span class="nav-text">2.
 Pre-Norm（主流变体设计）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB%E5%AF%B9%E6%AF%94"><span class="nav-text">3. 核心区别对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%98%E4%BD%93%E4%B8%8E%E6%94%B9%E8%BF%9B"><span class="nav-text">4. 其他变体与改进</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#llm"><span class="nav-text">LLM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pretraining"><span class="nav-text">1. Pretraining</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B"><span class="nav-text">过程：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-text">特点：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sft"><span class="nav-text">2. SFT</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B-1"><span class="nav-text">过程：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-1"><span class="nav-text">特点：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rlhf"><span class="nav-text">3. RLHF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B-2"><span class="nav-text">过程：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-2"><span class="nav-text">特点：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">总结流程图</span></a></li></ol></li></ol></div>
       </div>
@@ -816,12 +820,12 @@ Pre-Norm（主流变体设计）</span></a></li><li class="nav-item nav-level-3"
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">504k</span>
+    <span title="站点总字数">506k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7:38</span>
+    <span title="站点阅读时长">7:40</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

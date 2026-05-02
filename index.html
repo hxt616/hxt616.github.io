@@ -559,7 +559,7 @@ Cache）</strong>
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-04-29 19:04:52" itemprop="dateModified" datetime="2026-04-29T19:04:52+08:00">2026-04-29</time>
+                <time title="修改时间：2026-05-01 00:43:51" itemprop="dateModified" datetime="2026-05-01T00:43:51+08:00">2026-05-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -577,14 +577,14 @@ Cache）</strong>
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>11k</span>
+              <span>13k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>10 分钟</span>
+              <span>12 分钟</span>
             </span>
 
         </div>
@@ -606,6 +606,100 @@ Cache）</strong>
 <p><strong>策略 →（生成）→ 响应 →（输入）→ 奖励模型 →（输出）→ 奖励
 →（反馈）→ 策略</strong></p>
 </blockquote>
+<hr>
+<h3 id="概述">概述</h3>
+<p>在大语言模型（LLM）的强化学习微调（RLHF）中，PPO（近端策略优化）是目前的<strong>事实标准</strong>。它的核心任务非常明确：利用奖励模型（Reward
+Model）的反馈，指导策略模型（Actor）生成更符合人类偏好的文本，同时利用价值模型（Critic）来评估生成的质量。</p>
+<p>为了让你的读者清晰地理解 PPO，我们将它拆解为以下四个核心步骤。</p>
+<h4 id="核心思想在探索与稳定之间走钢丝">1.
+核心思想：在“探索”与“稳定”之间走钢丝</h4>
+<p>PPO
+的核心逻辑可以用一句话概括：<strong>既要让模型根据奖励信号变得更好，又不能让它变得太激进，以免破坏原本学好的语言能力。</strong></p>
+<p>为了实现这一点，PPO
+引入了<strong>裁剪（Clipping）</strong>机制。它不会无脑地让模型去追求高分，而是限制模型参数更新的幅度。如果某个生成策略带来的优势（Advantage）过高，PPO
+会“剪掉”这部分过高的收益，强迫模型保持克制。</p>
+<h4 id="四大核心组件">2. 四大核心组件</h4>
+<p>在 PPO 训练流程中，通常有四个关键的“角色”协同工作：</p>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 9%">
+<col style="width: 58%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">角色定位</th>
+<th style="text-align: left;">核心职责</th>
+<th style="text-align: left;">是否更新</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Actor (策略模型)</strong></td>
+<td style="text-align: left;"><strong>演员</strong></td>
+<td style="text-align: left;">负责生成文本（回答）。它是训练的主角，参数会不断优化。</td>
+<td style="text-align: left;">✅ 是</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Critic (价值模型)</strong></td>
+<td style="text-align: left;"><strong>预言家</strong></td>
+<td style="text-align: left;">评估 Actor
+当前的状态值多少钱（预测未来回报 <span class="math inline">\(V(s)\)</span>）。</td>
+<td style="text-align: left;">✅ 是</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Reward Model</strong></td>
+<td style="text-align: left;"><strong>裁判</strong></td>
+<td style="text-align: left;">根据人类偏好数据训练，给 Actor
+生成的完整回答打分。</td>
+<td style="text-align: left;">❌ 否 (冻结)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Reference Model</strong></td>
+<td style="text-align: left;"><strong>守门员</strong></td>
+<td style="text-align: left;">通常是 SFT 后的初始模型，用来计算 KL
+散度，防止 Actor 变得太离谱。</td>
+<td style="text-align: left;">❌ 否 (冻结)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="训练流水线从生成到更新">3. 训练流水线：从生成到更新</h4>
+<p>PPO 的训练过程是一个循环的流水线，我们可以将其分为三个阶段：</p>
+<p><strong>阶段一：Rollout (采样与打分)</strong> 1.
+<strong>生成</strong>：Actor
+模型接收提示词（Prompt），生成一段回答（Response）。 2. <strong>计算 KL
+惩罚</strong>：计算 Actor 生成的每个 Token 的概率，与 Reference Model
+的差异（KL 散度）。这是一个负向奖励，用来约束模型不要偏离常识太远。 3.
+<strong>最终打分</strong>：将生成的完整句子交给 Reward
+Model，得到一个标量分数（RM Score）。 4.
+<strong>计算即时奖励</strong>：将 RM Score 与 KL
+惩罚结合，得到最终的奖励值 <span class="math inline">\(r_t\)</span>。</p>
+<p><strong>阶段二：GAE (计算优势与回报)</strong> 这是 PPO
+中最容易混淆的部分。我们需要计算两个关键指标： * <strong>Advantage
+(优势) <span class="math inline">\(A_t\)</span></strong>：表示“这一步做得比平均水平好多少”。
+* 我们使用 <strong>GAE (广义优势估计)</strong>
+算法来计算。它结合了蒙特卡洛（MC）的准确性和时序差分（TD）的高效性。 *
+公式逻辑：<span class="math inline">\(A_t = \delta_t + (\gamma \lambda)
+\delta_{t+1} + \dots\)</span> （其中 <span class="math inline">\(\delta\)</span> 是 TD Error）。 * <strong>Returns
+(回报) <span class="math inline">\(G_t\)</span></strong>：表示“从这一步开始，未来能拿到的总分”。
+* 它是 Critic 模型训练的“标准答案”。 * 计算公式：<span class="math inline">\(G_t = A_t + V(s_t)\)</span>。</p>
+<p><strong>阶段三：Loss 更新 (策略与价值)</strong> 利用计算出的 <span class="math inline">\(A_t\)</span> 和 <span class="math inline">\(G_t\)</span>，分别更新 Actor 和 Critic： 1.
+<strong>更新 Critic</strong>：计算预测值 <span class="math inline">\(V(s_t)\)</span> 与目标值 <span class="math inline">\(G_t\)</span>
+的均方误差（MSE），让“预言家”说得越来越准。 2. <strong>更新
+Actor</strong>：计算 PPO 的裁剪损失（Clipped Surrogate Loss）。 *
+计算新旧策略的概率比 <span class="math inline">\(r_t(\theta)\)</span>。
+* 通过 <span class="math inline">\(\min(r_t \hat{A}_t, \text{clip}(r_t,
+1-\epsilon, 1+\epsilon)\hat{A}_t)\)</span> 来确定最终的梯度方向。</p>
+<h4 id="代码实现从-tensor-到-loss">4. 代码实现：从 Tensor 到 Loss</h4>
+<p>为了让你的读者更直观地理解，我们通过一个具体的 Tensor 形状变化来展示
+PPO 的核心计算过程。</p>
+<p><strong>假设场景</strong>：Batch Size = 2，序列长度 T = 3。</p>
+<p><strong>Step 1: 奖励计算 (Reward Shaping)</strong> </p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输入：RM 模型打分 [2], KL 惩罚系数 beta</span></span><br><span class="line">rm_scores = [<span class="number">1.0</span>, <span class="number">0.6</span>] </span><br><span class="line">kl_divs = [<span class="number">0.30</span>, <span class="number">0.20</span>] <span class="comment"># 每条序列的总 KL</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出：最终奖励 (标量) -&gt; 扩展为序列级</span></span><br><span class="line">final_rewards = rm_scores - beta * kl_divs <span class="comment"># [0.985, 0.590]</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p><strong>Step 2: 构建目标 (GAE &amp; Returns)</strong>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 假设 critic 旧预测 values_old: [2, 3]</span></span><br><span class="line"><span class="comment"># 经过 GAE 计算，得到优势 advantages: [2, 3]</span></span><br><span class="line">advantages = [[<span class="number">0.10</span>, <span class="number">0.05</span>, <span class="number">0.02</span>], [<span class="number">0.08</span>, <span class="number">0.04</span>, <span class="number">0.01</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算 Returns (G_t) 作为 Critic 的目标</span></span><br><span class="line">returns = advantages + values_old <span class="comment"># [2, 3]</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p><strong>Step 3: 策略更新 (PPO Loss)</strong> </p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算新旧策略概率比</span></span><br><span class="line">ratios = torch.exp(current_logprobs - old_logprobs) <span class="comment"># [2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># PPO 裁剪核心逻辑</span></span><br><span class="line">surr1 = ratios * advantages</span><br><span class="line">surr2 = torch.clamp(ratios, <span class="number">1</span>-epsilon, <span class="number">1</span>+epsilon) * advantages</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最终 Loss (取两者中的较小值并取负)</span></span><br><span class="line">policy_loss = -torch.<span class="built_in">min</span>(surr1, surr2).mean()</span><br></pre></td></tr></tbody></table></figure><p></p>
 <h3 id="组件">组件</h3>
 <h4 id="策略模型actor">策略模型（Actor）</h4>
 <p>通常是大型语言模型（如 LLaMA、GPT
@@ -875,7 +969,7 @@ r_t(\theta)
 <p><strong>最终用于 critic loss 计算</strong></p>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将最终奖励R分配给每个时间步（考虑折扣）</span></span><br><span class="line"><span class="comment"># 假设只有序列结束时有奖励</span></span><br><span class="line">T = <span class="built_in">len</span>(response_tokens)</span><br><span class="line">discount_factor = gamma  <span class="comment"># 如0.99</span></span><br><span class="line"></span><br><span class="line">returns = []  <span class="comment"># 每个时间步的折扣累积回报 G_t</span></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(T):</span><br><span class="line">    <span class="comment"># 从时间步t到结束的折扣累积奖励</span></span><br><span class="line">    <span class="comment"># 因为只有最终奖励R，所以是 γ^(T-t-1) * R</span></span><br><span class="line">    G_t = (discount_factor ** (T - t - <span class="number">1</span>)) * final_reward</span><br><span class="line">    returns.append(G_t)</span><br></pre></td></tr></tbody></table></figure></li>
 <li><p>计算优势 A</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 方法1：简单时序差分（不推荐）</span></span><br><span class="line"><span class="comment"># A_t ≈ G_t - V(s_t)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法2：广义优势估计GAE（推荐，标准做法）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compute_gae</span>(<span class="params">values, rewards, gamma=<span class="number">0.99</span>, lambda_=<span class="number">0.95</span></span>):</span><br><span class="line">    <span class="string">"""计算广义优势估计"""</span></span><br><span class="line">    T = <span class="built_in">len</span>(rewards)</span><br><span class="line">    advantages = torch.zeros(T)</span><br><span class="line">    gae = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(T)):</span><br><span class="line">        <span class="keyword">if</span> t == T - <span class="number">1</span>:  <span class="comment"># 最后一步</span></span><br><span class="line">            delta_t = rewards[t] - values[t]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            delta_t = rewards[t] + gamma * values[t+<span class="number">1</span>] - values[t]</span><br><span class="line">        </span><br><span class="line">        gae = delta_t + gamma * lambda_ * gae</span><br><span class="line">        advantages[t] = gae</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> advantages</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在只有最终奖励R的情况下，rewards[t]通常为0（t&lt;T-1时）</span></span><br><span class="line">rewards = [<span class="number">0</span>, <span class="number">0</span>, ..., <span class="number">0</span>, final_reward]  <span class="comment"># 前T-1步奖励为0</span></span><br><span class="line">advantages = compute_gae(values, rewards, gamma, lambda_)</span><br></pre></td></tr></tbody></table></figure></li>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 方法1：简单时序差分（不推荐）</span></span><br><span class="line"><span class="comment"># A_t ≈ G_t - V(s_t)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法2：广义优势估计GAE（推荐，标准做法）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compute_gae</span>(<span class="params">values, rewards, gamma=<span class="number">0.99</span>, lambda_=<span class="number">0.95</span></span>):</span><br><span class="line">    <span class="string">"""计算广义优势估计"""</span></span><br><span class="line">    T = <span class="built_in">len</span>(rewards)</span><br><span class="line">    advantages = torch.zeros(T)</span><br><span class="line">    gae = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(T)):</span><br><span class="line">        <span class="keyword">if</span> t == T - <span class="number">1</span>:  <span class="comment"># 最后一步</span></span><br><span class="line">            delta_t = rewards[t] - values[t]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            delta_t = rewards[t] + gamma * values[t+<span class="number">1</span>] - values[t]</span><br><span class="line">        </span><br><span class="line">        gae = delta_t + gamma * lambda_ * gae</span><br><span class="line">        advantages[t] = gae</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> advantages</span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">主流PPO使用密集奖励，让算法能在每一步都获得有效反馈，从而稳定、高效地学习。</span></span><br><span class="line"><span class="string">稀疏奖励：在只有最终奖励R的情况下，rewards[t]通常为0（t&lt;T-1时），下面的代码示例是稀疏奖励</span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line">rewards = [<span class="number">0</span>, <span class="number">0</span>, ..., <span class="number">0</span>, final_reward]  <span class="comment"># 前T-1步奖励为0</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line">advantages = compute_gae(values, rewards, gamma, lambda_)</span><br></pre></td></tr></tbody></table></figure></li>
 <li><p>优势归一化</p>
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重要技巧：归一化优势</span></span><br><span class="line">advantages = (advantages - advantages.mean()) / (advantages.std() + <span class="number">1e-8</span>)</span><br></pre></td></tr></tbody></table></figure></li>
 <li><p>PPO loss 计算 <span class="math display">\[
@@ -1102,6 +1196,10 @@ token 对所属序列损失的贡献也相同。</li>
 </ul>
 <p><strong>而DAPO考虑了token对损失的影响，从而有效处理长序列中token的影响</strong></p>
 <h2 id="on-policy-rl">on-policy RL</h2>
+<blockquote>
+<p>on-policy
+的意思是：数据是必须由<strong>当前正在优化的策略</strong>采样得到的</p>
+</blockquote>
 <p>RL在工程上的流程，这里以PPO为例</p>
 <h3 id="阶段-1rollout-generation关键路径">阶段 1：Rollout /
 Generation（关键路径）</h3>
@@ -1604,7 +1702,7 @@ Rotary Embeddings）</strong></h3>
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-12-09 22:58:39" itemprop="dateModified" datetime="2025-12-09T22:58:39+08:00">2025-12-09</time>
+                <time title="修改时间：2026-05-02 15:01:20" itemprop="dateModified" datetime="2026-05-02T15:01:20+08:00">2026-05-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1704,13 +1802,15 @@ Q、K、V，再进行拆分，下面是完整步骤</p>
 </figure>
 <p>这里使用层归一化，因为层归一化会在每个样本上计算其所有层的均值和方差，从而使每个样本的分布达到稳定。</p>
 <h2 id="解码器">解码器</h2>
-<h3 id="自回归解码器">自回归解码器</h3>
+<h3 id="自回归解码器最常用">自回归解码器（最常用）</h3>
 <p>在生成序列时，每一步仅基于<strong>当前及之前的token</strong>预测下一个token，这就要用到掩蔽自注意力（masked
 self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻止每个位置选择其后面的输入信息（在训练阶段非常重要）。</p>
 <figure>
 <img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221042825.png" alt="image-20250727221042825">
 <figcaption aria-hidden="true">image-20250727221042825</figcaption>
 </figure>
+<p>详细的流程或代码参考 <a target="_blank" rel="noopener" href="https://github.com/jingyaogong/minimind">MiniMind</a></p>
+<p><img src="https://github.com/jingyaogong/minimind/raw/master/images/LLM-structure.jpg"></p>
 <h3 id="非自回归解码器">非自回归解码器</h3>
 <p>是一种并行生成序列的模型，与自回归（AR）解码器逐步生成的方式不同，它一次性输出整个序列，显著提升了推理速度，但可能牺牲生成质量。</p>
 <p>例如：给编码器一堆 <code>&lt;BOS&gt;</code>
@@ -1782,7 +1882,8 @@ Transformer，但嵌入值是模型学到的，而非预设的数学函数</li>
 <li><strong>残差连接 + LayerNorm</strong></li>
 <li><strong>Encoder-Decoder 注意力</strong>（关注 <code>Z</code>）</li>
 <li><strong>残差连接 + LayerNorm</strong></li>
-<li><strong>前馈网络 FFN</strong></li>
+<li><strong>前馈网络 FFN</strong>：先升维再降维（可以理解为
+让相关特征更突出，参考<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oyoEBWEsn/?spm_id_from=333.1391.0.0">视频</a>）</li>
 <li><strong>残差连接 + LayerNorm</strong></li>
 </ul></li>
 <li>输出：解码后的隐藏状态 <code>H</code>。</li>
@@ -3891,12 +3992,12 @@ Argument）：线程已经是<strong>分离状态</strong>。</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">504k</span>
+    <span title="站点总字数">506k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7:38</span>
+    <span title="站点阅读时长">7:40</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
