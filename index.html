@@ -164,6 +164,169 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/05/23/Matrix%20Transpose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/05/23/Matrix%20Transpose/" class="post-title-link" itemprop="url">Matrix Transpose</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-05-23 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-23T00:00:00+08:00">2026-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-05-26 17:25:41" itemprop="dateModified" datetime="2026-05-26T17:25:41+08:00">2026-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>矩阵转置在逻辑上比较简单，但是cuda算子有不同的实现，下面分析朴素版本和共享内存版本的区别</p>
+<h2 id="一朴素版本">一、朴素版本</h2>
+<h3 id="代码">代码</h3>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">naive_transpose</span><span class="params">(<span class="type">float</span>* input, <span class="type">float</span>* output, <span class="type">int</span> width)</span> </span>{</span><br><span class="line">    <span class="type">int</span> x = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> y = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (x &lt; width &amp;&amp; y &lt; width) {</span><br><span class="line">        <span class="type">int</span> input_idx = y * width + x;      <span class="comment">// 按行读取</span></span><br><span class="line">        <span class="type">int</span> output_idx = x * width + y;      <span class="comment">// 按列写入！</span></span><br><span class="line">        output[output_idx] = input[input_idx];</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="问题分析">问题分析</h3>
+<p>写入操作是非合并的</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">假设 width=<span class="number">1024</span>，blockDim.x=blockDim.y=<span class="number">32</span></span><br><span class="line">一个 warp 包含 threadIdx.x=<span class="number">0.</span><span class="number">.31</span>, threadIdx.y=<span class="number">0</span>（固定）</span><br><span class="line"></span><br><span class="line">这个 warp 执行写入时的地址：</span><br><span class="line">线程<span class="number">0</span>: output[<span class="number">0</span> * <span class="number">1024</span> + <span class="number">0</span>] = output[<span class="number">0</span>]      <span class="comment">// 偏移 0 字节</span></span><br><span class="line">线程<span class="number">1</span>: output[<span class="number">1</span> * <span class="number">1024</span> + <span class="number">0</span>] = output[<span class="number">1024</span>]   <span class="comment">// 偏移 4096 字节</span></span><br><span class="line">线程<span class="number">2</span>: output[<span class="number">2</span> * <span class="number">1024</span> + <span class="number">0</span>] = output[<span class="number">2048</span>]   <span class="comment">// 偏移 8192 字节</span></span><br><span class="line">...</span><br><span class="line">线程<span class="number">31</span>: output[<span class="number">31</span> * <span class="number">1024</span> + <span class="number">0</span>] = output[<span class="number">31744</span>] <span class="comment">// 偏移 126976 字节</span></span><br><span class="line"></span><br><span class="line">地址间隔 = <span class="number">4096</span> 字节 = <span class="number">1024</span> 个 <span class="type">float</span></span><br><span class="line">这远大于 <span class="number">32</span> 字节的合并访问粒度！</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>结果</strong>：32个线程的写入地址分散在内存的各个角落，每个访问都需要独立的全局内存事务
+→ <strong>带宽利用率可能低至 5%</strong>。</p>
+<h2 id="二共享内存版本">二、共享内存版本</h2>
+<p><strong>关键</strong>：</p>
+<ul>
+<li><strong>读取</strong>：从输入矩阵是<strong>按行访问</strong>的（合并的，<strong>快</strong>）</li>
+<li><strong>写入</strong>：到输出矩阵是<strong>按列访问</strong>的（非合并的，<strong>慢</strong>）</li>
+</ul>
+<p><strong>共享内存的作用</strong>：作为<strong>中转站</strong>，解耦读写访问模式
+1. 先按行读入共享内存（合并读） 2.
+在共享内存中完成转置（内部重排，不涉及全局内存） 3.
+再从共享内存按行写出（合并写）</p>
+<h3 id="代码-1">代码</h3>
+<p>每个 Block 对应一个 tile</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> TILE_SIZE 32</span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">shared_mem_transpose</span><span class="params">(<span class="type">float</span>* input, <span class="type">float</span>* output, <span class="type">int</span> width)</span> </span>{</span><br><span class="line">    <span class="comment">// 声明共享内存，+1（padding方法） 避免 bank conflict</span></span><br><span class="line">    __shared__ <span class="type">float</span> tile[TILE_SIZE][TILE_SIZE + <span class="number">1</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 计算当前线程负责的全局坐标，这里一个块的形状是 TILE_SIZE*TILE_SIZE</span></span><br><span class="line">    <span class="type">int</span> x = blockIdx.x * TILE_SIZE + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> y = blockIdx.y * TILE_SIZE + threadIdx.y;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 阶段1: 合并读取 - 从全局内存加载到共享内存</span></span><br><span class="line">    <span class="keyword">if</span> (x &lt; width &amp;&amp; y &lt; width) {</span><br><span class="line">        <span class="type">int</span> input_idx = y * width + x;           <span class="comment">// 按行读取（合并的）</span></span><br><span class="line">        tile[threadIdx.y][threadIdx.x] = input[input_idx];</span><br><span class="line">    }</span><br><span class="line">    __syncthreads();  <span class="comment">// 确保所有线程都完成加载</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 阶段2: 计算转置后的输出坐标</span></span><br><span class="line">    <span class="type">int</span> out_x = blockIdx.y * TILE_SIZE + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> out_y = blockIdx.x * TILE_SIZE + threadIdx.y;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 阶段3: 合并写入 - 从共享内存写入全局内存</span></span><br><span class="line">    <span class="keyword">if</span> (out_x &lt; width &amp;&amp; out_y &lt; width) {</span><br><span class="line">        <span class="type">int</span> output_idx = out_y * width + out_x;  <span class="comment">// 按行写入（合并的）</span></span><br><span class="line">        output[output_idx] = tile[threadIdx.x][threadIdx.y];  <span class="comment">// 读取转置后的位置</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="四数据流">四、数据流</h2>
+<h3 id="初始状态输入矩阵按行存储">初始状态：输入矩阵（按行存储）</h3>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">width=128, TILE_SIZE=32</span><br><span class="line">网格大小：gridDim.x = 128/32 = 4, gridDim.y = 128/32 = 4</span><br><span class="line">总共 16 个 block，每个负责 32×32 的区域</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="阶段1加载到共享内存">阶段1：加载到共享内存</h3>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Block0 负责输入矩阵的左上角 32x32 区域</span></span><br><span class="line"><span class="comment">// 线程 (threadIdx.x, threadIdx.y) 加载 input[y*width + x]</span></span><br><span class="line"></span><br><span class="line">共享内存 tile（在一个Block内）：</span><br><span class="line">After loading:</span><br><span class="line">    threadIdx.x=<span class="number">0</span>  <span class="number">1</span>   <span class="number">2</span>  ... <span class="number">31</span></span><br><span class="line">y=<span class="number">0</span>:  input[<span class="number">0</span>]    [<span class="number">1</span>]  [<span class="number">2</span>]  ... [<span class="number">31</span>]</span><br><span class="line">y=<span class="number">1</span>:  input[<span class="number">128</span>]  [<span class="number">129</span>] ...   [<span class="number">159</span>]</span><br><span class="line">y=<span class="number">2</span>:  input[<span class="number">256</span>]  [<span class="number">257</span>] ...   [<span class="number">287</span>]</span><br><span class="line">...</span><br><span class="line">y=<span class="number">31</span>: input[<span class="number">3968</span>] ...        [<span class="number">3999</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 关键：加载时每个 warp 访问连续地址</span></span><br><span class="line"><span class="comment">// warp (threadIdx.y=0, threadIdx.x=0..31):</span></span><br><span class="line"><span class="comment">// 地址: 0, 4, 8, ..., 124 → 完美合并！</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="阶段2共享内存中的转置">阶段2：共享内存中的转置</h3>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同一 Block 内，线程访问 tile[threadIdx.x][threadIdx.y]</span></span><br><span class="line"><span class="comment">// 这是"读取列"操作，但在共享内存中完成，代价低</span></span><br><span class="line"></span><br><span class="line">共享内存转置后（逻辑视图）：</span><br><span class="line">从 tile[threadIdx.y][threadIdx.x] 读取</span><br><span class="line">写入到 tile[threadIdx.x][threadIdx.y]（但实际上不需要写回共享内存，直接读即可）</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：这正是会产生 bank conflict 的地方</span></span><br><span class="line"><span class="comment">// 但通过 padding（+1列）解决了</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="阶段3写出到输出矩阵">阶段3：写出到输出矩阵</h3>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Block0 负责输出矩阵的左上角 32x32 区域吗？</span></span><br><span class="line"><span class="comment">// 不！注意坐标变换：</span></span><br><span class="line"></span><br><span class="line">输出坐标：</span><br><span class="line">out_x = blockIdx.y * TILE_SIZE + threadIdx.x  <span class="comment">// blockIdx.y 决定输出列</span></span><br><span class="line">out_y = blockIdx.x * TILE_SIZE + threadIdx.y  <span class="comment">// blockIdx.x 决定输出行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 原来输入中的 Block(0,0) → 输出中的 Block(0,0)</span></span><br><span class="line"><span class="comment">// 原来输入中的 Block(1,0) → 输出中的 Block(0,1)</span></span><br><span class="line"><span class="comment">// 原来输入中的 Block(0,1) → 输出中的 Block(1,0)</span></span><br><span class="line"></span><br><span class="line">输出矩阵布局：</span><br><span class="line">        <span class="built_in">Block</span>(<span class="number">0</span>,<span class="number">0</span>) <span class="built_in">Block</span>(<span class="number">1</span>,<span class="number">0</span>) <span class="built_in">Block</span>(<span class="number">2</span>,<span class="number">0</span>) <span class="built_in">Block</span>(<span class="number">3</span>,<span class="number">0</span>)  ← blockIdx.y 方向</span><br><span class="line"><span class="built_in">Block</span>(<span class="number">0</span>,<span class="number">0</span>)</span><br><span class="line"><span class="built_in">Block</span>(<span class="number">1</span>,<span class="number">0</span>)</span><br><span class="line"><span class="built_in">Block</span>(<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line"><span class="built_in">Block</span>(<span class="number">3</span>,<span class="number">0</span>)</span><br><span class="line">↑ blockIdx.x 方向</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写入时的地址计算：</span></span><br><span class="line"><span class="type">int</span> output_idx = out_y * width + out_x;</span><br><span class="line"><span class="comment">// = (blockIdx.x * 32 + threadIdx.y) * width + (blockIdx.y * 32 + threadIdx.x)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 对于一个 warp (threadIdx.x=0..31, threadIdx.y=0)：</span></span><br><span class="line"><span class="comment">// out_y = blockIdx.x*32 + 0（固定）</span></span><br><span class="line"><span class="comment">// out_x = blockIdx.y*32 + 0..31（连续）</span></span><br><span class="line"><span class="comment">// output_idx = (固定行) * width + (连续列)</span></span><br><span class="line"><span class="comment">// 完美合并写入！</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="五性能对比分析">五、性能对比分析</h2>
+<p>全局内存事务数量对比（width=1024, tile=32）</p>
+<table>
+<colgroup>
+<col style="width: 23%">
+<col style="width: 31%">
+<col style="width: 23%">
+<col style="width: 8%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">版本</th>
+<th style="text-align: left;">读取事务</th>
+<th style="text-align: left;">写入事务</th>
+<th style="text-align: left;">总事务</th>
+<th style="text-align: left;">带宽效率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>朴素版本</strong></td>
+<td style="text-align: left;">1024×1024/32 = 32,768</td>
+<td style="text-align: left;">32,768（非合并）</td>
+<td style="text-align: left;">65,536</td>
+<td style="text-align: left;">~10-20%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>共享内存版本</strong></td>
+<td style="text-align: left;">32,768（合并）</td>
+<td style="text-align: left;">32,768（合并）</td>
+<td style="text-align: left;">65,536</td>
+<td style="text-align: left;">~90-100%</td>
+</tr>
+</tbody>
+</table>
+<p>虽然总事务数相同，但： - <strong>朴素版本</strong>：每次写入事务传输
+32 字节，但只用了 4 字节（1个float）→ 浪费 87.5% 带宽 -
+<strong>优化版本</strong>：每次写入事务传输 32 字节，32 字节全部有效 →
+充分利用带宽</p>
+<h2 id="六为什么不直接按列读按行写">六、为什么不直接按列读、按行写？</h2>
+<p>你可能会想：那我可以改变读取模式来匹配写入吗？</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 想法：按列读取，按行写入</span></span><br><span class="line"><span class="type">int</span> input_idx = x * width + y;   <span class="comment">// 按列读取（非合并）</span></span><br><span class="line"><span class="type">int</span> output_idx = y * width + x;  <span class="comment">// 按行写入（合并）</span></span><br></pre></td></tr></tbody></table></figure>
+<p><strong>问题</strong>：按列读取同样是非合并的，只是把瓶颈从写入转移到了读取。<strong>总性能不会改善</strong>。</p>
+<p>共享内存的优雅之处在于：<strong>让读取和写入都变成合并的</strong>，通过中间存储解耦了输入和输出的访问模式。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2026/01/13/Attention%E5%89%8D%E5%90%91%E8%AE%A1%E7%AE%97%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -398,10 +561,16 @@ attention</strong></p>
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2026-01-07 00:00:00 / 修改时间：22:39:15" itemprop="dateCreated datePublished" datetime="2026-01-07T00:00:00+08:00">2026-01-07</time>
+              <time title="创建时间：2026-01-07 00:00:00" itemprop="dateCreated datePublished" datetime="2026-01-07T00:00:00+08:00">2026-01-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-05-24 00:17:17" itemprop="dateModified" datetime="2026-05-24T00:17:17+08:00">2026-05-24</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -478,7 +647,7 @@ Cache）</strong>
 <p>GQA将Q头分组，<strong>每组内的Q头共享同一套K/V投影</strong>：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">假设有32个Q头，分为8组：</span><br><span class="line">组1: Q头1-4 → 共享 KV头1</span><br><span class="line">组2: Q头5-8 → 共享 KV头2</span><br><span class="line">...</span><br><span class="line">组8: Q头29-32 → 共享 KV头8</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="代码示例">代码示例</h3>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟MQA：4个Q头共享1个KV头</span></span><br><span class="line">head_dim = <span class="number">64</span></span><br><span class="line">num_q_heads = <span class="number">4</span></span><br><span class="line">num_kv_heads = <span class="number">1</span></span><br><span class="line">seq_len = <span class="number">3</span></span><br><span class="line">batch_size = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建可学习的投影层，第一个参数是输入维度，第二个参数是输出维度</span></span><br><span class="line">q_proj = nn.Linear(head_dim, head_dim * num_q_heads)</span><br><span class="line">k_proj = nn.Linear(head_dim, head_dim * num_kv_heads)  <span class="comment"># 输出维度较小！</span></span><br><span class="line">v_proj = nn.Linear(head_dim, head_dim * num_kv_heads)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟输入</span></span><br><span class="line">x = torch.randn(batch_size, seq_len, head_dim)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成Q、K、V</span></span><br><span class="line">Q = q_proj(x).view(batch_size, seq_len, num_q_heads, head_dim)</span><br><span class="line">K = k_proj(x).view(batch_size, seq_len, num_kv_heads, head_dim)  <span class="comment"># 只有1个头！</span></span><br><span class="line">V = v_proj(x).view(batch_size, seq_len, num_kv_heads, head_dim)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"Q形状:"</span>, Q.shape)  <span class="comment"># [1, 3, 4, 64] - 4个不同的Q头</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"K形状:"</span>, K.shape)  <span class="comment"># [1, 3, 1, 64] - 只有1个KV头！</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"V形状:"</span>, V.shape)  <span class="comment"># [1, 3, 1, 64] - 只有1个KV头！</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制KV以匹配Q头数量，也就是扩展KV矩阵与Q头形状相同</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">repeat_kv</span>(<span class="params">x, n_rep</span>):</span><br><span class="line">    bs, slen, n_kv, hd = x.shape</span><br><span class="line">    <span class="keyword">return</span> x[:, :, :, <span class="literal">None</span>, :].expand(bs, slen, n_kv, n_rep, hd).reshape(bs, slen, n_kv * n_rep, hd)</span><br><span class="line"></span><br><span class="line">K_expanded = repeat_kv(K, num_q_heads // num_kv_heads)  <span class="comment"># 复制4次</span></span><br><span class="line">V_expanded = repeat_kv(V, num_q_heads // num_kv_heads)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"\n扩展后K形状:"</span>, K_expanded.shape)  <span class="comment"># [1, 3, 4, 64]</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"扩展后V形状:"</span>, V_expanded.shape)  <span class="comment"># [1, 3, 4, 64]</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟GQA：4个Q头共享1个KV头</span></span><br><span class="line">head_dim = <span class="number">64</span></span><br><span class="line">num_q_heads = <span class="number">4</span></span><br><span class="line">num_kv_heads = <span class="number">1</span></span><br><span class="line">seq_len = <span class="number">3</span></span><br><span class="line">batch_size = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建可学习的投影层，第一个参数是输入维度，第二个参数是输出维度</span></span><br><span class="line">q_proj = nn.Linear(head_dim, head_dim * num_q_heads)</span><br><span class="line">k_proj = nn.Linear(head_dim, head_dim * num_kv_heads)  <span class="comment"># 输出维度较小！</span></span><br><span class="line">v_proj = nn.Linear(head_dim, head_dim * num_kv_heads)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟输入</span></span><br><span class="line">x = torch.randn(batch_size, seq_len, head_dim)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成Q、K、V</span></span><br><span class="line">Q = q_proj(x).view(batch_size, seq_len, num_q_heads, head_dim)</span><br><span class="line">K = k_proj(x).view(batch_size, seq_len, num_kv_heads, head_dim)  <span class="comment"># 只有1个头！</span></span><br><span class="line">V = v_proj(x).view(batch_size, seq_len, num_kv_heads, head_dim)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"Q形状:"</span>, Q.shape)  <span class="comment"># [1, 3, 4, 64] - 4个不同的Q头</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"K形状:"</span>, K.shape)  <span class="comment"># [1, 3, 1, 64] - 只有1个KV头！</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"V形状:"</span>, V.shape)  <span class="comment"># [1, 3, 1, 64] - 只有1个KV头！</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制KV以匹配Q头数量，也就是扩展KV矩阵与Q头形状相同</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">repeat_kv</span>(<span class="params">x, n_rep</span>):</span><br><span class="line">    bs, slen, n_kv, hd = x.shape</span><br><span class="line">    <span class="keyword">return</span> x[:, :, :, <span class="literal">None</span>, :].expand(bs, slen, n_kv, n_rep, hd).reshape(bs, slen, n_kv * n_rep, hd)</span><br><span class="line"></span><br><span class="line">K_expanded = repeat_kv(K, num_q_heads // num_kv_heads)  <span class="comment"># 复制4次</span></span><br><span class="line">V_expanded = repeat_kv(V, num_q_heads // num_kv_heads)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"\n扩展后K形状:"</span>, K_expanded.shape)  <span class="comment"># [1, 3, 4, 64]</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"扩展后V形状:"</span>, V_expanded.shape)  <span class="comment"># [1, 3, 4, 64]</span></span><br></pre></td></tr></tbody></table></figure>
 <h2 id="对比">对比</h2>
 <table>
 <thead>
@@ -3786,116 +3955,6 @@ Argument）：线程已经是<strong>分离状态</strong>。</li>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/03/24/VSCode%20%E5%8A%A0%E8%BD%BD%20.vscode%20%E8%A7%84%E5%88%99/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/03/24/VSCode%20%E5%8A%A0%E8%BD%BD%20.vscode%20%E8%A7%84%E5%88%99/" class="post-title-link" itemprop="url">VSCode加载`.vscode`的规则</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2025-03-24 23:22:06" itemprop="dateCreated datePublished" datetime="2025-03-24T23:22:06+08:00">2025-03-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-05-15 21:23:48" itemprop="dateModified" datetime="2025-05-15T21:23:48+08:00">2025-05-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/VSCode/" itemprop="url" rel="index"><span itemprop="name">VSCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>622</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>下面是我的文件结构</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">D:\CodeFile\</span><br><span class="line">│── .vscode\                 ← 父目录 `.vscode`</span><br><span class="line">│   ├── settings.json        (影响整个 `CodeFile` 及所有子目录)</span><br><span class="line">│   ├── tasks.json           (VSCode 任务系统会使用这个)</span><br><span class="line">│   ├── launch.json          (VSCode 调试器会使用这个)</span><br><span class="line">│</span><br><span class="line">├── CPP\</span><br><span class="line">│   ├── .vscode\             ← 子目录 `.vscode`（默认不会生效）</span><br><span class="line">│   │   ├── settings.json    (不会生效，除非 VSCode 直接打开 `CPP` 目录)</span><br><span class="line">│   │   ├── tasks.json       (不会生效)</span><br><span class="line">│   │   ├── launch.json      (不会生效)</span><br><span class="line">│   ├── test.cpp</span><br><span class="line">│   └── ...</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<p>VSCode 的 <code>settings.json</code> 是
-<strong>基于当前打开的“工作区”</strong> 来生效的：</p>
-<ul>
-<li><strong>如果你打开 <code>CodeFile</code> 目录</strong>：
-<ul>
-<li><code>CodeFile/.vscode/settings.json</code> 生效（影响
-<code>CodeFile</code> 下所有子文件夹，包括 <code>CPP</code>）。</li>
-<li>你的 <code>"cpp"</code> 运行配置会作用于整个 <code>CodeFile</code>
-目录。</li>
-<li><strong><code>$workspaceFolder</code> 变为
-<code>d:\CodeFile\</code></strong>，Code Runner 解析 <code>$dir</code>
-时可能会有路径问题。</li>
-</ul></li>
-<li><strong>如果你只打开 <code>CPP</code> 目录</strong>：
-<ul>
-<li><code>CodeFile/.vscode/settings.json</code> 不会生效（因为
-<code>.vscode</code> 在 <code>CodeFile</code> 目录下）。</li>
-<li>需要 <code>CPP</code> 目录下也有一个
-<code>.vscode/settings.json</code> 才能影响 <code>CPP</code> 目录。</li>
-</ul></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3967,20 +4026,20 @@ Argument）：线程已经是<strong>分离状态</strong>。</li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">188</span>
+          <span class="site-state-item-count">189</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">80</span>
+        <span class="site-state-item-count">81</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -4016,12 +4075,12 @@ Argument）：线程已经是<strong>分离状态</strong>。</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">514k</span>
+    <span title="站点总字数">517k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7:47</span>
+    <span title="站点阅读时长">7:50</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
