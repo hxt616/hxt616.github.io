@@ -164,6 +164,186 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/05/26/reduce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/05/26/reduce/" class="post-title-link" itemprop="url">reduce算子实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-05-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-26T00:00:00+08:00">2026-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-05-29 23:43:22" itemprop="dateModified" datetime="2026-05-29T23:43:22+08:00">2026-05-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考：https://github.com/BBuf/how-to-optim-algorithm-in-cuda/tree/master/cuda-kernels/reduce</p>
+<h2 id="reduce-0-baseline">reduce 0 Baseline</h2>
+<p>数组之和</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">reduce0</span><span class="params">(<span class="type">int</span> *g_idata, <span class="type">int</span> *g_odata)</span> </span>{ <span class="comment">// 指向全局内存的输入/出数组指针</span></span><br><span class="line">    <span class="keyword">extern</span> __shared__ <span class="type">int</span> sdata[]; <span class="comment">// 这个数组的大小由内核启动配置&lt;&lt;&lt;...&gt;&gt;&gt;的第三个参数决定</span></span><br><span class="line">    <span class="comment">// each thread loads one element from global to shared mem</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> tid = threadIdx.x; </span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> i = blockIdx.x*blockDim.x + threadIdx.x;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 将全局内存中的一个元素读到共享内存 sdata[tid] 中</span></span><br><span class="line">    sdata[tid] = g_idata[i];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 保证共享内存中的数据在开始归约前已被完整填充，这是 块级同步，不会跨 block</span></span><br><span class="line">    __syncthreads(); <span class="comment">// 阻塞 block 内的所有线程，直到全部到达此处</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 在共享内存中进行循环归约，每次循环是所有元素的一次归约</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">unsigned</span> <span class="type">int</span> s=<span class="number">1</span>; s &lt; blockDim.x; s *= <span class="number">2</span>) { <span class="comment">// 线程在 block 内 的一维索引（0 ~ blockDim.x-1）</span></span><br><span class="line">        <span class="keyword">if</span> (tid % (<span class="number">2</span>*s) == <span class="number">0</span>) {</span><br><span class="line">            sdata[tid] += sdata[tid + s];</span><br><span class="line">        }</span><br><span class="line">    	__syncthreads();</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 只有 tid = 0 的线程负责将 block 归约的结果写回全局内存</span></span><br><span class="line">    <span class="keyword">if</span> (tid == <span class="number">0</span>) g_odata[blockIdx.x] = sdata[<span class="number">0</span>];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>缺点：</p>
+<ul>
+<li>偶数线程工作，奇数线程闲置，随着不断循环，效率逐渐下降，大量线程空闲</li>
+<li>可能会产生 bank conflict</li>
+<li><code>__syncthreads();</code>的代价不低，所有 warp 必须等待，SM
+调度停顿</li>
+</ul>
+<h2 id="reduce-1-交错索引">reduce 1 交错索引</h2>
+<p>交错索引</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">unsigned</span> <span class="type">int</span> s = <span class="number">1</span>; s &lt; blockDim.x; s *= <span class="number">2</span>) {</span><br><span class="line">    <span class="type">int</span> index = <span class="number">2</span> * s * tid;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &lt; blockDim.x) {</span><br><span class="line">        sdata[index] += sdata[index + s];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    __syncthreads();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li><p>消除 <code>%</code> 开销（模运算开销大）</p></li>
+<li><p>减少 warp divergence，即减少了同一个 warp
+内部线程的执行路径分歧</p></li>
+<li><p>提高 warp
+执行连续性，<code>reduce 0</code>方法中执行的线程号离散，而当前方法线程号连续，示例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// reduce 0</span><br><span class="line">0 active</span><br><span class="line">1 inactive</span><br><span class="line">2 active</span><br><span class="line">3 inactive</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">// reduce 1</span><br><span class="line">thread0~15 active</span><br><span class="line">thread16~31 inactive</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>还是可能存在 bank
+conflict，当经过多次迭代后，可能出现下面这种情况，多个线程同时访问同一个bank</p>
+<table>
+<thead>
+<tr class="header">
+<th>index</th>
+<th>bank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>32</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>64</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>96</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<h2 id="reduce-2-顺序索引">reduce 2 顺序索引</h2>
+<p>通过顺序索引的方式优化 bank conflict 问题</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">unsigned</span> <span class="type">int</span> s = blockDim.x/<span class="number">2</span>; s &gt; <span class="number">0</span>; s &gt;&gt;= <span class="number">1</span>) {</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (tid &lt; s) {</span><br><span class="line">        sdata[tid] += sdata[tid + s];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    __syncthreads();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">当 s = 128 时，访问的共享内存的index如下：</span></span><br><span class="line"><span class="comment">线程1：0 + 128</span></span><br><span class="line"><span class="comment">线程2：1 + 129</span></span><br><span class="line"><span class="comment">线程3：2 + 130</span></span><br><span class="line"><span class="comment">...</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></tbody></table></figure>
+<p>即使再多迭代几次，还是连续的线程对共享内存进行访问，也就避免了出现
+bank conflict</p>
+<h2 id="reduce-3-加载时计算">reduce 3 加载时计算</h2>
+<p>解决每一轮迭代中都有大量空闲线程的问题，核心思想：</p>
+<p><strong>在读 global memory 时顺便完成第一轮 reduction</strong></p>
+<ul>
+<li>推迟 idle 的出现，但是线程空闲还是存在的</li>
+<li>减少 reduction 轮数</li>
+<li>提高 overall utilization</li>
+</ul>
+<blockquote>
+<p>GPU往往是因为<code>memory-bound</code>影响效率，所以可以尽可能提高
+计算量</p>
+</blockquote>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">int</span> tid = threadIdx.x;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> i = </span><br><span class="line">    blockIdx.x * (blockDim.x * <span class="number">2</span>)  <span class="comment">// 相当于每两个block进行了合并</span></span><br><span class="line">    + threadIdx.x;</span><br><span class="line"></span><br><span class="line">sdata[tid] =</span><br><span class="line">    g_idata[i]</span><br><span class="line">    + g_idata[i + blockDim.x];</span><br><span class="line"></span><br><span class="line">__syncthreads();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对应的还是 v3 的循环处理方法</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">unsigned</span> <span class="type">int</span> s=blockDim.x/<span class="number">2</span>; s&gt;<span class="number">0</span>; s &gt;&gt;= <span class="number">1</span>) {</span><br><span class="line">    <span class="keyword">if</span> (tid &lt; s){</span><br><span class="line">        sdata[tid] += sdata[tid + s];</span><br><span class="line">    }</span><br><span class="line">    __syncthreads();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="reduce-4-展开最后一个warp">reduce 4 展开最后一个warp</h2>
+<p>对于<code>reudce 3</code>的 kernel
+来说，它的带宽相比于理论带宽还差得比较远，因为 Reduce
+操作并不是算术密集型的算子。因此，一个可能的瓶颈是指令的开销。这里说的指令不是加载，存储或者给计算核心用的辅算术指令。这里的指令瓶颈是指<strong>地址算术
+(address arithmetic) 和循环开销 (loop overhead)。</strong>。</p>
+<p>当<code>reduce 3</code>里面的 s&lt;=32 时，此时的 block 中只有一个
+warp0
+在干活时，但线程还在进行同步操作。这一条语句造成了极大的指令浪费。<strong>由于一个
+warp 的32个线程都是在同一个 SIMD
+单元上，天然保持了同步的状态</strong>，所以当 s&lt;=32 时，也即只有一个
+warp
+在工作时，完全可以把<code>__syncthreads()</code>这条同步语句去掉，<strong>使用手动展开的方式来代替</strong>。也就是下面的<code>warpReduce</code>函数</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// volatile修饰符作用：对访问该变量的代码不再优化</span></span><br><span class="line"><span class="function">__device__ <span class="type">void</span> <span class="title">warpReduce</span><span class="params">(<span class="keyword">volatile</span> <span class="type">float</span>* cache, <span class="type">unsigned</span> <span class="type">int</span> tid)</span></span>{</span><br><span class="line">    cache[tid]+=cache[tid+<span class="number">32</span>];</span><br><span class="line">    cache[tid]+=cache[tid+<span class="number">16</span>];</span><br><span class="line">    cache[tid]+=cache[tid+<span class="number">8</span>];</span><br><span class="line">    cache[tid]+=cache[tid+<span class="number">4</span>];</span><br><span class="line">    cache[tid]+=cache[tid+<span class="number">2</span>];</span><br><span class="line">    cache[tid]+=cache[tid+<span class="number">1</span>];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">reduce_v4</span><span class="params">(<span class="type">float</span> *g_idata,<span class="type">float</span> *g_odata)</span></span>{</span><br><span class="line">    __shared__ <span class="type">float</span> sdata[BLOCK_SIZE];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// each thread loads one element from global to shared mem</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> i = blockIdx.x*(blockDim.x*<span class="number">2</span>) + threadIdx.x;</span><br><span class="line">    sdata[tid] = g_idata[i] + g_idata[i + blockDim.x];</span><br><span class="line">    __syncthreads();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注意这里的循环结束条件是 s &gt; 32</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">unsigned</span> <span class="type">int</span> s=blockDim.x/<span class="number">2</span>; s&gt;<span class="number">32</span>; s &gt;&gt;= <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">if</span> (tid &lt; s){</span><br><span class="line">            sdata[tid] += sdata[tid + s];</span><br><span class="line">        }</span><br><span class="line">        __syncthreads();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用手动展开计算</span></span><br><span class="line">    <span class="keyword">if</span> (tid &lt; <span class="number">32</span>) <span class="built_in">warpReduce</span>(sdata, tid);</span><br><span class="line">    <span class="keyword">if</span> (tid == <span class="number">0</span>) g_odata[blockIdx.x] = sdata[<span class="number">0</span>];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>用 <code>volatile</code>
+的核心原因是：防止编译器把“共享内存读写优化掉”，保证 warp
+内线程看到的是“最新值”，详细分析见https://stackoverflow.com/questions/21205471/cuda-in-warp-reduction-and-volatile-keyword?noredirect=1&amp;lq=1</li>
+</ul>
+<h2 id="reduce-5-完全展开">reduce 5 完全展开</h2>
+<p>for 循环完全展开，实现如下：</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="type">unsigned</span> <span class="type">int</span> blockSize&gt;</span><br><span class="line"><span class="function">__device__ <span class="type">void</span> <span class="title">warpReduce</span><span class="params">(<span class="keyword">volatile</span> <span class="type">float</span>* cache,<span class="type">int</span> tid)</span></span>{</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">64</span>)cache[tid]+=cache[tid+<span class="number">32</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">32</span>)cache[tid]+=cache[tid+<span class="number">16</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">16</span>)cache[tid]+=cache[tid+<span class="number">8</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">8</span>)cache[tid]+=cache[tid+<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">4</span>)cache[tid]+=cache[tid+<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">2</span>)cache[tid]+=cache[tid+<span class="number">1</span>];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="type">unsigned</span> <span class="type">int</span> blockSize&gt; <span class="comment">// 编译时常量</span></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">reduce_v5</span><span class="params">(<span class="type">float</span> *g_idata,<span class="type">float</span> *g_odata)</span></span>{</span><br><span class="line">    __shared__ <span class="type">float</span> sdata[BLOCK_SIZE];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// each thread loads one element from global to shared mem</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> i = blockIdx.x*(blockDim.x*<span class="number">2</span>) + threadIdx.x;</span><br><span class="line">    sdata[tid] = g_idata[i] + g_idata[i + blockDim.x];</span><br><span class="line">    __syncthreads();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// do reduction in shared mem</span></span><br><span class="line">    <span class="keyword">if</span>(blockSize&gt;=<span class="number">512</span>){</span><br><span class="line">        <span class="keyword">if</span>(tid&lt;<span class="number">256</span>){</span><br><span class="line">            sdata[tid]+=sdata[tid+<span class="number">256</span>];</span><br><span class="line">        }</span><br><span class="line">        __syncthreads();</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(blockSize&gt;=<span class="number">256</span>){</span><br><span class="line">        <span class="keyword">if</span>(tid&lt;<span class="number">128</span>){</span><br><span class="line">            sdata[tid]+=sdata[tid+<span class="number">128</span>];</span><br><span class="line">        }</span><br><span class="line">        __syncthreads();</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(blockSize&gt;=<span class="number">128</span>){</span><br><span class="line">        <span class="keyword">if</span>(tid&lt;<span class="number">64</span>){</span><br><span class="line">            sdata[tid]+=sdata[tid+<span class="number">64</span>];</span><br><span class="line">        }</span><br><span class="line">        __syncthreads();</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// write result for this block to global mem</span></span><br><span class="line">    <span class="keyword">if</span>(tid&lt;<span class="number">32</span>)<span class="built_in">warpReduce</span>&lt;blockSize&gt;(sdata,tid);</span><br><span class="line">    <span class="keyword">if</span> (tid == <span class="number">0</span>) g_odata[blockIdx.x] = sdata[<span class="number">0</span>];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="reduce-6-调节blocksize和gridsize">reduce 6
+调节BlockSize和GridSize</h2>
+<p>可以设置一个线程负责更多的元素计算</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="type">unsigned</span> <span class="type">int</span> blockSize&gt;</span><br><span class="line"><span class="function">__device__ <span class="type">void</span> <span class="title">warpReduce</span><span class="params">(<span class="keyword">volatile</span> <span class="type">float</span>* cache,<span class="type">int</span> tid)</span></span>{</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">64</span>)cache[tid]+=cache[tid+<span class="number">32</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">32</span>)cache[tid]+=cache[tid+<span class="number">16</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">16</span>)cache[tid]+=cache[tid+<span class="number">8</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">8</span>)cache[tid]+=cache[tid+<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">4</span>)cache[tid]+=cache[tid+<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">if</span>(blockSize &gt;= <span class="number">2</span>)cache[tid]+=cache[tid+<span class="number">1</span>];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="type">unsigned</span> <span class="type">int</span> blockSize, <span class="type">int</span> NUM_PER_THREAD&gt;</span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">reduce_v6</span><span class="params">(<span class="type">float</span> *g_idata,<span class="type">float</span> *g_odata)</span></span>{</span><br><span class="line">    __shared__ <span class="type">float</span> sdata[BLOCK_SIZE];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// each thread loads one element from global to shared mem</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> i = blockIdx.x*(blockDim.x * NUM_PER_THREAD) + threadIdx.x;</span><br><span class="line">    sdata[tid] = <span class="number">0</span>;</span><br><span class="line">    <span class="meta">#<span class="keyword">pragma</span> unroll</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> iter=<span class="number">0</span>; iter&lt;NUM_PER_THREAD; iter++){</span><br><span class="line">        sdata[tid] += g_idata[i+iter*blockSize];</span><br><span class="line">    }</span><br><span class="line">    __syncthreads();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// do reduction in shared mem</span></span><br><span class="line">    <span class="keyword">if</span>(blockSize&gt;=<span class="number">512</span>){</span><br><span class="line">        <span class="keyword">if</span>(tid&lt;<span class="number">256</span>){</span><br><span class="line">            sdata[tid]+=sdata[tid+<span class="number">256</span>];</span><br><span class="line">        }</span><br><span class="line">        __syncthreads();</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(blockSize&gt;=<span class="number">256</span>){</span><br><span class="line">        <span class="keyword">if</span>(tid&lt;<span class="number">128</span>){</span><br><span class="line">            sdata[tid]+=sdata[tid+<span class="number">128</span>];</span><br><span class="line">        }</span><br><span class="line">        __syncthreads();</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(blockSize&gt;=<span class="number">128</span>){</span><br><span class="line">        <span class="keyword">if</span>(tid&lt;<span class="number">64</span>){</span><br><span class="line">            sdata[tid]+=sdata[tid+<span class="number">64</span>];</span><br><span class="line">        }</span><br><span class="line">        __syncthreads();</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// write result for this block to global mem</span></span><br><span class="line">    <span class="keyword">if</span>(tid&lt;<span class="number">32</span>)<span class="built_in">warpReduce</span>&lt;blockSize&gt;(sdata,tid);</span><br><span class="line">    <span class="keyword">if</span> (tid == <span class="number">0</span>) g_odata[blockIdx.x] = sdata[<span class="number">0</span>];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">float</span> *input_host = (<span class="type">float</span>*)<span class="built_in">malloc</span>(N*<span class="built_in">sizeof</span>(<span class="type">float</span>));</span><br><span class="line">    <span class="type">float</span> *input_device;</span><br><span class="line">    <span class="built_in">cudaMalloc</span>((<span class="type">void</span> **)&amp;input_device, N*<span class="built_in">sizeof</span>(<span class="type">float</span>));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) input_host[i] = <span class="number">2.0</span>;</span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(input_device, input_host, N*<span class="built_in">sizeof</span>(<span class="type">float</span>), cudaMemcpyHostToDevice);</span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> block_num = <span class="number">1024</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> NUM_PER_BLOCK = N / block_num;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> NUM_PER_THREAD = NUM_PER_BLOCK / BLOCK_SIZE;</span><br><span class="line">    <span class="type">float</span> *output_host = (<span class="type">float</span>*)<span class="built_in">malloc</span>((block_num) * <span class="built_in">sizeof</span>(<span class="type">float</span>));</span><br><span class="line">    <span class="type">float</span> *output_device;</span><br><span class="line">    <span class="built_in">cudaMalloc</span>((<span class="type">void</span> **)&amp;output_device, (block_num) * <span class="built_in">sizeof</span>(<span class="type">float</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="function">dim3 <span class="title">grid</span><span class="params">(block_num, <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">block</span><span class="params">(BLOCK_SIZE, <span class="number">1</span>)</span></span>;</span><br><span class="line">    reduce_v6&lt;BLOCK_SIZE ,NUM_PER_THREAD&gt;&lt;&lt;&lt;grid, block&gt;&gt;&gt;(input_device, output_device);</span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(output_host, output_device, block_num * <span class="built_in">sizeof</span>(<span class="type">float</span>), cudaMemcpyDeviceToHost);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2026/05/23/Matrix%20Transpose/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2873,160 +3053,10 @@ Exported）；</li>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/05/13/std_thread/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/13/std_thread/" class="post-title-link" itemprop="url">std::thread</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2025-05-13 00:00:00" itemprop="dateCreated datePublished" datetime="2025-05-13T00:00:00+08:00">2025-05-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-07-27 00:13:08" itemprop="dateModified" datetime="2025-07-27T00:13:08+08:00">2025-07-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CPP/" itemprop="url" rel="index"><span itemprop="name">CPP</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="一基本使用方法">一、基本使用方法</h2>
-<h3 id="创建线程">1. 创建线程</h3>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printMessage</span><span class="params">()</span> </span>{</span><br><span class="line">    std::cout &lt;&lt; <span class="string">"Hello from thread!"</span> &lt;&lt; std::endl;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="function">std::thread <span class="title">t</span><span class="params">(printMessage)</span></span>; <span class="comment">// 启动线程</span></span><br><span class="line">    t.<span class="built_in">join</span>(); <span class="comment">// 等待线程结束</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="带参数的线程">2. 带参数的线程</h3>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printSum</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>{</span><br><span class="line">    std::cout &lt;&lt; a + b &lt;&lt; std::endl;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="function">std::thread <span class="title">t</span><span class="params">(printSum, <span class="number">3</span>, <span class="number">4</span>)</span></span>; <span class="comment">// 传值参数</span></span><br><span class="line">    t.<span class="built_in">join</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="使用-lambda-表达式">3. 使用 Lambda 表达式</h3>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::thread <span class="title">t</span><span class="params">([]() {</span></span></span><br><span class="line"><span class="params"><span class="function">    std::cout &lt;&lt; <span class="string">"Lambda thread"</span> &lt;&lt; std::endl;</span></span></span><br><span class="line"><span class="params"><span class="function">})</span></span>;</span><br><span class="line">t.<span class="built_in">join</span>();</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="使用成员函数">4. 使用成员函数</h3>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Worker</span> {</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">doWork</span><span class="params">(<span class="type">int</span> times)</span> </span>{</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; times; ++i)</span><br><span class="line">            std::cout &lt;&lt; <span class="string">"Working..."</span> &lt;&lt; std::endl;</span><br><span class="line">    }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    Worker w;</span><br><span class="line">    <span class="function">std::thread <span class="title">t</span><span class="params">(&amp;Worker::doWork, &amp;w, <span class="number">3</span>)</span></span>;</span><br><span class="line">    t.<span class="built_in">join</span>();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<hr>
-<h2 id="二线程控制">二、线程控制</h2>
-<h3 id="detach">1. <code>detach()</code></h3>
-<p><code>std::thread::detach()</code> 的意思是：</p>
-<ul>
-<li>让线程 <strong>后台运行（daemon-like）</strong></li>
-<li>主线程 <strong>不再跟踪这个线程</strong>，你不能再
-<code>join()</code> 它，也无法控制它</li>
-<li>它会在自己工作完成后自动结束</li>
-</ul>
-<h4 id="但如果-main-提前退出">但如果 <code>main()</code> 提前退出？</h4>
-<p>一旦 <code>main()</code>
-返回，程序的所有资源都会被释放，<strong>包括所有线程</strong>（不管他们干完了没有）！</p>
-<ul>
-<li>即使你已经 <code>detach()</code>
-了线程，它也可能<strong>没有时间完成任务</strong>；</li>
-<li>程序就直接退出了，<strong>线程被强制杀死</strong>，<strong>任务中断</strong>；</li>
-<li>所以你可能看不到完整输出，或者文件没下载完。</li>
-</ul>
-<h4 id="示例">示例</h4>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">myfunc</span><span class="params">()</span> </span>{</span><br><span class="line">    std::<span class="built_in">thread</span>([] {</span><br><span class="line">        <span class="built_in">download</span>(<span class="string">"file.zip"</span>); <span class="comment">// 下载需要 4 秒</span></span><br><span class="line">    }).<span class="built_in">detach</span>();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="built_in">myfunc</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// 马上退出！后台线程直接被终止</span></span><br><span class="line">}</span><br><span class="line"><span class="comment">/* 运行结果：可能只打印出 1～2 行“Downloading ...”，甚至什么都不打印。*/</span></span><br></pre></td></tr></tbody></table></figure>
-<p>解决方法：</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">myfunc</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="function">std::thread <span class="title">t</span><span class="params">([] {</span></span></span><br><span class="line"><span class="params"><span class="function">        download(<span class="string">"file.zip"</span>);</span></span></span><br><span class="line"><span class="params"><span class="function">    })</span></span>;</span><br><span class="line">    t.<span class="built_in">join</span>(); <span class="comment">// 等它干完</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="join">2. <code>join()</code></h3>
-<p><code>std::thread::join()</code>
-的作用是：<strong>阻塞当前线程，直到目标线程执行完成</strong>。</p>
-<ul>
-<li>当你调用
-<code>t.join();</code>，当前线程（比如主线程）会<strong>暂停运行</strong>；</li>
-<li>一直等到 <code>t</code> 所代表的那个子线程跑完；</li>
-<li>然后继续执行后面的语句。</li>
-</ul>
-<p><strong>注意事项</strong>：</p>
-<ol type="1">
-<li><p>一个线程只能 <code>join()</code> 一次</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::thread <span class="title">t</span><span class="params">(work)</span></span>;</span><br><span class="line">t.<span class="built_in">join</span>();</span><br><span class="line">t.<span class="built_in">join</span>(); <span class="comment">// 再次调用会崩溃，线程已经结束</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>线程未启动不能 <code>join()</code></p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::thread t;  <span class="comment">// 默认构造，未绑定函数</span></span><br><span class="line">t.<span class="built_in">join</span>();       <span class="comment">// 崩溃，线程未启动</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>通常在 <code>joinable()</code> 判断后调用</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (t.<span class="built_in">joinable</span>()) {</span><br><span class="line">    t.<span class="built_in">join</span>();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>这是一种<strong>良好的编程习惯</strong>，避免调用非法
-<code>join()</code>。</p></li>
-</ol>
-<hr>
-<h2 id="三常见注意事项">三、常见注意事项</h2>
-<ol type="1">
-<li><p><strong>不要忘记调用 <code>join()</code> 或
-<code>detach()</code></strong>，否则程序会崩溃。</p></li>
-<li><p><strong>传递引用参数时要使用 <code>std::ref</code></strong>：</p>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">update</span><span class="params">(<span class="type">int</span>&amp; x)</span> </span>{ x++; }</span><br><span class="line"><span class="function">std::thread <span class="title">t</span><span class="params">(update, std::ref(myInt))</span></span>;</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p><strong>避免使用局部变量传给线程（可能悬空）</strong>。</p></li>
-<li><p><strong>多线程共享资源要注意加锁</strong>，使用
-<code>std::mutex</code> 等同步原语。</p></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -3094,7 +3124,7 @@ Exported）；</li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">190</span>
+          <span class="site-state-item-count">191</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -3143,12 +3173,12 @@ Exported）；</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">519k</span>
+    <span title="站点总字数">526k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7:52</span>
+    <span title="站点阅读时长">7:58</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

@@ -164,6 +164,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/22/N%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/22/N%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">N叉树的层序遍历</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-02-22 10:53:22" itemprop="dateCreated datePublished" datetime="2024-02-22T10:53:22+08:00">2024-02-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/n-ary-tree-level-order-traversal/</p>
+<p>这题与二叉树的层序遍历基本相同，直接在之前的代码上稍作修改。</p>
+<p>运行默认的2个测试用例，通过了；直接提交发现报错：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">=================================================================</span><br><span class="line">==22==ERROR: AddressSanitizer: attempting double-free on 0x603000000100 in thread T0:</span><br><span class="line">    #0 0x7f28f87e7537 in __interceptor_free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127</span><br><span class="line">    #2 0x7f28f7e17d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)</span><br><span class="line">    #3 0x7f28f7e17e3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f)</span><br><span class="line">0x603000000100 is located 0 bytes inside of 20-byte region [0x603000000100,0x603000000114)</span><br><span class="line">freed by thread T0 here:</span><br><span class="line">    #0 0x7f28f87e7537 in __interceptor_free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127</span><br><span class="line">    #2 0x7f28f7e17d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)</span><br><span class="line">previously allocated by thread T0 here:</span><br><span class="line">    #0 0x7f28f87e7887 in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:145</span><br><span class="line">    #3 0x7f28f7e17d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)</span><br><span class="line">SUMMARY: AddressSanitizer: double-free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127 in __interceptor_free</span><br><span class="line">==22==ABORTING</span><br></pre></td></tr></tbody></table></figure>
+<p>搜了一下，上述报错原因是：<strong>这个错误提示是地址检测工具（AddressSanitizer）给出的。它指出了双重释放（double-free）的问题，意味着你试图释放已经被释放过的内存空间。</strong></p>
+<p>然后发现LeetCode上有人提过这个问题，解决方案是<strong>初始化<code>*returnColumnSizes</code></strong>，下面是正确代码：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>** <span class="title function_">levelOrder</span><span class="params">(<span class="keyword">struct</span> Node* root, <span class="type">int</span>* returnSize, <span class="type">int</span>** returnColumnSizes)</span> {</span><br><span class="line">    <span class="type">int</span>** res = (<span class="type">int</span>**)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>*)*<span class="number">1000</span>);</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(root==<span class="literal">NULL</span>){</span><br><span class="line">        *returnColumnSizes = <span class="literal">NULL</span>; <span class="comment">//很重要！！！</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span>* <span class="title">que</span>[10000];</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> count[<span class="number">1000</span>]; <span class="comment">//统计每一层节点的个数</span></span><br><span class="line">    <span class="type">int</span> front=<span class="number">0</span>, rear=<span class="number">0</span>; <span class="comment">//队头，队尾</span></span><br><span class="line">    que[rear++] = root; <span class="comment">//根结点入队</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(front!=rear) {</span><br><span class="line">        count[*returnSize] = rear-front; <span class="comment">//当前层所包含的节点个数</span></span><br><span class="line">        <span class="type">int</span> start = front;  <span class="comment">//当前层的起始节点下标</span></span><br><span class="line">        front = rear; <span class="comment">//当前层的最后一个节点下标</span></span><br><span class="line">        res[*returnSize] = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*count[*returnSize]); <span class="comment">//分配空间</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=start; i&lt;front; i++) {</span><br><span class="line">            res[*returnSize][i-start] = que[i]-&gt;val;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>; j&lt;que[i]-&gt;numChildren; j++) { <span class="comment">//遍历当前节点的所有子结点</span></span><br><span class="line">                que[rear++] = que[i]-&gt;children[j];</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        (*returnSize)++; <span class="comment">//层数增加</span></span><br><span class="line">    }</span><br><span class="line">    *returnColumnSizes = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*(*returnSize));</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;*returnSize; i++) {</span><br><span class="line">        (*returnColumnSizes)[i] = count[i];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/19/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1031,110 +1122,10 @@ false</p></li>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/08/%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/08/%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/" class="post-title-link" itemprop="url">三数之和</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-02-08 15:40:30" itemprop="dateCreated datePublished" datetime="2024-02-08T15:40:30+08:00">2024-02-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/3sum/description/</p>
-<p>这题使用双指针法比较合适：</p>
-<ul>
-<li><p>先使用<code>qsort()</code>函数将数组进行升序排序</p></li>
-<li><p>由于是三数之和，所以使用一个for循环确定<strong>第一个元素下标i</strong>，初始化左右指针——使用<code>left</code>指针指向第二个元素（<strong>i+1</strong>），<code>right</code>指针指向数组<strong>最后一个元素</strong></p></li>
-<li><p>当三数之和大于0时，执行<code>right--</code>，因为当前数组是有序的，所以左移右指针使得三数之和减小</p></li>
-<li><p>当三数之和小于0时，执行<code>left++</code>，原理同上</p></li>
-<li><p>难点在于去重，<strong>不能有重复的三元组，但三元组内的元素是可以重复的！</strong></p>
-<ol type="1">
-<li><p>对一个元素去重：比较nums[i]和nums[i-1]</p>
-<p>若 i&gt;0 且
-nums[i]==nums[i-1]，则说明三元组中第一个数不变，又因为此时右指针不做任何操作，即三元组中有两个值不变，则第三个值也是确定的，因此产生了重复的三元组</p></li>
-<li><p>对后两个元素去重：原理同上</p></li>
-</ol></li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Return an array of arrays of size *returnSize.</span></span><br><span class="line"><span class="comment"> * The sizes of the arrays are returned as *returnColumnSizes array.</span></span><br><span class="line"><span class="comment"> * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">cmp</span><span class="params">(<span class="type">const</span> <span class="type">void</span>* ptr1, <span class="type">const</span> <span class="type">void</span>* ptr2)</span> {</span><br><span class="line">    <span class="keyword">return</span> *((<span class="type">int</span>*)ptr1) &gt; *((<span class="type">int</span>*)ptr2);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span>** <span class="title function_">threeSum</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize, <span class="type">int</span>* returnSize, <span class="type">int</span>** returnColumnSizes)</span>{</span><br><span class="line">    <span class="type">int</span> **ans = (<span class="type">int</span>**)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>*)*numsSize  *numsSize);</span><br><span class="line">    <span class="type">int</span> ansTop = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(numsSize&lt;<span class="number">3</span>) { <span class="comment">//若数组元素个数小于3则返回空数组ans</span></span><br><span class="line">        *returnSize = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">//升序，参数（数组名，数组大小，数组元素大小，排序原则）</span></span><br><span class="line">    qsort(nums, numsSize, <span class="keyword">sizeof</span>(<span class="type">int</span>), cmp); </span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;numsSize<span class="number">-2</span>; i++) {</span><br><span class="line">        <span class="keyword">if</span>(nums[i]&gt;<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>; <span class="comment">//升序后若第一个元素大于0，则三数之和一定大于0</span></span><br><span class="line">        <span class="keyword">if</span>(i&gt;<span class="number">0</span> &amp;&amp; nums[i] == nums[i<span class="number">-1</span>])</span><br><span class="line">            <span class="keyword">continue</span>; <span class="comment">//对a（第一个元素）去重</span></span><br><span class="line">        <span class="type">int</span> left=i+<span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> right = numsSize - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(right&gt;left) {</span><br><span class="line">            <span class="type">int</span> sum = nums[right] + nums[left] + nums[i];</span><br><span class="line">            <span class="keyword">if</span>(sum&lt;<span class="number">0</span>)</span><br><span class="line">                left++;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(sum&gt;<span class="number">0</span>)</span><br><span class="line">                right--;</span><br><span class="line">            <span class="keyword">else</span> {</span><br><span class="line">                <span class="type">int</span>* arr = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>)*<span class="number">3</span>);</span><br><span class="line">                arr[<span class="number">0</span>] = nums[i];</span><br><span class="line">                arr[<span class="number">1</span>] = nums[left];</span><br><span class="line">                arr[<span class="number">2</span>] = nums[right];</span><br><span class="line">                ans[ansTop++] = arr;</span><br><span class="line">                <span class="keyword">while</span>(right &gt; left &amp;&amp; nums[right] == nums[right<span class="number">-1</span>])</span><br><span class="line">                    right--; <span class="comment">//对c（第三个元素）去重</span></span><br><span class="line">                <span class="keyword">while</span>(left &lt; right &amp;&amp; nums[left] == nums[left + <span class="number">1</span>])</span><br><span class="line">                    left++;  <span class="comment">//对b（第二个元素）去重</span></span><br><span class="line">                <span class="comment">//更新左右指针</span></span><br><span class="line">                left++;</span><br><span class="line">                right--;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设定返回的数组大小</span></span><br><span class="line">    *returnSize = ansTop;</span><br><span class="line">    *returnColumnSizes = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * ansTop);</span><br><span class="line">    <span class="type">int</span> z;</span><br><span class="line">    <span class="keyword">for</span>(z = <span class="number">0</span>; z &lt; ansTop; z++) {</span><br><span class="line">        (*returnColumnSizes)[z] = <span class="number">3</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1202,7 +1193,7 @@ nums[i]==nums[i-1]，则说明三元组中第一个数不变，又因为此时�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">190</span>
+          <span class="site-state-item-count">191</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1251,12 +1242,12 @@ nums[i]==nums[i-1]，则说明三元组中第一个数不变，又因为此时�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">519k</span>
+    <span title="站点总字数">526k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7:52</span>
+    <span title="站点阅读时长">7:58</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

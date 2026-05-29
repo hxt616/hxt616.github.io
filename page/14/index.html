@@ -164,6 +164,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/09/%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/09/%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">移除链表元素</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-09 11:39:00" itemprop="dateCreated datePublished" datetime="2024-01-09T11:39:00+08:00">2024-01-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>856</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/remove-linked-list-elements/</p>
+<blockquote>
+<p>注意题目中的头节点就是指首元结点，即指针<code>head</code>指向的节点存储数据；</p>
+<p>而408中的头节点不存储数据</p>
+</blockquote>
+<p>该题有两种解决方案：</p>
+<ol type="1">
+<li>直接从首元节点开始遍历，删除节点（分为：头节点的删除与中间节点的删除）</li>
+<li>定义一个虚拟头节点<code>vhead</code>，不存放数据，<code>vhead-&gt;next</code>指向<code>head</code></li>
+</ol>
+<p>我使用的是第二种方案，不需要考虑两种节点的删除，一步到位</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode {</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * };</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">removeElements</span><span class="params">(<span class="keyword">struct</span> ListNode* head, <span class="type">int</span> val)</span> {</span><br><span class="line">    <span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> <span class="title">ListNode</span>;</span></span><br><span class="line">    ListNode *vhead;        <span class="comment">//定义虚拟头节点指针</span></span><br><span class="line">    vhead = (ListNode *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(ListNode));  <span class="comment">//分配虚拟头节点空间</span></span><br><span class="line">    vhead-&gt;next = head;     <span class="comment">//将虚拟头节点放在首元结点之前</span></span><br><span class="line">    ListNode *p = vhead;</span><br><span class="line">    <span class="keyword">while</span>(p-&gt;next!=<span class="literal">NULL</span>) {  <span class="comment">//第一次循环 p-&gt;next 即为 head</span></span><br><span class="line">        <span class="keyword">if</span> (p-&gt;next-&gt;val == val) {</span><br><span class="line">            ListNode *del = p-&gt;next;     <span class="comment">//记录要删除的节点</span></span><br><span class="line">            p-&gt;next = p-&gt;next-&gt;next;     </span><br><span class="line">            <span class="built_in">free</span>(del);                   <span class="comment">//释放待删除节点的内存</span></span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        }</span><br><span class="line">        p = p-&gt;next;</span><br><span class="line">    }</span><br><span class="line">    head = vhead-&gt;next;</span><br><span class="line">    <span class="built_in">free</span>(vhead);            <span class="comment">//注意别忘了删除虚拟头节点</span></span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/05/%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1039,107 +1135,10 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/18/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/18/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/" class="post-title-link" itemprop="url">最长公共前缀</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-07-18 09:20:42" itemprop="dateCreated datePublished" datetime="2023-07-18T09:20:42+08:00">2023-07-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/longest-common-prefix/</p>
-<blockquote>
-<p>编写一个函数来查找字符串数组中的最长公共前缀。</p>
-<p>如果不存在公共前缀，返回空字符串 <code>""</code>。</p>
-<p><strong>示例 ：</strong></p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：strs = ["flower","flow","flight"]</span><br><span class="line">输出："fl"</span><br></pre></td></tr></tbody></table></figure>
-</blockquote>
-<p>又是因为基础不扎实找了半天bug<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>。</p>
-<p>例如下面这段代码：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> {</span><br><span class="line">    <span class="type">char</span> *str[] = {<span class="string">"Hello"</span>,<span class="string">"world"</span>};</span><br><span class="line">    <span class="type">char</span> *ptr = str[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改字符数组元素</span></span><br><span class="line">    ptr[<span class="number">2</span>] = <span class="string">'J'</span>;  <span class="comment">//报错</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>当声明一个字符指针数组<code>str[]</code>并初始化它为字符串常量时，每个元素都是一个指向字符串常量的指针。这意味着我们不能直接修改字符串常量中的字符。这时应该使用<code>malloc</code>函数开辟一片空间存放该字符串的副本，然后进行修改，可参考下面的完整代码。</p>
-<p>完整代码：</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> * <span class="title function_">longestCommonPrefix</span><span class="params">(<span class="type">char</span> ** strs, <span class="type">int</span> strsSize)</span>{</span><br><span class="line">    <span class="type">char</span>* all = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="built_in">strlen</span>(strs[<span class="number">0</span>]) + <span class="number">1</span>); <span class="comment">// 分配空间</span></span><br><span class="line">    <span class="built_in">strcpy</span>(all, strs[<span class="number">0</span>]); <span class="comment">//存放strs[0]的副本</span></span><br><span class="line">    <span class="type">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">char</span> t; <span class="comment">//存放当前比较的字符</span></span><br><span class="line">    <span class="type">int</span> flag = <span class="number">1</span>; <span class="comment">//判断是否不匹配</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="built_in">strlen</span>(strs[<span class="number">0</span>]); j++) {</span><br><span class="line">        t = strs[<span class="number">0</span>][j];</span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>; i &lt; strsSize&amp;&amp; j &lt; <span class="built_in">strlen</span>(strs[i]); i++) { <span class="comment">//for的条件语句判断是否溢出</span></span><br><span class="line">            <span class="keyword">if</span> (strs[i][j] != t) {</span><br><span class="line">                flag = <span class="number">0</span>;  <span class="comment">//当字符不匹配时，flag=0</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (i &lt; strsSize&amp;&amp;j &gt;= <span class="built_in">strlen</span>(strs[i])) <span class="comment">//当下标溢出时，flag=0，方便退出循环</span></span><br><span class="line">            flag=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (flag == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    all[j] = <span class="string">'\0'</span>;</span><br><span class="line">    <span class="keyword">return</span> all;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/13/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/15/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/13/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/15/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1207,7 +1206,7 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">190</span>
+          <span class="site-state-item-count">191</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1256,12 +1255,12 @@ n+1)</strong>，其中<strong>n</strong>为整数，所以<strong>k</strong>的�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">519k</span>
+    <span title="站点总字数">526k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7:52</span>
+    <span title="站点阅读时长">7:58</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
