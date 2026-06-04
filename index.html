@@ -189,7 +189,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2026-06-05 00:00:00 / 修改时间：00:26:03" itemprop="dateCreated datePublished" datetime="2026-06-05T00:00:00+08:00">2026-06-05</time>
+              <time title="创建时间：2026-06-05 00:00:00 / 修改时间：00:29:47" itemprop="dateCreated datePublished" datetime="2026-06-05T00:00:00+08:00">2026-06-05</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -207,7 +207,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>495</span>
+              <span>503</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -228,29 +228,29 @@
       
           <p>下面的操作都是在Windows的terminal中执行</p>
 <h2 id="step-1查看-wsl-发行版">🥇 Step 1：查看 WSL 发行版</h2>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -l -v</span><br></pre></td></tr></tbody></table></figure>
-<p>例如：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -l -v</span><br></pre></td></tr></tbody></table></figure>
+<p>回显如下：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ubuntu    Running    2</span><br></pre></td></tr></tbody></table></figure>
 <hr>
 <h2 id="step-2关闭-wsl">🥇 Step 2：关闭 WSL</h2>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown</span><br></pre></td></tr></tbody></table></figure>
 <hr>
 <h2 id="step-3导出系统备份">🥇 Step 3：导出系统（备份）</h2>
 <p>比如导出到 D 盘：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --export Ubuntu D:\wsl\images\ubuntu.tar</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --export Ubuntu D:\wsl\images\ubuntu.tar</span><br></pre></td></tr></tbody></table></figure>
 <hr>
 <h2 id="step-4注销原-wsl重要">🥇 Step 4：注销原 WSL（重要）</h2>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --unregister Ubuntu</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --unregister Ubuntu</span><br></pre></td></tr></tbody></table></figure>
 <p>⚠️ 注意：这一步会删除原系统（但你已经导出备份了）</p>
 <hr>
 <h2 id="step-5导入到新位置">🥇 Step 5：导入到新位置</h2>
 <p>注意新的文件夹必须是空文件夹，即<code>D:\wsl\Ubuntu-1</code>是空文件夹</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --import Ubuntu D:\wsl\Ubuntu-1 D:\wsl\images\ubuntu.tar --version 2</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --import Ubuntu D:\wsl\Ubuntu-1 D:\wsl\images\ubuntu.tar --version 2</span><br></pre></td></tr></tbody></table></figure>
 <hr>
 <h2 id="step-6设置默认用户可选但常用">🥇 Step
 6：设置默认用户（可选但常用）</h2>
 <p>在Windows的终端中运行：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu config --default-user hxt</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu config --default-user your-name</span><br></pre></td></tr></tbody></table></figure>
 <p>或修改 <code>/etc/wsl.conf</code></p>
 <hr>
 <h1 id="三迁移后的目录结构">📁 三、迁移后的目录结构</h1>
