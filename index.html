@@ -164,6 +164,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/05/WSL2%E8%BF%81%E7%A7%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/06/05/WSL2%E8%BF%81%E7%A7%BB/" class="post-title-link" itemprop="url">WSL2迁移</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-06-05 00:00:00 / 修改时间：00:21:18" itemprop="dateCreated datePublished" datetime="2026-06-05T00:00:00+08:00">2026-06-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WSL/" itemprop="url" rel="index"><span itemprop="name">WSL</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>459</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="step-1查看-wsl-发行版">🥇 Step 1：查看 WSL 发行版</h2>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -l -v</span><br></pre></td></tr></tbody></table></figure>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ubuntu    Running    2</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h2 id="step-2关闭-wsl">🥇 Step 2：关闭 WSL</h2>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h2 id="step-3导出系统备份">🥇 Step 3：导出系统（备份）</h2>
+<p>比如导出到 D 盘：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --export Ubuntu D:\wsl\images\ubuntu.tar</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h2 id="step-4注销原-wsl重要">🥇 Step 4：注销原 WSL（重要）</h2>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --unregister Ubuntu</span><br></pre></td></tr></tbody></table></figure>
+<p>⚠️ 注意：这一步会删除原系统（但你已经导出备份了）</p>
+<hr>
+<h2 id="step-5导入到新位置">🥇 Step 5：导入到新位置</h2>
+<p>注意新的文件夹必须是空文件夹，即<code>D:\wsl\Ubuntu-1</code>是空文件夹</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --import Ubuntu D:\wsl\Ubuntu-1 D:\wsl\images\ubuntu.tar --version 2</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h2 id="step-6设置默认用户可选但常用">🥇 Step
+6：设置默认用户（可选但常用）</h2>
+<p>进入 WSL：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu config --default-user hxt</span><br></pre></td></tr></tbody></table></figure>
+<p>或修改 <code>/etc/wsl.conf</code></p>
+<hr>
+<h1 id="三迁移后的目录结构">📁 三、迁移后的目录结构</h1>
+<p>迁移后：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">D:\WSL\Ubuntu\</span><br><span class="line">   ├── ext4.vhdx</span><br><span class="line">   ├── /home</span><br><span class="line">   ├── /usr</span><br><span class="line">   └── /opt</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2026/05/26/reduce/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2762,297 +2872,6 @@ Alpaca、OpenAI InstructGPT 数据）</p></li>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/26/Go%20%E8%AF%AD%E8%A8%80%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E4%B8%8E%E5%8C%85%E7%AE%A1%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/26/Go%20%E8%AF%AD%E8%A8%80%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E4%B8%8E%E5%8C%85%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">Go语言项目管理与包管理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2025-07-26 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-26T00:00:00+08:00">2025-07-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-07-27 00:10:36" itemprop="dateModified" datetime="2025-07-27T00:10:36+08:00">2025-07-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文由 ChatGPT 生成</p>
-<h2 id="引言"><strong>引言</strong></h2>
-<p>Go 语言以其简洁的语法和强大的工具链著称，但其独特的项目管理机制（如
-<code>module</code>、<code>package</code> 和
-<code>GOPATH</code>）常让初学者困惑。本文将系统梳理 Go
-的项目结构、包管理规则和最佳实践，帮助你高效组织代码。</p>
-<hr>
-<h2 id="从-gopath-到-go-module演进史"><strong>1. 从 GOPATH 到 Go
-Module：演进史</strong></h2>
-<h3 id="gopath-时代已淘汰"><strong>1.1 GOPATH
-时代（已淘汰）</strong></h3>
-<ul>
-<li><strong>作用</strong>：全局工作区，所有项目必须放在
-<code>$GOPATH/src</code> 下。</li>
-<li><strong>问题</strong>：
-<ul>
-<li>依赖全局共享，易冲突</li>
-<li>项目路径不灵活</li>
-</ul></li>
-<li><strong>目录结构</strong>： <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GOPATH/</span><br><span class="line">├── src/github.com/user/project  # 项目代码</span><br><span class="line">├── pkg/                        # 编译后的库</span><br><span class="line">└── bin/                        # 可执行文件</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="go-module现代标准"><strong>1.2 Go
-Module（现代标准）</strong></h3>
-<ul>
-<li><strong>核心文件</strong>：<code>go.mod</code>（定义模块路径、依赖项）。</li>
-<li><strong>优势</strong>：
-<ul>
-<li>项目可放在任意路径</li>
-<li>依赖版本锁定（<code>go.sum</code>）</li>
-<li>支持语义化版本（如 <code>v1.2.3</code>）</li>
-</ul></li>
-</ul>
-<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// go.mod 示例</span></span><br><span class="line">module github.com/user/project  <span class="comment">// 全局唯一标识</span></span><br><span class="line"><span class="keyword">go</span> <span class="number">1.21</span>                        <span class="comment">// Go 版本要求</span></span><br><span class="line">require (</span><br><span class="line">    github.com/gin-gonic/gin v1<span class="number">.9</span><span class="number">.1</span>  <span class="comment">// 依赖项，保存的位置：%GOPATH%\pkg\mod\</span></span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
-<hr>
-<h2 id="模块module与包package的关系"><strong>2.
-模块（Module）与包（Package）的关系</strong></h2>
-<h3 id="module项目的集装箱"><strong>2.1
-Module：项目的集装箱</strong></h3>
-<ul>
-<li><strong>一个项目 = 一个模块 = 一个 <code>go.mod</code>
-文件</strong></li>
-<li><strong>模块路径</strong>需全局唯一（如 GitHub 仓库地址）：
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go mod init github.com/yourname/project</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="package代码的逻辑单元"><strong>2.2
-Package：代码的逻辑单元</strong></h3>
-<ul>
-<li><strong>规则</strong>：
-<ul>
-<li>同一目录下所有文件必须属于<strong>同一个包</strong></li>
-<li>包名通常与目录名一致（非强制）</li>
-<li>大写字母开头的标识符可被其他包访问</li>
-</ul></li>
-<li><strong>示例</strong>： <figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pkg/utils/strings.go</span></span><br><span class="line"><span class="keyword">package</span> utils</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Trim</span><span class="params">(s <span class="type">string</span>)</span></span> <span class="type">string</span> {  <span class="comment">// 可导出的函数</span></span><br><span class="line">    <span class="keyword">return</span> strings.TrimSpace(s)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<p>所以一个项目相当于一个 module，包含多个 package</p>
-<hr>
-<h2 id="关键目录结构设计"><strong>3. 关键目录结构设计</strong></h2>
-<h3 id="标准布局"><strong>3.1 标准布局</strong></h3>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">my-project/</span><br><span class="line">├── go.mod</span><br><span class="line">├── go.sum</span><br><span class="line">├── cmd/</span><br><span class="line">│   └── main.go</span><br><span class="line">├── pkg/</span><br><span class="line">│   └── utils/</span><br><span class="line">│       └── math.go</span><br><span class="line">└── internal/          # 私有代码（仅限当前模块使用）</span><br><span class="line">    └── secret/</span><br><span class="line">        └── secret.go</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="特殊目录说明"><strong>3.2 特殊目录说明</strong></h3>
-<table>
-<thead>
-<tr class="header">
-<th>目录</th>
-<th>用途</th>
-<th>可见性规则</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>cmd/</code></td>
-<td>存放 <code>main</code> 包的可执行程序</td>
-<td>无限制</td>
-</tr>
-<tr class="even">
-<td><code>internal/</code></td>
-<td>内部私有代码</td>
-<td>仅父模块可导入</td>
-</tr>
-<tr class="odd">
-<td><code>pkg/</code></td>
-<td>公共库代码</td>
-<td>可被其他模块导入</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<h2 id="包package的进阶规则"><strong>4.
-包（Package）的进阶规则</strong></h2>
-<h3 id="main-包的特殊性"><strong>4.1 <code>main</code>
-包的特殊性</strong></h3>
-<ul>
-<li>只有<code>main</code>包才能包含 <code>func main()</code></li>
-<li>编译生成可执行文件： <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go build -o app cmd/app/main.go</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="go-中-package-的调用逻辑">4.2 Go 中 <code>package</code>
-的调用逻辑</h3>
-<p>在 Go 中：</p>
-<ul>
-<li>每个 <code>.go</code> 文件都属于某个
-<code>package</code>（包）。</li>
-<li>包名决定了文件之间能否互相引用。</li>
-<li><strong>主程序（入口）通常在 <code>package main</code>
-中</strong>，其他功能模块则可以定义为自定义包。</li>
-<li>如果你想在 <code>main.go</code> 中调用其他包的函数，必须：
-<ol type="1">
-<li>在目标文件中将函数名 <strong>大写</strong>（表示导出
-Exported）；</li>
-<li>在 <code>main.go</code> 中使用 <code>import</code> 引入包；</li>
-<li>保证代码在模块结构下能找到包路径。</li>
-</ol></li>
-</ul>
-<hr>
-<h4 id="示例">🔹 示例</h4>
-<h5 id="项目结构">📁 项目结构</h5>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">myproject/</span><br><span class="line">├── go.mod</span><br><span class="line">├── main.go</span><br><span class="line">└── utils/</span><br><span class="line">    └── mathutil.go</span><br></pre></td></tr></tbody></table></figure>
-<hr>
-<h5 id="go.mod">📄 go.mod</h5>
-<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">module example.com/myproject</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="number">1.21</span></span><br></pre></td></tr></tbody></table></figure>
-<hr>
-<h5 id="utilsmathutil.go">📄 utils/mathutil.go</h5>
-<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> utils</span><br><span class="line"></span><br><span class="line"><span class="comment">// Add 是导出的函数（首字母大写），可以被其他包调用</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Add</span><span class="params">(a, b <span class="type">int</span>)</span></span> <span class="type">int</span> {</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<hr>
-<h5 id="main.go">📄 main.go</h5>
-<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"example.com/myproject/utils"</span>  <span class="comment">// 引入本模块下的 utils 包</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">    sum := utils.Add(<span class="number">3</span>, <span class="number">5</span>)  <span class="comment">// 调用 utils 包中的 Add 函数</span></span><br><span class="line">    fmt.Println(<span class="string">"Sum:"</span>, sum)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<hr>
-<h4 id="总结调用规则">🔹 总结调用规则</h4>
-<table>
-<colgroup>
-<col style="width: 18%">
-<col style="width: 81%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>元素</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>package xxx</code></td>
-<td>决定该文件属于哪个包</td>
-</tr>
-<tr class="even">
-<td><code>import</code></td>
-<td>在另一个文件中引用该包，使用的是
-<code>module 路径 + 包相对路径</code></td>
-</tr>
-<tr class="odd">
-<td>导出函数</td>
-<td>被调用的函数必须 <strong>首字母大写</strong>，否则是私有的</td>
-</tr>
-<tr class="even">
-<td>go.mod</td>
-<td>必须正确声明 <code>module</code>，才能让 <code>import</code>
-路径生效</td>
-</tr>
-</tbody>
-</table>
-<h3 id="可见性控制"><strong>4.3 可见性控制</strong></h3>
-<ul>
-<li><strong>大写字母开头</strong>：可被其他包访问（如
-<code>func Public()</code>）。</li>
-<li><strong>小写字母开头</strong>：仅限包内使用（如
-<code>func private()</code>）。</li>
-</ul>
-<h3 id="初始化函数-init"><strong>4.4 初始化函数
-<code>init()</code></strong></h3>
-<ul>
-<li>每个包可定义多个 <code>init()</code>，按依赖顺序自动执行：
-<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> db</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> {</span><br><span class="line">    <span class="built_in">println</span>(<span class="string">"数据库连接初始化"</span>)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<hr>
-<h2 id="依赖管理实战"><strong>5. 依赖管理实战</strong></h2>
-<h3 id="添加依赖"><strong>5.1 添加依赖</strong></h3>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/gin-gonic/gin@v1.9.1  <span class="comment"># 指定版本</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="常用命令"><strong>5.2 常用命令</strong></h3>
-<table>
-<thead>
-<tr class="header">
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>go mod init</code></td>
-<td>初始化模块</td>
-</tr>
-<tr class="even">
-<td><code>go mod tidy</code></td>
-<td>同步依赖项</td>
-</tr>
-<tr class="odd">
-<td><code>go list -m all</code></td>
-<td>查看所有依赖</td>
-</tr>
-<tr class="even">
-<td><code>go mod vendor</code></td>
-<td>创建本地依赖副本（离线构建）</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3124,7 +2943,7 @@ Exported）；</li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">191</span>
+          <span class="site-state-item-count">192</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -3178,7 +2997,7 @@ Exported）；</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7:59</span>
+    <span title="站点阅读时长">8:01</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
