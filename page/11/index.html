@@ -164,6 +164,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/" class="post-title-link" itemprop="url">二叉树的最大深度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-02-23 16:34:18" itemprop="dateCreated datePublished" datetime="2024-02-23T16:34:18+08:00">2024-02-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>450</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>题目地址：https://leetcode.cn/problems/maximum-depth-of-binary-tree/</p>
+<p>这题可以使用二叉树的层序遍历计算深度（迭代），或者使用深度优先搜索（递归），我使用的就是递归法：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">deep</span><span class="params">(<span class="keyword">struct</span> TreeNode* root, <span class="type">int</span> depth)</span> {</span><br><span class="line">    <span class="keyword">if</span>(root==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> depth;</span><br><span class="line">    <span class="type">int</span> dep1 =  deep(root-&gt;left, depth+<span class="number">1</span>); <span class="comment">//左子树的深度</span></span><br><span class="line">    <span class="type">int</span> dep2 = deep(root-&gt;right,depth+<span class="number">1</span>); <span class="comment">//右子树的深度</span></span><br><span class="line">    <span class="keyword">return</span> dep1&gt;dep2?dep1:dep2;  <span class="comment">//返回更大的深度</span></span><br><span class="line">}</span><br><span class="line"><span class="type">int</span> <span class="title function_">maxDepth</span><span class="params">(<span class="keyword">struct</span> TreeNode* root)</span> {</span><br><span class="line">    <span class="keyword">if</span>(root==<span class="literal">NULL</span>) <span class="comment">//若树为空则返回0</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> depth = deep(root,<span class="number">0</span>);  <span class="comment">//调用deep函数</span></span><br><span class="line">    <span class="keyword">return</span> depth;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/23/%E5%A1%AB%E5%85%85%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E4%B8%8B%E4%B8%80%E4%B8%AA%E5%8F%B3%E4%BE%A7%E8%8A%82%E7%82%B9%E6%8C%87%E9%92%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1015,112 +1102,6 @@ Zero）</strong>，或者说当操作数为正的时候相当于Floor，当操�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/09/%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/02/09/%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/" class="post-title-link" itemprop="url">有效的括号</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-02-09 17:42:48" itemprop="dateCreated datePublished" datetime="2024-02-09T17:42:48+08:00">2024-02-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">代码随想录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目地址：https://leetcode.cn/problems/valid-parentheses/</p>
-<p>有关括号匹配的题一般都是用栈来实现。</p>
-<p>下面是我自己的代码，比较繁琐：</p>
-<ul>
-<li>遍历 s
-字符串，遇到左括号就入栈，遇到右括号则判断<strong>栈内是否为空</strong>，若不为空则<strong>判断栈顶元素</strong>是否为对应的右括号；若不满足条件则返回
-false ，满足条件则栈顶元素出栈</li>
-<li>循环结束后判断栈内是否为空，若不为空（有多余的左括号）则返回
-false</li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> <span class="title function_">isValid</span><span class="params">(<span class="type">char</span>* s)</span> {</span><br><span class="line">    <span class="type">char</span> tmp[<span class="number">10000</span>]; <span class="comment">//栈（暂存左括号）</span></span><br><span class="line">    <span class="type">int</span> j=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="built_in">strlen</span>(s); i++) {</span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">'('</span> || s[i]==<span class="string">'{'</span> || s[i]==<span class="string">'['</span>) {</span><br><span class="line">            tmp[j++] = s[i];</span><br><span class="line">        } <span class="comment">//左括号入栈</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">')'</span> &amp;&amp; (j&lt;=<span class="number">0</span> || tmp[j<span class="number">-1</span>]!=<span class="string">'('</span>)) {</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'}'</span> &amp;&amp; (j&lt;=<span class="number">0</span> || tmp[j<span class="number">-1</span>]!=<span class="string">'{'</span>)) {</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">']'</span> &amp;&amp; (j&lt;=<span class="number">0</span> || tmp[j<span class="number">-1</span>]!=<span class="string">'['</span>)) {</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            j--;</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(j &gt; <span class="number">0</span>) <span class="comment">//若栈不为空则返回false</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>下面介绍<a target="_blank" rel="noopener" href="https://programmercarl.com/0020.%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7.html#%E6%80%9D%E8%B7%AF">代码随想录</a>的解法：</p>
-<p>遍历 s 字符串，遇到左括号，则入栈；遇到右括号则与栈顶元素进行配对</p>
-<ul>
-<li><p>第一种情况：已经遍历完了字符串，但是栈不为空，说明有相应的左括号没有右括号来匹配，所以return
-false</p></li>
-<li><p>第二种情况：遍历字符串匹配的过程中，发现栈里没有要匹配的字符。所以return
-false</p></li>
-<li><p>第三种情况：遍历字符串匹配的过程中，栈已经为空了，没有匹配的字符了，说明右括号没有找到对应的左括号return
-false</p></li>
-</ul>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//辅助函数：判断栈顶元素与输入的括号是否为一对。若不是，则返回False</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">notMatch</span><span class="params">(<span class="type">char</span> par, <span class="type">char</span>* <span class="built_in">stack</span>, <span class="type">int</span> stackTop)</span> {</span><br><span class="line">    <span class="keyword">switch</span>(par) {</span><br><span class="line">        <span class="keyword">case</span> <span class="string">']'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">stack</span>[stackTop - <span class="number">1</span>] != <span class="string">'['</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">')'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">stack</span>[stackTop - <span class="number">1</span>] != <span class="string">'('</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'}'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">stack</span>[stackTop - <span class="number">1</span>] != <span class="string">'{'</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> <span class="title function_">isValid</span><span class="params">(<span class="type">char</span> * s)</span>{</span><br><span class="line">    <span class="type">int</span> strLen = <span class="built_in">strlen</span>(s);</span><br><span class="line">    <span class="comment">//开辟栈空间</span></span><br><span class="line">    <span class="type">char</span> <span class="built_in">stack</span>[<span class="number">5000</span>];</span><br><span class="line">    <span class="type">int</span> stackTop = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//遍历字符串</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; strLen; i++) {</span><br><span class="line">        <span class="comment">//取出当前下标所对应字符</span></span><br><span class="line">        <span class="type">char</span> tempChar = s[i];</span><br><span class="line">        <span class="comment">//若当前字符为左括号，则入栈</span></span><br><span class="line">        <span class="keyword">if</span>(tempChar == <span class="string">'('</span> || tempChar == <span class="string">'['</span> || tempChar == <span class="string">'{'</span>)</span><br><span class="line">            <span class="built_in">stack</span>[stackTop++] = tempChar;</span><br><span class="line">        <span class="comment">//若当前字符为右括号，且栈中无元素或右括号与栈顶元素不符，返回False</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(stackTop == <span class="number">0</span> || notMatch(tempChar, <span class="built_in">stack</span>, stackTop))</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//当前字符与栈顶元素为一对括号，将栈顶元素出栈</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            stackTop--;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">//若栈中有元素，返回False。若没有元素（stackTop为0），返回True</span></span><br><span class="line">    <span class="keyword">return</span> !stackTop;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1192,7 +1173,7 @@ false</p></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-count">193</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1241,12 +1222,12 @@ false</p></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">528k</span>
+    <span title="站点总字数">530k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:01</span>
+    <span title="站点阅读时长">8:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

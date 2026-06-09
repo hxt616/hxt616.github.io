@@ -164,6 +164,517 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/27/Transformer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/27/Transformer/" class="post-title-link" itemprop="url">Transformer和LLM</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-27 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-27T00:00:00+08:00">2025-07-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-05-03 16:42:42" itemprop="dateModified" datetime="2026-05-03T16:42:42+08:00">2026-05-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Transformer/" itemprop="url" rel="index"><span itemprop="name">Transformer</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">大模型</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/datawhalechina/leedl-tutorial/releases/tag/v1.2.4">李宏毅深度学习教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://datawhalechina.github.io/happy-llm/#/">Happy-LLM</a></li>
+</ul>
+<p>总结构如下，被框住的部分一般都有N个</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221346536.png" alt="image-20250727221346536">
+<figcaption aria-hidden="true">image-20250727221346536</figcaption>
+</figure>
+<h2 id="自注意力机制">自注意力机制</h2>
+<blockquote>
+<p>常见的大语言模型一般只包含解码器，没有编码器</p>
+</blockquote>
+<p>自注意力模型会“吃”整个序列的数据，输入几个向量，它就输出几个向量</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727225641856.png" alt="image-20250727225641856" style="zoom:67%;"></p>
+<p>对于输入序列中的每个
+token（向量），我们会计算出三个矩阵：（X为输入矩阵即多个向量的组合，乘以对应的矩阵得到
+Q、K、V）</p>
+<ul>
+<li><strong>Query (Q)</strong>：查询向量，<span class="math inline">\(Q
+= W^QX\)</span></li>
+<li><strong>Key (K)</strong>：键向量，<span class="math inline">\(K =
+W^KX\)</span></li>
+<li><strong>Value (V)</strong>：值向量，<span class="math inline">\(V =
+W^VX\)</span></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727230428672.png" alt="image-20250727230428672" style="zoom:80%;"></p>
+<p>计算注意力权重（softmax 后）： <span class="math display">\[
+\text{Attention}(Q, K, V) =
+\text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\]</span> <span class="math inline">\(d_k\)</span> 是 Key
+向量的维度（用于缩放避免梯度过大）</p>
+<blockquote>
+<p><strong>多头注意力机制</strong>：</p>
+<p>Transformer 实际使用的是
+<strong>多头自注意力</strong>，先计算整个向量的
+Q、K、V，再进行拆分，下面是完整步骤</p>
+<p><strong>Step 1: 线性变换</strong></p>
+<p>先通过三组权重矩阵，计算整个序列的 Q、K、V：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Q = X @ W_Q  <span class="comment"># [batch, seq_len, d_model] @ [d_model, d_model] -&gt; [batch, seq_len, d_model]</span></span><br><span class="line">K = X @ W_K</span><br><span class="line">V = X @ W_V</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>Step 2: 拆分成多头</strong></p>
+<p>再把 Q/K/V 拆成多个头（通常是 reshape + transpose）：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拆成多头，每一头的维度是 d_head</span></span><br><span class="line">Q = Q.reshape(batch_size, seq_len, num_heads, d_head).transpose(<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line"><span class="comment"># Q 形状变为 [batch, num_heads, seq_len, d_head]</span></span><br></pre></td></tr></tbody></table></figure>
+<p><strong>Step 3: 每个头独立进行注意力计算</strong></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">attention_scores = softmax(Q @ K.transpose(-<span class="number">1</span>, -<span class="number">2</span>) / sqrt(d_head))  <span class="comment"># shape: [batch, num_heads, seq_len, seq_len]</span></span><br><span class="line">output_heads = attention_scores @ V  <span class="comment"># shape: [batch, num_heads, seq_len, d_head]</span></span><br></pre></td></tr></tbody></table></figure>
+<p><strong>Step 4: 拼接所有头 &amp; 最终线性变换</strong></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拼接所有头</span></span><br><span class="line">output = output_heads.transpose(<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>).reshape(batch_size, seq_len, d_model)</span><br><span class="line">output = output @ W_O  <span class="comment"># 最终线性变换</span></span><br></pre></td></tr></tbody></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727230452594.png" alt="image-20250727230452594" style="zoom:80%;"></p>
+</blockquote>
+<h2 id="编码器">编码器</h2>
+<p>编码器输入一排向量，输出另外一排向量</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727220019098.png" alt="image-20250727220019098" style="zoom:50%;"></p>
+<p>编码器内部可以分为多个块，如下图所示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727220057077.png" alt="image-20250727220057077" style="zoom:67%;"></p>
+<p>接下来就是每个块的细节</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221138994.png" alt="image-20250727221138994">
+<figcaption aria-hidden="true">image-20250727221138994</figcaption>
+</figure>
+<p>这里使用层归一化，因为层归一化会在每个样本上计算其所有层的均值和方差，从而使每个样本的分布达到稳定。</p>
+<h2 id="解码器">解码器</h2>
+<h3 id="自回归解码器最常用">自回归解码器（最常用）</h3>
+<p>在生成序列时，每一步仅基于<strong>当前及之前的token</strong>预测下一个token，这就要用到掩蔽自注意力（masked
+self-attention），掩蔽自注意力可以通过一个掩码（mask）来阻止每个位置选择其后面的输入信息（在训练阶段非常重要）。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221042825.png" alt="image-20250727221042825">
+<figcaption aria-hidden="true">image-20250727221042825</figcaption>
+</figure>
+<p>详细的流程或代码参考 <a target="_blank" rel="noopener" href="https://github.com/jingyaogong/minimind">MiniMind</a></p>
+<p><img src="https://github.com/jingyaogong/minimind/raw/master/images/LLM-structure.jpg"></p>
+<blockquote>
+<p>注意：</p>
+<ul>
+<li>在生成任务中，我们通常只关心<strong>下一个</strong>词是什么，所以<strong>只取序列中最后一个位置的向量</strong>来解码。前面的向量虽然包含了丰富信息，但此刻是给未来的词准备的。</li>
+<li><strong>在推理（生成）阶段，对于Prompt中的非最后一个Token，我们只需要计算并缓存它们的Key和Value（KV
+Cache），而无需为它们重复计算完整的注意力。</strong></li>
+</ul>
+</blockquote>
+<h3 id="非自回归解码器">非自回归解码器</h3>
+<p>是一种并行生成序列的模型，与自回归（AR）解码器逐步生成的方式不同，它一次性输出整个序列，显著提升了推理速度，但可能牺牲生成质量。</p>
+<p>例如：给编码器一堆 <code>&lt;BOS&gt;</code>
+的词元。假设输出的句子的长度有上限，绝对不会超过 300 个字。给编码器 300
+个 <code>&lt;BOS&gt;</code>，就会输出 300 个字，输出
+<code>&lt;EOS&gt;</code> 右边的的输出就当它没有输出。</p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727221617793.png" alt="image-20250727221617793">
+<figcaption aria-hidden="true">image-20250727221617793</figcaption>
+</figure>
+<h2 id="编码器-解码器注意力">编码器-解码器注意力</h2>
+<p>编码器的最终输出（即最后一层的隐藏状态）会作为<strong>Key和Value</strong>输入到解码器的<strong>每一层</strong>的交叉注意力（Cross-Attention）模块中。</p>
+<p><img src="https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/images/2-figures/2-0.jpg" style="zoom: 67%;"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/hxt616/PicGo@main/img/image-20250727224644292.png" alt="image-20250727224644292" style="zoom:80%;"></p>
+<h2 id="流程总结">流程总结</h2>
+<ol type="1">
+<li><p><strong>输入预处理</strong></p>
+<ul>
+<li><p><strong>Tokenization</strong>：文本 → Token IDs（如
+<code>[I, love, NLP]</code> →
+<code>[1045, 2293, 4263]</code>）。</p></li>
+<li><p><strong>Embedding</strong>：Token IDs →
+词向量（<code>d_model</code> 维，如 512 维）。</p></li>
+<li><p><strong>Positional Encoding</strong>：加入位置信息 → 最终输入向量
+<code>X = WordEmbedding + PositionalEncoding</code>。</p>
+<blockquote>
+<p><strong>位置编码的区别</strong></p>
+<ul>
+<li><p><strong>Transformer（原始模型）</strong>：</p>
+<ul>
+<li><p>使用
+<strong>固定的数学函数</strong>（正弦和余弦函数）生成位置编码，与输入嵌入（token
+embeddings）<strong>相加</strong>。</p></li>
+<li><p>公式： <span class="math display">\[
+PE_{(pos, 2i)} =
+\sin\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right), \quad
+PE_{(pos, 2i+1)} =
+\cos\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right)
+\]</span></p>
+<p>其中 pos 是位置，i 是维度索引，d<sub>model</sub>
+是模型维度。</p></li>
+<li><p>这种编码是确定性的，无需学习，能捕捉绝对位置和相对位置关系。</p></li>
+</ul></li>
+<li><p><strong>BERT</strong>：</p>
+<ul>
+<li>使用 <strong>可学习的位置嵌入（Learned Positional
+Embeddings）</strong>，即每个位置（如最大长度512）对应一个随机初始化的向量，通过训练更新。</li>
+<li>位置嵌入与 token embeddings <strong>相加</strong>，类似
+Transformer，但嵌入值是模型学到的，而非预设的数学函数</li>
+</ul></li>
+</ul>
+</blockquote></li>
+</ul></li>
+<li><p><strong>Encoder 阶段（N 一般是 6 层）</strong></p>
+<ul>
+<li>每层执行：
+<ul>
+<li><strong>多头自注意力</strong>（计算全局依赖）</li>
+<li><strong>前馈网络 FFN</strong>（非线性变换）</li>
+<li><strong>残差连接 + LayerNorm</strong>（稳定训练）</li>
+</ul></li>
+<li>输出：上下文感知的编码表示 <code>Z</code>（供 Decoder 使用）。</li>
+</ul></li>
+<li><p><strong>Decoder 阶段（N 一般是 6 层）</strong></p>
+<ul>
+<li>每层执行：
+<ul>
+<li><strong>掩码自注意力</strong>（防止未来信息泄漏）</li>
+<li><strong>残差连接 + LayerNorm</strong></li>
+<li><strong>Encoder-Decoder 注意力</strong>（关注 <code>Z</code>）</li>
+<li><strong>残差连接 + LayerNorm</strong></li>
+<li><strong>前馈网络 FFN</strong>：先升维再降维（可以理解为
+让相关特征更突出，参考<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oyoEBWEsn/?spm_id_from=333.1391.0.0">视频</a>）</li>
+<li><strong>残差连接 + LayerNorm</strong></li>
+</ul></li>
+<li>输出：解码后的隐藏状态 <code>H</code>。</li>
+</ul></li>
+<li><p><strong>输出生成</strong></p>
+<ul>
+<li><strong>线性层</strong>：将 <code>H</code> 投影到词表大小维度（如
+50,000 维）。</li>
+<li><strong>Softmax</strong>：生成概率分布 → 选择概率最高的 Token
+作为输出（或采样）。</li>
+</ul></li>
+<li><p><strong>自回归（Autoregressive）</strong></p>
+<ul>
+<li>若为生成任务（如
+GPT），将当前输出作为下一步输入，循环直至结束。</li>
+</ul></li>
+</ol>
+<h2 id="bert和gpt">BERT和GPT</h2>
+<ul>
+<li><strong>BERT</strong>（Bidirectional Encoder Representations from
+Transformers）——填空
+<ul>
+<li><strong>双向编码器</strong>：使用Transformer的<strong>Encoder</strong>部分，能同时利用上下文信息（左右双向上下文）。</li>
+<li>适合理解型任务（如文本分类、实体识别、问答）。</li>
+<li>结构：Transformer编码器 + <strong>MLM</strong>(随机掩码) /
+<strong>NSP</strong>(下一句预测)</li>
+</ul></li>
+<li><strong>GPT</strong>（Generative Pre-trained
+Transformer）——预测下一个词
+<ul>
+<li><strong>单向解码器</strong>：使用Transformer的<strong>Decoder</strong>部分（掩码自注意力），没有交叉注意力（因为没有编码器的输出作为输入），仅依赖左侧上下文生成文本。</li>
+<li>适合生成型任务（如文本生成、对话、续写）。</li>
+</ul></li>
+</ul>
+<h2 id="post-norm-和-pre-norm">Post-Norm 和 Pre-Norm</h2>
+<p>在 Transformer 及其变体模型中，<strong>Pre-Norm</strong> 和
+<strong>Post-Norm</strong> 是两种不同的层归一化（Layer Normalization,
+LayerNorm）放置方式，直接影响模型的训练稳定性、收敛速度和性能。以下是它们的详细对比：</p>
+<h3 id="post-norm原始-transformer-设计"><strong>1. Post-Norm（原始
+Transformer 设计）</strong></h3>
+<ul>
+<li><p><strong>结构顺序</strong>：</p>
+<p><code>残差连接 → LayerNorm</code></p>
+<p>即：<br>
+<span class="math display">\[
+\text{Output} = \text{LayerNorm}(x + \text{Sublayer}(x))
+\]</span></p>
+<ul>
+<li>例如：多头注意力或前馈网络（FFN）的输出先与输入残差连接，再进行归一化。</li>
+</ul></li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li><strong>原始 Transformer</strong>（论文中的编码器/解码器）和
+<strong>GLM</strong>（由智谱开发的主流中文 LLM 之一）使用
+Post-Norm。</li>
+<li>训练初期可能不稳定（梯度方差大），需要配合 <strong>warm-up</strong>
+学习率调度。</li>
+<li>更深的模型容易因梯度消失/爆炸而难以训练。</li>
+<li>理论上有更强的表达能力（因归一化在非线性变换后），但实际需要精细调参。</li>
+</ul></li>
+</ul>
+<h3 id="pre-norm主流变体设计"><strong>2.
+Pre-Norm（主流变体设计）</strong></h3>
+<ul>
+<li><p><strong>结构顺序</strong>：</p>
+<p><code>LayerNorm → 残差连接</code></p>
+<p>即： <span class="math display">\[
+\text{Output} = x + \text{Sublayer}(\text{LayerNorm}(x))
+\]</span></p>
+<ul>
+<li>先对输入归一化，再通过子层（如注意力或
+FFN），最后与原始输入残差连接。</li>
+</ul></li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li><strong>BERT、GPT 等现代模型普遍采用 Pre-Norm</strong>。</li>
+<li>训练更稳定，无需 warm-up 也能快速收敛。</li>
+<li>支持更深的网络（如 100+ 层），梯度传播更顺畅。</li>
+<li>牺牲少量理论表达能力，换取实际训练的鲁棒性。</li>
+</ul></li>
+</ul>
+<h3 id="核心区别对比"><strong>3. 核心区别对比</strong></h3>
+<table>
+<colgroup>
+<col style="width: 21%">
+<col style="width: 42%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>Post-Norm</th>
+<th>Pre-Norm</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>归一化位置</strong></td>
+<td>残差连接后</td>
+<td>残差连接前（子层输入）</td>
+</tr>
+<tr class="even">
+<td><strong>训练稳定性</strong></td>
+<td>依赖 warm-up，易不稳定</td>
+<td>更稳定，适合深层模型</td>
+</tr>
+<tr class="odd">
+<td><strong>梯度传播</strong></td>
+<td>可能梯度消失/爆炸（深模型）</td>
+<td>梯度更平缓，易于优化</td>
+</tr>
+<tr class="even">
+<td><strong>表达能力</strong></td>
+<td>理论上更强（非线性后归一化）</td>
+<td>稍弱，但实际差距小</td>
+</tr>
+<tr class="odd">
+<td><strong>典型应用</strong></td>
+<td>原始 Transformer</td>
+<td>BERT、GPT、T5 等现代模型</td>
+</tr>
+</tbody>
+</table>
+<h3 id="其他变体与改进"><strong>4. 其他变体与改进</strong></h3>
+<ul>
+<li><strong>ReZero Norm</strong>：将残差连接乘以可学习的标量（初始为
+0），逐步增加非线性强度，结合两者优点。</li>
+<li><strong>Sandwich Norm</strong>：在子层前后都加入 LayerNorm（如
+<code>Norm → Sublayer → Norm → 残差</code>），进一步提升稳定性。</li>
+<li><strong>DeepNorm</strong>（微软）：在 Post-Norm
+基础上调整残差权重，用于极深模型（如 1000 层）。</li>
+</ul>
+<h2 id="llm">LLM</h2>
+<p>三个阶段——Pretrain、SFT 和 RLHF</p>
+<p>大语言模型（LLM）的训练通常分为三个关键阶段，每个阶段有不同的目标和方法：</p>
+<h3 id="pretraining">1. Pretraining</h3>
+<p>预训练</p>
+<blockquote>
+<p><strong>目标：</strong>
+学习语言的通用知识（语法、语义、世界常识等）</p>
+</blockquote>
+<h4 id="过程">过程：</h4>
+<ul>
+<li>利用大规模通用语料（如网页、书籍、百科等）进行<strong>自监督学习</strong>。</li>
+<li>训练任务通常是：
+<ul>
+<li><strong>因果语言建模（Causal LM）</strong>：预测下一个词（GPT
+风格）</li>
+<li><strong>掩码语言建模（Masked LM）</strong>：预测被遮盖的词（BERT
+风格）</li>
+</ul></li>
+</ul>
+<h4 id="特点">特点：</h4>
+<ul>
+<li>模型尚未特定任务对齐，仅有通用语言能力</li>
+<li>参数量巨大（几十亿到千亿级别）</li>
+<li>训练耗费算力与数据</li>
+</ul>
+<h3 id="sft">2. SFT</h3>
+<p>Supervised Fine-Tuning，监督微调</p>
+<blockquote>
+<p><strong>目标：</strong>
+将模型调整为能按照人类期望完成具体任务（如问答、摘要）</p>
+</blockquote>
+<h4 id="过程-1">过程：</h4>
+<ul>
+<li><p>使用<strong>人工标注的高质量指令-响应对</strong>进行监督微调（如
+Alpaca、OpenAI InstructGPT 数据）</p></li>
+<li><p>输入是类似：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">指令（Instruction）：请写一首关于春天的诗</span><br><span class="line">输出（Response）：春风吹绿柳，暖日照花枝……</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h4 id="特点-1">特点：</h4>
+<ul>
+<li>显著提升对“任务”或“指令”的响应能力</li>
+<li>强化了与人类沟通的能力，但输出可能仍存在幻觉或不可靠性</li>
+</ul>
+<blockquote>
+<p>注意指令微调和 Prompt 工程的区别</p>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 37%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>项目</th>
+<th>指令微调（Instruction Tuning）</th>
+<th>Prompt 工程（Prompt Engineering）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>是否训练模型</td>
+<td>✅ 需要重新训练或微调模型</td>
+<td>❌ 不训练，直接用</td>
+</tr>
+<tr class="even">
+<td>成本</td>
+<td>高：需要 GPU、数据、训练资源</td>
+<td>低：只需要会写 prompt</td>
+</tr>
+<tr class="odd">
+<td>是否修改模型参数</td>
+<td>✅ 修改参数</td>
+<td>❌ 不修改</td>
+</tr>
+<tr class="even">
+<td>应用阶段</td>
+<td>训练阶段（Finetune）</td>
+<td>推理阶段（Inference）</td>
+</tr>
+<tr class="odd">
+<td>优点</td>
+<td>长期效果好、可扩展</td>
+<td>灵活、快速试验</td>
+</tr>
+<tr class="even">
+<td>缺点</td>
+<td>昂贵、不易调试</td>
+<td>不稳定、易受上下文影响</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h3 id="rlhf">3. RLHF</h3>
+<p>Reinforcement Learning with Human Feedback</p>
+<blockquote>
+<p><strong>目标：</strong>
+利用人类偏好优化模型行为，提升对齐程度（alignment）</p>
+</blockquote>
+<h4 id="过程-2">过程：</h4>
+<ol type="1">
+<li><p><strong>收集人类偏好数据：</strong>
+给出同一个输入，模型生成多个回答，由人类标注哪个更好。</p></li>
+<li><p><strong>训练奖励模型（RM）：</strong>
+学习如何从输入和输出中打分。</p>
+<blockquote>
+<ul>
+<li>让 SFT 模型对同一个问题生成多个回答（如 A 和 B）</li>
+<li>请人类标注员判断：<strong>哪个回答更好？</strong>（A &gt; B）</li>
+<li>用这些“偏好对”训练一个 <strong>Reward Model</strong></li>
+<li>RM 的输入是“问题 + 回答”，输出是一个<strong>分数</strong>（如 1~10
+分）</li>
+</ul>
+</blockquote></li>
+<li><p><strong>强化学习（PPO 等）：</strong>
+使用奖励模型对主模型进行强化学习优化。</p>
+<blockquote>
+<ul>
+<li>将 SFT 模型作为<strong>策略（Policy）</strong></li>
+<li>每次生成一个回答 → RM 给出奖励分数</li>
+<li>使用 <strong>PPO（Proximal Policy Optimization）</strong>
+算法更新策略参数</li>
+<li>目标：<strong>最大化奖励分数</strong></li>
+<li>通常加一个 <strong>KL 惩罚</strong>，防止模型偏离 SFT
+模型太远（避免过度优化）</li>
+</ul>
+</blockquote></li>
+</ol>
+<h4 id="特点-2">特点：</h4>
+<ul>
+<li>对齐人类偏好（例如：更礼貌、更安全、更有逻辑）</li>
+<li>可以显著改善模型的对话体验和安全性（ChatGPT、Claude
+等都采用该方式）</li>
+</ul>
+<h3 id="总结流程图">总结流程图</h3>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">原始语料（大规模网络文本等）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">    Pretraining（自监督）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">SFT（有标注任务数据，提升任务能力）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">RLHF（通过人类偏好进一步优化）：包括奖励模型（Reward Modeling) 和 强化学习 (RL)</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/26/Go%20%E8%AF%AD%E8%A8%80%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E4%B8%8E%E5%8C%85%E7%AE%A1%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3436,179 +3947,6 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/20/%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/20/%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8/" class="post-title-link" itemprop="url">顺序容器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-11-20 00:00:00" itemprop="dateCreated datePublished" datetime="2024-11-20T00:00:00+08:00">2024-11-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-01-01 11:17:58" itemprop="dateModified" datetime="2025-01-01T11:17:58+08:00">2025-01-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CPP/" itemprop="url" rel="index"><span itemprop="name">CPP</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>内容参考《C++ primer》</p>
-<p>遇到具体的容器操作可以查看https://zh.cppreference.com/w/cpp</p>
-<h2 id="顺序容器类型">顺序容器类型</h2>
-<p><code>vector</code>、<code>deque</code>、<code>list</code>、<code>forward_list</code>、<code>array</code>、<code>string</code></p>
-<ul>
-<li><code>string</code>和<code>vector</code>将元素保存在连续的内存空间中。在这两种容器的中间位置添加或删除元素就会非常耗时——需要移动插入/删除位置之后的所有元素</li>
-<li><code>list</code>和<code>forward_list</code>两个容器的设计目的是令容器任何位置的添加和删除操作都很快速。但是这两个容器不支持元素的随机访问。</li>
-<li><code>deque</code>（双端队列）支持随机访问，在其两端添加或删除元素都是很快的</li>
-<li><code>array</code>对象的大小是固定的。因此，<code>array</code>不支持添加和删除元素以及改变容器大小的操作</li>
-<li>顺序容器是可以嵌套的，例如：<code>vector&lt;vector&lt;string&gt;&gt; lines;</code></li>
-</ul>
-<h2 id="定义和初始化">定义和初始化</h2>
-<h3 id="拷贝初始化">拷贝初始化</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="type">int</span>&gt; ivec; <span class="comment">//初始状态为空</span></span><br><span class="line"><span class="comment">//在此处给ivec添加一些值</span></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ivec2</span><span class="params">(ivec)</span></span>; <span class="comment">//把ivec的元素拷贝给ivec2</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; ivec3 = ivec; <span class="comment">//把ivec的元素拷贝给ivec3</span></span><br><span class="line"></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">it</span><span class="params">(b, e)</span></span>; <span class="comment">//it初始化为迭代器b和e指定范围中的元素的拷贝。</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="列表初始化">列表初始化</h3>
-<p>使用花括号初始化元素值</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;string&gt; <span class="title">vl</span><span class="params">(<span class="string">"a"</span>,<span class="string">"an"</span>,<span class="string">"the"</span>};<span class="comment">//列表初始化</span></span></span></span><br><span class="line"><span class="params"><span class="function">vector&lt;string&gt; v1 = {<span class="string">"a"</span>, <span class="string">"an"</span>, <span class="string">"the"</span>}; </span></span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="创建指定数量的元素">创建指定数量的元素</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ivec</span><span class="params">(<span class="number">10</span>,<span class="number">-1</span>)</span></span>; <span class="comment">//10个int类型的元素，每个都被初始化为-1</span></span><br><span class="line"><span class="function">vector&lt;string&gt; <span class="title">svec</span><span class="params">(<span class="number">10</span>,<span class="string">"hi!"</span>)</span></span>;<span class="comment">// 10个string类型的元素，每个都被初始化为"hi!"</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="值初始化">值初始化</h3>
-<p>只提供容器容纳的元素数量</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ivec</span><span class="params">(<span class="number">10</span>)</span></span>; <span class="comment">// 10个元素，每个都初始化为0</span></span><br><span class="line"><span class="function">vector&lt;string&gt; <span class="title">svec</span><span class="params">(<span class="number">10</span>)</span></span>; <span class="comment">// 10个元素，每个都是空string对象</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="array">array</h3>
-<ul>
-<li><p>使用该类型时，<strong>必须</strong>指明元素类型和<strong>大小</strong></p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array&lt;<span class="type">int</span>, 10&gt; a1;</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>数组类型不能进行拷贝或对象赋值操作，但是<code>array</code>类型可以</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> digs[<span class="number">10</span>]=(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>};</span><br><span class="line"><span class="type">int</span> cpy[<span class="number">10</span>] = digs;<span class="comment">//错误：内置数组不支持拷贝或赋值</span></span><br><span class="line">              </span><br><span class="line">array&lt;<span class="type">int</span>,<span class="number">10</span>&gt; digits-(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>};</span><br><span class="line">array&lt;<span class="type">int</span>,<span class="number">10</span>&gt; copy = digits;<span class="comment">//正确：只要数组类型和大小匹配即合法</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<blockquote>
-<p>注意区别</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">v1</span><span class="params">(<span class="number">10</span>)</span></span>; <span class="comment">// v1有10个元素，每个的值都是0</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; v2{<span class="number">10</span>}; <span class="comment">// v2有1个元素，该元素的值是10</span></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">v3</span><span class="params">(<span class="number">10</span>,<span class="number">1</span>)</span></span>; <span class="comment">// v3有10个元素，每个的值都是1</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; v4{<span class="number">10</span>,<span class="number">1</span>); <span class="comment">// v4有2个元素，值分别是10和1</span></span><br><span class="line"><span class="function">vector&lt;string&gt; <span class="title">v5</span><span class="params">(<span class="string">"hi"</span>};<span class="comment">//列表初始化：v5有一个元素</span></span></span></span><br><span class="line"><span class="params"><span class="function"><span class="comment">// vector&lt;string&gt; v6("hi"); 错误：不能使用字符串字面值构建vector对象</span></span></span></span><br><span class="line"><span class="params"><span class="function">vector&lt;string&gt; v7(<span class="number">10</span>}; <span class="comment">// v7有10个默认初始化的元素</span></span></span></span><br><span class="line"><span class="params"><span class="function">vector&lt;string&gt; v8(<span class="number">10</span>,<span class="string">"hi"</span>}; <span class="comment">// v8有10个值为"hi"的元素</span></span></span></span><br></pre></td></tr></tbody></table></figure>
-</blockquote>
-<h2 id="赋值">赋值</h2>
-<h3 id="直接赋值">直接赋值</h3>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v1 = v2;</span><br><span class="line">v = {a, b, c ...}; <span class="comment">// 初始化列表赋值，不适用于array</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="swap">swap</h3>
-<ul>
-<li>两个容器的大小不同也可以使用</li>
-<li>例如，假定iter在swap之前指向svec1[3]的元素，那么在swap之后它指向svec2[3]的元素。与其他容器不同，对一个string调用swap会导致迭代器、引用和指针失效。</li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">swap</span>(v1, v2); </span><br><span class="line">v1.<span class="built_in">swap</span>(v2);<span class="comment">// 交换v1和v2的值，速度比直接赋值快</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="assign">assign</h3>
-<p><code>assign</code>操作不适用于关联容器和<code>array</code></p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">seq.<span class="built_in">assign</span>(b, e); <span class="comment">// 将seq中的元素替换为迭代器b和e所表示的范围中的元素。迭代器b和e不能指向seq中的元素</span></span><br><span class="line">seq.<span class="built_in">assign</span>(il); <span class="comment">// 将seq中的元素替换为初始化列表il中的元素</span></span><br><span class="line">seq.<span class="built_in">assign</span>(n, t); <span class="comment">// 将seq中的元素替换为n个值为t的元素</span></span><br></pre></td></tr></tbody></table></figure>
-<h2 id="关系运算">关系运算</h2>
-<p><code>==</code>、<code>!=</code>、<code>&lt;</code>、<code>&gt;</code>、<code>&gt;=</code>、<code>&lt;=</code></p>
-<ul>
-<li>如果两个容器具有相同大小且所有元素都两两对应相等，则这两个容器相等；否则两个容器不等。</li>
-<li>如果两个容器大小不同，但较小容器中每个元素都等于较大容器中的对应元素，则较小容器小于较大容器。</li>
-<li>如果两个容器都不是另一个容器的前缀子序列，则它们的比较结果取决于第一个不相等的元素的比较结果。</li>
-</ul>
-<h2 id="迭代器">迭代器</h2>
-<p>迭代器范围由一对迭代器组成，分别是<code>begin</code>和<code>end</code>，<code>begin</code>指向第一个元素，<code>end</code>指向最后一个元素之后的位置，所以元素所在的区间范围是左闭右开的<code>[begin, end)</code></p>
-<h3 id="迭代器运算">迭代器运算</h3>
-<ul>
-<li><code>*iter</code> ：返回迭代器所指元素的引用</li>
-<li><code>++iter</code>：令迭代器指向下一个元素</li>
-<li><code>--iter</code>：令迭代器指向上一个元素</li>
-<li><code>iter1 == iter2</code>或<code>iter1 != iter2</code>：判断两个迭代器是否相等</li>
-</ul>
-<h3 id="迭代器类型">迭代器类型</h3>
-<p>分为<code>iterator</code>和<code>const_iterator</code>来表示。</p>
-<ul>
-<li><code>const_iterator</code>和常量指针差不多，能读取但<strong>不能修改</strong>它所指的元素值。</li>
-<li><code>iterator</code>的对象可读可写。</li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="type">int</span>&gt;::iterator it;    <span class="comment">// it能读写vector&lt;int&gt;的元素</span></span><br><span class="line">string::iterator it2; <span class="comment">// it2能读写string对象中的字符</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt;::const_iterator it3;<span class="comment">// it3只能读元素，不能写元素</span></span><br><span class="line">string::const_iterator it4; <span class="comment">// it4只能读字符，不能写字符</span></span><br></pre></td></tr></tbody></table></figure>
-<p>一般使用<code>auto</code>声明迭代器，例如<code>auto it = a.begin()</code></p>
-<h2 id="下标访问元素">下标访问元素</h2>
-<p>我们希望确保下标是合法的，可以使用<code>at</code>成员函数。如果下标越界，<code>at</code>会抛出一个<code>out_of_range</code>异常</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;string&gt; svec;<span class="comment">//空vector</span></span><br><span class="line">cout &lt;&lt; svec[<span class="number">0</span>];<span class="comment">//运行时错误：svec中没有元素!</span></span><br><span class="line">cout &lt;&lt; svec.<span class="built_in">at</span>(<span class="number">0</span>);<span class="comment">//抛出一个out_of_range异常</span></span><br></pre></td></tr></tbody></table></figure>
-<h2 id="改变容器大小">改变容器大小</h2>
-<ul>
-<li>使用<code>resize(new_size)</code>修改容器大小</li>
-<li>注意<code>array</code>不支持修改容器大小</li>
-<li>若要增大容器，则会在容器末尾添加</li>
-<li>若要缩小容器，则会删去末尾元素</li>
-</ul>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">list&lt;<span class="type">int</span>&gt; <span class="title">ilist</span><span class="params">(<span class="number">10</span>,<span class="number">42</span>)</span></span>;<span class="comment">// 10个int:每个的值都是42</span></span><br><span class="line">ilist.<span class="built_in">resize</span>(<span class="number">15</span>);<span class="comment">//将5个值为0的元素添加到ilist的末尾</span></span><br><span class="line">ilist.<span class="built_in">resize</span>(<span class="number">25</span>,<span class="number">-1</span>);<span class="comment">//将10个值为-1的元素添加到ilist的末尾</span></span><br><span class="line">ilist.<span class="built_in">resize</span>(<span class="number">5</span>);<span class="comment">//从ilist末尾删除20个元素</span></span><br></pre></td></tr></tbody></table></figure>
-<h2 id="适配器">适配器</h2>
-<p>这里介绍顺序容器适配器：<code>stack</code>、<code>queue</code>和<code>priority_queue</code>。适配器(adaptor)是标准库中的一个通用概念。容器、迭代器和函数都有适配器。本质上，一个适配器是一种机制。</p>
-<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stack&lt;string, vector&lt;string&gt;&gt; str_stk; </span><br><span class="line"><span class="comment">//此声明的作用是创建一个以 vector&lt;string&gt; 为底层存储容器的堆栈，堆栈中的每个元素都是一个 string</span></span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>注意要<strong>根据不同适配器的特性重载其默认容器类型</strong>，例如，<code>stack</code>只要求<code>push_back</code>、<code>pop_back</code>和<code>back</code>操作，因此可以使用除<code>array</code>和<code>forward_list</code>之外的任何容器类型来构造<code>stack</code>。<code>queue</code>适配器要求<code>back</code>、<code>push_back</code>、<code>front</code>和<code>push_front</code>，因此它可以构造于<code>list</code>或<code>deque</code>之上，但不能基于<code>vector</code>构造。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3680,7 +4018,7 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-count">193</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -3729,12 +4067,12 @@ encoding：解决多类问题，使用二进制表示特征，方便输入神经
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">528k</span>
+    <span title="站点总字数">530k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:01</span>
+    <span title="站点阅读时长">8:02</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
