@@ -814,7 +814,7 @@ warp
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-05-05 22:19:03" itemprop="dateModified" datetime="2026-05-05T22:19:03+08:00">2026-05-05</time>
+                <time title="修改时间：2026-06-15 23:23:01" itemprop="dateModified" datetime="2026-06-15T23:23:01+08:00">2026-06-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -832,7 +832,7 @@ warp
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>8.1k</span>
+              <span>8.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -862,8 +862,11 @@ warp
 <li><p><strong>logits</strong>:
 <code>[B, T, V]</code>，每个位置预测下一个 token</p>
 <blockquote>
-<p>V
-表示词表大小，模型可能的输出类型数，<strong>V中的每一个数值（每个维度）对应词表中的一个token，而不是50000维表示一个token</strong></p>
+<p>logits: [B, T, V]，其中 V
+是词表大小。对于每个seq来说，最后都会计算出一个长度为 V 的 logits
+向量，而该维度（V）上的每个<strong>数值</strong>表示模型认为该 token
+作为下一个输出的不同分数（或置信度），所以每次 forward 计算的
+logits，就是<strong>下一个 token 的所有可能值组成的向量</strong>。</p>
 </blockquote></li>
 <li><p><strong>KV cache</strong>: 每一层的
 Key/Value，用于推理阶段避免重复计算</p></li>
@@ -2686,7 +2689,7 @@ Pooling）</strong>：取区域的平均值，平滑特征图。</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">530k</span>
+    <span title="站点总字数">531k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
