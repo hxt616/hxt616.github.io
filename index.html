@@ -352,10 +352,16 @@ Python（包括 macOS 和未来的 Linux 版本）都在默认或者全面转向
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2026-06-05 00:00:00 / 修改时间：00:29:47" itemprop="dateCreated datePublished" datetime="2026-06-05T00:00:00+08:00">2026-06-05</time>
+              <time title="创建时间：2026-06-05 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-05T00:00:00+08:00">2026-06-05</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-08-08 22:56:37" itemprop="dateModified" datetime="2026-08-08T22:56:37+08:00">2026-08-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -471,7 +477,7 @@ Python（包括 macOS 和未来的 Linux 版本）都在默认或者全面转向
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-05-29 23:53:42" itemprop="dateModified" datetime="2026-05-29T23:53:42+08:00">2026-05-29</time>
+                <time title="修改时间：2026-08-08 22:56:24" itemprop="dateModified" datetime="2026-08-08T22:56:24+08:00">2026-08-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -510,7 +516,7 @@ Python（包括 macOS 和未来的 Linux 版本）都在默认或者全面转向
       
           <p>参考：https://github.com/BBuf/how-to-optim-algorithm-in-cuda/tree/master/cuda-kernels/reduce</p>
 <h2 id="reduce-0-baseline">reduce 0 Baseline</h2>
-<p>规约求和，完整代码如下：</p>
+<p>归约求和，完整代码如下：</p>
 <figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 32*1024*1024</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BLOCK_SIZE 256</span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">reduce0</span><span class="params">(<span class="type">int</span> *g_idata, <span class="type">int</span> *g_odata)</span> </span>{ <span class="comment">// 指向全局内存的输入/出数组指针</span></span><br><span class="line">    <span class="keyword">extern</span> __shared__ <span class="type">int</span> sdata[]; <span class="comment">// 这个数组的大小由内核启动配置&lt;&lt;&lt;...&gt;&gt;&gt;的第三个参数决定</span></span><br><span class="line">    <span class="comment">// each thread loads one element from global to shared mem</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> tid = threadIdx.x; </span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> i = blockIdx.x*blockDim.x + threadIdx.x;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 将全局内存中的一个元素读到共享内存 sdata[tid] 中</span></span><br><span class="line">    sdata[tid] = g_idata[i];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 保证共享内存中的数据在开始归约前已被完整填充，这是 块级同步，不会跨 block</span></span><br><span class="line">    __syncthreads(); <span class="comment">// 阻塞 block 内的所有线程，直到全部到达此处</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 在共享内存中进行循环归约，每次循环是所有元素的一次归约</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">unsigned</span> <span class="type">int</span> s=<span class="number">1</span>; s &lt; blockDim.x; s *= <span class="number">2</span>) { <span class="comment">// 线程在 block 内 的一维索引（0 ~ blockDim.x-1）</span></span><br><span class="line">        <span class="keyword">if</span> (tid % (<span class="number">2</span>*s) == <span class="number">0</span>) {</span><br><span class="line">            sdata[tid] += sdata[tid + s];</span><br><span class="line">        }</span><br><span class="line">    	__syncthreads();</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 只有 tid = 0 的线程负责将 block 归约的结果写回全局内存</span></span><br><span class="line">    <span class="keyword">if</span> (tid == <span class="number">0</span>) g_odata[blockIdx.x] = sdata[<span class="number">0</span>];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">float</span>&gt; <span class="title">input_host</span><span class="params">(N, <span class="number">2.0f</span>)</span></span>;</span><br><span class="line">    <span class="type">float</span> *input_device;</span><br><span class="line">    <span class="comment">// 统一内存方案</span></span><br><span class="line">    <span class="built_in">cudaMallocManaged</span> (&amp;input_device, N*<span class="built_in">sizeof</span>(<span class="type">float</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 不需要使用cudaMemcpy</span></span><br><span class="line">    <span class="built_in">memcpy</span>(input_device, input_host.<span class="built_in">data</span>(), N*<span class="built_in">sizeof</span>(<span class="type">float</span>));</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> block_num = (N + BLOCK_SIZE - <span class="number">1</span>) / BLOCK_SIZE;  <span class="comment">// block 数量</span></span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">float</span>&gt; <span class="title">output_host</span><span class="params">(block_num)</span></span>;</span><br><span class="line">    <span class="type">float</span> *output_device;</span><br><span class="line">    <span class="built_in">cudaMallocManaged</span>(&amp;output_device, (block_num) * <span class="built_in">sizeof</span>(<span class="type">float</span>));</span><br><span class="line"></span><br><span class="line">    <span class="function">dim3 <span class="title">grid</span><span class="params">(block_num, <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">block</span><span class="params">(BLOCK_SIZE, <span class="number">1</span>)</span></span>;</span><br><span class="line">    reduce_v0&lt;&lt;&lt;grid, block&gt;&gt;&gt;(input_device, output_device, N);</span><br><span class="line">    <span class="comment">// memcpy(output_host.data(), output_device, block_num*sizeof(float), cudaMemcpyDeviceToHost);</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">cudaDeviceSynchronize</span>();</span><br><span class="line">    <span class="type">double</span> final_sum = <span class="number">0.0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; block_num; ++i) {</span><br><span class="line">        final_sum += output_device[i];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; final_sum &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cudaFree</span>(input_device);</span><br><span class="line">    <span class="built_in">cudaFree</span>(output_device);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>缺点：</p>
 <ul>
@@ -527,7 +533,7 @@ Python（包括 macOS 和未来的 Linux 版本）都在默认或者全面转向
 <li><p>减少 warp divergence，即减少了同一个 warp
 内部线程的执行路径分歧</p></li>
 <li><p>提高 warp
-执行连续性，<code>reduce 0</code>方法中执行的线程号离散，而当前方法线程号连续，示例：</p>
+执行连续性，<code>reduce 0</code>方法中执行的线程号离散，而当前方法线程号连续，示例：前半部分线程活跃，后半部分线程空闲</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// reduce 0</span><br><span class="line">0 active</span><br><span class="line">1 inactive</span><br><span class="line">2 active</span><br><span class="line">3 inactive</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">// reduce 1</span><br><span class="line">thread0~15 active</span><br><span class="line">thread16~31 inactive</span><br></pre></td></tr></tbody></table></figure></li>
 <li><p>还是可能存在 bank
 conflict，当经过多次迭代后，可能出现下面这种情况，多个线程同时访问同一个bank</p>
@@ -814,7 +820,7 @@ warp
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-06-15 23:23:01" itemprop="dateModified" datetime="2026-06-15T23:23:01+08:00">2026-06-15</time>
+                <time title="修改时间：2026-08-08 22:56:32" itemprop="dateModified" datetime="2026-08-08T22:56:32+08:00">2026-08-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -2003,7 +2009,7 @@ L^{PPO}(θ, φ) = \underbrace{𝔼̂_t[L^{CLIP}_t(θ)]}_{\text{策略损失}} - 
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-06-07 18:11:47" itemprop="dateModified" datetime="2026-06-07T18:11:47+08:00">2026-06-07</time>
+                <time title="修改时间：2026-08-08 22:56:26" itemprop="dateModified" datetime="2026-08-08T22:56:26+08:00">2026-08-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -2021,7 +2027,7 @@ L^{PPO}(θ, φ) = \underbrace{𝔼̂_t[L^{CLIP}_t(θ)]}_{\text{策略损失}} - 
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
+              <span>2.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -2107,27 +2113,26 @@ Training, QAT）</strong></h4>
 <h4 id="训练时量化quantization-during-training"><strong>（3）训练时量化（Quantization
 During Training）</strong></h4>
 <p>从训练初期就引入量化约束，直接学习低精度表示</p>
-<h2 id="二最常见的量化方案minmax量化算法">二、最常见的量化方案：MinMax量化算法</h2>
-<h3 id="对称量化-vs-非对称量化"><strong>对称量化 vs
-非对称量化</strong></h3>
+<h2 id="二对称量化和非对称量化">二、对称量化和非对称量化</h2>
 <p>计算公式：</p>
 <ul>
 <li>S：缩放因子</li>
 <li>Z：零值</li>
-<li>R：待量化的浮点数</li>
+<li>x：待量化的浮点数</li>
 <li>Q：量化后的值</li>
 </ul>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S = (max - min) / (2^bits - 1)</span><br><span class="line">Z = round(-min / S)</span><br><span class="line">Q = R / S + Z</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="对称量化"><strong>对称量化</strong></h4>
+<h3 id="对称量化"><strong>对称量化</strong></h3>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S = <span class="built_in">max</span>(|x_min|, |x_max|) / (<span class="built_in">pow</span>(<span class="number">2</span>, bits - <span class="number">1</span>) - <span class="number">1</span>) </span><br><span class="line">Z = <span class="number">0</span></span><br><span class="line">Q = x / S + Z</span><br></pre></td></tr></tbody></table></figure>
 <ul>
-<li>只计算 scale（S）</li>
-<li>Z = 0</li>
+<li>反量化：x = Q * S</li>
 </ul>
 <p><strong>优势</strong>： - 实现简单，计算高效 -
 零点是固定的0，减少计算开销 - 广泛硬件支持（如NVIDIA Tensor Core）</p>
-<h4 id="非对称量化"><strong>非对称量化</strong></h4>
+<h3 id="非对称量化"><strong>非对称量化</strong></h3>
+<p>假设是 INT8 范围是 q [-128, 127]</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S = (x_min - x_max) / (qe_max - q_min) </span><br><span class="line">Z = <span class="built_in">round</span>(-x_min / S) + q_min</span><br><span class="line">Q = x / S + Z</span><br></pre></td></tr></tbody></table></figure>
 <ul>
-<li>计算 scale（S）和 zero-point（Z）</li>
+<li>反量化：x = (Q - Z) * S</li>
 </ul>
 <p><strong>优势</strong>： - 更好地利用数值范围 -
 适合非对称分布的数据</p>
@@ -2220,6 +2225,203 @@ Rotary Embeddings）</strong></h3>
 </tr>
 </tbody>
 </table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/10/07/%E9%9D%A2%E7%BB%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/hxt.jpg">
+      <meta itemprop="name" content="hxt">
+      <meta itemprop="description" content="May the Force be with you.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hxt's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/10/07/%E9%9D%A2%E7%BB%8F/" class="post-title-link" itemprop="url">面经</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-10-07 00:00:00" itemprop="dateCreated datePublished" datetime="2025-10-07T00:00:00+08:00">2025-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-10-07 22:45:00" itemprop="dateModified" datetime="2026-10-07T22:45:00+08:00">2026-10-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">大模型</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="项目">项目</h2>
+<h3 id="nano-vllmcontinuous-batching-推理优化"><strong>nano-vLLM（Continuous
+Batching 推理优化）</strong></h3>
+<ul>
+<li><strong>项目描述</strong>：原 nano-vLLM 调度器将 Prefill 和 Decode
+分离执行，导致单节点中 Batch 填充率低、GPU
+利用率不足。在原项目上修改，实现 Continuous Batching 调度。</li>
+<li><strong>核心实现</strong>：重构 Scheduler，实现 Prefill 与 Decode
+请求的动态混合调度；修改 Model Runner，将两类序列统一拼接为单个
+Batch，通过 <code>flash_attn_varlen_func</code> 统一计算
+Attention。</li>
+<li><strong>性能</strong>：在 RTX 4060 Laptop GPU（Qwen3-0.6B，ShareGPT
+数据集，500条）上完成性能验证，推理吞吐由 200.6 tokens/s 提升至 352.3
+tokens/s，提升 75%，主要得益于 Batch 合并与 Kernel Launch
+开销降低。</li>
+</ul>
+<h4 id="问题">问题</h4>
+<ol type="1">
+<li><strong>什么是 Continuous
+Batching？为什么能够提升推理吞吐？</strong></li>
+<li><strong>Prefill 和 Decode 为什么可以放在同一个 Batch？</strong></li>
+<li>Prefill 和 Decode 的计算特点有什么区别？</li>
+<li>为什么传统静态 Batch 对 LLM 推理不友好？</li>
+<li>Continuous Batching 和 Dynamic Batching 有什么区别？</li>
+<li>Scheduler 每一轮到底决定什么？</li>
+<li><code>max_num_batched_tokens</code> 是什么？</li>
+<li><code>max_num_seqs</code> 是什么？</li>
+<li>Decode-first 为什么能够降低 ITL？</li>
+<li>什么情况下应该优先 Prefill，什么情况下应该优先 Decode？</li>
+<li><strong>你具体修改了 Scheduler 哪部分？</strong></li>
+<li>原来的 Scheduler 为什么不能直接实现 Continuous Batching？</li>
+<li>你怎么判断一个 Sequence 当前处于 Prefill 还是 Decode？</li>
+<li>混合 Batch 后，Prefill 和 Decode 的输入 Shape 有什么区别？</li>
+<li>为什么 <code>flash_attn_varlen_func</code> 可以处理这种输入？</li>
+<li><code>cu_seqlens_q</code> 和 <code>cu_seqlens_k</code>
+是干什么的？</li>
+<li><code>slot_mapping</code> 是干什么的？</li>
+<li>KV Cache 是如何管理的？</li>
+<li>为什么 Continuous Batching 能提升你测试中的吞吐？</li>
+<li>你这个 <strong>75% 提升</strong>到底来自哪里？</li>
+</ol>
+<h3 id="tiny-flash-attention"><strong>tiny-flash-attention</strong></h3>
+<ul>
+<li><strong>项目描述</strong>：基于 CUTLASS 简单复现 Flash Attention
+v2，理解算子级优化。</li>
+<li><strong>核心实现</strong>：Online Softmax + Tile
+化计算减少全局内存访问；<code>cp.async</code> 隐藏访存延迟；Shared
+Memory 缓存中间结果。</li>
+<li><strong>性能</strong>：在 RTX 4060 Laptop GPU 测试环境下达到 26.8
+TFLOPS。</li>
+</ul>
+<h4 id="问题-1">问题</h4>
+<ol type="1">
+<li>Attention 的计算公式是什么？</li>
+<li>为什么 Attention 是典型的 memory-bound / compute-bound 问题？</li>
+<li>FlashAttention 为什么能够减少显存访问？</li>
+<li>FlashAttention-1 和 FlashAttention-2 有什么区别？</li>
+<li>什么是 Tiling？</li>
+<li>为什么 Tile 能减少 HBM 访问？</li>
+<li>Online Softmax 是怎么保证数值正确性的？</li>
+<li><code>m</code> 和 <code>l</code> 分别代表什么？</li>
+<li>为什么不能直接把完整 Attention Matrix 算出来？</li>
+<li>Shared Memory 在这里具体保存什么？</li>
+<li><code>cp.async</code> 是什么？</li>
+<li>为什么 <code>cp.async</code> 能隐藏访存延迟？</li>
+<li>Shared Memory Bank Conflict 是什么？</li>
+<li>Warp 是什么？</li>
+<li>一个 SM 如何调度 Warp？</li>
+<li>Register、Shared Memory、L2、HBM 的关系是什么？</li>
+<li>Occupancy 是什么？</li>
+<li>为什么线程数不是越多越好？</li>
+<li>Tensor Core 在 GEMM 中做什么？</li>
+<li>CUTLASS 和 CUDA Kernel 手写相比有什么优势？</li>
+</ol>
+<h2 id="实习">实习</h2>
+<ol type="1">
+<li><strong>什么是 Golden？</strong></li>
+<li>为什么不用原模型直接作为 Golden？</li>
+<li>为什么使用 PyTorch？</li>
+<li>Golden 的输入是怎么生成的？</li>
+<li>为什么要保存中间 Tensor？</li>
+<li>为什么不仅比较最终输出？</li>
+<li>如何判断两个 Tensor 是否一致？</li>
+<li>FP16/BF16/FP32 下如何判断误差？</li>
+<li><code>atol</code> 和 <code>rtol</code> 是什么？</li>
+<li>为什么融合之后结果可能和原模型不完全一致？</li>
+</ol>
+<h3 id="深挖">深挖</h3>
+<ol type="1">
+<li><strong>融合算子为什么可能产生精度误差？</strong></li>
+<li>不同计算顺序会不会影响结果？</li>
+<li>FP16 下加法为什么可能产生误差？</li>
+<li>Reduction 为什么特别容易产生误差？</li>
+<li>如果最终输出误差很大，你怎么定位是哪个子算子出了问题？</li>
+<li>为什么需要保存 intermediate result？</li>
+<li>Hook 是怎么实现的？</li>
+<li>PyTorch Hook 能 Hook 哪些东西？</li>
+<li>如果某个 Tensor 无法 Hook 怎么办？</li>
+<li>Golden 和 Reference Implementation 有什么区别？</li>
+<li><strong>融合算子为什么可能产生精度误差？</strong></li>
+<li>不同计算顺序会不会影响结果？</li>
+<li>FP16 下加法为什么可能产生误差？</li>
+<li>Reduction 为什么特别容易产生误差？</li>
+<li>如果最终输出误差很大，你怎么定位是哪个子算子出了问题？</li>
+<li>为什么需要保存 intermediate result？</li>
+<li>Hook 是怎么实现的？</li>
+<li>PyTorch Hook 能 Hook 哪些东西？</li>
+<li>如果某个 Tensor 无法 Hook 怎么办？</li>
+<li>Golden 和 Reference Implementation 有什么区别？</li>
+</ol>
 
       
     </div>
@@ -2347,228 +2549,6 @@ Rotary Embeddings）</strong></h3>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/08/27/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hxt.jpg">
-      <meta itemprop="name" content="hxt">
-      <meta itemprop="description" content="May the Force be with you.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hxt's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/27/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-title-link" itemprop="url">卷积神经网络CNN</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2025-08-27 00:00:00" itemprop="dateCreated datePublished" datetime="2025-08-27T00:00:00+08:00">2025-08-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-05-26 17:35:18" itemprop="dateModified" datetime="2026-05-26T17:35:18+08:00">2026-05-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li>卷积层由多个卷积核组成。</li>
-<li>每个卷积核的参数（权重+偏置）都是独立的。</li>
-<li>同一个卷积核在输入的所有位置共享参数（称为权重共享）。</li>
-<li>不同卷积核学习不同特征，从而生成多个卷积层，被称为 feature
-map（特征映射）。</li>
-</ul>
-<p>参数共享指的是
-<strong>同一个卷积核在整个图像上滑动时使用相同的权重</strong>。</p>
-<p><strong>注意</strong>：</p>
-<ul>
-<li>“参数共享”是卷积核内部的特性（减小参数量）</li>
-<li><strong>不同卷积核之间不共享权重</strong>，它们是独立的。</li>
-</ul>
-<h3 id="填充">填充</h3>
-<p>在应用多层卷积时，我们常常丢失边缘像素。
-解决这个问题的简单方法即为<em>填充</em>（padding）：在输入图像的边界填充元素（通常填充元素是）0。</p>
-<p>例如：将3x3填充到5x5，那么经过2x2卷积核的计算后得到的输出是4x4</p>
-<h3 id="步幅">步幅</h3>
-<p>我们将卷积核每次滑动元素的数量称为<em>步幅</em>（stride）。卷积窗口（卷积核）从输入张量的左上角开始，向下、向右滑动。
-在前面的例子中，我们默认每次滑动一个元素。
-但是，有时候为了<strong>高效计算</strong>或是<strong>缩减采样次数</strong>，卷积窗口可以跳过中间位置，每次滑动多个元素。</p>
-<h3 id="输入通道和输出通道">输入通道和输出通道</h3>
-<ul>
-<li>输入通道 = 图像的颜色通道</li>
-<li>一个卷积核就对应一个输出通道，卷积时，先对每个输入通道做卷积，再把结果相加，得到<strong>单个输出通道</strong>。</li>
-<li>如果输入有 <strong>c<sub>i</sub> 个通道</strong>，我们要得到
-<strong>c<sub>o</sub> 个输出通道</strong>，那就需要准备
-<strong>c<sub>o</sub>
-套</strong>这样的卷积核。所以总的卷积核形状就是四维的：<strong>(c<sub>o</sub>,
-c<sub>i</sub>, k<sub>h</sub>, k<sub>w</sub>)</strong></li>
-</ul>
-<p>下面是相关示例：</p>
-<p>好的，我们来逐行分析这个函数 <code>corr2d_multi_in_out</code> 👇</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">corr2d_multi_in_out</span>(<span class="params">X, K</span>):</span><br><span class="line">    <span class="comment"># 迭代“K”的第0个维度，每次都对输入“X”执行互相关运算。</span></span><br><span class="line">    <span class="comment"># 最后将所有结果都叠加在一起</span></span><br><span class="line">    <span class="keyword">return</span> torch.stack([corr2d_multi_in(X, k) <span class="keyword">for</span> k <span class="keyword">in</span> K], <span class="number">0</span>)</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="输入含义">1. 输入含义</h4>
-<ul>
-<li><code>X</code>：输入，多通道特征图（shape =
-<code>(ci, H, W)</code>）</li>
-<li><code>K</code>：卷积核张量（shape =
-<code>(co, ci, kh, kw)</code>）</li>
-</ul>
-<p>其中：</p>
-<ul>
-<li><code>ci</code> = 输入通道数</li>
-<li><code>co</code> = 输出通道数</li>
-<li><code>kh, kw</code> = 卷积核的高和宽</li>
-</ul>
-<h4 id="代码逐步解析">2. 代码逐步解析</h4>
-<p>（1）<strong>列表推导式</strong></p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[corr2d_multi_in(X, k) <span class="keyword">for</span> k <span class="keyword">in</span> K]</span><br></pre></td></tr></tbody></table></figure>
-<ul>
-<li><code>for k in K</code>
-<ul>
-<li>遍历卷积核的第 0 个维度（即输出通道维度 <code>co</code>）</li>
-<li>每次 <code>k</code> 的形状是 <code>(ci, kh, kw)</code></li>
-<li>意思是“第 o 个输出通道的卷积核”，它需要和所有输入通道 <code>X</code>
-做卷积</li>
-</ul></li>
-</ul>
-<p>（2）<strong>调用 <code>corr2d_multi_in</code></strong></p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">corr2d_multi_in(X, k)</span><br></pre></td></tr></tbody></table></figure>
-<ul>
-<li>输入：<code>X</code> 的形状 <code>(ci, H, W)</code></li>
-<li>卷积核：<code>k</code> 的形状 <code>(ci, kh, kw)</code></li>
-<li>内部逻辑：
-<ul>
-<li>遍历输入的每个通道 <code>x</code> 和对应的卷积核
-<code>k[i]</code></li>
-<li>做 2D 卷积（互相关），再相加</li>
-</ul></li>
-<li>输出：单个通道的结果，形状 <code>(H_out, W_out)</code></li>
-</ul>
-<p>所以 <code>corr2d_multi_in(X, k)</code> 的结果就是
-<strong>一个输出通道</strong>。</p>
-<p>（3）<code>torch.stack([...], 0)</code></p>
-<ul>
-<li>把所有输出通道的结果沿着新的维度 <strong>堆叠起来</strong></li>
-<li>输出形状：<code>(co, H_out, W_out)</code></li>
-</ul>
-<h4 id="举个例子">3. 举个例子</h4>
-<p>假设：</p>
-<ul>
-<li>输入 <code>X</code>：形状 <code>(3, 6, 6)</code>，RGB 三通道</li>
-<li>卷积核 <code>K</code>：形状 <code>(2, 3, 3, 3)</code>（2
-个输出通道，每个核对应 3 个输入通道）</li>
-</ul>
-<p>流程：</p>
-<ol type="1">
-<li>遍历 <code>K[0]</code>（形状 <code>(3, 3, 3)</code>），对
-<code>X</code> 做多通道卷积 → 得到输出通道 0</li>
-<li>遍历 <code>K[1]</code>（形状 <code>(3, 3, 3)</code>），对
-<code>X</code> 做多通道卷积 → 得到输出通道 1</li>
-<li><code>torch.stack([...], 0)</code> → 最终输出
-<code>(2, H_out, W_out)</code></li>
-</ol>
-<h4 id="总结">总结</h4>
-<p><code>corr2d_multi_in_out</code> 的功能就是实现 <strong>多输入通道 →
-多输出通道</strong> 的卷积过程：</p>
-<ul>
-<li>遍历输出通道 <code>co</code></li>
-<li>每个输出通道对应一组 <code>(ci, kh, kw)</code> 的卷积核</li>
-<li>对输入 <code>X</code> 的 <code>ci</code> 个通道做卷积并相加</li>
-<li>把所有输出通道结果堆叠起来</li>
-</ul>
-<p>最终得到形状 <code>(co, H_out, W_out)</code> 的输出特征图。</p>
-<h3 id="卷积层">1 × 1 卷积层</h3>
-<p>可以将卷积层看作在每个像素位置应用的全连接层</p>
-<h3 id="池化层pooling-layer">池化层（pooling layer）</h3>
-<p>类似于卷积层，池化层也是由一个个形状固定的窗口组成（矩阵），根据步幅滑动，只是计算过程不同</p>
-<h4 id="降采样下采样">1. <strong>降采样（下采样）</strong></h4>
-<ul>
-<li>减小特征图的 <strong>空间尺寸 (H, W)</strong>，比如从 32×32 变成
-16×16。</li>
-<li>这样可以：
-<ul>
-<li>降低计算量（减少后续卷积层的输入规模）。</li>
-<li>减少参数量，提高效率。</li>
-</ul></li>
-</ul>
-<h4 id="增强平移不变性">2. <strong>增强平移不变性</strong></h4>
-<ul>
-<li>池化在一个小区域里取“代表性”数值（最大值或平均值）。</li>
-<li>即使输入图像稍微平移/变形，池化后的特征图变化不会太大。</li>
-<li>这使得模型对小范围的 <strong>位置变化不敏感</strong>。</li>
-</ul>
-<h4 id="计算方法">3. 计算方法</h4>
-<ul>
-<li><strong>最大池化（Max
-Pooling）</strong>：保留局部区域最强的激活（比如边缘、角点）。</li>
-<li><strong>平均池化（Average
-Pooling）</strong>：取区域的平均值，平滑特征图。</li>
-<li>本质上就是一种 <strong>特征选择</strong> 或
-<strong>特征压缩</strong>。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2640,7 +2620,7 @@ Pooling）</strong>：取区域的平均值，平滑特征图。</li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">193</span>
+          <span class="site-state-item-count">194</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2689,12 +2669,12 @@ Pooling）</strong>：取区域的平均值，平滑特征图。</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">531k</span>
+    <span title="站点总字数">533k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:02</span>
+    <span title="站点阅读时长">8:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
